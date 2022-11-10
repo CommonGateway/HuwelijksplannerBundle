@@ -1,6 +1,6 @@
 {
-    "name": "common-gateway/pet-store-bundle",
-    "description": "An example package for creating symfony flex bundles as plugins",
+    "name": "common-gateway/huwelijksplanner-bundle",
+    "description": "A symfony package for dutch municipality marriage functionality",
 	"type" : "symfony-bundle",
     "license": "EUPL-1.2",
     "minimum-stability" : "dev",
