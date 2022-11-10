@@ -1,16 +1,16 @@
 <?php
 
-namespace CommonGateway\PetStoreBundle\ActionHandler;
+namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
-use CommonGateway\PetStoreBundle\Service\PetStoreService;
+use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
 
-class PetStoreHandler
+class HuwelijksplannerHandler
 {
-    private PetStoreService $petStoreService;
+    private HuwelijksplannerService $huwelijksplannerService;
 
-    public function __construct(PetStoreService $petStoreService)
+    public function __construct(HuwelijksplannerService $huwelijksplannerService)
     {
-        $this->petStoreService = $petStoreService;
+        $this->huwelijksplannerService = $huwelijksplannerService;
     }
 
     /**
@@ -23,7 +23,7 @@ class PetStoreHandler
         return [
             '$id'         => 'https://example.com/person.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
-            'title'       => 'PetStore Action',
+            'title'       => 'Huwelijksplanner Action',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
             'properties'  => [],
@@ -45,6 +45,6 @@ class PetStoreHandler
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->petStoreService->petStoreHandler($data, $configuration);
+        return $this->huwelijksplannerService->huwelijksplannerHandler($data, $configuration);
     }
 }
