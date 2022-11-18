@@ -1,7 +1,16 @@
 {
     "name": "common-gateway/huwelijksplanner-bundle",
     "description": "A symfony package for dutch municipality marriage functionality",
-    "type" : "common-gateway-plugin",
+    "type" : "symfony-bundle",	
+	"keywords" : [
+		"commongateway",
+		"common",
+		"gateway",
+		"conduction",
+		"symfony",
+		"common-gateway-plugin"
+	],
+	"homepage" : "https://commongatway.nl",
     "license": "EUPL-1.2",
     "minimum-stability" : "dev",
     "require": {
