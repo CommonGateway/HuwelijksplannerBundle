@@ -57,6 +57,62 @@
             "type": "string",
             "description": "Thje summary of this event.",
             "nullable": true
+        },
+        "duration": {
+            "type": "string",
+            "description": "The summary of this event.",
+            "format": "duration",
+            "nullable": true
+        },
+        "contact": {
+            "type": "string",
+            "description": "Url of this person.",
+            "nullable": true
+        },
+        "seq": {
+            "type": "integer",
+            "description": "The version number of this event."
+        },
+        "priority": {
+            "type": "integer",
+            "description": "The priority of this event ranging from 1 (high) to 9 (low)."
+        },
+        "attendees": {
+            "type": "array",
+            "description": "The urls of the attendees of this event.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "attachments": {
+            "type": "array",
+            "description": "The urls of the attachments of this event.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "categories": {
+            "type": "array",
+            "description": "The urls of the categories this event belongs to.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "comments": {
+            "type": "array",
+            "description": "The urls of the comments that belong to this event.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "percentageDone": {
+            "type": "integer",
+            "description": "The percentage of a to-do that has been completed."
+        },
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource.",
+            "nullable": true
         }
     }
 }
