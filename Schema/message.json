@@ -1,0 +1,62 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.message.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Message",
+    "properties":{
+        "receiver": {
+            "type": "string",
+            "nullable": true,
+            "description": "Either a contact component person or contact list or an plain email that will recieve this message",
+            "maxLength": 255
+        },
+        "sender": {
+            "type": "string",
+            "nullable": true,
+            "description": "Either a contact component person, or wrc application or an plain email that sends this message",
+            "maxLength": 255
+        },
+        "subject": {
+            "type": "string",
+            "nullable": true,
+            "description": "subject of the mail",
+            "maxLength": 255
+        },
+        "content": {
+            "type": "string",
+            "description": "The webresource template object (from wrc) that is used as content for this message"
+        },
+        "type":{
+            "type": "string",
+            "nullable": true,
+            "description": "The type of this message.",
+            "maxLength": 255
+        },
+        "resource": {
+            "type": "string",
+            "nullable": true,
+            "description": "A resource used for this message.",
+            "maxLength": 255
+        },
+        "data": {
+            "type": "array",
+            "format": "string",
+            "nullable": true
+        },
+        "status":{
+            "type": "string",
+            "description": "The current status of this message",
+            "maxLength": 255
+        },
+        "service": {
+            "type": "object",
+            "$ref": "#/definitions/Service"
+        },
+        "attachments": {
+            "type": "array",
+            "$ref": "#/definitions/Attachment"
+        }
+    },
+    "description": "A  message to be send to a spefic recipient or list troug a message service."
+}
