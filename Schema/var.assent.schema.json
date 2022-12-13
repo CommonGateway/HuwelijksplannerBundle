@@ -1,0 +1,84 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.assent.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Assent",
+    "properties":{
+        "id": {
+            "type": "string"
+        },
+        "token": {
+            "type": "string",
+            "description": "A secret token used to validate the assent",
+            "maxLength": 255
+        },
+        "name": {
+            "type": "string",
+            "description": "The name of this assend is displayed as a title to end users and should make clear what they arre assending to",
+            "maxLength": 255,
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "The description of this assend is displayed to end users as aditional information and should make clear what they arre assending to"
+        },
+        "request": {
+            "type": "string",
+            "description": "The request that this assent applies to",
+            "maxLength": 255
+        },
+        "forwardUrl": {
+            "type": "string",
+            "description": "The request that this assent applies to",
+            "maxLength": 255
+        },
+        "property": {
+            "type": "string",
+            "description": "The property of a request that this assent applies to e.g. parner in meldingvoorgenomenhuwelijk",
+            "maxLength": 255
+        },
+        "process": {
+            "type": "string",
+            "description": "The process that this assent originated from",
+            "maxLength": 255
+        },
+        "contact": {
+            "type": "string",
+            "description": "The contact that this assent applies to",
+            "maxLength": 255
+        },
+        "person": {
+            "type": "string",
+            "description": "The person that this assent applies to",
+            "maxLength": 255
+        },
+        "status": {
+            "type": "string",
+            "description": "The status of this assent e.g. requested, granted, declined, cancelled, withdrawn",
+            "maxLength": 255,
+            "enum": [
+                "requested",
+                "granted",
+                "submitted",
+                "declined",
+                "cancelled",
+                "withdrawn"
+            ]
+        },
+        "requester": {
+            "type": "string",
+            "description": "The organisation (RSIN) or person (BSN) that is responsible for making this assent",
+            "maxLength": 255,
+            "required": true
+        },
+        "revocable": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "required": [
+        "name",
+        "requester"
+    ]
+}
