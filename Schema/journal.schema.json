@@ -1,10 +1,10 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/event.schema.json",
+    "$id": "https://vng.opencatalogi.nl/schemas/journal.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1.0",
-    "title": "Event",
+    "title": "Journal",
     "type": "object",
-    "description": "An event happening at a certain time and location, such as a concert, lecture, meeting or festival.",
+    "description": "A journal from an event.",
     "properties": {
         "name": {
             "type": "string",
@@ -16,26 +16,11 @@
             "description": "An short description of this Event.",
             "nullable": true
         },
-        "organization": {
-            "type": "string",
-            "description": "A specific commonground organisation.",
-            "nullable": true
-        },
-        "resource": {
-            "type": "string",
-            "description": "A specific commonground resource.",
-            "nullable": true
-        },
         "startDate": {
             "type": "string",
             "description": "The moment this event starts.",
             "format": "date-time",
             "required": true
-        },
-        "location": {
-            "type": "string",
-            "description": "The location of this event.",
-            "nullable": true
         },
         "endDate": {
             "type": "string",
@@ -43,23 +28,12 @@
             "format": "date-time",
             "required": true
         },
-        "schedule": {
-            "$ref": "#/definitions/Schedule"
-        },
-        "calendar": {
-            "$ref": "#/definitions/Calendar"
-        },
         "class": {
             "type": "string",
             "description": "The security class of this event.",
             "nullable": true
         },
-        "geo": {
-            "type": "string",
-            "description": "The coordinates of this event.",
-            "nullable": true
-        },
-        "organizer": {
+        "organiser": {
             "type": "string",
             "description": "The organiser of this event linked to with an url.",
             "nullable": true
@@ -85,23 +59,18 @@
             "format": "duration",
             "nullable": true
         },
-        "contact": {
-            "type": "string",
-            "description": "Url of this person.",
-            "nullable": true
-        },
         "seq": {
             "type": "integer",
             "description": "The version number of this event."
         },
         "priority": {
             "type": "integer",
-            "description": "The priority of this event ranging from 1 (high) to 9 (low).",
-            "required": true
+            "description": "The priority of this event ranging from 1 (high) to 9 (low)."
         },
         "attendees": {
             "type": "array",
             "description": "The urls of the attendees of this event.",
+            "nullable": true,
             "items": {
                 "type": "string"
             }
@@ -109,13 +78,15 @@
         "attachments": {
             "type": "array",
             "description": "The urls of the attachments of this event.",
+            "nullable": true,
             "items": {
                 "type": "string"
             }
         },
         "categories": {
             "type": "array",
-            "description": "The urls of the catergories this event belong to.",
+            "description": "The urls of the catergories this event belongs to.",
+            "nullable": true,
             "items": {
                 "type": "string"
             }
@@ -127,33 +98,13 @@
                 "type": "string"
             }
         },
-        "related": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/Event"
-            }
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource.",
+            "nullable": true
         },
-        "resources": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/Resource"
-            }
-        },
-        "alarms": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/Alarm"
-            }
-        },
-        "journal": {
-            "$ref": "#/definitions/Journal"
-        },
-        "freebusies": {
-            "type": "array",
-            "description": "Freeusies that are for this Event.",
-            "items": {
-                "$ref": "#/definitions/Freebusy"
-            }
+        "event": {
+            "$ref": "#/definitions/Event"
         }
     }
 }
