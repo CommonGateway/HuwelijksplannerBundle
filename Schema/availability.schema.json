@@ -1,0 +1,33 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/availability.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1.0",
+    "title": "Availability",
+    "type": "object",
+    "properties": {
+        "startDate": {
+            "type": "string",
+            "description": "The start of the availability block.",
+            "format": "date-time",
+            "nullable": true
+        },
+        "endDate": {
+            "type": "string",
+            "description": "The end of the availability block.",
+            "format": "date-time",
+            "nullable": true
+        },
+        "available": {
+            "type": "boolean",
+            "description": "Whether the block is available or not."
+        },
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource",
+            "nullable": true
+        },
+        "calendar": {
+            "$ref": "#/definitions/Calendar"
+        }
+    }
+}

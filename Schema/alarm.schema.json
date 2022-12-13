@@ -42,7 +42,9 @@
             "type": "intger",
             "description": "The number of times the alarm repeats."
         },
-        "event": {},
+        "event": {
+            "$ref": "#/definitions/Event"
+        },
         "todo": {
             "type": "string",
             "description": "The url of the todo for this alarm."
