@@ -4,14 +4,13 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
+use App\Service\ObjectEntityService;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,23 +20,18 @@ class HuwelijksplannerService
 {
     private EntityManagerInterface $entityManager;
     private ObjectEntityService $objectEntityService;
-    private RequestStack $requestStack;
-    private Request $request;
     private array $data;
     private array $configuration;
 
     /**
      * @param ObjectEntityService    $objectEntityService
-     * @param RequestStack           $requestStack
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         ObjectEntityService $objectEntityService,
-        RequestStack $requestStack,
         EntityManagerInterface $entityManager
     ) {
         $this->objectEntityService = $objectEntityService;
-        $this->request = $requestStack->getCurrentRequest();
         $this->entityManager = $entityManager;
         $this->data = [];
         $this->configuration = [];
@@ -58,36 +52,36 @@ class HuwelijksplannerService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        $begin = new DateTime($this->request->get('start'));
-        $end = new DateTime($this->request->get('stop'));
-
-        $interval = new DateInterval($this->request->get('interval'));
-        $period = new DatePeriod($begin, $interval, $end);
-
-        $resultArray = [];
-        foreach ($period as $currentDate) {
-            // start voorbeeld code
-            $dayStart = clone $currentDate;
-            $dayStop = clone $currentDate;
-
-            $dayStart->setTime(9, 0);
-            $dayStop->setTime(17, 0);
-
-            if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
-                $resourceArray = $this->request->get('resources_could');
-            } else {
-                $resourceArray = [];
-            }
-
-            // end voorbeeld code
-            $resultArray[$currentDate->format('Y-m-d')][] = [
-                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
-                'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
-                'resources' => $resourceArray,
-            ];
-        }
-
-        $this->data['response'] = $resultArray;
+//        $begin = new DateTime($this->request->get('start'));
+//        $end = new DateTime($this->request->get('stop'));
+//
+//        $interval = new DateInterval($this->request->get('interval'));
+//        $period = new DatePeriod($begin, $interval, $end);
+//
+//        $resultArray = [];
+//        foreach ($period as $currentDate) {
+//            // start voorbeeld code
+//            $dayStart = clone $currentDate;
+//            $dayStop = clone $currentDate;
+//
+//            $dayStart->setTime(9, 0);
+//            $dayStop->setTime(17, 0);
+//
+//            if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
+//                $resourceArray = $this->request->get('resources_could');
+//            } else {
+//                $resourceArray = [];
+//            }
+//
+//            // end voorbeeld code
+//            $resultArray[$currentDate->format('Y-m-d')][] = [
+//                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
+//                'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
+//                'resources' => $resourceArray,
+//            ];
+//        }
+//
+//        $this->data['response'] = $resultArray;
 
         return $this->data;
     }

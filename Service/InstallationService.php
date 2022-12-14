@@ -183,6 +183,9 @@ class InstallationService implements InstallerInterface
                 count($entity->getEndpoints()) == 0
             ) {
                 $endpoint = new Endpoint($entity);
+                if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
+                    $endpoint->setThrows(['huwelijksplanner.default.listens']);
+                }
                 $this->entityManager->persist($endpoint);
                 (isset($this->io) ? $this->io->writeln('Endpoint created') : '');
                 continue;
