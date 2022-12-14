@@ -8,17 +8,20 @@ use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InstallationService implements InstallerInterface
 {
     private EntityManagerInterface $entityManager;
+    private ContainerInterface $container;
     private SymfonyStyle $io;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
     {
         $this->entityManager = $entityManager;
+        $this->container = $container;
     }
 
     /**
