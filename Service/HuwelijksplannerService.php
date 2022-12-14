@@ -47,7 +47,7 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function huwelijksplannerHandler(array $data, array $configuration): array
+    public function huwelijksplannerCalendarHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;
