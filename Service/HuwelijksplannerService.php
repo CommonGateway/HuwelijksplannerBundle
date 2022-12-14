@@ -47,41 +47,41 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function huwelijksplannerHandler(array $data, array $configuration): array
+    public function huwelijksplannerCalendarHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;
 
-//        $begin = new DateTime($this->request->get('start'));
-//        $end = new DateTime($this->request->get('stop'));
-//
-//        $interval = new DateInterval($this->request->get('interval'));
-//        $period = new DatePeriod($begin, $interval, $end);
-//
-//        $resultArray = [];
-//        foreach ($period as $currentDate) {
-//            // start voorbeeld code
-//            $dayStart = clone $currentDate;
-//            $dayStop = clone $currentDate;
-//
-//            $dayStart->setTime(9, 0);
-//            $dayStop->setTime(17, 0);
-//
-//            if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
-//                $resourceArray = $this->request->get('resources_could');
-//            } else {
-//                $resourceArray = [];
-//            }
-//
-//            // end voorbeeld code
-//            $resultArray[$currentDate->format('Y-m-d')][] = [
-//                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
-//                'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
-//                'resources' => $resourceArray,
-//            ];
-//        }
-//
-//        $this->data['response'] = $resultArray;
+        $begin = new DateTime($this->data['parameters']->get('start'));
+        $end = new DateTime($this->data['parameters']->get('stop'));
+
+        $interval = new DateInterval($this->data['parameters']->get('interval'));
+        $period = new DatePeriod($begin, $interval, $end);
+
+        $resultArray = [];
+        foreach ($period as $currentDate) {
+            // start voorbeeld code
+            $dayStart = clone $currentDate;
+            $dayStop = clone $currentDate;
+
+            $dayStart->setTime(9, 0);
+            $dayStop->setTime(17, 0);
+
+            if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
+                $resourceArray = $this->data['parameters']->get('resources_could');
+            } else {
+                $resourceArray = [];
+            }
+
+            // end voorbeeld code
+            $resultArray[$currentDate->format('Y-m-d')][] = [
+                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
+                'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
+                'resources' => $resourceArray,
+            ];
+        }
+
+        $this->data['response'] = $resultArray;
 
         return $this->data;
     }

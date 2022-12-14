@@ -8,6 +8,7 @@ use App\Entity\Action;
 use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
+use App\Entity\Entity;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -106,7 +107,7 @@ class InstallationService implements InstallerInterface
      *
      * @return void
      */
-    public function addActions(): void
+    public function addActions(?Entity $entity): void
     {
         $actionHandlers = $this->actionHandlers();
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for actions</info>']) : '');
@@ -126,7 +127,11 @@ class InstallationService implements InstallerInterface
             $defaultConfig = $this->addActionConfiguration($actionHandler);
 
             $action = new Action($actionHandler);
-            $action->setListens(['huwelijksplanner.default.listens']);
+            if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
+                $action->setListens(['huwelijksplanner.calendar.listens']);
+            } else {
+                $action->setListens(['huwelijksplanner.default.listens']);
+            }
             $action->setConfiguration($defaultConfig);
 
             $this->entityManager->persist($action);
@@ -184,9 +189,13 @@ class InstallationService implements InstallerInterface
             ) {
                 $endpoint = new Endpoint($entity);
                 if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
-                    $endpoint->setThrows(['huwelijksplanner.default.listens']);
+                    $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
                 }
                 $this->entityManager->persist($endpoint);
+
+                $entity->setEndpoint('/admin/endpoints/'.$endpoint->getId()->toString());
+                $this->entityManager->persist($entity);
+
                 (isset($this->io) ? $this->io->writeln('Endpoint created') : '');
                 continue;
             }
@@ -196,7 +205,7 @@ class InstallationService implements InstallerInterface
         // Lets see if there is a generic search endpoint
 
         // aanmaken van actions met een cronjob
-        $this->addActions();
+        $this->addActions($entity);
 
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
         // We only need 1 cronjob so lets set that
