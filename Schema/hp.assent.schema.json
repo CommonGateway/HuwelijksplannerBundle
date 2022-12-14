@@ -5,9 +5,6 @@
     "type": "object",
     "title": "Assent",
     "properties":{
-        "id": {
-            "type": "string"
-        },
         "token": {
             "type": "string",
             "description": "A secret token used to validate the assent",

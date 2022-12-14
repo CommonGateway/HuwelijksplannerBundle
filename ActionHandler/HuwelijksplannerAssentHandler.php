@@ -24,7 +24,7 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
         return [
             '$id'        => 'https://example.com/person.schema.json',
             '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
-            'title'      => 'Notification Action',
+            'title'      => 'Huwelijksplanner assent Action',
             'required'   => ['huwelijksEntityId'],
             'properties' => [
                 'huwelijksEntityId' => [

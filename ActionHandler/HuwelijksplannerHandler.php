@@ -22,9 +22,9 @@ class HuwelijksplannerHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://example.com/person.schema.json',
+            '$id'         => 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
-            'title'       => 'Huwelijksplanner Action',
+            'title'       => 'Huwelijksplanner calendar Action',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
             'properties'  => [],
