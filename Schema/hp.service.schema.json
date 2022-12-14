@@ -1,0 +1,38 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/hp.service.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Service",
+    "properties":{
+        "type": {
+            "type": "string",
+            "description": "The type of this service, iether use a pre configures service or just plain simple old smtp",
+            "maxLength": 255
+        },
+        "organisation":{
+            "type": "string",
+            "description": "The RSIN of the organization that ownes this service",
+            "maxLength": 255,
+            "required": true
+        },
+        "authorization": {
+            "type": "string",
+            "nullable": true,
+            "description": "The autorization be it password or api key that is used to connect to the service",
+            "maxLength": 255,
+            "required": true
+        },
+        "configuration": {
+            "type": "array",
+            "items": {
+                "format": "string"
+            },
+            "description": "Any specific setting for this service"
+        }
+    },
+    "required": [
+        "organisation",
+        "authorization"
+    ]
+}
