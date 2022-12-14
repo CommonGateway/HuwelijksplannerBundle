@@ -37,11 +37,6 @@ class HuwelijksplannerHandler implements ActionHandlerInterface
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
-     * @throws GatewayException
-     * @throws CacheException
-     * @throws InvalidArgumentException
-     * @throws ComponentException
-     *
      * @return array
      */
     public function run(array $data, array $configuration): array
