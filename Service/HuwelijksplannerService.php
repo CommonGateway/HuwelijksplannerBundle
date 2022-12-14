@@ -3,8 +3,8 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
-use App\Service\ObjectEntityService;
 use App\Exception\GatewayException;
+use App\Service\ObjectEntityService;
 use DateInterval;
 use DatePeriod;
 use DateTime;
