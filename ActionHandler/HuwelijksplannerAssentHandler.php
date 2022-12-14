@@ -41,7 +41,6 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
-     *
      * @return array
      */
     public function run(array $data, array $configuration): array
