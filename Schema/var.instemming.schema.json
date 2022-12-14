@@ -1,0 +1,43 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.instemming.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Instemming",
+    "properties":{
+        "id": {
+            "type": "string"
+        },
+        "subject": {
+            "type": "string",
+            "format": "uri",
+            "description": "The subject of consent, assent or aproval, should be a object"
+        },
+        "type": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "https://www.w3.org/TR/vc-data-model/#types",
+            "required": true
+        },
+        "issuer": {
+            "type": "string",
+            "required": true
+        },
+        "issuanceDate": {
+            "type": "string"
+        },
+        "credentialSubject": {
+            "type": "string",
+            "description": "https://www.w3.org/TR/vc-data-model/#credential-subject",
+            "required": true
+        }
+    },
+    "description": "A claim within huwelijksplanner marks a consent, assent or aproval by a user, person or organisation to a fact or actiont. As such it align closly with both claims and verifiable credentials.",
+    "required": [
+        "type",
+        "issuer",
+        "credentialSubject"
+    ]
+}

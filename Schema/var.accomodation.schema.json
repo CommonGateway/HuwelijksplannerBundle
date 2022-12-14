@@ -1,0 +1,70 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.accomodation.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Accomodation",
+    "properties":{
+        "id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "description": "The name of this accommodation is displayed as a title to end users",
+            "maxLength": 255,
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "The description of this accommodation is displayed to end users as additional information",
+            "maxLength": 255
+        },
+        "accommodationCategory": {
+            "type": "string",
+            "description": "The category this accomodation falls into",
+            "maxLength": 255
+        },
+        "floorSize": {
+            "type": "string",
+            "description": "The floor surface area of the accommodation",
+            "maxLength": 255
+        },
+        "petsAllowed" :{
+            "type": "boolean",
+            "description": "Answers the question if pets are allowed or not"
+        },
+        "wheelchairAccessible": {
+            "type": "boolean",
+            "description": "Answers the question if the accomodation is wheelchair accessible"
+        },
+        "numberOfBathroomsTotal": {
+            "type": "integer",
+            "description": "The number of available toilets at the accommodation"
+        },
+        "floorLevel": {
+            "type": "integer",
+            "description": "The floor level the accommodation is situated on"
+        },
+        "maximumAttendeeCapacity": {
+            "type": "integer",
+            "description": "The maximum number of attendees the accommodation can facilitate"
+        },
+        "product": {
+            "type": "string",
+            "description": "The product this accommodation is related to",
+            "maxLength": 255
+        },
+        "place": {
+            "type": "string",
+            "description": "The location this accommodation belongs to"
+        },
+        "accommodationProperties": {
+            "type": "string",
+            "description": "accommodation properties"
+        }
+    },
+    "description": "A room or other accommodation that can facilitate people.",
+    "required": [
+        "name"
+    ]
+}
