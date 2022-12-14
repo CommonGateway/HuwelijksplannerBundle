@@ -203,8 +203,6 @@ class InstallationService implements InstallerInterface
         }
 
         // Lets see if there is a generic search endpoint
-        
-        
 
         // aanmaken van actions met een cronjob
         $this->addActions($entity);
