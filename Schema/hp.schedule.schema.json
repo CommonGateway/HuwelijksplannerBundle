@@ -58,7 +58,7 @@
         },
         "repeatTill": {
             "type": "datetime",
-            "description": "The moment this recurrence can be recurred to.",
+            "description": "The moment this recurrence can be recurred to."
         },
         "repeatCount": {
             "type": "integer",
@@ -96,5 +96,8 @@
                 "type": "string"
             }
         }
-    }
+    },
+    "required": [
+        "name"
+    ]
 }
