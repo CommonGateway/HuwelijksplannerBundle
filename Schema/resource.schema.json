@@ -1,0 +1,38 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/resource.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1.0",
+    "title": "Resource",
+    "type": "object",
+    "description": "Descibes resources that can be needed for an event.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "The name of this RequestType.",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "An short description of this Event.",
+            "nullable": true
+        },
+        "resource": {
+            "type": "string",
+            "description": "The url of this resource.",
+            "nullable": true
+        },
+        "events": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "todos": {
+            "type": "array",
+            "description": "Todos that belong to thios Calendar.",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

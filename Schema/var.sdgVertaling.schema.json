@@ -1,0 +1,86 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.sdgVertaling.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "SDGVertaling",
+    "properties":{
+        "taal": {
+            "type":"string"
+        },
+        "productTitelDecentraal": {
+            "type":"string"
+        },
+        "specifiekeTekst": {
+            "type":"string"
+        },
+        "procedureBeschrijving": {
+            "type":"string"
+        },
+        "kostenEnBetaalmethoden": {
+            "type":"string"
+        },
+        "uitersteTermijn": {
+            "type":"string"
+        },
+        "conditions": {
+            "type":"string"
+        },
+        "bezwaarEnBeroep": {
+            "type":"string"
+        },
+        "notice": {
+            "type":"string"
+        },
+        "decentraleProcedureLink": {
+            "type":"string"
+        },
+        "vereisten": {
+            "type":"string"
+        },
+        "bewijs": {
+            "type":"string"
+        },
+        "contact": {
+            "type":"string"
+        },
+        "verwijzingLinks": {
+            "type":"array",
+            "format": "object",
+            "items": {
+                "label": {
+                    "type":"string"
+                },
+                "url": {
+                    "type":"string",
+                    "format": "uri"
+                }
+            }
+        },
+        "synonyms": {
+            "type":"array",
+            "format": "object",
+            "items": {
+                "synonym":{
+                    "type":"string"
+                }
+            }
+        },
+        "wtdBijGeenReactie": {
+            "type":"string"
+        },
+        "datumWijziging": {
+            "type":"string",
+            "format": "date-time"
+        },
+        "deskMemo": {
+            "type":"string"
+        },
+        "productAanwezigToelichting": {
+            "type":"string"
+        },
+        "productValtOnderToelichting": {
+            "type":"string"
+        }
+    }
+}

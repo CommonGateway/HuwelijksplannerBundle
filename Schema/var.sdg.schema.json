@@ -1,0 +1,58 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/var.sdg.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "SDG",
+    "properties":{
+        "url": {
+            "type":"string"
+        },
+        "uuid": {
+            "type":"string"
+        },
+        "upnLabel": {
+            "type":"string"
+        },
+        "upnUri":{
+            "type":"string"
+        },
+        "versie": {
+            "type":"integer"
+        },
+        "publicatieDatum": {
+            "type":"string"
+        },
+        "productAanwezigheid": {
+            "type":"boolean"
+        },
+        "productValtOnder": {
+            "type":"string"
+        },
+        "verantwoordelijkeOrganisatie": {
+            "type": "object",
+            "$ref": "#/definitions/SDGLocatie"
+        },
+        "bevoegdeOrganisatie": {
+            "type": "object",
+            "$ref": "#/definitions/SDGLocatie"
+        },
+        "catalogus": {
+            "type":"string"
+        },
+        "locaties": {
+            "type":"array"
+        },
+        "doelgroep": {
+            "type":"string"
+        },
+        "vertalingen": {
+            "type": "array",
+            "$ref": "#/definitions/SDGVertaling"
+        },
+        "gerelateerdeProducten": {
+            "type":"array",
+            "$ref": "#/definitions/SDGProduct"
+        }
+    }
+}
