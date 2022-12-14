@@ -27,16 +27,15 @@ class HuwelijksplannerService
     private array $configuration;
 
     /**
-     * @param ObjectEntityService $objectEntityService
-     * @param RequestStack $requestStack
+     * @param ObjectEntityService    $objectEntityService
+     * @param RequestStack           $requestStack
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
-        ObjectEntityService    $objectEntityService,
-        RequestStack           $requestStack,
+        ObjectEntityService $objectEntityService,
+        RequestStack $requestStack,
         EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         $this->objectEntityService = $objectEntityService;
         $this->request = $requestStack->getCurrentRequest();
         $this->entityManager = $entityManager;
@@ -50,9 +49,9 @@ class HuwelijksplannerService
      * @param array $data
      * @param array $configuration
      *
-     * @return array
      * @throws Exception
      *
+     * @return array
      */
     public function huwelijksplannerHandler(array $data, array $configuration): array
     {
@@ -82,8 +81,8 @@ class HuwelijksplannerService
 
             // end voorbeeld code
             $resultArray[$currentDate->format('Y-m-d')][] = [
-                'start' => $currentDate->format('Y-m-d\TH:i:sO'),
-                'stop' => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
+                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
+                'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
                 'resources' => $resourceArray,
             ];
         }
@@ -97,8 +96,10 @@ class HuwelijksplannerService
      * Handles Huwelijkslnner actions.
      *
      * @param ObjectEntity $partner
-     * @return string|null
+     *
      * @throws Exception
+     *
+     * @return string|null
      */
     public function mailConsentingPartner(ObjectEntity $partner): ?string
     {
@@ -120,10 +121,12 @@ class HuwelijksplannerService
     /**
      * Handles Huwelijkslnner actions.
      *
-     * @param ObjectEntity $huwelijk
+     * @param ObjectEntity         $huwelijk
      * @param PersistentCollection $partners
-     * @return ObjectEntity|null
+     *
      * @throws Exception
+     *
+     * @return ObjectEntity|null
      */
     public function huwelijkPartners(ObjectEntity $huwelijk, PersistentCollection $partners): ?ObjectEntity
     {
@@ -133,13 +136,11 @@ class HuwelijksplannerService
             $subjectIdentificatie = $person->getValue('subjectIdentificatie');
             $klantBsn = $subjectIdentificatie->getValue('inpBsn');
 
-
             $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
 
             if ($klantBsn > $requester || $klantBsn < $requester) {
                 $this->mailConsentingPartner($partner);
             }
-
         }
 
         return $huwelijk;
@@ -151,9 +152,9 @@ class HuwelijksplannerService
      * @param array $data
      * @param array $configuration
      *
-     * @return array
      * @throws Exception
      *
+     * @return array
      */
     public function huwelijksplannerAssentHandler(array $data, array $configuration): array
     {
@@ -167,16 +168,12 @@ class HuwelijksplannerService
 
         if (array_key_exists('id', $this->data['response']) &&
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-
-
             if ($partners = $huwelijk->getValue('partners')) {
                 $huwelijk = $this->huwelijkPartners($huwelijk, $partners);
             }
 
             var_dump($huwelijk->toArray());
-            die();
-
-
+            exit();
         }
 
         return $this->data;
@@ -188,9 +185,9 @@ class HuwelijksplannerService
      * @param array $data
      * @param array $configuration
      *
-     * @return array
      * @throws LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface
      *
+     * @return array
      */
     public function HuwelijksplannerCheckHandler(array $data, array $configuration): array
     {

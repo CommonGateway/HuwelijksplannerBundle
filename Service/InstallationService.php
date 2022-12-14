@@ -1,6 +1,7 @@
 <?php
 
 // src/Service/InstallationService.php
+
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Action;
@@ -8,9 +9,9 @@ use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InstallationService implements InstallerInterface
 {
@@ -25,9 +26,10 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * Set symfony style in order to output to the console
+     * Set symfony style in order to output to the console.
      *
      * @param SymfonyStyle $io
+     *
      * @return self
      */
     public function setStyle(SymfonyStyle $io): self
@@ -53,7 +55,7 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * The actionHandlers in Kiss
+     * The actionHandlers in Kiss.
      *
      * @return array
      */
@@ -61,21 +63,21 @@ class InstallationService implements InstallerInterface
     {
         return [
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerAssentHandler',
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerHandler'
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerHandler',
         ];
     }
 
     /**
-     * This function creates default configuration for the action
+     * This function creates default configuration for the action.
      *
      * @param $actionHandler The actionHandler for witch the default configuration is set
+     *
      * @return array
      */
     public function addActionConfiguration($actionHandler): array
     {
         $defaultConfig = [];
         foreach ($actionHandler->getConfiguration()['properties'] as $key => $value) {
-
             switch ($value['type']) {
                 case 'string':
                 case 'array':
@@ -95,25 +97,25 @@ class InstallationService implements InstallerInterface
                     // throw error
             }
         }
+
         return $defaultConfig;
     }
 
     /**
-     * This function creates actions for all the actionHandlers in Kiss
+     * This function creates actions for all the actionHandlers in Kiss.
      *
      * @return void
      */
     public function addActions(): void
     {
         $actionHandlers = $this->actionHandlers();
-        (isset($this->io)?$this->io->writeln(['','<info>Looking for actions</info>']):'');
+        (isset($this->io) ? $this->io->writeln(['', '<info>Looking for actions</info>']) : '');
 
         foreach ($actionHandlers as $handler) {
             $actionHandler = $this->container->get($handler);
 
             if ($this->entityManager->getRepository('App:Action')->findOneBy(['class'=> get_class($actionHandler)])) {
-
-                (isset($this->io)?$this->io->writeln(['Action found for '.$handler]):'');
+                (isset($this->io) ? $this->io->writeln(['Action found for '.$handler]) : '');
                 continue;
             }
 
@@ -129,7 +131,7 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($action);
 
-            (isset($this->io)?$this->io->writeln(['Action created for '.$handler]):'');
+            (isset($this->io) ? $this->io->writeln(['Action created for '.$handler]) : '');
         }
     }
 
@@ -141,11 +143,11 @@ class InstallationService implements InstallerInterface
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
             'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
-            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'
+            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
         ];
 
         foreach ($objectsThatShouldHaveCards as $object) {
-            (isset($this->io) ? $this->io->writeln('Looking for a dashboard card for: ' . $object) : '');
+            (isset($this->io) ? $this->io->writeln('Looking for a dashboard card for: '.$object) : '');
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -170,11 +172,11 @@ class InstallationService implements InstallerInterface
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
             'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
-            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'
+            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
         ];
 
         foreach ($objectsThatShouldHaveEndpoints as $object) {
-            (isset($this->io) ? $this->io->writeln('Looking for a endpoint for: ' . $object) : '');
+            (isset($this->io) ? $this->io->writeln('Looking for a endpoint for: '.$object) : '');
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
 
             if (
@@ -193,21 +195,19 @@ class InstallationService implements InstallerInterface
         // aanmaken van actions met een cronjob
         $this->addActions();
 
-        (isset($this->io)?$this->io->writeln(['','<info>Looking for cronjobs</info>']):'');
+        (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
         // We only need 1 cronjob so lets set that
-        if(!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name'=>'Huwelijksplanner']))
-        {
+        if (!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name'=>'Huwelijksplanner'])) {
             $cronjob = new Cronjob();
             $cronjob->setName('Huwelijksplanner');
-            $cronjob->setDescription("This cronjob fires all the huwelijksplanner actions ever 5 minutes");
+            $cronjob->setDescription('This cronjob fires all the huwelijksplanner actions ever 5 minutes');
             $cronjob->setThrows(['huwelijksplanner.default.listens']);
 
             $this->entityManager->persist($cronjob);
 
-            (isset($this->io)?$this->io->writeln(['','Created a cronjob for Huwelijksplanner']):'');
-        }
-        else {
-            (isset($this->io)?$this->io->writeln(['','There is alreade a cronjob for Huwelijksplanner']):'');
+            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for Huwelijksplanner']) : '');
+        } else {
+            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for Huwelijksplanner']) : '');
         }
 
         $this->entityManager->flush();

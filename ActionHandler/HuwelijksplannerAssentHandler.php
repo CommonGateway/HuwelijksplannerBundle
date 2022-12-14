@@ -2,8 +2,8 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
+use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
 
 class HuwelijksplannerAssentHandler implements ActionHandlerInterface
 {
