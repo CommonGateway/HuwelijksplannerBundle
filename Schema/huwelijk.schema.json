@@ -1,0 +1,88 @@
+{
+    "$id": "https://commongateway.huwelijksplanner.nl/schemas/huwelijk.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1.0",
+    "title": "Huwelijk",
+    "type": "object",
+    "properties": {
+        "partners": {
+            "type": "array",
+            "description": "De in dit huwelijk betrokken partners, bestaande uit hun instemmming (Assent) en getuigen.",
+            "items": {
+                "$ref": "#/definitions/Assent"
+            }
+        },
+        "getuigen": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Assent"
+            },
+            "maxLength": 4
+        },
+        "type": {
+            "description": "Het juridische type van dit huwelijk zo als opgehaald uit de SDG catalogus, zijnde huwelijk, parnterschap of omzetting",
+            "$ref": "#/definitions/SDGProduct"
+        },
+        "ceremonie": {
+            "description": "De cermonie (manier) waarop het huwelijk wordt volgrokken. Bijvoorbeeld gratis, flits, eenvoudig of uitgebreid.",
+            "$ref": "#/definitions/SDGProduct"
+        },
+        "locatie": {
+            "description": "Verwijzing(uri) naar de Locatie in het SDG, bij ophalen kan de query parameter &extend[]=locatie worden gebruikt om een volledig object op te halen.",
+            "$ref": "#/definitions/SDGProduct"
+        },
+        "ambtenaar": {
+            "description": "Verwijzing(uri) naar de Ambtenaar in het SDG, bij ophalen kan de query parameter &extend[]=ambtenaarworden gebruikt om een volledig object op te halen.",
+            "$ref": "#/definitions/SDGProduct"
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "concept",
+                "reported",
+                "confirmed",
+                "executed",
+                "cancelled"
+            ],
+            "default": "concept",
+            "example": "concept"
+        },
+        "moment": {
+            "type": "datetime",
+            "description": "De bij dit huwelijk gekozen extra producten"
+        },
+        "producten": {
+            "type": "array",
+            "description": "De bij dit huwelijk gekozen extra producten",
+            "items": {
+                "$ref": "#/definitions/SDGProduct"
+            }
+        },
+        "checklist": {
+            "$ref": "#/definitions/Checklist",
+            "readOnly": true
+        },
+        "order": {
+            "type": "string",
+            "format": "url",
+            "description": "Bij het melden van het voorgenomen huwelijk word een order gecreërd. Dit order bevat ook de betaallink. , bij ophalen kan de query parameter &extend[]=order worden gebruikt om een volledig object op te halen.",
+            "readOnly": true,
+            "example": "https://www.zuiddrecht.nl/api/orc/vi/ea16b2d6-3e0f-43d7-abf2-069569b2ee54"
+        },
+        "zaak": {
+            "$ref": "#/definitions/Zaak",
+            "description": "Een zaak bevat de ZRC verwijzing naar een zaak, mits de gemeente deze als verplicht heet ingecalculeerd. De zaak wordt onderwater autotmatisch gecreerd. , bij ophalen kan de query parameter &extend[]=zaak worden gebruikt om een volledig object op te halen.",
+            "readOnly": true,
+            "example": "https://www.zuiddrecht.nl/api/zrc/vi/ea16b2d6-3e0f-43d7-abf2-069569b2ee54"
+        },
+        "kosten": {
+            "type": "string",
+            "description": "Een ISO kosten opgaaf voor het huwelijk bestaande uit een drie cijferige valuta code gevold door het bedrag zonder decimalen e.g. EUR 150 voor € 1,50",
+            "example": "EUR 150",
+            "readOnly": true
+        },
+        "instemmingGemeente": {
+            "$ref": "#/definitions/Assent"
+        }
+    }
+}

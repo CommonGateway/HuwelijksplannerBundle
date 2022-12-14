@@ -18,8 +18,7 @@
             "type":"string"
         },
         "owmsEndDate": {
-            "type":"string",
-            "format": "date-time"
+            "type":"datetime"
         }
     }
 }

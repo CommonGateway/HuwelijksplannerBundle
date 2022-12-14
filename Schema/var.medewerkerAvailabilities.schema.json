@@ -6,27 +6,22 @@
     "title": "MedewerkerAvailabilities",
     "properties":{
         "maandag": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability",
             "required": true
         },
         "dinsdag": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability",
             "required": true
         },
         "woensdag": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability",
             "required": true
         },
         "donderdag": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability",
             "required": true
         },
         "vrijdag": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability",
             "required": true
         }

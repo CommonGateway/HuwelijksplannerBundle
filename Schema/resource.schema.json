@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "title": "Resource",
     "type": "object",
-    "description": "Descibes resources that can be needed for an event.",
+    "description": "Describes resources that can be needed for an event.",
     "properties": {
         "name": {
             "type": "string",

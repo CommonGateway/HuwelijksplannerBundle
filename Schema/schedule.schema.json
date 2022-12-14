@@ -57,9 +57,8 @@
             }
         },
         "repeatTill": {
-            "type": "string",
+            "type": "datetime",
             "description": "The moment this recurrence can be recurred to.",
-            "format": "date-time"
         },
         "repeatCount": {
             "type": "integer",

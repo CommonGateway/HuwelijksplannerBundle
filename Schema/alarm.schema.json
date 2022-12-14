@@ -39,7 +39,7 @@
             "required": true
         },
         "repeat": {
-            "type": "intger",
+            "type": "integer",
             "description": "The number of times the alarm repeats."
         },
         "event": {

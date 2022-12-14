@@ -39,7 +39,9 @@
         },
         "subscribers": {
             "type": "array",
-            "$ref":"#/definitions/Subscriber"
+            "items": {
+                "$ref":"#/definitions/Subscriber"
+            }
         }
     },
     "required": [
