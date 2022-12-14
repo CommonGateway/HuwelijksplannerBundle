@@ -22,15 +22,13 @@
             "nullable": true
         },
         "dateCreated": {
-            "type": "string",
+            "type": "datetime",
             "description": "The moment this resource was created.",
-            "format": "date-time",
             "nullable": true
         },
         "dateModified": {
-            "type": "string",
+            "type": "datetime",
             "description": "The moment this resource last Modified.",
-            "format": "date-time",
             "nullable": true
         },
         "underName": {

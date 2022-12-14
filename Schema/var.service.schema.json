@@ -25,7 +25,9 @@
         },
         "configuration": {
             "type": "array",
-            "format": "string",
+            "items": {
+                "format": "string"
+            },
             "description": "Any specific setting for this service"
         }
     },

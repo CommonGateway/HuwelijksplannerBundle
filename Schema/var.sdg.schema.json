@@ -30,11 +30,9 @@
             "type":"string"
         },
         "verantwoordelijkeOrganisatie": {
-            "type": "object",
             "$ref": "#/definitions/SDGLocatie"
         },
         "bevoegdeOrganisatie": {
-            "type": "object",
             "$ref": "#/definitions/SDGLocatie"
         },
         "catalogus": {
@@ -48,11 +46,15 @@
         },
         "vertalingen": {
             "type": "array",
-            "$ref": "#/definitions/SDGVertaling"
+            "items": {
+                "$ref": "#/definitions/SDGVertaling"
+            }
         },
         "gerelateerdeProducten": {
             "type":"array",
-            "$ref": "#/definitions/SDGProduct"
+            "items": {
+                "$ref": "#/definitions/SDGProduct"
+            }
         }
     }
 }

@@ -17,15 +17,13 @@
             "nullable": true
         },
         "startDate": {
-            "type": "string",
+            "type": "datetime",
             "description": "The moment this event starts.",
-            "format": "date-time",
             "required": true
         },
         "endDate": {
-            "type": "string",
+            "type": "datetime",
             "description": "The moment this event ends.",
-            "format": "date-time",
             "required": true
         },
         "class": {

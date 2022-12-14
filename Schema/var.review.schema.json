@@ -37,13 +37,11 @@
             "type": "integer"
         },
         "dateCreated": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The moment this resource was created"
         },
         "dateModified": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The moment this resource last Modified"
         }
     },

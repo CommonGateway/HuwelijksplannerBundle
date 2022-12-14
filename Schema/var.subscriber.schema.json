@@ -18,20 +18,20 @@
             "maxLength": 255
         },
         "dateAcceptedOrganisation": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "nullable": true,
             "description": "The moment the invite was accepted by the organization"
         },
         "dateAcceptedUser": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "nullable": true,
             "description": "The moment the invite was accepted by the user"
         },
         "sendLists": {
             "type": "array",
-            "$ref": "#/definitions/SendList",
+            "items": {
+                "$ref": "#/definitions/SendList"
+            },
             "required":true
         }
     },

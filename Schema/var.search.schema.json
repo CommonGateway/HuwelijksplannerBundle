@@ -43,7 +43,10 @@
         },
         "participants": {
             "type": "array",
-            "format": "string url",
+            "items": {
+                "type": "string",
+                "format": "url"
+            },
             "description": "Other co-agents that participated in the action indirectly. e.g. John wrote a book with Steve."
         },
         "provider": {
@@ -60,13 +63,11 @@
             "description": "For failed actions, more information on the cause of the failure."
         },
         "endTime": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The endTime of something. For a reserved event or service (e.g. FoodEstablishmentReservation), the time that it is expected to end. For actions that span a period of time, when the action was performed. e.g. John wrote a book from January to December. For media, including audio and video, it's the time offset of the end of a clip within a larger file.\nNote that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions."
         },
         "startTime": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The startTime of something. For a reserved event or service (e.g. FoodEstablishmentReservation), the time that it is expected to start. For actions that span a period of time, when the action was performed. e.g. John wrote a book from January to December. For media, including audio and video, it's the time offset of the start of a clip within a larger file.\nNote that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions."
         },
         "target": {
@@ -75,13 +76,11 @@
             "description": "Indicates a target EntryPoint for an Action."
         },
         "dateCreated": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The moment this resource was created"
         },
         "dateModified": {
-            "type": "string",
-            "format": "date-time",
+            "type": "datetime",
             "description": "The moment this resource last Modified"
         }
     },

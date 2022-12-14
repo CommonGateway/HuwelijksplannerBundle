@@ -15,13 +15,13 @@
         },
         "name": {
             "type": "string",
-            "description": "The name of this assend is displayed as a title to end users and should make clear what they arre assending to",
+            "description": "The name of this assent is displayed as a title to end users and should make clear what they are assending to",
             "maxLength": 255,
             "required": true
         },
         "description": {
             "type": "string",
-            "description": "The description of this assend is displayed to end users as aditional information and should make clear what they arre assending to"
+            "description": "The description of this assent is displayed to end users as additional information and should make clear what they are assending to"
         },
         "request": {
             "type": "string",
@@ -35,7 +35,7 @@
         },
         "property": {
             "type": "string",
-            "description": "The property of a request that this assent applies to e.g. parner in meldingvoorgenomenhuwelijk",
+            "description": "The property of a request that this assent applies to e.g. partner in meldingvoorgenomenhuwelijk",
             "maxLength": 255
         },
         "process": {

@@ -6,15 +6,13 @@
     "type": "object",
     "properties": {
         "startDate": {
-            "type": "string",
+            "type": "datetime",
             "description": "The start of the availability block.",
-            "format": "date-time",
             "nullable": true
         },
         "endDate": {
-            "type": "string",
+            "type": "datetime",
             "description": "The end of the availability block.",
-            "format": "date-time",
             "nullable": true
         },
         "available": {

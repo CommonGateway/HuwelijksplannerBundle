@@ -20,7 +20,7 @@
             "type": "integer",
             "default": 0,
             "example": "5",
-            "description": "The number of downvotes this answer has received from the community."
+            "description": "The number of down votes this answer has received from the community."
         }, 
          "upvoteCount": {
             "type": "integer",
@@ -29,7 +29,6 @@
             "description": "The number of upvotes this question, answer or comment has received from the community."
          },
          "question": {
-            "type": "object",
             "$ref": "#/definitions/Question"
          },
          "text": {

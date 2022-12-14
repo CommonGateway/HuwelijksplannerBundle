@@ -19,7 +19,9 @@
         },
         "resources":{
             "type": "array",
-            "format": "string"
+            "items": {
+                "format": "string"
+            }
         }
     }
 }

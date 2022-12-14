@@ -15,7 +15,9 @@
         },
         "type": {
             "type": "array",
-            "format": "string",
+            "items": {
+                "type": "string"
+            },
             "description": "https://www.w3.org/TR/vc-data-model/#types",
             "required": true
         },

@@ -26,7 +26,6 @@
             "description": "De funtie titel die door deze medewerker word bekleed"
         },
         "availabilities": {
-            "type": "object",
             "$ref": "#/definitions/MedewerkerAvailability"
         },
         "replacement": {

@@ -46,23 +46,27 @@
         },
         "verwijzingLinks": {
             "type":"array",
-            "format": "object",
             "items": {
-                "label": {
-                    "type":"string"
-                },
-                "url": {
-                    "type":"string",
-                    "format": "uri"
+                "type": "object",
+                "properties":{
+                    "label": {
+                        "type":"string"
+                    },
+                    "url": {
+                        "type":"string",
+                        "format": "uri"
+                    }
                 }
             }
         },
         "synonyms": {
             "type":"array",
-            "format": "object",
             "items": {
-                "synonym":{
-                    "type":"string"
+                "type": "object",
+                "properties":{
+                    "synonym":{
+                        "type":"string"
+                    }
                 }
             }
         },
@@ -70,8 +74,7 @@
             "type":"string"
         },
         "datumWijziging": {
-            "type":"string",
-            "format": "date-time"
+            "type":"datetime"
         },
         "deskMemo": {
             "type":"string"
