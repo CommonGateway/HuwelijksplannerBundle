@@ -1,0 +1,55 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/hp.review.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "Review",
+    "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "The UUID identifier of this object"
+        },
+        "author": {
+            "type": "string",
+            "format": "uri",
+            "required": true,
+            "description": "The user that made this node"
+        },
+        "topic": {
+            "type": "string",
+            "format": "uri",
+            "required": true,
+            "description": "The object that this note is about"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "description": "Name of the memo"
+        },
+        "description": {
+            "type": "string",
+            "required": true,
+            "description": "Description of the memo"
+        },
+        "rating": {
+            "type": "integer"
+        },
+        "dateCreated": {
+            "type": "datetime",
+            "description": "The moment this resource was created"
+        },
+        "dateModified": {
+            "type": "datetime",
+            "description": "The moment this resource last Modified"
+        }
+    },
+    "description": "Biedt de generieke mogelijkheid om gebruikers reviews te geven over objecten",
+    "required": [
+        "author",
+        "topic",
+        "name",
+        "description"
+    ]
+}

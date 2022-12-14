@@ -1,0 +1,37 @@
+{
+    "$id": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailabilities.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "MedewerkerAvailabilities",
+    "properties":{
+        "maandag": {
+            "$ref": "#/definitions/MedewerkerAvailability",
+            "required": true
+        },
+        "dinsdag": {
+            "$ref": "#/definitions/MedewerkerAvailability",
+            "required": true
+        },
+        "woensdag": {
+            "$ref": "#/definitions/MedewerkerAvailability",
+            "required": true
+        },
+        "donderdag": {
+            "$ref": "#/definitions/MedewerkerAvailability",
+            "required": true
+        },
+        "vrijdag": {
+            "$ref": "#/definitions/MedewerkerAvailability",
+            "required": true
+        }
+    },
+    "description": "Dit ORC medewerker object vang kiss specifieke wensen af. Let op het is verstandig de medewerker op te halen met ?extend[]=contact&extend[]=calendar zodat de contact en agenda gegevens meteen mee komen. ",
+    "required": [
+        "maandag",
+        "dinsdag",
+        "woensdag",
+        "donderdag",
+        "vrijdag"
+    ]
+}

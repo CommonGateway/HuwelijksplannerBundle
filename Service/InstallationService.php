@@ -8,17 +8,20 @@ use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InstallationService implements InstallerInterface
 {
     private EntityManagerInterface $entityManager;
+    private ContainerInterface $container;
     private SymfonyStyle $io;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
     {
         $this->entityManager = $entityManager;
+        $this->container = $container;
     }
 
     /**
@@ -134,7 +137,12 @@ class InstallationService implements InstallerInterface
     {
 
         // Lets create some genneric dashboard cards
-        $objectsThatShouldHaveCards = ['https://opencatalogi.nl/example.schema.json'];
+        $objectsThatShouldHaveCards = [
+            'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
+            'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'
+        ];
 
         foreach ($objectsThatShouldHaveCards as $object) {
             (isset($this->io) ? $this->io->writeln('Looking for a dashboard card for: ' . $object) : '');
@@ -158,7 +166,12 @@ class InstallationService implements InstallerInterface
         }
 
         // Let create some endpoints
-        $objectsThatShouldHaveEndpoints = ['https://opencatalogi.nl/example.schema.json'];
+        $objectsThatShouldHaveEndpoints = [
+            'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
+            'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'
+        ];
 
         foreach ($objectsThatShouldHaveEndpoints as $object) {
             (isset($this->io) ? $this->io->writeln('Looking for a endpoint for: ' . $object) : '');
