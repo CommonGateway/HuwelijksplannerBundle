@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
