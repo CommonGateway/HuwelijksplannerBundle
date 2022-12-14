@@ -127,7 +127,7 @@ class InstallationService implements InstallerInterface
             $defaultConfig = $this->addActionConfiguration($actionHandler);
 
             $action = new Action($actionHandler);
-            if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
+            if ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
                 $action->setListens(['huwelijksplanner.calendar.listens']);
             } else {
                 $action->setListens(['huwelijksplanner.default.listens']);
