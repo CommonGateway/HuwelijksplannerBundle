@@ -41,14 +41,9 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
-     * @throws \App\Exception\GatewayException
-     * @throws \Psr\Cache\CacheException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Respect\Validation\Exceptions\ComponentException
-     *
      * @return array
      */
-    public function __run(array $data, array $configuration): array
+    public function run(array $data, array $configuration): array
     {
         return $this->huwelijksplannerService->huwelijksplannerAssentHandler($data, $configuration);
     }
