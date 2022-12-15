@@ -11,6 +11,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -122,15 +123,18 @@ class HuwelijksplannerService
      *
      * @return ObjectEntity|null
      */
-    public function huwelijkPartners(ObjectEntity $huwelijk, PersistentCollection $partners): ?ObjectEntity
+    public function huwelijkPartners(ObjectEntity $huwelijk): ?ObjectEntity
     {
-        foreach ($partners as $partner) {
-            $requester = $partner->getValue('requester');
-            $person = $partner->getValue('person');
-            $subjectIdentificatie = $person->getValue('subjectIdentificatie');
-            $klantBsn = $subjectIdentificatie->getValue('inpBsn');
+        foreach ($huwelijk->getValue('partners') as $partner) {
+            var_dump($partner);
+            var_dump($partner['requester']);
+            $requester = $partner['requester'];
+            $person = $partner['person'];
+            $subjectIdentificatie = $person['subjectIdentificatie'];
+            $klantBsn = $subjectIdentificatie['inpBsn'];
 
             $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
+            $this->entityManager->persist($partners);
 
             if ($klantBsn > $requester || $klantBsn < $requester) {
                 $this->mailConsentingPartner($partner);
@@ -152,25 +156,39 @@ class HuwelijksplannerService
      */
     public function huwelijksplannerAssentHandler(array $data, array $configuration): array
     {
-        var_dump('jooo');
         $this->data = $data;
         $this->configuration = $configuration;
 
-        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijkEntityId']);
+        if (array_key_exists('huwelijksEntityId', $this->configuration)) {
+            var_dump($this->configuration['huwelijksEntityId']);
+
+            $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
+
+            var_dump($huwelijkEntity->getName());
+            $object = new ObjectEntity($huwelijkEntity);
+            $this->entityManager->persist($object);
+//            var_dump($this->data['response']->getId()->toString());
+            $this->entityManager->flush();
+            if (array_key_exists('id', $this->data['response']) &&
+                $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
+                if ($partners = $huwelijk->getValue('partners')) {
+                    $huwelijk = $this->huwelijkPartners($huwelijk);
+                }
+
+                $this->entityManager->persist($huwelijk);
+
+                var_dump($huwelijk->getValue('partners'));
+
+                var_dump($this->data['response']['id']);
+
+                var_dump($huwelijk->toArray());
+                exit();
+            }
+        }
 
 //        var_dump($this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])->toArray());
 
-        if (array_key_exists('id', $this->data['response']) &&
-            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-            if ($partners = $huwelijk->getValue('partners')) {
-                $huwelijk = $this->huwelijkPartners($huwelijk, $partners);
-            }
-
-            var_dump($huwelijk->toArray());
-            exit();
-        }
-
-        return $this->data;
+        return $this->data['response'];
     }
 
     /**
@@ -183,7 +201,7 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function HuwelijksplannerCheckHandler(array $data, array $configuration): array
+    public function huwelijksplannerCheckHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;

@@ -41,14 +41,12 @@
             "maxLength": 255
         },
         "contact": {
-            "type": "string",
             "description": "The contact that this assent applies to",
-            "maxLength": 255
+            "$ref": "#/definitions/Klant"
         },
         "person": {
-            "type": "string",
             "description": "The person that this assent applies to",
-            "maxLength": 255
+            "$ref": "#/definitions/Klant"
         },
         "status": {
             "type": "string",
