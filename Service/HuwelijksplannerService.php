@@ -209,7 +209,7 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function HuwelijksplannerCheckHandler(array $data, array $configuration): array
+    public function huwelijksplannerCheckHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;
