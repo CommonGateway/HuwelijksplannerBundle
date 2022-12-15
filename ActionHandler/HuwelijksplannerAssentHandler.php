@@ -22,14 +22,17 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://example.com/person.schema.json',
+            '$id'        => 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
             '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
             'title'      => 'Huwelijksplanner assent Action',
             'required'   => ['huwelijksEntityId'],
             'properties' => [
                 'huwelijksEntityId' => [
-                    'type'        => 'string',
+                    'type'        => 'uuid',
                     'description' => 'The id of the huwelijks entity',
+                    'example'     => 'b484ba0b-0fb7-4007-a303-1ead3ab48846',
+                    'nullable'    => true,
+                    '$ref'        => 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'
                 ],
             ],
         ];

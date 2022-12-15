@@ -107,7 +107,7 @@ class InstallationService implements InstallerInterface
      *
      * @return void
      */
-    public function addActions(?Entity $entity): void
+    public function addActions(): void
     {
         $actionHandlers = $this->actionHandlers();
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for actions</info>']) : '');
@@ -129,6 +129,8 @@ class InstallationService implements InstallerInterface
             $action = new Action($actionHandler);
             if ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
                 $action->setListens(['huwelijksplanner.calendar.listens']);
+            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'){
+                $action->setListens(['commongateway.response.pre']);
             } else {
                 $action->setListens(['huwelijksplanner.default.listens']);
             }
@@ -140,9 +142,8 @@ class InstallationService implements InstallerInterface
         }
     }
 
-    public function checkDataConsistency()
+    public function addDashboardCards()
     {
-
         // Lets create some genneric dashboard cards
         $objectsThatShouldHaveCards = [
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
@@ -171,7 +172,10 @@ class InstallationService implements InstallerInterface
             }
             (isset($this->io) ? $this->io->writeln('Dashboard card found') : '');
         }
+    }
 
+    public function addEndpoints()
+    {
         // Let create some endpoints
         $objectsThatShouldHaveEndpoints = [
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
@@ -190,6 +194,11 @@ class InstallationService implements InstallerInterface
                 $endpoint = new Endpoint($entity);
                 if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
+                    $endpoint->setMethod('GET');
+                }
+                if ($entity->getReference() == 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
+                    $endpoint->setThrows(['commongateway.response.pre']);
+//                    $endpoint->setMethod('POST');
                 }
                 $this->entityManager->persist($endpoint);
 
@@ -201,12 +210,10 @@ class InstallationService implements InstallerInterface
             }
             (isset($this->io) ? $this->io->writeln('Endpoint found') : '');
         }
+    }
 
-        // Lets see if there is a generic search endpoint
-
-        // aanmaken van actions met een cronjob
-        $this->addActions($entity);
-
+    public function addCronJobs()
+    {
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
         // We only need 1 cronjob so lets set that
         if (!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name'=>'Huwelijksplanner'])) {
@@ -221,6 +228,16 @@ class InstallationService implements InstallerInterface
         } else {
             (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for Huwelijksplanner']) : '');
         }
+    }
+
+    public function checkDataConsistency()
+    {
+
+        $this->addDashboardCards();
+        $this->addEndpoints();
+        // aanmaken van actions met een cronjob
+        $this->addActions();
+       $this->addCronJobs();
 
         $this->entityManager->flush();
     }
