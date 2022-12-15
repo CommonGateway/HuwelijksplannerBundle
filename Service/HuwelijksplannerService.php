@@ -11,8 +11,8 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
@@ -162,7 +162,6 @@ class HuwelijksplannerService
         if (array_key_exists('huwelijksEntityId', $this->configuration)) {
             var_dump($this->configuration['huwelijksEntityId']);
 
-
             $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
 
             var_dump($huwelijkEntity->getName());
@@ -172,14 +171,11 @@ class HuwelijksplannerService
             $this->entityManager->flush();
             if (array_key_exists('id', $this->data['response']) &&
                 $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-
-
                 if ($partners = $huwelijk->getValue('partners')) {
                     $huwelijk = $this->huwelijkPartners($huwelijk);
                 }
 
                 $this->entityManager->persist($huwelijk);
-
 
                 var_dump($huwelijk->getValue('partners'));
 
@@ -188,13 +184,9 @@ class HuwelijksplannerService
                 var_dump($huwelijk->toArray());
                 exit();
             }
-
         }
 
-
 //        var_dump($this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])->toArray());
-
-
 
         return $this->data['response'];
     }

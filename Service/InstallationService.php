@@ -8,7 +8,6 @@ use App\Entity\Action;
 use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
-use App\Entity\Entity;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -131,7 +130,7 @@ class InstallationService implements InstallerInterface
             $action = new Action($actionHandler);
             if ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
                 $action->setListens(['huwelijksplanner.calendar.listens']);
-            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json'){
+            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json') {
                 $action->setListens(['commongateway.response.pre']);
             } else {
                 $action->setListens(['huwelijksplanner.default.listens']);
@@ -234,12 +233,11 @@ class InstallationService implements InstallerInterface
 
     public function checkDataConsistency()
     {
-
         $this->addDashboardCards();
         $this->addEndpoints();
         // aanmaken van actions met een cronjob
         $this->addActions();
-       $this->addCronJobs();
+        $this->addCronJobs();
 
         $this->entityManager->flush();
     }

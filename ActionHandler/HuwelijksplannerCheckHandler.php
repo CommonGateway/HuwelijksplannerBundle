@@ -32,7 +32,7 @@ class HuwelijksplannerCheckHandler implements ActionHandlerInterface
                     'description' => 'The id of the huwelijks entity',
                     'example'     => 'b484ba0b-0fb7-4007-a303-1ead3ab48846',
                     'nullable'    => true,
-                    '$ref'        => 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'
+                    '$ref'        => 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
                 ],
             ],
         ];
