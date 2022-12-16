@@ -64,7 +64,7 @@ class InstallationService implements InstallerInterface
         return [
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerAssentHandler',
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCalendarHandler',
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCheckHandler',
+//            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCheckHandler',
             'App\ActionHandler\EmailHandler',
         ];
     }
@@ -83,14 +83,14 @@ class InstallationService implements InstallerInterface
             switch ($value['type']) {
                 case 'string':
                 case 'array':
-                    if (in_array('example', $value)) {
+                    if (array_key_exists('example', $value)) {
                         $defaultConfig[$key] = $value['example'];
                     }
                     break;
                 case 'object':
                     break;
                 case 'uuid':
-                    if (in_array('$ref', $value) &&
+                    if (array_key_exists('$ref', $value) &&
                         $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $value['$ref']])) {
                         $defaultConfig[$key] = $entity->getId()->toString();
                     }
