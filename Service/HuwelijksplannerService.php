@@ -11,9 +11,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\Security\Core\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
