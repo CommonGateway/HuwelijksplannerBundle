@@ -49,7 +49,7 @@
         },
         "moment": {
             "type": "datetime",
-            "description": "De bij dit huwelijk gekozen extra producten"
+            "description": "Het moment waarop het huwelijk aanvangt"
         },
         "producten": {
             "type": "array",
