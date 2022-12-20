@@ -11,9 +11,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
@@ -218,15 +218,14 @@ class HuwelijksplannerService
 
         if (array_key_exists('id', $this->data['response']) &&
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-
             $requestPartnerAssent = [
-                "name" => $security->getUser()->getUserName(),
-                "description" => null,
-                "property" => null,
-                "contact" => null,
-                "person" => 'natuurlijk_persoon',
-                "status" => null,
-                "requester" => null
+                'name'        => $security->getUser()->getUserName(),
+                'description' => null,
+                'property'    => null,
+                'contact'     => null,
+                'person'      => 'natuurlijk_persoon',
+                'status'      => null,
+                'requester'   => null,
             ];
             var_dump('hihihi');
             var_dump($security->getUser()->getUserName());
