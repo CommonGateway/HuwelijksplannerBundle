@@ -64,6 +64,7 @@ class InstallationService implements InstallerInterface
         return [
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerAssentHandler',
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCalendarHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCreateHandler',
             //            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCheckHandler',
             'App\ActionHandler\EmailHandler',
         ];
@@ -130,8 +131,10 @@ class InstallationService implements InstallerInterface
             $action = new Action($actionHandler);
             if ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
                 $action->setListens(['huwelijksplanner.calendar.listens']);
+            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.huwelijk.schema.json') {
+                $action->setListens(['huwelijksplanner.create.listens']);
             } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json') {
-                $action->setListens(['commongateway.response.pre']);
+                $action->setListens(['huwelijksplanner.assent.listens']);
             } else {
                 $action->setListens(['huwelijksplanner.default.listens']);
             }
@@ -198,7 +201,9 @@ class InstallationService implements InstallerInterface
                     $endpoint->setMethod('GET');
                 }
                 if ($entity->getReference() == 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
-                    $endpoint->setThrows(['commongateway.response.pre']);
+                    $endpoint->setThrows(
+                        ['huwelijksplanner.create.listens', 'huwelijksplanner.assent.listens']
+                    );
 //                    $endpoint->setMethod('POST');
                 }
                 $this->entityManager->persist($endpoint);
