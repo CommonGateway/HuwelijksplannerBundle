@@ -4,7 +4,7 @@ namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class HuwelijksplannerCreateHandler implements ActionHandlerInterface
 {

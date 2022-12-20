@@ -11,9 +11,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
@@ -159,12 +159,13 @@ class HuwelijksplannerService
     {
         $this->data = $data;
         $this->configuration = $configuration;
-        var_dump('jojojoojo');
-        var_dump($this->data['response']['id']);
 
         if ($this->data['parameters']->getMethod() !== 'PUT') {
             return $this->data;
         }
+
+        var_dump('jojojoojo');
+        var_dump($this->data['response']['id']);
 
         if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
             return $this->data;
@@ -204,6 +205,7 @@ class HuwelijksplannerService
     {
         $this->data = $data;
         $this->configuration = $configuration;
+        var_dump('hihihi');
 
         if ($this->data['parameters']->getMethod() !== 'POST') {
             return $this->data;
@@ -216,7 +218,16 @@ class HuwelijksplannerService
 
         if (array_key_exists('id', $this->data['response']) &&
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-            var_dump('jojojoojo');
+            $requestPartnerAssent = [
+                'name'        => $security->getUser()->getUserName(),
+                'description' => null,
+                'property'    => null,
+                'contact'     => null,
+                'person'      => 'natuurlijk_persoon',
+                'status'      => null,
+                'requester'   => null,
+            ];
+            var_dump('hihihi');
             var_dump($security->getUser()->getUserName());
 
             var_dump($huwelijk->toArray());
