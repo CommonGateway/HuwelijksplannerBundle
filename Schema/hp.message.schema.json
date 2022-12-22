@@ -52,12 +52,12 @@
             "maxLength": 255
         },
         "service": {
-            "$ref": "#/definitions/Service"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.service.schema.json"
         },
         "attachments": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/Attachment"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.attachment.schema.json"
             }
         }
     },

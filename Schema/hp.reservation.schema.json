@@ -40,7 +40,7 @@
             "description": "The number of participants for this reservation."
         },
         "event": {
-            "$ref": "#/definitions/Event"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
         },
         "provider": {
             "type": "string",

@@ -20,7 +20,7 @@
             "description": "The textual description of this taxonomy"
         },
         "parent": {
-            "$ref": "#/definitions/Taxanomy"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.taxanomy.schema.json"
         }
     },
     "description": "Lously bassed on how taxanomies work in wordpress, txoonomies represent a clustering of data. Be it posts, products or otherwise. The taxonomy presents a hyrichal way of ordering this data into a structure.\nTaxonomies them selfs do not link to other objects. Instead objects themself should implement a taxonomie interface in the form of a taxonomy property that contains an array of uri's. And an query parameter to serach for them. e.g. "

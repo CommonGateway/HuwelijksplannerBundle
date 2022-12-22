@@ -102,7 +102,7 @@
             "nullable": true
         },
         "event": {
-            "$ref": "#/definitions/Event"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
         }
     }
 }

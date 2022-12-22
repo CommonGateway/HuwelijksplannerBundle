@@ -25,7 +25,7 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "#/definitions/Calendar"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
         }
     }
 }

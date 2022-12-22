@@ -42,11 +42,11 @@
         },
         "contact": {
             "description": "The contact that this assent applies to",
-            "$ref": "#/definitions/Klant"
+            "$ref": "https://klantenBundle.commonground.nu/klant.schema.json"
         },
         "person": {
             "description": "The person that this assent applies to",
-            "$ref": "#/definitions/Klant"
+            "$ref": "https://klantenBundle.commonground.nu/klant.schema.json"
         },
         "status": {
             "type": "string",
