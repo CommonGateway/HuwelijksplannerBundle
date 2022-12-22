@@ -42,10 +42,10 @@
             "required": true
         },
         "schedule": {
-            "$ref": "#/definitions/Schedule"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json"
         },
         "calendar": {
-            "$ref": "#/definitions/Calendar"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
         },
         "class": {
             "type": "string",
@@ -128,29 +128,29 @@
         "related": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/Event"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
             }
         },
         "resources": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/Resource"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.resource.schema.json"
             }
         },
         "alarms": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/Alarm"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.alarm.schema.json"
             }
         },
         "journal": {
-            "$ref": "#/definitions/Journal"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.journal.schema.json"
         },
         "freebusies": {
             "type": "array",
             "description": "Freeusies that are for this Event.",
             "items": {
-                "$ref": "#/definitions/Freebusy"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.freebusy.schema.json"
             }
         }
     }

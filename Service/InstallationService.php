@@ -152,7 +152,7 @@ class InstallationService implements InstallerInterface
         $objectsThatShouldHaveCards = [
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
-            'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json',
             'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
         ];
 

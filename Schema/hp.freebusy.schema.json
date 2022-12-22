@@ -62,14 +62,14 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "#/definitions/Calendar"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
         },
         "event": {
-            "$ref": "#/definitions/Event"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
         },
         "schedule": {
             "description": "Schedule that belongs to this freebusy",
-            "$ref": "#/definitions/Schedule"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json"
         }
     }
 }
