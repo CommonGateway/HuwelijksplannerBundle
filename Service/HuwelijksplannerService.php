@@ -201,11 +201,67 @@ class HuwelijksplannerService
      *
      * @return array
      */
+    public function addPartnerFromUser(Security $security): ObjectEntity
+    {
+        $natuurlijkPersoonEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['natuurlijkPersoonEntityId']);
+        $natuurlijkPersoon = new ObjectEntity($natuurlijkPersoonEntity);
+        $natuurlijkPersoon->setValue('inpBsn', $security->getUser()->getUserIdentifier());
+        $natuurlijkPersoon->setValue('geslachtsnaam', $security->getUser()->getLastName());
+        $natuurlijkPersoon->setValue('voorvoegselGeslachtsnaam', null);
+        $natuurlijkPersoon->setValue('voorletters', null);
+        $natuurlijkPersoon->setValue('voornamen', $security->getUser()->getFirstName());
+        $natuurlijkPersoon->setValue('geslachtsaanduiding', null);
+        $natuurlijkPersoon->setValue('geboortedatum', null);
+        $natuurlijkPersoon->setValue('verblijfsadres', null);
+        $this->entityManager->persist($natuurlijkPersoon);
+//        var_dump($natuurlijkPersoon->toArray());die();
+
+        $klantEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['klantEntityId']);
+        $klant = new ObjectEntity($klantEntity);
+        $klant->setValue('bronorganisatie', "99999");
+        $klant->setValue('klantnummer', '99999');
+        $klant->setValue('websiteUrl', "wwww.example.com");
+        $klant->setValue('voornaam', $security->getUser()->getFirstName());
+        $klant->setValue('voorvoegselAchternaam', null);
+        $klant->setValue('achternaam', $security->getUser()->getLastName());
+        $klant->setValue('subjectIdentificatie', $natuurlijkPersoon);
+        $klant->setValue('subjectType', 'natuurlijk_persoon');
+        $this->entityManager->persist($klant);
+        var_dump($klant->toArray());die();
+
+
+        $assentEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['assentEntityId']);
+        $assent = new ObjectEntity($assentEntity);
+        $assent->setValue('name', $security->getUser()->getName());
+        $assent->setValue('description', null);
+        $assent->setValue('property', null);
+        $assent->setValue('contact', $klant);
+        $assent->setValue('person', $klant);
+        $assent->setValue('status', null);
+        $assent->setValue('requester', $security->getUser()->getUserIdentifier());
+
+        $this->entityManager->persist($assent);
+//        $this->entityManager->flush();
+
+//        var_dump($assent->toArray());
+
+        return $assent;
+    }
+
+    /**
+     * Handles Huwelijkslnner actions.
+     *
+     * @param array $data
+     * @param array $configuration
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
     public function huwelijksplannerCreateHandler(array $data, array $configuration, Security $security): array
     {
         $this->data = $data;
         $this->configuration = $configuration;
-        var_dump('hihihi');
 
         if ($this->data['parameters']->getMethod() !== 'POST') {
             return $this->data;
@@ -218,23 +274,45 @@ class HuwelijksplannerService
 
         if (array_key_exists('id', $this->data['response']) &&
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
-            $requestPartnerAssent = [
-                'name'        => $security->getUser()->getUserName(),
-                'description' => null,
-                'property'    => null,
-                'contact'     => null,
-                'person'      => 'natuurlijk_persoon',
-                'status'      => null,
-                'requester'   => null,
-            ];
-            var_dump('hihihi');
-            var_dump($security->getUser()->getUserName());
 
-            var_dump($huwelijk->toArray());
-            exit();
+            if (!$huwelijk->getValue('ceremonie')) {
+                throw new GatewayException('Ceremonie is null', null, null, [
+                    'data'         => $huwelijk->getValue('ceremonie'), 'path' => 'ceremonie',
+                    'responseType' => Response::HTTP_BAD_REQUEST,
+                ]);
+            }
+
+            if (!$huwelijk->getValue('producten')) {
+                throw new GatewayException('Producten is null', null, null, [
+                    'data'         => $huwelijk->getValue('producten'), 'path' => 'producten',
+                    'responseType' => Response::HTTP_BAD_REQUEST,
+                ]);
+            }
+
+            if (!$huwelijk->getValue('moment')) {
+                throw new GatewayException('Moment is null', null, null, [
+                    'data'         => $huwelijk->getValue('moment'), 'path' => 'moment',
+                    'responseType' => Response::HTTP_BAD_REQUEST,
+                ]);
+            }
+            // check producten
+            // check ceremonie
+            // check moment
+            // check locatie if balie huwelijk
+
+            $requestPartnerAssent[] = $this->addPartnerFromUser($security);
+            $huwelijk->setValue('partners', $requestPartnerAssent);
+            $this->entityManager->persist($huwelijk);
+//            $this->entityManager->flush();
+            var_dump($huwelijk->getValue('partners')[0]->toArray());
+//            var_dump($huwelijk->toArray());
+
+            $this->data['response'] = $huwelijk->toArray();
+
         }
 
-        return $this->data['response'];
+        var_dump($this->data['response']);
+        return $this->data;
     }
 
     /**
