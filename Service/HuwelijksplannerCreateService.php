@@ -58,15 +58,16 @@ class HuwelijksplannerCreateService
     /**
      * Handles Huwelijkslnner actions.
      *
-     * @param array $data
-     * @param array $configuration
+     * @param ?array $data
+     * @param ?array $configuration
      *
      * @throws Exception
      *
      * @return array
      */
-    public function huwelijksplannerCreateHandler(array $data, array $configuration, Security $security): array
+    public function huwelijksplannerCreateHandler(?array $data = [], ?array $configuration = [], Security $security): array
     {
+        isset($this->io) && $this->io->success('huwelijksplannerCreateHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
         var_dump('hihihi');

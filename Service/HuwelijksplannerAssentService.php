@@ -116,15 +116,17 @@ class HuwelijksplannerAssentService
     /**
      * Handles Huwelijkslnner actions.
      *
-     * @param array $data
-     * @param array $configuration
+     * @param ?array $data
+     * @param ?array $configuration
      *
      * @throws Exception
      *
      * @return array
      */
-    public function huwelijksplannerAssentHandler(array $data, array $configuration): array
+    public function huwelijksplannerAssentHandler(?array $data = [], ?array $configuration = []): array
     {
+        isset($this->io) && $this->io->success('huwelijksplannerAssentHandler triggered');
+
         $this->data = $data;
         $this->configuration = $configuration;
 

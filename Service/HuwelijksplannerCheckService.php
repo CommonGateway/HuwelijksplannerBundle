@@ -92,15 +92,16 @@ class HuwelijksplannerCheckService
     /**
      * Handles Huwelijkslnner actions.
      *
-     * @param array $data
-     * @param array $configuration
+     * @param ?array $data
+     * @param ?array $configuration
      *
      * @throws LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface
      *
      * @return array
      */
-    public function huwelijksplannerCheckHandler(array $data, array $configuration): array
+    public function huwelijksplannerCheckHandler(?array $data = [], ?array $configuration = []): array
     {
+        isset($this->io) && $this->io->success('huwelijksplannerCheckHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 

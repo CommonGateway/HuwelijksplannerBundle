@@ -58,15 +58,16 @@ class HuwelijksplannerCalendarService
     /**
      * Handles Huwelijkslnner actions.
      *
-     * @param array $data
-     * @param array $configuration
+     * @param ?array $data
+     * @param ?array $configuration
      *
      * @throws Exception
      *
      * @return array
      */
-    public function huwelijksplannerCalendarHandler(array $data, array $configuration): array
+    public function huwelijksplannerCalendarHandler(?array $data = [], ?array $configuration = []): array
     {
+        isset($this->io) && $this->io->success('huwelijksplannerCalendarHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
