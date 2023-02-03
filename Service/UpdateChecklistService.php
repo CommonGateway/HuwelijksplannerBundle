@@ -90,7 +90,7 @@ class UpdateChecklistService
     }
 
     /**
-     * Handles Huwelijkslnner actions.
+     * Checks data from the marriage request and updates the associated checklist.
      *
      * @param ?array $data
      * @param ?array $configuration

@@ -56,7 +56,7 @@ class CreateMarriageService
     }
 
     /**
-     * Handles Huwelijkslnner actions.
+     * Creates the marriage request object.
      *
      * @param ?array $data
      * @param ?array $configuration

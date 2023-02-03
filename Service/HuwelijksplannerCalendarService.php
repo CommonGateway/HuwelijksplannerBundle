@@ -56,7 +56,7 @@ class HuwelijksplannerCalendarService
     }
 
     /**
-     * Handles Huwelijkslnner actions.
+     * ?
      *
      * @param ?array $data
      * @param ?array $configuration

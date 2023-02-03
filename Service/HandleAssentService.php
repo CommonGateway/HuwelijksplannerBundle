@@ -114,7 +114,7 @@ class HandleAssentService
     }
 
     /**
-     * Handles Huwelijkslnner actions.
+     * Handles the assent approval or request.
      *
      * @param ?array $data
      * @param ?array $configuration
