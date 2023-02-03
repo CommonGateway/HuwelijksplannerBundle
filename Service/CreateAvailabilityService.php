@@ -2,19 +2,14 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use App\Service\ObjectEntityService;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\PersistentCollection;
 use Exception;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for creating availability.
@@ -56,7 +51,7 @@ class CreateAvailabilityService
     }
 
     /**
-     * Creates availability for someone with given date info
+     * Creates availability for someone with given date info.
      *
      * @param ?array $data
      * @param ?array $configuration

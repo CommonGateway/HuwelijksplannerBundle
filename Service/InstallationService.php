@@ -26,7 +26,7 @@ class InstallationService implements InstallerInterface
         'https://huwelijksplanner.nl/schemas/hp.availability.schema.json',
         'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
         'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json',
-        'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json'
+        'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json',
     ];
 
     public const SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS = [
@@ -166,7 +166,7 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($action);
 
-            isset($this->io) && $this->io->writeln(['Action created for ' . $handler]);
+            isset($this->io) && $this->io->writeln(['Action created for '.$handler]);
         }
     }
 
@@ -213,8 +213,8 @@ class InstallationService implements InstallerInterface
     {
         $collectionConfigs = [
             [
-                'name' => 'Huwelijksplanner',
-                'prefix' => 'hp',
+                'name'         => 'Huwelijksplanner',
+                'prefix'       => 'hp',
                 'schemaPrefix' => 'https://huwelijksplanner.nl',
             ],
         ];
@@ -239,7 +239,7 @@ class InstallationService implements InstallerInterface
     public function createDashboardCards($objectsThatShouldHaveCards)
     {
         foreach ($objectsThatShouldHaveCards as $object) {
-            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: ' . $object);
+            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: '.$object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -256,7 +256,7 @@ class InstallationService implements InstallerInterface
                 isset($this->io) && $this->io->writeln('Dashboard card created');
                 continue;
             } else {
-                isset($this->io) && $this->io->writeln('Entity with reference ' . $object . ' can\'t be found');
+                isset($this->io) && $this->io->writeln('Entity with reference '.$object.' can\'t be found');
             }
             isset($this->io) && $this->io->writeln('Dashboard card found');
         }
@@ -280,7 +280,6 @@ class InstallationService implements InstallerInterface
             (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for '.$cronjob->getName()]) : '');
         }
     }
-
 
     public function checkDataConsistency()
     {
