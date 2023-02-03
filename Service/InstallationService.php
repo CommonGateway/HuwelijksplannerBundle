@@ -62,10 +62,10 @@ class InstallationService implements InstallerInterface
     public function actionHandlers(): array
     {
         return [
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerAssentHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler',
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCalendarHandler',
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCreateHandler',
-            //            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCheckHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler',
+            //            'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler',
             'App\ActionHandler\EmailHandler',
         ];
     }
@@ -91,8 +91,10 @@ class InstallationService implements InstallerInterface
                 case 'object':
                     break;
                 case 'uuid':
-                    if (array_key_exists('$ref', $value) &&
-                        $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $value['$ref']])) {
+                    if (
+                        array_key_exists('$ref', $value) &&
+                        $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $value['$ref']])
+                    ) {
                         $defaultConfig[$key] = $entity->getId()->toString();
                     }
                     break;
@@ -112,13 +114,13 @@ class InstallationService implements InstallerInterface
     public function addActions(): void
     {
         $actionHandlers = $this->actionHandlers();
-        (isset($this->io) ? $this->io->writeln(['', '<info>Looking for actions</info>']) : '');
+        isset($this->io) && $this->io->writeln(['', '<info>Looking for actions</info>']);
 
         foreach ($actionHandlers as $handler) {
             $actionHandler = $this->container->get($handler);
 
-            if ($this->entityManager->getRepository('App:Action')->findOneBy(['class'=> get_class($actionHandler)])) {
-                (isset($this->io) ? $this->io->writeln(['Action found for '.$handler]) : '');
+            if ($this->entityManager->getRepository('App:Action')->findOneBy(['class' => get_class($actionHandler)])) {
+                isset($this->io) && $this->io->writeln(['Action found for ' . $handler]);
                 continue;
             }
 
@@ -142,7 +144,7 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($action);
 
-            (isset($this->io) ? $this->io->writeln(['Action created for '.$handler]) : '');
+            isset($this->io) && $this->io->writeln(['Action created for ' . $handler]);
         }
     }
 
@@ -157,7 +159,7 @@ class InstallationService implements InstallerInterface
         ];
 
         foreach ($objectsThatShouldHaveCards as $object) {
-            (isset($this->io) ? $this->io->writeln('Looking for a dashboard card for: '.$object) : '');
+            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: ' . $object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -171,10 +173,10 @@ class InstallationService implements InstallerInterface
                 $dashboardCard->setEntityId($entity->getId());
                 $dashboardCard->setOrdering(1);
                 $this->entityManager->persist($dashboardCard);
-                (isset($this->io) ? $this->io->writeln('Dashboard card created') : '');
+                isset($this->io) && $this->io->writeln('Dashboard card created');
                 continue;
             }
-            (isset($this->io) ? $this->io->writeln('Dashboard card found') : '');
+            isset($this->io) && $this->io->writeln('Dashboard card found');
         }
     }
 
@@ -189,7 +191,7 @@ class InstallationService implements InstallerInterface
         ];
 
         foreach ($objectsThatShouldHaveEndpoints as $object) {
-            (isset($this->io) ? $this->io->writeln('Looking for a endpoint for: '.$object) : '');
+            isset($this->io) && $this->io->writeln('Looking for a endpoint for: ' . $object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
 
             if (
@@ -204,25 +206,25 @@ class InstallationService implements InstallerInterface
                     $endpoint->setThrows(
                         ['huwelijksplanner.create.listens', 'huwelijksplanner.assent.listens']
                     );
-//                    $endpoint->setMethod('POST');
+                    //                    $endpoint->setMethod('POST');
                 }
                 $this->entityManager->persist($endpoint);
 
-                $entity->setEndpoint('/admin/endpoints/'.$endpoint->getId()->toString());
+                $entity->setEndpoint('/admin/endpoints/' . $endpoint->getId()->toString());
                 $this->entityManager->persist($entity);
 
-                (isset($this->io) ? $this->io->writeln('Endpoint created') : '');
+                isset($this->io) && $this->io->writeln('Endpoint created');
                 continue;
             }
-            (isset($this->io) ? $this->io->writeln('Endpoint found') : '');
+            isset($this->io) && $this->io->writeln('Endpoint found');
         }
     }
 
     public function addCronJobs()
     {
-        (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
+        isset($this->io) && $this->io->writeln(['', '<info>Looking for cronjobs</info>']);
         // We only need 1 cronjob so lets set that
-        if (!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name'=>'Huwelijksplanner'])) {
+        if (!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name' => 'Huwelijksplanner'])) {
             $cronjob = new Cronjob();
             $cronjob->setName('Huwelijksplanner');
             $cronjob->setDescription('This cronjob fires all the huwelijksplanner actions ever 5 minutes');
@@ -230,9 +232,9 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($cronjob);
 
-            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for Huwelijksplanner']) : '');
+            isset($this->io) && $this->io->writeln(['', 'Created a cronjob for Huwelijksplanner']);
         } else {
-            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for Huwelijksplanner']) : '');
+            isset($this->io) && $this->io->writeln(['', 'There is alreade a cronjob for Huwelijksplanner']);
         }
     }
 

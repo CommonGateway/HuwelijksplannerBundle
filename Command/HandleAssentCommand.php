@@ -2,7 +2,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Command;
 
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerCreateService;
+use CommonGateway\HuwelijksplannerBundle\Service\HandleAssentService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -10,16 +10,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Command to execute the HuwelijksplannerCreateService.
+ * Command to execute the HandleAssentService.
  */
-class HuwelijksplannerCreateCommand extends Command
+class HandleAssentCommand extends Command
 {
-    protected static $defaultName = 'huwelijksplanner:create:execute';
-    private HuwelijksplannerCreateService $huwelijksplannerCreateService;
+    protected static $defaultName = 'huwelijksplanner:assent:execute';
+    private HandleAssentService $handleAssentService;
 
-    public function __construct(HuwelijksplannerCreateService $huwelijksplannerCreateService)
+    public function __construct(HandleAssentService $handleAssentService)
     {
-        $this->huwelijksplannerCreateService = $huwelijksplannerCreateService;
+        $this->handleAssentService = $handleAssentService;
         parent::__construct();
     }
 
@@ -28,14 +28,14 @@ class HuwelijksplannerCreateCommand extends Command
         $this
             ->setDescription('?')
             ->setHelp('?');
-        }
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->huwelijksplannerCreateService->setStyle($io);
+        $this->handleAssentService->setStyle($io);
 
-        if (!$this->huwelijksplannerCreateService->huwelijksplannerCreateHandler([], [])) {
+        if (!$this->handleAssentService->handleAssentHandler([], [])) {
             return Command::FAILURE;
         }
 

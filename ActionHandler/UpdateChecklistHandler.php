@@ -3,15 +3,15 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerAssentService;
+use CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService;
 
-class HuwelijksplannerAssentHandler implements ActionHandlerInterface
+class UpdateChecklistHandler implements ActionHandlerInterface
 {
-    private HuwelijksplannerAssentService $huwelijksplannerAssentService;
+    private UpdateChecklistService $updateChecklistService;
 
-    public function __construct(HuwelijksplannerAssentService $huwelijksplannerAssentService)
+    public function __construct(UpdateChecklistService $updateChecklistService)
     {
-        $this->huwelijksplannerAssentService = $huwelijksplannerAssentService;
+        $this->updateChecklistService = $updateChecklistService;
     }
 
     /**
@@ -48,6 +48,6 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerAssentService->huwelijksplannerAssentHandler($data, $configuration);
+        return $this->updateChecklistService->updateChecklistHandler($data, $configuration);
     }
 }

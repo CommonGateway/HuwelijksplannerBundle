@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
  */
-class HuwelijksplannerCreateService
+class CreateMarriageService
 {
     private EntityManagerInterface $entityManager;
     private ObjectEntityService $objectEntityService;
@@ -65,9 +65,9 @@ class HuwelijksplannerCreateService
      *
      * @return array
      */
-    public function huwelijksplannerCreateHandler(?array $data = [], ?array $configuration = [], Security $security): array
+    public function createMarriageHandler(?array $data = [], ?array $configuration = [], Security $security): array
     {
-        isset($this->io) && $this->io->success('huwelijksplannerCreateHandler triggered');
+        isset($this->io) && $this->io->success('createMarriageHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
         var_dump('hihihi');
@@ -81,8 +81,10 @@ class HuwelijksplannerCreateService
         }
         $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
 
-        if (array_key_exists('id', $this->data['response']) &&
-            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
+        if (
+            array_key_exists('id', $this->data['response']) &&
+            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
+        ) {
             $requestPartnerAssent = [
                 'name'        => $security->getUser()->getUserName(),
                 'description' => null,

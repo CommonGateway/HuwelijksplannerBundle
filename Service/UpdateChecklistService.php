@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
  */
-class HuwelijksplannerCheckService
+class UpdateChecklistService
 {
     private EntityManagerInterface $entityManager;
     private ObjectEntityService $objectEntityService;
@@ -99,9 +99,9 @@ class HuwelijksplannerCheckService
      *
      * @return array
      */
-    public function huwelijksplannerCheckHandler(?array $data = [], ?array $configuration = []): array
+    public function updateChecklistHandler(?array $data = [], ?array $configuration = []): array
     {
-        isset($this->io) && $this->io->success('huwelijksplannerCheckHandler triggered');
+        isset($this->io) && $this->io->success('updateChecklistHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
@@ -109,7 +109,8 @@ class HuwelijksplannerCheckService
         if (
             in_array('id', $this->data) &&
             $huwelijk = $this->objectEntityService->getObject(null, $this->data['id']) &&
-                $huwelijk->getEntity()->getName() == 'huwelijk') {
+            $huwelijk->getEntity()->getName() == 'huwelijk'
+        ) {
             return $this->checkHuwelijk($huwelijk)->toArray();
         }
 

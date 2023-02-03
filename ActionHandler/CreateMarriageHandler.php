@@ -3,17 +3,17 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerCreateService;
+use CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService;
 use Symfony\Component\Security\Core\Security;
 
-class HuwelijksplannerCreateHandler implements ActionHandlerInterface
+class CreateMarriageHandler implements ActionHandlerInterface
 {
-    private HuwelijksplannerCreateService $huwelijksplannerCreateService;
+    private CreateMarriageService $createMarriageService;
     private Security $security;
 
-    public function __construct(HuwelijksplannerCreateService $huwelijksplannerCreateService, Security $security)
+    public function __construct(CreateMarriageService $createMarriageService, Security $security)
     {
-        $this->huwelijksplannerCreateService = $huwelijksplannerCreateService;
+        $this->createMarriageService = $createMarriageService;
         $this->security = $security;
     }
 
@@ -72,6 +72,6 @@ class HuwelijksplannerCreateHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerCreateService->huwelijksplannerCreateHandler($data, $configuration, $this->security);
+        return $this->createMarriageService->createMarriageHandler($data, $configuration, $this->security);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Command;
 
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerAssentService;
+use CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -10,16 +10,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Command to execute the HuwelijksplannerAssentService.
+ * Command to execute the UpdateChecklistService.
  */
-class HuwelijksplannerAssentCommand extends Command
+class UpdateChecklistCommand extends Command
 {
-    protected static $defaultName = 'huwelijksplanner:assent:execute';
-    private HuwelijksplannerAssentService $huwelijksplannerAssentService;
+    protected static $defaultName = 'huwelijksplanner:check:execute';
+    private UpdateChecklistService $updateChecklistService;
 
-    public function __construct(HuwelijksplannerAssentService $huwelijksplannerAssentService)
+    public function __construct(UpdateChecklistService $updateChecklistService)
     {
-        $this->huwelijksplannerAssentService = $huwelijksplannerAssentService;
+        $this->updateChecklistService = $updateChecklistService;
         parent::__construct();
     }
 
@@ -28,14 +28,14 @@ class HuwelijksplannerAssentCommand extends Command
         $this
             ->setDescription('?')
             ->setHelp('?');
-        }
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->huwelijksplannerAssentService->setStyle($io);
+        $this->updateChecklistService->setStyle($io);
 
-        if (!$this->huwelijksplannerAssentService->huwelijksplannerAssentHandler([], [])) {
+        if (!$this->updateChecklistService->updateChecklistHandler([], [])) {
             return Command::FAILURE;
         }
 

@@ -2,7 +2,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Command;
 
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerCheckService;
+use CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -10,16 +10,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Command to execute the HuwelijksplannerCheckService.
+ * Command to execute the CreateMarriageService.
  */
-class HuwelijksplannerCheckCommand extends Command
+class CreateMarriageCommand extends Command
 {
-    protected static $defaultName = 'huwelijksplanner:check:execute';
-    private HuwelijksplannerCheckService $huwelijksplannerCheckService;
+    protected static $defaultName = 'huwelijksplanner:create:execute';
+    private CreateMarriageService $createMarriageService;
 
-    public function __construct(HuwelijksplannerCheckService $huwelijksplannerCheckService)
+    public function __construct(CreateMarriageService $createMarriageService)
     {
-        $this->huwelijksplannerCheckService = $huwelijksplannerCheckService;
+        $this->createMarriageService = $createMarriageService;
         parent::__construct();
     }
 
@@ -28,14 +28,14 @@ class HuwelijksplannerCheckCommand extends Command
         $this
             ->setDescription('?')
             ->setHelp('?');
-        }
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->huwelijksplannerCheckService->setStyle($io);
+        $this->createMarriageService->setStyle($io);
 
-        if (!$this->huwelijksplannerCheckService->huwelijksplannerCheckHandler([], [])) {
+        if (!$this->createMarriageService->createMarriageHandler([], [])) {
             return Command::FAILURE;
         }
 

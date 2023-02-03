@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
  */
-class HuwelijksplannerAssentService
+class HandleAssentService
 {
     private EntityManagerInterface $entityManager;
     private SymfonyStyle $io;
@@ -103,7 +103,7 @@ class HuwelijksplannerAssentService
             $klantBsn = $subjectIdentificatie['inpBsn'];
 
             $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
-            $this->entityManager->persist($partners);
+            $this->entityManager->persist($partner);
 
             if ($klantBsn > $requester || $klantBsn < $requester) {
                 $this->mailConsentingPartner($partner);
@@ -123,9 +123,9 @@ class HuwelijksplannerAssentService
      *
      * @return array
      */
-    public function huwelijksplannerAssentHandler(?array $data = [], ?array $configuration = []): array
+    public function handleAssentHandler(?array $data = [], ?array $configuration = []): array
     {
-        isset($this->io) && $this->io->success('huwelijksplannerAssentHandler triggered');
+        isset($this->io) && $this->io->success('handleAssentHandler triggered');
 
         $this->data = $data;
         $this->configuration = $configuration;
@@ -142,8 +142,10 @@ class HuwelijksplannerAssentService
         }
         $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
 
-        if (array_key_exists('id', $this->data['response']) &&
-            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
+        if (
+            array_key_exists('id', $this->data['response']) &&
+            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
+        ) {
             if ($partners = $huwelijk->getValue('partners')) {
                 var_dump($huwelijk->getValue('partners'));
 
