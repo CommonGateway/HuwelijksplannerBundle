@@ -3,15 +3,15 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
+use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerAssentService;
 
 class HuwelijksplannerAssentHandler implements ActionHandlerInterface
 {
-    private HuwelijksplannerService $huwelijksplannerService;
+    private HuwelijksplannerAssentService $huwelijksplannerAssentService;
 
-    public function __construct(HuwelijksplannerService $huwelijksplannerService)
+    public function __construct(HuwelijksplannerAssentService $huwelijksplannerAssentService)
     {
-        $this->huwelijksplannerService = $huwelijksplannerService;
+        $this->huwelijksplannerAssentService = $huwelijksplannerAssentService;
     }
 
     /**
@@ -48,6 +48,6 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerService->huwelijksplannerAssentHandler($data, $configuration);
+        return $this->huwelijksplannerAssentService->huwelijksplannerAssentHandler($data, $configuration);
     }
 }
