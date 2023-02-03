@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.medewerker.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1",
     "type": "object",
