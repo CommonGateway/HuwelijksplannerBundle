@@ -184,6 +184,16 @@ class InstallationService implements InstallerInterface
                 $endpoints[] = $endpoint;
             }
         }
+
+        $availabilityCheckEndpoint = $endpointRepository->findOneBy(['pathRegex' => '^hp/calendar/availabilitycheck$']) ?? new Endpoint();
+        $availabilityCheckEndpoint->setName('CheckAvailability');
+        $availabilityCheckEndpoint->setPathRegex('^hp/calendar/availabilitycheck$');
+        $availabilityCheckEndpoint->setPath(['hp', 'calendar', 'checkavailability']);
+        $availabilityCheckEndpoint->setMethod('POST');
+        $availabilityCheckEndpoint->setThrows(['huwelijksplanner.calendar.listens']);
+        $this->entityManager->persist($availabilityCheckEndpoint);
+        $this->entityManager->flush();
+        $endpoints[] = $availabilityCheckEndpoint;
         (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
 
         return $endpoints;
