@@ -5,9 +5,6 @@
     "type": "object",
     "title": "Assent",
     "properties":{
-        "id": {
-            "type": "string"
-        },
         "token": {
             "type": "string",
             "description": "A secret token used to validate the assent",
@@ -44,14 +41,12 @@
             "maxLength": 255
         },
         "contact": {
-            "type": "string",
             "description": "The contact that this assent applies to",
-            "maxLength": 255
+            "$ref": "https://klantenBundle.commonground.nu/klant.schema.json"
         },
         "person": {
-            "type": "string",
             "description": "The person that this assent applies to",
-            "maxLength": 255
+            "$ref": "https://klantenBundle.commonground.nu/klant.schema.json"
         },
         "status": {
             "type": "string",

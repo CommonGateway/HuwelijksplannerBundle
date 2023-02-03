@@ -5,7 +5,7 @@ namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
 
-class HuwelijksplannerAssentHandler implements ActionHandlerInterface
+class HuwelijksplannerCheckHandler implements ActionHandlerInterface
 {
     private HuwelijksplannerService $huwelijksplannerService;
 
@@ -48,6 +48,6 @@ class HuwelijksplannerAssentHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerService->huwelijksplannerAssentHandler($data, $configuration);
+        return $this->huwelijksplannerService->huwelijksplannerCheckHandler($data, $configuration);
     }
 }

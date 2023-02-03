@@ -1,9 +1,9 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json",
+    "$id": "https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1",
     "type": "object",
-    "title": "SDG",
+    "title": "SDGProduct",
     "properties":{
         "url": {
             "type":"string"
@@ -30,10 +30,10 @@
             "type":"string"
         },
         "verantwoordelijkeOrganisatie": {
-            "$ref": "#/definitions/SDGLocatie"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgLocatie.schema.json"
         },
         "bevoegdeOrganisatie": {
-            "$ref": "#/definitions/SDGLocatie"
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgLocatie.schema.json"
         },
         "catalogus": {
             "type":"string"
@@ -47,13 +47,13 @@
         "vertalingen": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/SDGVertaling"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgVertaling.schema.json"
             }
         },
         "gerelateerdeProducten": {
             "type":"array",
             "items": {
-                "$ref": "#/definitions/SDGProduct"
+                "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json"
             }
         }
     }

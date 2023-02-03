@@ -4,15 +4,16 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
+use App\Service\ObjectEntityService;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * This service holds al the logic for the huwelijksplanner plugin.
@@ -21,23 +22,18 @@ class HuwelijksplannerService
 {
     private EntityManagerInterface $entityManager;
     private ObjectEntityService $objectEntityService;
-    private RequestStack $requestStack;
-    private Request $request;
     private array $data;
     private array $configuration;
 
     /**
      * @param ObjectEntityService    $objectEntityService
-     * @param RequestStack           $requestStack
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         ObjectEntityService $objectEntityService,
-        RequestStack $requestStack,
         EntityManagerInterface $entityManager
     ) {
         $this->objectEntityService = $objectEntityService;
-        $this->request = $requestStack->getCurrentRequest();
         $this->entityManager = $entityManager;
         $this->data = [];
         $this->configuration = [];
@@ -53,15 +49,15 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function huwelijksplannerHandler(array $data, array $configuration): array
+    public function huwelijksplannerCalendarHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;
 
-        $begin = new DateTime($this->request->get('start'));
-        $end = new DateTime($this->request->get('stop'));
+        $begin = new DateTime($this->data['parameters']->get('start'));
+        $end = new DateTime($this->data['parameters']->get('stop'));
 
-        $interval = new DateInterval($this->request->get('interval'));
+        $interval = new DateInterval($this->data['parameters']->get('interval'));
         $period = new DatePeriod($begin, $interval, $end);
 
         $resultArray = [];
@@ -74,7 +70,7 @@ class HuwelijksplannerService
             $dayStop->setTime(17, 0);
 
             if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
-                $resourceArray = $this->request->get('resources_could');
+                $resourceArray = $this->data['parameters']->get('resources_could');
             } else {
                 $resourceArray = [];
             }
@@ -128,15 +124,18 @@ class HuwelijksplannerService
      *
      * @return ObjectEntity|null
      */
-    public function huwelijkPartners(ObjectEntity $huwelijk, PersistentCollection $partners): ?ObjectEntity
+    public function huwelijkPartners(ObjectEntity $huwelijk): ?ObjectEntity
     {
-        foreach ($partners as $partner) {
-            $requester = $partner->getValue('requester');
-            $person = $partner->getValue('person');
-            $subjectIdentificatie = $person->getValue('subjectIdentificatie');
-            $klantBsn = $subjectIdentificatie->getValue('inpBsn');
+        foreach ($huwelijk->getValue('partners') as $partner) {
+            var_dump($partner);
+            var_dump($partner['requester']);
+            $requester = $partner['requester'];
+            $person = $partner['person'];
+            $subjectIdentificatie = $person['subjectIdentificatie'];
+            $klantBsn = $subjectIdentificatie['inpBsn'];
 
             $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
+            $this->entityManager->persist($partners);
 
             if ($klantBsn > $requester || $klantBsn < $requester) {
                 $this->mailConsentingPartner($partner);
@@ -158,25 +157,84 @@ class HuwelijksplannerService
      */
     public function huwelijksplannerAssentHandler(array $data, array $configuration): array
     {
-        var_dump('jooo');
         $this->data = $data;
         $this->configuration = $configuration;
 
-        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijkEntityId']);
+        if ($this->data['parameters']->getMethod() !== 'PUT') {
+            return $this->data;
+        }
 
-//        var_dump($this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])->toArray());
+        var_dump('jojojoojo');
+        var_dump($this->data['response']['id']);
+
+        if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
+            return $this->data;
+        }
+        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
 
         if (array_key_exists('id', $this->data['response']) &&
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
             if ($partners = $huwelijk->getValue('partners')) {
-                $huwelijk = $this->huwelijkPartners($huwelijk, $partners);
+                var_dump($huwelijk->getValue('partners'));
+
+                $huwelijk = $this->huwelijkPartners($huwelijk);
             }
+
+            $this->entityManager->persist($huwelijk);
+
+            var_dump($this->data['response']['id']);
 
             var_dump($huwelijk->toArray());
             exit();
         }
 
-        return $this->data;
+        return $this->data['response'];
+    }
+
+    /**
+     * Handles Huwelijkslnner actions.
+     *
+     * @param array $data
+     * @param array $configuration
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public function huwelijksplannerCreateHandler(array $data, array $configuration, Security $security): array
+    {
+        $this->data = $data;
+        $this->configuration = $configuration;
+        var_dump('hihihi');
+
+        if ($this->data['parameters']->getMethod() !== 'POST') {
+            return $this->data;
+        }
+
+        if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
+            return $this->data;
+        }
+        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
+
+        if (array_key_exists('id', $this->data['response']) &&
+            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])) {
+            $requestPartnerAssent = [
+                'name'        => $security->getUser()->getUserName(),
+                'description' => null,
+                'property'    => null,
+                'contact'     => null,
+                'person'      => 'natuurlijk_persoon',
+                'status'      => null,
+                'requester'   => null,
+            ];
+            var_dump('hihihi');
+            var_dump($security->getUser()->getUserName());
+
+            var_dump($huwelijk->toArray());
+            exit();
+        }
+
+        return $this->data['response'];
     }
 
     /**
@@ -189,7 +247,7 @@ class HuwelijksplannerService
      *
      * @return array
      */
-    public function HuwelijksplannerCheckHandler(array $data, array $configuration): array
+    public function huwelijksplannerCheckHandler(array $data, array $configuration): array
     {
         $this->data = $data;
         $this->configuration = $configuration;

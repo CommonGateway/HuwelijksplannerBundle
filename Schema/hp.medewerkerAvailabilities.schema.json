@@ -6,23 +6,23 @@
     "title": "MedewerkerAvailabilities",
     "properties":{
         "maandag": {
-            "$ref": "#/definitions/MedewerkerAvailability",
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "dinsdag": {
-            "$ref": "#/definitions/MedewerkerAvailability",
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "woensdag": {
-            "$ref": "#/definitions/MedewerkerAvailability",
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "donderdag": {
-            "$ref": "#/definitions/MedewerkerAvailability",
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "vrijdag": {
-            "$ref": "#/definitions/MedewerkerAvailability",
+            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         }
     },

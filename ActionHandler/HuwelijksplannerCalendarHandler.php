@@ -2,9 +2,10 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
+use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
 
-class HuwelijksplannerHandler
+class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
 {
     private HuwelijksplannerService $huwelijksplannerService;
 
@@ -21,9 +22,9 @@ class HuwelijksplannerHandler
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://example.com/person.schema.json',
+            '$id'         => 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
-            'title'       => 'Huwelijksplanner Action',
+            'title'       => 'Huwelijksplanner calendar Action',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
             'properties'  => [],
@@ -36,15 +37,10 @@ class HuwelijksplannerHandler
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
-     * @throws GatewayException
-     * @throws CacheException
-     * @throws InvalidArgumentException
-     * @throws ComponentException
-     *
      * @return array
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerService->huwelijksplannerHandler($data, $configuration);
+        return $this->huwelijksplannerService->huwelijksplannerCalendarHandler($data, $configuration);
     }
 }

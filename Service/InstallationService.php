@@ -63,7 +63,10 @@ class InstallationService implements InstallerInterface
     {
         return [
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerAssentHandler',
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCalendarHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCreateHandler',
+            //            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCheckHandler',
+            'App\ActionHandler\EmailHandler',
         ];
     }
 
@@ -81,14 +84,14 @@ class InstallationService implements InstallerInterface
             switch ($value['type']) {
                 case 'string':
                 case 'array':
-                    if (in_array('example', $value)) {
+                    if (array_key_exists('example', $value)) {
                         $defaultConfig[$key] = $value['example'];
                     }
                     break;
                 case 'object':
                     break;
                 case 'uuid':
-                    if (in_array('$ref', $value) &&
+                    if (array_key_exists('$ref', $value) &&
                         $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $value['$ref']])) {
                         $defaultConfig[$key] = $entity->getId()->toString();
                     }
@@ -126,7 +129,15 @@ class InstallationService implements InstallerInterface
             $defaultConfig = $this->addActionConfiguration($actionHandler);
 
             $action = new Action($actionHandler);
-            $action->setListens(['huwelijksplanner.default.listens']);
+            if ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
+                $action->setListens(['huwelijksplanner.calendar.listens']);
+            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.huwelijk.schema.json') {
+                $action->setListens(['huwelijksplanner.create.listens']);
+            } elseif ($schema['$id'] == 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json') {
+                $action->setListens(['huwelijksplanner.assent.listens']);
+            } else {
+                $action->setListens(['huwelijksplanner.default.listens']);
+            }
             $action->setConfiguration($defaultConfig);
 
             $this->entityManager->persist($action);
@@ -135,14 +146,13 @@ class InstallationService implements InstallerInterface
         }
     }
 
-    public function checkDataConsistency()
+    public function addDashboardCards()
     {
-
         // Lets create some genneric dashboard cards
         $objectsThatShouldHaveCards = [
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
-            'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json',
             'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
         ];
 
@@ -166,12 +176,15 @@ class InstallationService implements InstallerInterface
             }
             (isset($this->io) ? $this->io->writeln('Dashboard card found') : '');
         }
+    }
 
+    public function addEndpoints()
+    {
         // Let create some endpoints
         $objectsThatShouldHaveEndpoints = [
             'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
-            'https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json',
+            'https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json',
             'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
         ];
 
@@ -183,18 +196,30 @@ class InstallationService implements InstallerInterface
                 count($entity->getEndpoints()) == 0
             ) {
                 $endpoint = new Endpoint($entity);
+                if ($entity->getReference() == 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json') {
+                    $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
+                    $endpoint->setMethod('GET');
+                }
+                if ($entity->getReference() == 'https://commongateway.huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
+                    $endpoint->setThrows(
+                        ['huwelijksplanner.create.listens', 'huwelijksplanner.assent.listens']
+                    );
+//                    $endpoint->setMethod('POST');
+                }
                 $this->entityManager->persist($endpoint);
+
+                $entity->setEndpoint('/admin/endpoints/'.$endpoint->getId()->toString());
+                $this->entityManager->persist($entity);
+
                 (isset($this->io) ? $this->io->writeln('Endpoint created') : '');
                 continue;
             }
             (isset($this->io) ? $this->io->writeln('Endpoint found') : '');
         }
+    }
 
-        // Lets see if there is a generic search endpoint
-
-        // aanmaken van actions met een cronjob
-        $this->addActions();
-
+    public function addCronJobs()
+    {
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
         // We only need 1 cronjob so lets set that
         if (!$cronjob = $this->entityManager->getRepository('App:Cronjob')->findOneBy(['name'=>'Huwelijksplanner'])) {
@@ -209,6 +234,15 @@ class InstallationService implements InstallerInterface
         } else {
             (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for Huwelijksplanner']) : '');
         }
+    }
+
+    public function checkDataConsistency()
+    {
+        $this->addDashboardCards();
+        $this->addEndpoints();
+        // aanmaken van actions met een cronjob
+        $this->addActions();
+        $this->addCronJobs();
 
         $this->entityManager->flush();
     }
