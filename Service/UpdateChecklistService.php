@@ -3,18 +3,10 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use App\Service\ObjectEntityService;
-use DateInterval;
-use DatePeriod;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\PersistentCollection;
-use Exception;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for checksing data from the marriage request and updating the associated checklist.
