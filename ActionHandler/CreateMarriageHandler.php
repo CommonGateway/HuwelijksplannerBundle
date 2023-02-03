@@ -63,7 +63,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
     }
 
     /**
-     * This function runs the zaak type plugin.
+     * This function runs the createMarriage function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action

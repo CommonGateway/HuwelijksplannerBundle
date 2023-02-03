@@ -17,9 +17,9 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * This service holds al the logic for the huwelijksplanner plugin.
+ * This service holds al the logic for creating availability.
  */
-class HuwelijksplannerCalendarService
+class CreateAvailabilityService
 {
     private EntityManagerInterface $entityManager;
     private ObjectEntityService $objectEntityService;
@@ -56,7 +56,7 @@ class HuwelijksplannerCalendarService
     }
 
     /**
-     * ?
+     * Creates availability for someone with given date info
      *
      * @param ?array $data
      * @param ?array $configuration
@@ -65,9 +65,9 @@ class HuwelijksplannerCalendarService
      *
      * @return array
      */
-    public function huwelijksplannerCalendarHandler(?array $data = [], ?array $configuration = []): array
+    public function createAvailabilityHandler(?array $data = [], ?array $configuration = []): array
     {
-        isset($this->io) && $this->io->success('huwelijksplannerCalendarHandler triggered');
+        isset($this->io) && $this->io->success('createAvailabilityHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 

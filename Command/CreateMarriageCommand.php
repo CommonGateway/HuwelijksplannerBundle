@@ -26,8 +26,8 @@ class CreateMarriageCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('?')
-            ->setHelp('?');
+            ->setDescription('Creates a marriage request object')
+            ->setHelp('Creates a marriage request object');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

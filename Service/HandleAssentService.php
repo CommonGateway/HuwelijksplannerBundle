@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * This service holds al the logic for the huwelijksplanner plugin.
+ * This service holds al the logic for approving or requesting a assent.
  */
 class HandleAssentService
 {

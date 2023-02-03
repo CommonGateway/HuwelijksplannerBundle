@@ -63,7 +63,7 @@ class InstallationService implements InstallerInterface
     {
         return [
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler',
-            'CommonGateway\HuwelijksplannerBundle\ActionHandler\HuwelijksplannerCalendarHandler',
+            'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler',
             'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler',
             //            'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler',
             'App\ActionHandler\EmailHandler',

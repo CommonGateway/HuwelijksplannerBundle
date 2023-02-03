@@ -26,8 +26,8 @@ class HandleAssentCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('?')
-            ->setHelp('?');
+            ->setDescription('Requests or approves a assent')
+            ->setHelp('Requests or approves a assent');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

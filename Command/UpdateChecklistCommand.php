@@ -26,8 +26,8 @@ class UpdateChecklistCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('?')
-            ->setHelp('?');
+            ->setDescription('Checks marriage data and updates the associated checklist')
+            ->setHelp('Checks marriage data and updates the associated checklist');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

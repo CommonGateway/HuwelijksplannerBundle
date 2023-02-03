@@ -39,7 +39,7 @@ class HandleAssentHandler implements ActionHandlerInterface
     }
 
     /**
-     * This function runs the zaak type plugin.
+     * This function runs the handleAssent function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action

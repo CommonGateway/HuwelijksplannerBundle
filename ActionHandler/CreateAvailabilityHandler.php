@@ -3,15 +3,15 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerCalendarService;
+use CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService;
 
-class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
+class CreateAvailabilityHandler implements ActionHandlerInterface
 {
-    private HuwelijksplannerCalendarService $huwelijksplannerCalendarService;
+    private CreateAvailabilityService $createAvailabilityService;
 
-    public function __construct(HuwelijksplannerCalendarService $huwelijksplannerCalendarService)
+    public function __construct(CreateAvailabilityService $createAvailabilityService)
     {
-        $this->huwelijksplannerCalendarService = $huwelijksplannerCalendarService;
+        $this->createAvailabilityService = $createAvailabilityService;
     }
 
     /**
@@ -32,7 +32,7 @@ class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
     }
 
     /**
-     * This function runs the service.
+     * This function runs the createAvailability service.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -41,6 +41,6 @@ class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerCalendarService->huwelijksplannerCalendarHandler($data, $configuration);
+        return $this->createAvailabilityService->createAvailabilityHandler($data, $configuration);
     }
 }
