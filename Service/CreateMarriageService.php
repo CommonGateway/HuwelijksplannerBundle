@@ -2,12 +2,19 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
+use App\Entity\ObjectEntity;
+use App\Exception\GatewayException;
 use App\Service\ObjectEntityService;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -63,7 +70,6 @@ class CreateMarriageService
         isset($this->io) && $this->io->success('createMarriageHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
-        var_dump('hihihi');
 
         if ($this->data['parameters']->getMethod() !== 'POST') {
             return $this->data;
@@ -79,7 +85,7 @@ class CreateMarriageService
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
         ) {
             $requestPartnerAssent = [
-                'name'        => $security->getUser()->getUserName(),
+                'name'        => $security->getUser()->getUserIdentifier(),
                 'description' => null,
                 'property'    => null,
                 'contact'     => null,
@@ -87,11 +93,7 @@ class CreateMarriageService
                 'status'      => null,
                 'requester'   => null,
             ];
-            var_dump('hihihi');
-            var_dump($security->getUser()->getUserName());
-
-            var_dump($huwelijk->toArray());
-            exit();
+            isset($this->io) && $this->io->info($security->getUser()->getUserIdentifier());
         }
 
         return $this->data['response'];

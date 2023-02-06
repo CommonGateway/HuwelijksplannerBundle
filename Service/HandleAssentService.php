@@ -8,9 +8,8 @@ use App\Service\ObjectEntityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for approving or requesting a assent.
@@ -19,20 +18,16 @@ class HandleAssentService
 {
     private EntityManagerInterface $entityManager;
     private SymfonyStyle $io;
-    private ObjectEntityService $objectEntityService;
 
     private array $data;
     private array $configuration;
 
     /**
-     * @param ObjectEntityService    $objectEntityService
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
-        ObjectEntityService $objectEntityService,
         EntityManagerInterface $entityManager
     ) {
-        $this->objectEntityService = $objectEntityService;
         $this->entityManager = $entityManager;
         $this->data = [];
         $this->configuration = [];
@@ -70,7 +65,7 @@ class HandleAssentService
         if (count($phoneNumbers) > 0 || count($emailAddresses) > 0) {
             // sent email or phoneNumber
 
-            var_dump('hier mail of sms versturen en een secret genereren');
+            isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
         } else {
             throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
         }
@@ -91,8 +86,6 @@ class HandleAssentService
     public function huwelijkPartners(ObjectEntity $huwelijk): ?ObjectEntity
     {
         foreach ($huwelijk->getValue('partners') as $partner) {
-            var_dump($partner);
-            var_dump($partner['requester']);
             $requester = $partner['requester'];
             $person = $partner['person'];
             $subjectIdentificatie = $person['subjectIdentificatie'];
@@ -130,9 +123,6 @@ class HandleAssentService
             return $this->data;
         }
 
-        var_dump('jojojoojo');
-        var_dump($this->data['response']['id']);
-
         if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
             return $this->data;
         }
@@ -143,17 +133,12 @@ class HandleAssentService
             $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
         ) {
             if ($partners = $huwelijk->getValue('partners')) {
-                var_dump($huwelijk->getValue('partners'));
-
                 $huwelijk = $this->huwelijkPartners($huwelijk);
             }
 
             $this->entityManager->persist($huwelijk);
 
-            var_dump($this->data['response']['id']);
-
-            var_dump($huwelijk->toArray());
-            exit();
+            isset($this->io) && $this->io->info($this->data['response']['id']);
         }
 
         return $this->data['response'];

@@ -2,36 +2,23 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Service\ObjectEntityService;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for creating availability.
  */
 class CreateAvailabilityService
 {
-    private EntityManagerInterface $entityManager;
-    private ObjectEntityService $objectEntityService;
     private SymfonyStyle $io;
     private array $data;
     private array $configuration;
 
-    /**
-     * @param ObjectEntityService    $objectEntityService
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(
-        ObjectEntityService $objectEntityService,
-        EntityManagerInterface $entityManager
-    ) {
-        $this->objectEntityService = $objectEntityService;
-        $this->entityManager = $entityManager;
+    public function __construct() {
         $this->data = [];
         $this->configuration = [];
     }
@@ -51,7 +38,7 @@ class CreateAvailabilityService
     }
 
     /**
-     * Creates availability for someone with given date info.
+     * Creates availability for someone with given date info
      *
      * @param ?array $data
      * @param ?array $configuration
