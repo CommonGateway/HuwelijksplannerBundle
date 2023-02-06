@@ -46,10 +46,10 @@ class InstallationService implements InstallerInterface
     ];
 
     public const ACTION_HANDLERS = [
-        ['name' => 'CreateAvailbility', 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.default.listens']],
-        ['name' => 'CreateMarriage', 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.default.listens']],
-        ['name' => 'HandleAssent', 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
-        ['name' => 'UpdateChecklist', 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]]
+        ['name' => 'CreateAvailbility', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.default.listens']],
+        ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
+        ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
+        ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]]
     ];
 
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
@@ -210,6 +210,10 @@ class InstallationService implements InstallerInterface
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $objectThatShouldHaveEndpoint['reference']]);
             if ($entity instanceof Entity && !$endpointRepository->findOneBy(['name' => $entity->getName()])) {
                 $endpoint = new Endpoint($entity, $objectThatShouldHaveEndpoint['path'], $objectThatShouldHaveEndpoint['methods']);
+
+                if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
+                    $endpoint->setThrows(['huwelijksplanner.huwelijk.created']);
+                }
 
                 $this->entityManager->persist($endpoint);
                 $this->entityManager->flush();

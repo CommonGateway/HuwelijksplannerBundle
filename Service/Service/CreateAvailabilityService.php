@@ -68,6 +68,7 @@ class CreateAvailabilityService
             $dayStart->setTime(9, 0);
             $dayStop->setTime(17, 0);
 
+            // @TODO Add format 'c'
             if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
                 $resourceArray = $this->data['parameters']->get('resources_could');
             } else {
@@ -75,8 +76,9 @@ class CreateAvailabilityService
             }
 
             // end voorbeeld code
-            $resultArray[$currentDate->format('Y-m-d')][] = [
-                'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
+            
+            $resultArray[$currentDate->format('Y-m-d')][] = [ // @TODO Add format 'c'
+                'start'     => $currentDate->format('Y-m-d\TH:i:sO'), // @TODO Add format 'c'
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
                 'resources' => $resourceArray,
             ];

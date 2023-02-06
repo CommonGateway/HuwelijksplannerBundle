@@ -27,7 +27,6 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
             'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
-            'properties'  => [],
         ];
     }
 
