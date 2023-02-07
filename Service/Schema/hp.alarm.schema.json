@@ -43,7 +43,7 @@
             "description": "The number of times the alarm repeats."
         },
         "event": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
         },
         "todo": {
             "type": "string",

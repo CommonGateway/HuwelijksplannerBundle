@@ -79,14 +79,14 @@
             "type": "array",
             "description": "The events that belong to or are caused by this Schedule.",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
             }
         },
         "freebusies": {
             "type": "array",
             "description": "The freebusies that belong to or are caused by this Schedule.",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.freebusy.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
             }
         },
         "todos": {

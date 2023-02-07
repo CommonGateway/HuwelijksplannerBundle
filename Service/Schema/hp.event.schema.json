@@ -42,10 +42,10 @@
             "required": true
         },
         "schedule": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
         },
         "calendar": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
         },
         "class": {
             "type": "string",
@@ -128,29 +128,29 @@
         "related": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
             }
         },
         "resources": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.resource.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.resource.schema.json"
             }
         },
         "alarms": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.alarm.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.alarm.schema.json"
             }
         },
         "journal": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.journal.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.journal.schema.json"
         },
         "freebusies": {
             "type": "array",
             "description": "Freeusies that are for this Event.",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.freebusy.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
             }
         }
     }

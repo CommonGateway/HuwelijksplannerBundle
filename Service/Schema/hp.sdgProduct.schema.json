@@ -30,10 +30,10 @@
             "type":"string"
         },
         "verantwoordelijkeOrganisatie": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgLocatie.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgLocatie.schema.json"
         },
         "bevoegdeOrganisatie": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgLocatie.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgLocatie.schema.json"
         },
         "catalogus": {
             "type":"string"
@@ -47,13 +47,13 @@
         "vertalingen": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgVertaling.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.sdgVertaling.schema.json"
             }
         },
         "gerelateerdeProducten": {
             "type":"array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.sdgProduct.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
             }
         }
     }
