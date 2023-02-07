@@ -9,31 +9,31 @@
             "type": "array",
             "description": "De in dit huwelijk betrokken partners, bestaande uit hun instemmming (Assent) en getuigen.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
             }
         },
         "getuigen": {
             "type": "array",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
             },
             "maxLength": 4
         },
         "type": {
             "description": "Het juridische type van dit huwelijk zo als opgehaald uit de SDG catalogus, zijnde huwelijk, parnterschap of omzetting",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
         },
         "ceremonie": {
             "description": "De cermonie (manier) waarop het huwelijk wordt volgrokken. Bijvoorbeeld gratis, flits, eenvoudig of uitgebreid.",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
         },
         "locatie": {
             "description": "Verwijzing(uri) naar de Locatie in het SDG, bij ophalen kan de query parameter &extend[]=locatie worden gebruikt om een volledig object op te halen.",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
         },
         "ambtenaar": {
             "description": "Verwijzing(uri) naar de Ambtenaar in het SDG, bij ophalen kan de query parameter &extend[]=ambtenaarworden gebruikt om een volledig object op te halen.",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
         },
         "status": {
             "type": "string",
@@ -55,11 +55,11 @@
             "type": "array",
             "description": "De bij dit huwelijk gekozen extra producten",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
             }
         },
         "checklist": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.checklist.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.checklist.schema.json",
             "readOnly": true
         },
         "order": {
@@ -82,7 +82,7 @@
             "readOnly": true
         },
         "instemmingGemeente": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
         }
     }
 }

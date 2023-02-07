@@ -30,7 +30,7 @@
         "sendLists": {
             "type": "array",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.sendList.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.sendList.schema.json"
             },
             "required":true
         }

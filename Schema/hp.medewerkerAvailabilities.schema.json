@@ -6,23 +6,23 @@
     "title": "MedewerkerAvailabilities",
     "properties":{
         "maandag": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "dinsdag": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "woensdag": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "donderdag": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "vrijdag": {
-            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         }
     },

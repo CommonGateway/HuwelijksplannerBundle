@@ -35,28 +35,28 @@
             "type": "array",
             "description": "Events that belong to this Calendar.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
             }
         },
         "schedules": {
             "type": "array",
             "description": "Schedules that belong to this Calendar.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
             }
         },
         "freebusies": {
             "type": "array",
             "description": "that belong to this Calendar.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
             }
         },
         "journals": {
             "type": "array",
             "description": "journals that belong to this Calendar.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.journal.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.journal.schema.json"
             }
         },
         "todos": {
@@ -75,7 +75,7 @@
             "type": "array",
             "description": "Availability that belong to this Calendar.",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json"
             }
         }
     }

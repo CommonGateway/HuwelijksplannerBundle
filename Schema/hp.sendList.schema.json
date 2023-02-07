@@ -40,7 +40,7 @@
         "subscribers": {
             "type": "array",
             "items": {
-                "ref": "https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json"
             }
         }
     },
