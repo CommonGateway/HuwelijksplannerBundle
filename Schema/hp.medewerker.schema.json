@@ -26,7 +26,7 @@
             "description": "De funtie titel die door deze medewerker word bekleed"
         },
         "availabilities": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailabilities.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailabilities.schema.json"
         },
         "replacement": {
             "type": "string",

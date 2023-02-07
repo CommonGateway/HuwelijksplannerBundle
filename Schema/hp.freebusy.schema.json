@@ -62,14 +62,14 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
         },
         "event": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
         },
         "schedule": {
             "description": "Schedule that belongs to this freebusy",
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
         }
     }
 }

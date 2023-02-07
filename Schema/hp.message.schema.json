@@ -52,12 +52,12 @@
             "maxLength": 255
         },
         "service": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.service.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.service.schema.json"
         },
         "attachments": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.attachment.schema.json"
+                "ref": "https://huwelijksplanner.nl/schemas/hp.attachment.schema.json"
             }
         }
     },

@@ -102,7 +102,7 @@
             "nullable": true
         },
         "event": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
         }
     }
 }

@@ -25,7 +25,7 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
         }
     }
 }

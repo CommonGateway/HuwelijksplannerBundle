@@ -29,7 +29,7 @@
             "description": "The number of upvotes this question, answer or comment has received from the community."
          },
          "question": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.question.schema.json"
+           "ref": "https://huwelijksplanner.nl/schemas/hp.question.schema.json"
          },
          "text": {
             "type": "string",
