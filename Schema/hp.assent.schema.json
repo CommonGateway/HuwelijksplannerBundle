@@ -42,11 +42,11 @@
         },
         "contact": {
             "description": "The contact that this assent applies to",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.klant.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.klant.schema.json"
         },
         "person": {
             "description": "The person that this assent applies to",
-            "ref": "https://huwelijksplanner.nl/schemas/hp.klant.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.klant.schema.json"
         },
         "status": {
             "type": "string",

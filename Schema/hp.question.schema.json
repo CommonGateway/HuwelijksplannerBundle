@@ -31,11 +31,11 @@
          "answers": {
             "type": "array",
            "items": {
-             "ref": "https://huwelijksplanner.nl/schemas/hp.answer.schema.json"
+             "$ref": "https://huwelijksplanner.nl/schemas/hp.answer.schema.json"
            }
          },
          "acceptedAnswer": {
-           "ref": "https://huwelijksplanner.nl/schemas/hp.answer.schema.json"
+           "$ref": "https://huwelijksplanner.nl/schemas/hp.answer.schema.json"
          },
          "text": {
             "type": "string",
