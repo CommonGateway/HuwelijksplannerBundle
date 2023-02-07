@@ -71,6 +71,7 @@ class CreateMarriageService
     {
         if (!$this->huwelijkSchema = $this->schemaRepo->findOneBy(['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'])) {
             isset($this->io) && $this->io->error('No schema found for https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
+                throw new Exception('No schema found for https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
 
             return false;
         }
@@ -87,18 +88,21 @@ class CreateMarriageService
     {
         if (!isset($huwelijk['type'])) {
             isset($this->io) && $this->io->error('huwelijk.type not given'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type not given');
 
             return false;
         }
 
         if (!$typeObject = $this->objectRepo->find($huwelijk['type'])) {
             isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type not found in the databse with given id');
 
             return false;
         }
 
         if (!in_array($typeObject['upnLabel'], ['huwelijk', 'omzetten', 'partnerschap'])) {
             isset($this->io) && $this->io->error('huwelijk.type is not huwelijk, omzetten or partnerschap'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type is not huwelijk, omzetten or partnerschap');
 
             return false;
         }
@@ -113,18 +117,21 @@ class CreateMarriageService
     {
         if (!isset($huwelijk['type'])) {
             isset($this->io) && $this->io->error('huwelijk.type not given'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type not given');
 
             return false;
         }
 
         if (!$typeObject = $this->objectRepo->find($huwelijk['type'])) {
             isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type not found in the databse with given id');
 
             return false;
         }
 
         if (!in_array($typeObject['upnLabel'], ['flitshuwelijk', 'gratis huwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
             isset($this->io) && $this->io->error('huwelijk.type is not huwelijk, omzetten or partnerschap'); // @TODO throw exception ?
+            throw new Exception('huwelijk.type is not huwelijk, omzetten or partnerschap');
 
             return false;
         }
@@ -160,16 +167,19 @@ class CreateMarriageService
 
         if (!isset($this->data['request'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
+            throw new Exception('No data passed');
             return $this->data;
         }
 
         if (!$method = $this->data['parameters']->getMethod()) {
             isset($this->io) && $this->io->error('Method not set'); // @TODO throw exception ?
+            throw new Exception('Method not set');
             return $this->data;
         }
 
         if (!in_array(strtolower($method), ['post', 'put'])) {
             isset($this->io) && $this->io->error('Not a POST or PUT request'); // @TODO throw exception ?
+            throw new Exception('Not a POST or PUT request');
             return $this->data;
         }
 
@@ -185,6 +195,7 @@ class CreateMarriageService
         if (isset($this->data['response']['id'])) {
             if (!$huwelijkObject = $this->objectRepo->find($this->data['response']['id'])) {
                 isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $this->data['response']['id']); // @TODO throw exception ?
+                throw new Exception('Could not find huwelijk with id ' . $this->data['response']['id']);
             }
         } else {
             $huwelijkObject = new ObjectEntity($this->huwelijkSchema);

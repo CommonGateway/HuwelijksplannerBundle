@@ -38,9 +38,9 @@ class CreateMarriageHandler implements ActionHandlerInterface
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
      *
-     * @return array
+     * @return array|null
      */
-    public function run(array $data, array $configuration): array
+    public function run(array $data, array $configuration) 
     {
         return $this->createMarriageService->createMarriageHandler($data, $configuration, $this->security);
     }

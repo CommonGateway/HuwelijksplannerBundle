@@ -1,5 +1,5 @@
 {
-    "https://vng.opencatalogi.nl/schemas/hp.assent.schema.json": [
+    "https://huwelijksplanner.nl/schemas/hp.assent.schema.json": [
         {
             "token":"string",
                "name":"Partner",
@@ -43,7 +43,7 @@
                 "revocable":true  
         }
     ],
-    "https://vng.opencatalogi.nl/schemas/hp.sdg.schema.json": [
+    "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json": [
         {
                "uuid":"f3603321-b592-41b5-a2c7-949f493dbd99",
                "upnLabel":"huwelijk",
