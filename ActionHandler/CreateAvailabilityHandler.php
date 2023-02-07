@@ -24,10 +24,9 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
         return [
             '$id'         => 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
-            'title'       => 'Huwelijksplanner calendar Action',
+            'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
-            'properties'  => [],
         ];
     }
 
