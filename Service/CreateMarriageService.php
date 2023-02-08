@@ -146,6 +146,19 @@ class CreateMarriageService
         $this->validateCeremonie($huwelijk);
     }
 
+    /**
+     * Calculates the total costs of a marriage
+     */
+    private function calculateCosts(array $huwelijk): array
+    {
+        $costs = 0; // in cents like: EUR 150 for 1.50
+        isset($huwelijk['ceremonie']) && isset($huwelijk['vertalingen']['kostenEnBetaalmethoden']) && $costs += intval($huwelijk['vertalingen']['kostenEnBetaalmethoden']);
+
+
+        $huwelijk['kosten'] = "EUR {strval($costs)}";
+        return $huwelijk;
+    }
+
     private function createMarriage(array $huwelijk, ?string $id)
     {
         // test
@@ -172,6 +185,8 @@ class CreateMarriageService
         if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
             // $huwelijk = $this->handleAssentService->handleAssent($huwelijk);
             // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
+
+            $huwelijk = $this->calculateCosts($huwelijk);
 
             if (!isset($huwelijk['message'])) {
                 $huwelijkObject->hydrate($huwelijk);
