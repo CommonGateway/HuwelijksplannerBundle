@@ -146,6 +146,32 @@ class CreateMarriageService
         $this->validateCeremonie($huwelijk);
     }
 
+
+    /**
+     * Handles Huwelijkslnner actions.
+     *
+     * @param array $huwelijk
+     * @return ObjectEntity|null
+     */
+    public function huwelijkPartners(array $huwelijk, ObjectEntity $person): ?array
+    {
+        foreach ($huwelijk['partners'] as $partner) {
+            $requester = $person->getValue('requester');
+            $person = $partner['person'];
+            $subjectIdentificatie = $person['subjectIdentificatie'];
+            $klantBsn = $subjectIdentificatie['inpBsn'];
+
+//            $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
+//            $this->entityManager->persist($partner);
+
+            if ($klantBsn > $requester || $klantBsn < $requester) {
+                $this->handleAssentService->handleAssent($huwelijk, $partner, null);
+            }
+        }
+
+        return $huwelijk;
+    }
+
     private function createMarriage(array $huwelijk, ?string $id)
     {
         // test
@@ -170,7 +196,13 @@ class CreateMarriageService
         $this->entityManager->flush();
 
         if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
-            // $huwelijk = $this->handleAssentService->handleAssent($huwelijk);
+
+
+
+            $person = new ObjectEntity(); // @TODO get user/ person object from jwt token
+            $brpPerson = null; // @TODO get brp user
+            $huwelijk = $this->huwelijkPartners($huwelijk, $person);
+
             // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
 
             if (!isset($huwelijk['message'])) {

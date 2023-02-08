@@ -47,17 +47,19 @@ class HandleAssentService
     }
 
     /**
-     * Handles Huwelijkslnner actions.
+     * Handles the assent for the given person
      *
-     * @param ObjectEntity $partner
-     *
-     * @throws Exception
-     *
-     * @return string|null
+     * @param array|null $huwelijk
+     * @param ObjectEntity|null $person
+     * @param string|null $id
+     * @return ObjectEntity|null
      */
-    public function mailConsentingPartner(ObjectEntity $partner): ?string
+    public function handleAssent(?array $huwelijk, ?ObjectEntity $person, ?string $id): ?ObjectEntity
     {
-        $person = $partner->getValue('person');
+        if (isset($id) && !$huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+            return null;
+        }
+
         $phoneNumbers = $person->getValue('telefoonnummers');
         $emailAddresses = $person->getValue('emails');
 
@@ -72,74 +74,46 @@ class HandleAssentService
         return null;
     }
 
-    /**
-     * Handles Huwelijkslnner actions.
-     *
-     * @param ObjectEntity         $huwelijk
-     * @param PersistentCollection $partners
-     *
-     * @throws Exception
-     *
-     * @return ObjectEntity|null
-     */
-    public function huwelijkPartners(ObjectEntity $huwelijk): ?ObjectEntity
-    {
-        foreach ($huwelijk->getValue('partners') as $partner) {
-            $requester = $partner['requester'];
-            $person = $partner['person'];
-            $subjectIdentificatie = $person['subjectIdentificatie'];
-            $klantBsn = $subjectIdentificatie['inpBsn'];
 
-            $partner->setValue('status', $requester === $klantBsn ? 'granted' : 'requested');
-            $this->entityManager->persist($partner);
-
-            if ($klantBsn > $requester || $klantBsn < $requester) {
-                $this->mailConsentingPartner($partner);
-            }
-        }
-
-        return $huwelijk;
-    }
-
-    /**
-     * Handles the assent approval or request.
-     *
-     * @param ?array $data
-     * @param ?array $configuration
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function handleAssentHandler(?array $data = [], ?array $configuration = []): array
-    {
-        isset($this->io) && $this->io->success('handleAssentHandler triggered');
-
-        $this->data = $data;
-        $this->configuration = $configuration;
-
-        if ($this->data['parameters']->getMethod() !== 'PUT') {
-            return $this->data;
-        }
-
-        if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
-            return $this->data;
-        }
-        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
-
-        if (
-            array_key_exists('id', $this->data['response']) &&
-            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
-        ) {
-            if ($partners = $huwelijk->getValue('partners')) {
-                $huwelijk = $this->huwelijkPartners($huwelijk);
-            }
-
-            $this->entityManager->persist($huwelijk);
-
-            isset($this->io) && $this->io->info($this->data['response']['id']);
-        }
-
-        return $this->data['response'];
-    }
+//    /**
+//     * Handles the assent approval or request.
+//     *
+//     * @param ?array $data
+//     * @param ?array $configuration
+//     *
+//     * @throws Exception
+//     *
+//     * @return array
+//     */
+//    public function handleAssentHandler(?array $data = [], ?array $configuration = []): array
+//    {
+//        isset($this->io) && $this->io->success('handleAssentHandler triggered');
+//
+//        $this->data = $data;
+//        $this->configuration = $configuration;
+//
+//        if ($this->data['parameters']->getMethod() !== 'PUT') {
+//            return $this->data;
+//        }
+//
+//        if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
+//            return $this->data;
+//        }
+//        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
+//
+//        if (
+//            array_key_exists('id', $this->data['response']) &&
+//            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
+//        ) {
+//            if ($partners = $huwelijk->getValue('partners')) {
+//                $huwelijk = $this->huwelijkPartners($huwelijk);
+//            }
+//
+//            $this->entityManager->persist($huwelijk);
+//
+//            isset($this->io) && $this->io->info($this->data['response']['id']);
+//        }
+//
+//        return $this->data['response'];
+//    }
 }
