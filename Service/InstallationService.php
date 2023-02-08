@@ -10,6 +10,7 @@ use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use App\Entity\Entity;
+use App\Entity\Gateway as Source;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -47,7 +48,7 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-               ['name' => 'Mollie API', 'location' => 'https://api.mollie.com/',
+               ['name' => 'Mollie API', 'location' => 'https://api.mollie.com',
                    'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '']
     ];
 
@@ -257,13 +258,13 @@ class InstallationService implements InstallerInterface
         }
 
         // Custom payment endpoint
-        $paymentEndpoint = new Endpoint();
+        $paymentEndpoint = $this->entityManager->getRepository('App:Endpoint')->findOneBy(['pathRegex' => '^hp/payment$']) ?? new Endpoint();
         $paymentEndpoint->setName('Mollie payment endpoint');
         $paymentEndpoint->setPathRegex('^hp/payment$');
         $paymentEndpoint->setThrows(['huwelijksplanner.payment.create']);
         $paymentEndpoint->setMethod('GET');
         $paymentEndpoint->setMethods(['GET']);
-        $this->entityManager->persist($endpoint);
+        $this->entityManager->persist($paymentEndpoint);
         $endpoints[] = $paymentEndpoint;
 
         $this->entityManager->flush();
@@ -290,6 +291,7 @@ class InstallationService implements InstallerInterface
             if (!$sourceRepository->findOneBy(['name' => $sourceThatShouldExist['name']])) {
                 $source = new Source($sourceThatShouldExist);
                 $source->setApikey(array_key_exists('apikey', $sourceThatShouldExist) ? $sourceThatShouldExist['apikey'] : '');
+                $source->setLocation($sourceThatShouldExist['location']);
 
                 $this->entityManager->persist($source);
                 $this->entityManager->flush();
