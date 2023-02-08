@@ -56,6 +56,7 @@ class InstallationService implements InstallerInterface
         ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
         ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
         ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.default.listens'], 'conditions' => [[1 => 1]]],
+        ['name' => 'CreatePayment', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreatePaymentHandler', 'listens' => ['huwelijksplanner.payment.create'], 'conditions' => [[1 => 1]]],
     ];
 
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
