@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1.0",
     "title": "Schedule",
@@ -79,14 +79,14 @@
             "type": "array",
             "description": "The events that belong to or are caused by this Schedule.",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
             }
         },
         "freebusies": {
             "type": "array",
             "description": "The freebusies that belong to or are caused by this Schedule.",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.freebusy.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
             }
         },
         "todos": {

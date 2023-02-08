@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.subscriber.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1",
     "type": "object",
@@ -30,7 +30,7 @@
         "sendLists": {
             "type": "array",
             "items": {
-                "$ref": "https://vng.opencatalogi.nl/schemas/hp.sendList.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.sendList.schema.json"
             },
             "required":true
         }

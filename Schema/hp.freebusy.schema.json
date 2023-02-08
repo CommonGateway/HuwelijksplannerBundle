@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.freebusy.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1.0",
     "title": "Freebusy",
@@ -62,14 +62,14 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
         },
         "event": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.event.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
         },
         "schedule": {
             "description": "Schedule that belongs to this freebusy",
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.schedule.schema.json"
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
         }
     }
 }

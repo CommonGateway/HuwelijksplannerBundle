@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.availability.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1.0",
     "title": "Availability",
@@ -25,7 +25,7 @@
             "nullable": true
         },
         "calendar": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.calendar.schema.json"
+            "ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
         }
     }
 }

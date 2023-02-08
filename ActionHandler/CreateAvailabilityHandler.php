@@ -3,15 +3,15 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\HuwelijksplannerService;
+use CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService;
 
-class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
+class CreateAvailabilityHandler implements ActionHandlerInterface
 {
-    private HuwelijksplannerService $huwelijksplannerService;
+    private CreateAvailabilityService $createAvailabilityService;
 
-    public function __construct(HuwelijksplannerService $huwelijksplannerService)
+    public function __construct(CreateAvailabilityService $createAvailabilityService)
     {
-        $this->huwelijksplannerService = $huwelijksplannerService;
+        $this->createAvailabilityService = $createAvailabilityService;
     }
 
     /**
@@ -24,15 +24,14 @@ class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
         return [
             '$id'         => 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
-            'title'       => 'Huwelijksplanner calendar Action',
+            'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],
-            'properties'  => [],
         ];
     }
 
     /**
-     * This function runs the service.
+     * This function runs the createAvailability service.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -41,6 +40,6 @@ class HuwelijksplannerCalendarHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->huwelijksplannerService->huwelijksplannerCalendarHandler($data, $configuration);
+        return $this->createAvailabilityService->createAvailabilityHandler($data, $configuration);
     }
 }

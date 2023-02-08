@@ -1,5 +1,5 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.answer.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.answer.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1",
     "type": "object",
@@ -29,7 +29,7 @@
             "description": "The number of upvotes this question, answer or comment has received from the community."
          },
          "question": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.question.schema.json"
+           "$ref": "https://huwelijksplanner.nl/schemas/hp.question.schema.json"
          },
          "text": {
             "type": "string",

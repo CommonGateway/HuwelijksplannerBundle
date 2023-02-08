@@ -1,28 +1,28 @@
 {
-    "$id": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailabilities.schema.json",
+    "$id": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailabilities.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "version": "0.1",
     "type": "object",
     "title": "MedewerkerAvailabilities",
     "properties":{
         "maandag": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "dinsdag": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "woensdag": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "donderdag": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         },
         "vrijdag": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true
         }
     },
