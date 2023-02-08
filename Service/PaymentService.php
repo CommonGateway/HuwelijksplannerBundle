@@ -21,6 +21,7 @@ class PaymentService
         EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
+    }
 
     /**
      * Set symfony style in order to output to the console.
@@ -46,5 +47,27 @@ class PaymentService
         isset($this->io) && $this->io->success('createPayment triggered');
 
         return [];
+    }
+
+    
+
+    /**
+     * Creates payment for given marriage.
+     *
+     * @param ?array $data
+     * @param ?array $configuration
+     *
+     * @return array
+     */
+    public function createPaymentHandler(?array $data = [], ?array $configuration = []): array
+    {
+        isset($this->io) && $this->io->success('createPaymentHandler function triggered');
+        $this->data = $data;
+        $this->configuration = $configuration;
+
+        $payment = $this->createPayment();
+
+
+        return $this->data;
     }
 }
