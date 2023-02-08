@@ -7,7 +7,6 @@ use DatePeriod;
 use DateTime;
 use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for creating availability.
