@@ -251,10 +251,22 @@ class InstallationService implements InstallerInterface
                 }
 
                 $this->entityManager->persist($endpoint);
-                $this->entityManager->flush();
                 $endpoints[] = $endpoint;
             }
         }
+
+        // Custom payment endpoint
+        $paymentEndpoint = new Endpoint();
+        $paymentEndpoint->setName('Mollie payment endpoint');
+        $paymentEndpoint->setPathRegex('^hp/payment$');
+        $paymentEndpoint->setThrows(['huwelijksplanner.payment.create']);
+        $paymentEndpoint->setMethod('GET');
+        $paymentEndpoint->setMethods(['GET']);
+        $this->entityManager->persist($endpoint);
+        $endpoints[] = $paymentEndpoint;
+
+        $this->entityManager->flush();
+
 
         (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
 
