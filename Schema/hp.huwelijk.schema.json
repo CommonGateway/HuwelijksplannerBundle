@@ -83,6 +83,9 @@
         },
         "instemmingGemeente": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
+        },
+        "payment": {
+            "$ref": "https://huwelijksplanner.nl/schemas/mollie.payment.schema.json"
         }
     }
 }

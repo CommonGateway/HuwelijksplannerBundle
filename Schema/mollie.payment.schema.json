@@ -60,7 +60,7 @@
         },
         "sequenceType": {
             "type": "string",
-            "example": "oneoff",
+            "example": "oneoff"
         },
         "redirectUrl": {
             "type": "string",
