@@ -88,15 +88,23 @@ class CreateMarriageService
             if (!$typeProductObject = $this->objectRepo->find($huwelijk['type'])) {
                 isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
 
-                throw new Exception('huwelijk.type not found in the databse with given id');
+                throw new GatewayException('huwelijk.type not found in the databse with given id');
             }
 
             if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
-                isset($this->io) && $this->io->error('huwelijk.type is not huwelijk, omzetten or partnerschap');
+                isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
 
-                throw new Exception('huwelijk.type is not huwelijk, Omzetting or Partnerschap');
+                throw new GatewayException('huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap');
             }
+
+            return true;
+        } else {
+            isset($this->io) && $this->io->error('huwelijk.type is not given');
+
+            throw new GatewayException('huwelijk.type is not given');
         }
+
+        return true;
     }
 
     /**
@@ -108,17 +116,25 @@ class CreateMarriageService
     {
         if (isset($huwelijk['ceremonie'])) {
             if (!$ceremonieProductObject = $this->objectRepo->find($huwelijk['ceremonie'])) {
-                isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
+                isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
 
-                throw new Exception('huwelijk.type not found in the databse with given id');
+                throw new GatewayException('huwelijk.ceremonie not found in the databse with given id');
             }
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                isset($this->io) && $this->io->error('huwelijk.type is not huwelijk, omzetten or partnerschap');
+                isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
-                throw new Exception('huwelijk.ceremonie is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+                throw new GatewayException('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
             }
+
+            return true;
+        } else {
+            isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
+
+            throw new GatewayException('huwelijk.ceremonie is not given');
         }
+
+        return true;
     }
 
     /**
@@ -135,41 +151,40 @@ class CreateMarriageService
         // test
         // var_dump($this->io->info($security->getUser()->getUserIdentifier()));
 
-        $this->getHuwelijkSchema();
+        if (!$huwelijkSchema = $this->getHuwelijkSchema()) {
+            isset($this->io) && $this->io->error('No HuwelijkSchema found when trying to post a huwelijk');
+
+            return null;
+        }
 
         if (isset($this->data['response']['id'])) {
             if (!$huwelijkObject = $this->objectRepo->find($this->data['response']['id'])) {
                 isset($this->io) && $this->io->error('Could not find huwelijk with id '.$this->data['response']['id']); // @TODO throw exception ?
 
-                throw new Exception('Could not find huwelijk with id '.$this->data['response']['id']);
+                throw new GatewayException('Could not find huwelijk with id '.$this->data['response']['id']);
             }
         } else {
-            $huwelijkObject = new ObjectEntity($this->huwelijkSchema);
+            $huwelijkObject = new ObjectEntity($huwelijkSchema);
         }
-
-        try {
-            $this->validateMarriage($huwelijk);
-        } catch (Exception $e) {
-            $this->entityManager->remove($huwelijkObject); // delete if error
-            $this->entityManager->flush();
-
-            throw new Exception($e->getMessage());
-        }
-
-        // $huwelijk = $this->handleAssentService->handleAssent($huwelijk);
-        // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
-
-        // If message aint set
-        if (!isset($huwelijk['message'])) {
-            $huwelijkObject->hydrate($huwelijk);
-            $this->entityManager->persist($huwelijkObject);
-            $huwelijk = $huwelijkObject->toArray();
-        } else {
-            $this->entityManager->remove($huwelijkObject); // delete if error
-        }
+        $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
 
-        return $huwelijk;
+        if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
+            // $huwelijk = $this->handleAssentService->handleAssent($huwelijk);
+            // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
+
+            if (!isset($huwelijk['message'])) {
+                $huwelijkObject->hydrate($huwelijk);
+                $this->entityManager->persist($huwelijkObject);
+                $huwelijk = $huwelijkObject->toArray();
+
+                return $huwelijk;
+            }
+
+            $this->entityManager->flush();
+        }
+
+        // @TODO delete the huwelijk object if validation failed
     }
 
     /**
@@ -206,14 +221,10 @@ class CreateMarriageService
             return ['response' => ['message' => 'Not a POST or PUT request'], 'httpCode' => 400];
         }
 
-        try {
-            $huwelijk = $this->createMarriage($this->data['request'], $this->data['response']['id'] ?? null);
-            $httpCode = 201;
-        } catch (Exception $e) {
-            $huwelijk = ['message' => $e->getMessage()];
-            $httpCode = 400;
-        }
+        $huwelijk = $this->createMarriage($this->data['request'], $this->data['response']['id'] ?? null);
 
-        return ['response' => $huwelijk, 'httpCode' => $httpCode];
+        $this->data['response'] = $huwelijk;
+
+        return $this->data;
     }
 }

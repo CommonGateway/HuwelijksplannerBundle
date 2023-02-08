@@ -1,7 +1,7 @@
 {
-    "name": "common-gateway/huwelijksplanner-bundle",
-    "description": "A symfony package for dutch municipality marriage functionality",
-    "type" : "symfony-bundle",	
+	"name": "common-gateway/huwelijksplanner-bundle",
+	"description": "A symfony package for dutch municipality marriage functionality",
+	"type" : "symfony-bundle",
 	"keywords" : [
 		"commongateway",
 		"common",
@@ -11,13 +11,14 @@
 		"common-gateway-plugin"
 	],
 	"homepage" : "https://commongatway.nl",
-    "license": "EUPL-1.2",
-    "minimum-stability" : "dev",
-    "require": {
-        "php": ">=7.4",
-		"commongateway/corebundle": "dev-master",
-		"common-gateway/klanten-bundle": "^0.0.8",
-		"common-gateway/zgw-bundle": "^0.0.6"
+	"license": "EUPL-1.2",
+	"minimum-stability" : "dev",
+	"require": {
+		"php": ">=7.4",
+		"commongateway/corebundle": ">=0.0.1",
+		"common-gateway/brp-bundle": ">=0.0.12",
+		"common-gateway/klanten-bundle": ">=0.0.22,",
+		"common-gateway/zgw-bundle": ">=0.0.19"
 	},
 	"require-dev" : {
 		"symfony/dependency-injection" : "~3.4|~4.1|~5.0"
@@ -28,8 +29,8 @@
 		}
 	},
 	"scripts": {
-		"post-package-install": "bin/console common-gateway/huwelijksplanner-bundle",
-		"post-package-update": "bin/console common-gateway/huwelijksplanner-bundle",
-		"post-package-uninstall": "bin/console common-gateway/huwelijksplanner-bundle"
+		"post-package-install": "bin/console commongateway:install common-gateway/huwelijksplanner-bundle",
+		"post-package-update": "bin/console commongateway:update common-gateway/huwelijksplanner-bundle",
+		"post-package-uninstall": "bin/console commongateway:uninstall common-gateway/huwelijksplanner-bundle"
 	}
 }
