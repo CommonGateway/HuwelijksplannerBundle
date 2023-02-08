@@ -7,6 +7,7 @@ use App\Entity\ObjectEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
+use App\Exception\GatewayException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
@@ -152,18 +153,24 @@ class CreateMarriageService
     private function calculateCosts(array $huwelijk): array
     {
         $costs = 0; // in cents like: EUR 150 for 1.50
-        isset($huwelijk['ceremonie']) && isset($huwelijk['vertalingen']['kostenEnBetaalmethoden']) && $costs += intval($huwelijk['vertalingen']['kostenEnBetaalmethoden']);
+        if (isset($huwelijk['type'])) {
+            $type = $this->objectRepo->find($huwelijk['type']);
+            $type && $typePrice = $type->toArray()['vertalingen'][0]['kostenEnBetaalmethoden'] ?? null;
+            $typePrice && $costs += intval($typePrice);
+        }
+        if (isset($huwelijk['ceremonie'])) {
+            $ceremonie = $this->objectRepo->find($huwelijk['ceremonie']);
+            $ceremonie && $ceremoniePrice = $ceremonie->toArray()['vertalingen'][0]['kostenEnBetaalmethoden'] ?? null;
+            $ceremoniePrice && $costs += intval($ceremoniePrice);
+        }
+        //@TODO check more properties on prices
 
-
-        $huwelijk['kosten'] = "EUR {strval($costs)}";
+        $huwelijk['kosten'] = 'EUR ' . strval($costs);
         return $huwelijk;
     }
 
     private function createMarriage(array $huwelijk, ?string $id)
     {
-        // test
-        // var_dump($this->io->info($security->getUser()->getUserIdentifier()));
-
         if (!$huwelijkSchema = $this->getHuwelijkSchema()) {
             isset($this->io) && $this->io->error('No HuwelijkSchema found when trying to post a huwelijk');
 
