@@ -2,6 +2,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
+use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,7 @@ class HandleAssentService
 
     private array $data;
     private array $configuration;
+    private ?Schema $assentSchema;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -47,73 +49,71 @@ class HandleAssentService
     }
 
     /**
-     * Handles the assent for the given person
+     * Get the assent schema.
+     *
+     * @return bool
+     */
+    private function getAssentSchema()
+    {
+        if (!$this->assentSchema = $this->entityManager->getRepository(Schema::class)->findOneBy(['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json'])) {
+            isset($this->io) && $this->io->error('No schema found for https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
+
+            throw new Exception('No schema found for https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
+
+            return null;
+        }
+
+        return $this->assentSchema;
+    }
+
+    /**
+     * Handles the assent for the given person and sends an email or sms
      *
      * @param array|null $huwelijk
      * @param ObjectEntity|null $person
      * @param string|null $id
      * @return ObjectEntity|null
      */
-    public function handleAssent(?array $huwelijk, ?ObjectEntity $person, ?string $id): ?ObjectEntity
+    public function handleAssent(ObjectEntity $person): ?ObjectEntity
     {
-        if (isset($id) && !$huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+        if (!$assentSchema = $this->getAssentSchema()) {
+            isset($this->io) && $this->io->error('No AssentSchema found when trying create an assent');
+
             return null;
         }
+
+        $assent = new ObjectEntity($assentSchema);
+        $assent->hydrate([
+            'name' => $person->getValue('voornaam'),
+            'description' => null,
+            'request' => null,
+            'forwardUrl' => null,
+            'property' => null,
+            'process' => null,
+            'contact' => $person,
+            'status' => 'requested',
+            'requester' => null, // the bsn of the person
+            'revocable' => true
+        ]);
+        $this->entityManager->persist($assent);
 
         $phoneNumbers = $person->getValue('telefoonnummers');
         $emailAddresses = $person->getValue('emails');
 
-        if (count($phoneNumbers) > 0 || count($emailAddresses) > 0) {
-            // sent email or phoneNumber
-
-            isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
-        } else {
+        if (count($phoneNumbers) <= 0 || count($emailAddresses) <= 0) {
             throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
         }
 
-        return null;
+        isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
+
+        foreach ($emailAddresses as $emailAddress) {
+
+        }
+
+        foreach ($phoneNumbers as $phoneNumber) {
+
+        }
+
+        return $assent;
     }
-
-
-//    /**
-//     * Handles the assent approval or request.
-//     *
-//     * @param ?array $data
-//     * @param ?array $configuration
-//     *
-//     * @throws Exception
-//     *
-//     * @return array
-//     */
-//    public function handleAssentHandler(?array $data = [], ?array $configuration = []): array
-//    {
-//        isset($this->io) && $this->io->success('handleAssentHandler triggered');
-//
-//        $this->data = $data;
-//        $this->configuration = $configuration;
-//
-//        if ($this->data['parameters']->getMethod() !== 'PUT') {
-//            return $this->data;
-//        }
-//
-//        if (!array_key_exists('huwelijksEntityId', $this->configuration)) {
-//            return $this->data;
-//        }
-//        $huwelijkEntity = $this->entityManager->getRepository('App:Entity')->find($this->configuration['huwelijksEntityId']);
-//
-//        if (
-//            array_key_exists('id', $this->data['response']) &&
-//            $huwelijk = $this->entityManager->getRepository('App:ObjectEntity')->findOneBy(['entity' => $huwelijkEntity, 'id' => $this->data['response']['id']])
-//        ) {
-//            if ($partners = $huwelijk->getValue('partners')) {
-//                $huwelijk = $this->huwelijkPartners($huwelijk);
-//            }
-//
-//            $this->entityManager->persist($huwelijk);
-//
-//            isset($this->io) && $this->io->info($this->data['response']['id']);
-//        }
-//
-//        return $this->data['response'];
-//    }
 }
