@@ -47,12 +47,8 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-        //        ['name' => 'EnterpriseSearch API Search', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-search-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'EnterpriseSearch API Private', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-private-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'OpenPub API', 'location' => 'https://openweb.{yourDomain}/wp-json/wp/v2',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'none', 'configuration' => ['verify' => false]]
+               ['name' => 'Mollie API', 'location' => 'https://api.mollie.com/',
+                   'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '']
     ];
 
     public const ACTION_HANDLERS = [
@@ -419,6 +415,9 @@ class InstallationService implements InstallerInterface
 
         // create actions from the given actionHandlers
         $this->addActions();
+
+        // create sources
+        $this->createSources($this::SOURCES);
 
         $this->entityManager->flush();
     }
