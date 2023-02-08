@@ -63,6 +63,14 @@ class PaymentService
             return false;
         }
 
+        if (!$this->mollieAPI->getApiKey()) {
+            isset($this->io) && $this->io->error('No api key set on mollie api source');
+
+            throw new Exception('No api key set on mollie api source');
+
+            return false;
+        } 
+
         return true;
     }
 
