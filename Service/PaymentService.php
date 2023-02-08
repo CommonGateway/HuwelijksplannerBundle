@@ -3,8 +3,11 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
+use App\Entity\Gateway as Source;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Doctrine\Persistence\ObjectRepository;
+use Exception;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -13,6 +16,12 @@ class PaymentService
 {
     private EntityManagerInterface $entityManager;
     private SymfonyStyle $io;
+    private ObjectRepository $sourceRepo;
+
+    private ?Source $mollieAPI;
+
+    private array $data;
+    private array $configuration;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -21,6 +30,8 @@ class PaymentService
         EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
+
+        $this->sourceRepo = $this->entityManager->getRepository(Source::class);
     }
 
     /**
@@ -38,6 +49,24 @@ class PaymentService
     }
 
     /**
+     * Get the mollie api source.
+     *
+     * @return bool
+     */
+    private function getMollieSource(): bool
+    {
+        if (!$this->mollieAPI = $this->sourceRepo->findOneBy(['location' => 'https://api.mollie.com'])) {
+            isset($this->io) && $this->io->error('No source found for https://api.mollie.com');
+
+            throw new Exception('No source found for https://api.mollie.com');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Creates a payment object.
      *
      * @return array
@@ -45,6 +74,17 @@ class PaymentService
     public function createPayment(): array
     {
         isset($this->io) && $this->io->success('createPayment triggered');
+
+        $huwelijkId = $this->data['parameters']->query->get('huwelijk') ?? null;
+        // @TODO Validate hywelijk
+        if (!$huwelijkId) {
+            // @TODO throw exception
+            return [];
+        }
+
+        $this->getMollieSource();
+
+        // @TODO create mollie payment
 
         return [];
     }
@@ -68,6 +108,6 @@ class PaymentService
         $payment = $this->createPayment();
 
 
-        return $this->data;
+        return ['response' => ['test' => 'test']];
     }
 }
