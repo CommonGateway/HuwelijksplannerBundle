@@ -4,12 +4,11 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
-use App\Service\ObjectEntityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for approving or requesting a assent.

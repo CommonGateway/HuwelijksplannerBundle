@@ -5,7 +5,6 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -18,7 +17,8 @@ class CreateAvailabilityService
     private array $data;
     private array $configuration;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->data = [];
         $this->configuration = [];
     }
@@ -38,7 +38,7 @@ class CreateAvailabilityService
     }
 
     /**
-     * Creates availability for someone with given date info
+     * Creates availability for someone with given date info.
      *
      * @param ?array $data
      * @param ?array $configuration
@@ -76,7 +76,7 @@ class CreateAvailabilityService
             }
 
             // end voorbeeld code
-            
+
             $resultArray[$currentDate->format('Y-m-d')][] = [ // @TODO Add format 'c'
                 'start'     => $currentDate->format('Y-m-d\TH:i:sO'), // @TODO Add format 'c'
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),

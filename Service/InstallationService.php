@@ -9,12 +9,12 @@ use App\Entity\CollectionEntity;
 use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
+use App\Entity\Entity;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Exception;
-use App\Entity\Entity;
 
 class InstallationService implements InstallerInterface
 {
@@ -28,7 +28,7 @@ class InstallationService implements InstallerInterface
         'https://huwelijksplanner.nl/schemas/hp.availability.schema.json',
         'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',
         'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json',
-        'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json'
+        'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json',
     ];
 
     public const SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS = [
@@ -49,7 +49,7 @@ class InstallationService implements InstallerInterface
         ['name' => 'CreateAvailbility', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.default.listens']],
         ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
         ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
-        ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]]
+        ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]],
     ];
 
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
@@ -134,23 +134,25 @@ class InstallationService implements InstallerInterface
     /**
      * @param array $defaultConfig
      * @param array $overrides
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function overrideConfig(array $defaultConfig, array $overrides): array
     {
-        foreach($overrides as $key => $override) {
-            if(is_array($override) && $this->isAssociative($override)) {
+        foreach ($overrides as $key => $override) {
+            if (is_array($override) && $this->isAssociative($override)) {
                 $defaultConfig[$key] = $this->overrideConfig(isset($defaultConfig[$key]) ? $defaultConfig[$key] : [], $override);
-            } elseif($key == 'entity') {
+            } elseif ($key == 'entity') {
                 $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $override]);
-                if(!$entity) {
+                if (!$entity) {
                     throw new Exception("No entity found with reference {$override}");
                 }
                 $defaultConfig[$key] = $entity->getId()->toString();
-            } elseif($key == 'source') {
+            } elseif ($key == 'source') {
                 $source = $this->entityManager->getRepository('App:Gateway')->findOneBy(['name' => $override]);
-                if(!$source) {
+                if (!$source) {
                     throw new Exception("No source found with name {$override}");
                 }
                 $defaultConfig[$key] = $source->getId()->toString();
@@ -158,6 +160,7 @@ class InstallationService implements InstallerInterface
                 $defaultConfig[$key] = $override;
             }
         }
+
         return $defaultConfig;
     }
 
@@ -176,11 +179,11 @@ class InstallationService implements InstallerInterface
 
             if (array_key_exists('name', $handler)) {
                 if ($this->entityManager->getRepository('App:Action')->findOneBy(['name'=> $handler['name']])) {
-                    (isset($this->io)?$this->io->writeln(['Action found with name '.$handler['name']]):'');
+                    (isset($this->io) ? $this->io->writeln(['Action found with name '.$handler['name']]) : '');
                     continue;
                 }
             } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class'=> get_class($actionHandler)])) {
-                (isset($this->io)?$this->io->writeln(['Action found for '.$handler['actionHandler']]):'');
+                (isset($this->io) ? $this->io->writeln(['Action found for '.$handler['actionHandler']]) : '');
                 continue;
             }
 
@@ -198,7 +201,7 @@ class InstallationService implements InstallerInterface
             $action->setConditions($handler['conditions'] ?? ['==' => [1, 1]]);
 
             $this->entityManager->persist($action);
-            (isset($this->io)?$this->io->writeln(['Created Action '.$action->getName().' with Handler: '.$handler['actionHandler']]):'');
+            (isset($this->io) ? $this->io->writeln(['Created Action '.$action->getName().' with Handler: '.$handler['actionHandler']]) : '');
         }
     }
 
@@ -251,8 +254,8 @@ class InstallationService implements InstallerInterface
     {
         $collectionConfigs = [
             [
-                'name' => 'Huwelijksplanner',
-                'prefix' => 'hp',
+                'name'         => 'Huwelijksplanner',
+                'prefix'       => 'hp',
                 'schemaPrefix' => 'https://huwelijksplanner.nl',
             ],
         ];
@@ -277,7 +280,7 @@ class InstallationService implements InstallerInterface
     public function createDashboardCards($objectsThatShouldHaveCards)
     {
         foreach ($objectsThatShouldHaveCards as $object) {
-            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: ' . $object);
+            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: '.$object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -294,7 +297,7 @@ class InstallationService implements InstallerInterface
                 isset($this->io) && $this->io->writeln('Dashboard card created');
                 continue;
             } else {
-                isset($this->io) && $this->io->writeln('Entity with reference ' . $object . ' can\'t be found');
+                isset($this->io) && $this->io->writeln('Entity with reference '.$object.' can\'t be found');
             }
             isset($this->io) && $this->io->writeln('Dashboard card found');
         }
@@ -318,7 +321,6 @@ class InstallationService implements InstallerInterface
             (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for '.$cronjob->getName()]) : '');
         }
     }
-
 
     public function checkDataConsistency()
     {

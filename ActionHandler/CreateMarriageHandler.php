@@ -28,7 +28,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
             '$id'        => 'https://vng.opencatalogi.nl/schemas/hp.huwelijk.schema.json',
             '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
             'title'      => 'CreateMarriage',
-            'required'   => ['huwelijksEntityId', 'assentEntityId', 'klantEntityId', 'natuurlijkPersoonEntityId']
+            'required'   => ['huwelijksEntityId', 'assentEntityId', 'klantEntityId', 'natuurlijkPersoonEntityId'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
      *
      * @return array|null
      */
-    public function run(array $data, array $configuration) 
+    public function run(array $data, array $configuration)
     {
         return $this->createMarriageService->createMarriageHandler($data, $configuration, $this->security);
     }
