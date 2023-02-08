@@ -25,7 +25,7 @@ class UpdateChecklistHandler implements ActionHandlerInterface
             '$id'        => 'https://vng.opencatalogi.nl/schemas/hp.assent.schema.json',
             '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
             'title'      => 'UpdateChecklist',
-            'required'   => ['huwelijksEntityId']
+            'required'   => ['huwelijksEntityId'],
         ];
     }
 
