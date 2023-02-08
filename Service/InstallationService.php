@@ -47,19 +47,19 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-//        ['name' => 'EnterpriseSearch API Search', 'location' => 'https://enterprise-search-ent-http:3002',
-//            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-search-key', 'configuration' => ['verify' => false]],
-//        ['name' => 'EnterpriseSearch API Private', 'location' => 'https://enterprise-search-ent-http:3002',
-//            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-private-key', 'configuration' => ['verify' => false]],
-//        ['name' => 'OpenPub API', 'location' => 'https://openweb.{yourDomain}/wp-json/wp/v2',
-//            'headers' => ['accept' => 'application/json'], 'auth' => 'none', 'configuration' => ['verify' => false]]
+        //        ['name' => 'EnterpriseSearch API Search', 'location' => 'https://enterprise-search-ent-http:3002',
+        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-search-key', 'configuration' => ['verify' => false]],
+        //        ['name' => 'EnterpriseSearch API Private', 'location' => 'https://enterprise-search-ent-http:3002',
+        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-private-key', 'configuration' => ['verify' => false]],
+        //        ['name' => 'OpenPub API', 'location' => 'https://openweb.{yourDomain}/wp-json/wp/v2',
+        //            'headers' => ['accept' => 'application/json'], 'auth' => 'none', 'configuration' => ['verify' => false]]
     ];
 
     public const ACTION_HANDLERS = [
         ['name' => 'CreateAvailbility', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]],
         ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
         ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
-        ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.default.listens'], 'conditions' => [[1 => 1]]]
+        ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.default.listens'], 'conditions' => [[1 => 1]]],
     ];
 
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
@@ -232,16 +232,17 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * Creates the huwelijksplanner Endpoints from the given array
+     * Creates the huwelijksplanner Endpoints from the given array.
      *
      * @param array $objectsThatShouldHaveEndpoints
+     *
      * @return array
      */
     private function createEndpoints(array $objectsThatShouldHaveEndpoints): array
     {
         $endpointRepository = $this->entityManager->getRepository('App:Endpoint');
         $endpoints = [];
-        foreach($objectsThatShouldHaveEndpoints as $objectThatShouldHaveEndpoint) {
+        foreach ($objectsThatShouldHaveEndpoints as $objectThatShouldHaveEndpoint) {
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $objectThatShouldHaveEndpoint['reference']]);
             if ($entity instanceof Entity && !$endpointRepository->findOneBy(['name' => $entity->getName()])) {
                 $endpoint = new Endpoint($entity, $objectThatShouldHaveEndpoint['path'], $objectThatShouldHaveEndpoint['methods']);
@@ -259,15 +260,16 @@ class InstallationService implements InstallerInterface
             }
         }
 
-        (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created'): '');
+        (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
 
         return $endpoints;
     }
 
     /**
-     * Creates the huwelijksplanner Sources
+     * Creates the huwelijksplanner Sources.
      *
      * @param array $sourcesThatShouldExist
+     *
      * @return array
      */
     private function createSources(array $sourcesThatShouldExist): array
@@ -275,7 +277,7 @@ class InstallationService implements InstallerInterface
         $sourceRepository = $this->entityManager->getRepository('App:Gateway');
         $sources = [];
 
-        foreach($sourcesThatShouldExist as $sourceThatShouldExist) {
+        foreach ($sourcesThatShouldExist as $sourceThatShouldExist) {
             if (!$sourceRepository->findOneBy(['name' => $sourceThatShouldExist['name']])) {
                 $source = new Source($sourceThatShouldExist);
                 $source->setApikey(array_key_exists('apikey', $sourceThatShouldExist) ? $sourceThatShouldExist['apikey'] : '');
@@ -286,16 +288,16 @@ class InstallationService implements InstallerInterface
             }
         }
 
-        (isset($this->io) ? $this->io->writeln(count($sources).' Sources Created'): '');
+        (isset($this->io) ? $this->io->writeln(count($sources).' Sources Created') : '');
 
         return $sources;
     }
 
     /**
-     * Adds schemas with the given prefix to the given collection
+     * Adds schemas with the given prefix to the given collection.
      *
      * @param CollectionEntity $collection
-     * @param string $schemaPrefix
+     * @param string           $schemaPrefix
      *
      * @return CollectionEntity
      */
@@ -310,7 +312,7 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * Creates collections for huwelijkplanner
+     * Creates collections for huwelijkplanner.
      *
      * @return array
      */
@@ -342,7 +344,7 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * Creates dashboard cards for the given schemas
+     * Creates dashboard cards for the given schemas.
      *
      * @return void
      */
@@ -373,11 +375,11 @@ class InstallationService implements InstallerInterface
     }
 
     /**
-     * Creates cronjobs for huwelijksplanner
+     * Creates cronjobs for huwelijksplanner.
      *
      * @return void
      */
-    public function createCronjobs():void
+    public function createCronjobs(): void
     {
         (isset($this->io) ? $this->io->writeln(['', '<info>Looking for cronjobs</info>']) : '');
         // We only need 1 cronjob so lets set that
@@ -396,13 +398,12 @@ class InstallationService implements InstallerInterface
         }
     }
 
-
     /**
-     * This function installs the huwelijksplanner bundle assets
+     * This function installs the huwelijksplanner bundle assets.
      *
      * @return void
      */
-    public function checkDataConsistency():void
+    public function checkDataConsistency(): void
     {
         // Lets create some genneric dashboard cards
         $this->createDashboardCards($this::OBJECTS_THAT_SHOULD_HAVE_CARDS);

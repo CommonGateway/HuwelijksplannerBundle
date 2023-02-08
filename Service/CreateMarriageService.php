@@ -87,17 +87,20 @@ class CreateMarriageService
         if (isset($huwelijk['type'])) {
             if (!$typeProductObject = $this->objectRepo->find($huwelijk['type'])) {
                 isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
+
                 throw new GatewayException('huwelijk.type not found in the databse with given id');
             }
 
             if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
                 isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
+
                 throw new GatewayException('huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap');
             }
 
             return true;
         } else {
             isset($this->io) && $this->io->error('huwelijk.type is not given');
+
             throw new GatewayException('huwelijk.type is not given');
         }
 
@@ -114,17 +117,20 @@ class CreateMarriageService
         if (isset($huwelijk['ceremonie'])) {
             if (!$ceremonieProductObject = $this->objectRepo->find($huwelijk['ceremonie'])) {
                 isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
+
                 throw new GatewayException('huwelijk.ceremonie not found in the databse with given id');
             }
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
                 isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+
                 throw new GatewayException('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
             }
 
             return true;
         } else {
             isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
+
             throw new GatewayException('huwelijk.ceremonie is not given');
         }
 
@@ -153,15 +159,15 @@ class CreateMarriageService
 
         if (isset($this->data['response']['id'])) {
             if (!$huwelijkObject = $this->objectRepo->find($this->data['response']['id'])) {
-                isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $this->data['response']['id']); // @TODO throw exception ?
-                throw new GatewayException('Could not find huwelijk with id ' . $this->data['response']['id']);
+                isset($this->io) && $this->io->error('Could not find huwelijk with id '.$this->data['response']['id']); // @TODO throw exception ?
+
+                throw new GatewayException('Could not find huwelijk with id '.$this->data['response']['id']);
             }
         } else {
             $huwelijkObject = new ObjectEntity($huwelijkSchema);
         }
         $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
-
 
         if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
             // $huwelijk = $this->handleAssentService->handleAssent($huwelijk);
