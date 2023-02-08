@@ -15,14 +15,14 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
     }
 
     /**
-     *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
+     *  This function returns the required configuration as a [json-schema](https://json-schema.org/) array.
      *
      * @throws array a [json-schema](https://json-schema.org/) that this  action should comply to
      */
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://vng.opencatalogi.nl/schemas/hp.availabilityCheck.schema.json',
+            '$id'         => 'https://huwelijksplanner.nl/schemas/hp.createAvailability.schema.json',
             '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
             'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',

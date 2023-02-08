@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for creating availability.
@@ -76,7 +77,7 @@ class CreateAvailabilityService
             }
 
             // end voorbeeld code
-            
+
             $resultArray[$currentDate->format('Y-m-d')][] = [ // @TODO Add format 'c'
                 'start'     => $currentDate->format('Y-m-d\TH:i:sO'), // @TODO Add format 'c'
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
