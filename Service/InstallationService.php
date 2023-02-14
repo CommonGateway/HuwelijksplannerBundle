@@ -245,7 +245,7 @@ class InstallationService implements InstallerInterface
         foreach ($objectsThatShouldHaveEndpoints as $objectThatShouldHaveEndpoint) {
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $objectThatShouldHaveEndpoint['reference']]);
             if ($entity instanceof Entity && !$endpointRepository->findOneBy(['name' => $entity->getName()])) {
-                $endpoint = new Endpoint($entity, $objectThatShouldHaveEndpoint['path'], $objectThatShouldHaveEndpoint['methods']);
+                $endpoint = new Endpoint($entity, null, $objectThatShouldHaveEndpoint);
 
                 if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.huwelijk.created']);
