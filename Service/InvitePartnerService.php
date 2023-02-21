@@ -7,10 +7,12 @@ use App\Entity\ObjectEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use App\Exception\GatewayException;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -68,7 +70,7 @@ class InvitePartnerService
         EntityManagerInterface $entityManager,
         HandleAssentService    $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security $security
+        Security               $security
     )
     {
         $this->entityManager = $entityManager;
@@ -196,7 +198,7 @@ class InvitePartnerService
             'achternaam' => $this->security->getUser()->getLastName(),
             'telefoonnummers' => null,
             'emails' => [[
-                'naam' => 'Emailadres van '. $this->security->getUser()->getFirstName(),
+                'naam' => 'Emailadres van ' . $this->security->getUser()->getFirstName(),
                 'email' => $this->security->getUser()->getEmail()
             ]],
             'adressen' => null,
@@ -215,42 +217,35 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, ?string $id): ?array
     {
-        $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
+        if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+            isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $id); // @TODO throw exception ?
 
-        if (isset($this->data['response']['id'])) {
-            if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($this->data['response']['id'])) {
-                isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $this->data['response']['id']); // @TODO throw exception ?
-
-                return null;
-                throw new GatewayException('Could not find huwelijk with id ' . $this->data['response']['id']);
-            }
-        } else {
-            $huwelijkObject = new ObjectEntity($huwelijkSchema);
+            return null;
+            throw new GatewayException('Could not find huwelijk with id ' . $id);
         }
 
-        if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
+        if (isset($huwelijk['partners']) && count($huwelijk['partners']) === 1) {
 
-            // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
-
-            if (!isset($huwelijk['message'])) {
-                $huwelijkObject->hydrate($huwelijk);
-                $this->entityManager->persist($huwelijkObject);
-                $this->entityManager->flush();
-
-                $peron = $this->createPerson();
-                // creates an assent and add the person to the partners of this merriage
-                $partnerAssent = $this->handleAssentService->handleAssent($peron, 'requester', $this->data);
-                $huwelijkObject->setValue('partners', [$partnerAssent]);
-
-                $huwelijk = $huwelijkObject->toArray();
-
-                return $huwelijk;
+            if (count($huwelijkObject->getValue('partners')) > 1) {
+                // @TODO update partner?
+                return $huwelijkObject->toArray();
             }
+
+            $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
+            $person = new ObjectEntity($personSchema);
+            $person->hydrate($huwelijk['partners'][0]['person']);
+            $this->entityManager->persist($person);
+            $this->entityManager->flush();
+
+            // creates an assent and add the person to the partners of this merriage
+            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
+            $huwelijkObject->hydrate($requesterAssent); // @TODO adds to objects to the array, don't know why
+
+            $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
         }
 
-        return [];
-
-        // @TODO delete the huwelijk object if validation failed
+        return $huwelijkObject->toArray(); // @TODO ? throw error
     }//end createMarriage()
 
     /**
@@ -269,21 +264,35 @@ class InvitePartnerService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        if (!isset($this->data['request'])) {
+        if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['parameters']->getMethod() !== 'PUT') {
-            isset($this->io) && $this->io->error('Not a PUT request');
+        if ($this->data['method'] !== 'PATCH') {
+            isset($this->io) && $this->io->error('Not a PATCH request');
 
-            return ['response' => ['message' => 'Not a PUT request'], 'httpCode' => 400];
+            return $this->data;
         }
 
-        $huwelijk = $this->invitePartner($this->data['request'], $this->data['response']['id'] ?? null);
+        foreach ($this->data['path'] as $path) {
+            if (Uuid::isValid($path)) {
+                $id = $path;
+            }
+        }
 
-        $this->data['response'] = $huwelijk;
+        if (!isset($id)) {
+            return $this->data;
+        }
+
+        $huwelijk = $this->invitePartner($this->data['body'], $id);
+
+        $this->data['response'] = new Response(
+            json_encode($huwelijk),
+            Response::HTTP_OK,
+            ['content-type' => 'json']
+        );
 
         return $this->data;
     }//end invitePartnerHandler()
