@@ -33,18 +33,18 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS = [
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json',        'path' => 'assents',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.calendar.schema.json',     'path' => 'calendars',     'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json',      'path' => 'availabilities',      'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',         'path' => 'huwelijk',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json',       'path' => 'medewerkers',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json',       'path' => 'producten',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.accommodation.schema.json',       'path' => 'accommodations',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.message.schema.json',       'path' => 'messages',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sendList.schema.json',       'path' => 'send_lists',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.service.schema.json',       'path' => 'services',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json',       'path' => 'subscribers',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json',       'path' => 'calendar/availabilitycheck',        'methods' => ['POST']],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'path' => 'assents', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.calendar.schema.json', 'path' => 'calendars', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json', 'path' => 'availabilities', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'path' => 'huwelijk', 'methods' => ['GET', 'PUT', 'PATCH', 'DELETE']],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json', 'path' => 'medewerkers', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json', 'path' => 'producten', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.accommodation.schema.json', 'path' => 'accommodations', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.message.schema.json', 'path' => 'messages', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sendList.schema.json', 'path' => 'send_lists', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.service.schema.json', 'path' => 'services', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json', 'path' => 'subscribers', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json', 'path' => 'calendar/availabilitycheck', 'methods' => ['POST']],
     ];
 
     public const SOURCES = [
@@ -157,9 +157,9 @@ class InstallationService implements InstallerInterface
      * @param array $defaultConfig
      * @param array $overrides
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function overrideConfig(array $defaultConfig, array $overrides): array
     {
@@ -200,12 +200,12 @@ class InstallationService implements InstallerInterface
             $actionHandler = $this->container->get($handler['actionHandler']);
 
             if (array_key_exists('name', $handler)) {
-                if ($this->entityManager->getRepository('App:Action')->findOneBy(['name'=> $handler['name']])) {
-                    (isset($this->io) ? $this->io->writeln(['Action found with name '.$handler['name']]) : '');
+                if ($this->entityManager->getRepository('App:Action')->findOneBy(['name' => $handler['name']])) {
+                    (isset($this->io) ? $this->io->writeln(['Action found with name ' . $handler['name']]) : '');
                     continue;
                 }
-            } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class'=> get_class($actionHandler)])) {
-                (isset($this->io) ? $this->io->writeln(['Action found for '.$handler['actionHandler']]) : '');
+            } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class' => get_class($actionHandler)])) {
+                (isset($this->io) ? $this->io->writeln(['Action found for ' . $handler['actionHandler']]) : '');
                 continue;
             }
 
@@ -223,7 +223,7 @@ class InstallationService implements InstallerInterface
             $action->setConditions($handler['conditions'] ?? ['==' => [1, 1]]);
 
             $this->entityManager->persist($action);
-            (isset($this->io) ? $this->io->writeln(['Created Action '.$action->getName().' with Handler: '.$handler['actionHandler']]) : '');
+            (isset($this->io) ? $this->io->writeln(['Created Action ' . $action->getName() . ' with Handler: ' . $handler['actionHandler']]) : '');
         }
     }
 
@@ -244,7 +244,8 @@ class InstallationService implements InstallerInterface
                 $endpoint = new Endpoint($entity, null, $objectThatShouldHaveEndpoint);
 
                 if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
-                    $endpoint->setThrows(['huwelijksplanner.huwelijk.created', 'huwelijksplanner.huwelijk.updated']);
+                    $endpoint->setThrows(['huwelijksplanner.huwelijk.updated']);
+                    $endpoint->removeEntity($entity);
                 } elseif ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
                     $endpoint->removeEntity($entity);
@@ -256,7 +257,26 @@ class InstallationService implements InstallerInterface
             }
         }
 
-        (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
+        if (!$endpointRepository->findOneBy(['name' => 'Created Huwelijk'])) {
+            $createdEndpoint = new Endpoint();
+            $createdEndpoint->setName('Created Huwelijk');
+            $createdEndpoint->setPath([
+                "hp",
+                "huwelijk",
+                "id"
+            ]);
+            $createdEndpoint->setPathRegex("^hp/huwelijk?$");
+            $createdEndpoint->setMethods(['POST']);
+            $createdEndpoint->setThrows([
+                "huwelijksplanner.huwelijk.created"
+            ]);
+
+            $this->entityManager->persist($createdEndpoint);
+            $this->entityManager->flush();
+            $endpoints[] = $createdEndpoint;
+        }
+
+        (isset($this->io) ? $this->io->writeln(count($endpoints) . ' Endpoints Created') : '');
 
         return $endpoints;
     }
@@ -284,7 +304,7 @@ class InstallationService implements InstallerInterface
             }
         }
 
-        (isset($this->io) ? $this->io->writeln(count($sources).' Sources Created') : '');
+        (isset($this->io) ? $this->io->writeln(count($sources) . ' Sources Created') : '');
 
         return $sources;
     }
@@ -293,7 +313,7 @@ class InstallationService implements InstallerInterface
      * Adds schemas with the given prefix to the given collection.
      *
      * @param CollectionEntity $collection
-     * @param string           $schemaPrefix
+     * @param string $schemaPrefix
      *
      * @return CollectionEntity
      */
@@ -316,8 +336,8 @@ class InstallationService implements InstallerInterface
     {
         $collectionConfigs = [
             [
-                'name'         => 'Huwelijksplanner',
-                'prefix'       => 'hp',
+                'name' => 'Huwelijksplanner',
+                'prefix' => 'hp',
                 'schemaPrefix' => 'https://huwelijksplanner.nl',
             ],
         ];
@@ -334,7 +354,7 @@ class InstallationService implements InstallerInterface
             $this->entityManager->flush();
             $collections[$collectionConfig['name']] = $collection;
         }
-        (isset($this->io) ? $this->io->writeln(count($collections).' Collections Created') : '');
+        (isset($this->io) ? $this->io->writeln(count($collections) . ' Collections Created') : '');
 
         return $collections;
     }
@@ -347,7 +367,7 @@ class InstallationService implements InstallerInterface
     public function createDashboardCards($objectsThatShouldHaveCards): void
     {
         foreach ($objectsThatShouldHaveCards as $object) {
-            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: '.$object);
+            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: ' . $object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -364,7 +384,7 @@ class InstallationService implements InstallerInterface
                 isset($this->io) && $this->io->writeln('Dashboard card created');
                 continue;
             } else {
-                isset($this->io) && $this->io->writeln('Entity with reference '.$object.' can\'t be found');
+                isset($this->io) && $this->io->writeln('Entity with reference ' . $object . ' can\'t be found');
             }
             isset($this->io) && $this->io->writeln('Dashboard card found');
         }
@@ -388,9 +408,24 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($cronjob);
 
-            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for '.$cronjob->getName()]) : '');
+            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for ' . $cronjob->getName()]) : '');
         } else {
-            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for '.$cronjob->getName()]) : '');
+            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for ' . $cronjob->getName()]) : '');
+        }
+    }
+
+    /**
+     * This function sets the max depth of all entities to 5
+     *
+     * @return void
+     */
+    public function setEntityMaxDepth()
+    {
+        $entities = $this->entityManager->getRepository('App:Entity')->findAll();
+        foreach ($entities as $entity) {
+            // set maxDepth for an entity to 5
+            $entity->setMaxDepth(5);
+            $this->entityManager->persist($entity);
         }
     }
 
@@ -401,6 +436,10 @@ class InstallationService implements InstallerInterface
      */
     public function checkDataConsistency(): void
     {
+        // @TODO check if it works only for assent/person object
+        // set all entity maxDepth to 5
+        $this->setEntityMaxDepth();
+
         // Lets create some genneric dashboard cards
         $this->createDashboardCards($this::OBJECTS_THAT_SHOULD_HAVE_CARDS);
 
