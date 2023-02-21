@@ -55,7 +55,6 @@ class InstallationService implements InstallerInterface
     public const ACTION_HANDLERS = [
         ['name' => 'CreateAvailbility', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]],
         ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
-        ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
         ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.default.listens'], 'conditions' => [[1 => 1]]],
     ];
 
@@ -245,7 +244,7 @@ class InstallationService implements InstallerInterface
                 $endpoint = new Endpoint($entity, null, $objectThatShouldHaveEndpoint);
 
                 if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
-                    $endpoint->setThrows(['huwelijksplanner.huwelijk.created']);
+                    $endpoint->setThrows(['huwelijksplanner.huwelijk.created', 'huwelijksplanner.huwelijk.updated']);
                 } elseif ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
                     $endpoint->removeEntity($entity);

@@ -16,7 +16,7 @@ use App\Exception\GatewayException;
 /**
  * This service holds al the logic for creating the marriage request object.
  */
-class CreateMarriageService
+class InvitePartnerService
 {
     /**
      * @var EntityManagerInterface
@@ -213,7 +213,7 @@ class CreateMarriageService
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
      */
-    private function createMarriage(array $huwelijk, ?string $id): ?array
+    private function invitePartner(array $huwelijk, ?string $id): ?array
     {
         $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
 
@@ -263,9 +263,9 @@ class CreateMarriageService
      * @throws Exception
      *
      */
-    public function createMarriageHandler(?array $data = [], ?array $configuration = []): ?array
+    public function invitePartnerHandler(?array $data = [], ?array $configuration = []): ?array
     {
-        isset($this->io) && $this->io->success('createMarriageHandler triggered');
+        isset($this->io) && $this->io->success('invitePartnerHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
@@ -275,16 +275,16 @@ class CreateMarriageService
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['parameters']->getMethod() !== 'POST') {
-            isset($this->io) && $this->io->error('Not a POST request');
+        if ($this->data['parameters']->getMethod() !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
 
-            return ['response' => ['message' => 'Not a POST request'], 'httpCode' => 400];
+            return ['response' => ['message' => 'Not a PUT request'], 'httpCode' => 400];
         }
 
-        $huwelijk = $this->createMarriage($this->data['request'], $this->data['response']['id'] ?? null);
+        $huwelijk = $this->invitePartner($this->data['request'], $this->data['response']['id'] ?? null);
 
         $this->data['response'] = $huwelijk;
 
         return $this->data;
-    }//end createMarriageHandler()
+    }//end invitePartnerHandler()
 }
