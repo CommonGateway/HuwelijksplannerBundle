@@ -18,23 +18,51 @@ use App\Exception\GatewayException;
  */
 class CreateMarriageService
 {
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
-    private SymfonyStyle $io;
-    private array $data;
-    private array $configuration;
-    private HandleAssentService $handleAssentService;
-    private UpdateChecklistService $updateChecklistService;
-    private Security $security;
-
-    private ObjectRepository $schemaRepo;
-    private ObjectRepository $objectRepo;
-
-    private ?Schema $huwelijkSchema;
-    private ?Schema $personSchema;
 
     /**
-     * @param ObjectEntityService $objectEntityService
-     * @param EntityManagerInterface $entityManager
+     * @var SymfonyStyle
+     */
+    private SymfonyStyle $io;
+
+    /**
+     * @var HandleAssentService
+     */
+    private HandleAssentService $handleAssentService;
+
+    /**
+     * @var UpdateChecklistService
+     */
+    private UpdateChecklistService $updateChecklistService;
+
+    /**
+     * @var Security
+     */
+    private Security $security;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var array
+     */
+    private array $data;
+
+    /**
+     * @var array
+     */
+    private array $configuration;
+
+    /**
+     * @param EntityManagerInterface $entityManager The Entity Manager
+     * @param HandleAssentService $handleAssentService The Handle Assent Service
+     * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
+     * @param Security $security The Security
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -49,9 +77,6 @@ class CreateMarriageService
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
-
-        $this->schemaRepo = $this->entityManager->getRepository(Schema::class);
-        $this->objectRepo = $this->entityManager->getRepository(ObjectEntity::class);
     }
 
     /**
@@ -69,40 +94,22 @@ class CreateMarriageService
     }
 
     /**
-     * Get the huwelijk schema.
+     * Get an schema by reference.
      *
-     * @return bool
-     */
-    private function getHuwelijkSchema(): bool
-    {
-        if (!$this->huwelijkSchema = $this->schemaRepo->findOneBy(['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'])) {
-            isset($this->io) && $this->io->error('No schema found for https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
-
-            throw new Exception('No schema found for https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get the person schema.
+     * @param string $reference The reference to look for
      *
-     * @return bool
+     * @return Schema|null
      */
-    private function getPersonSchema(): ?Entity
+    public function getSchema(string $reference): ?Schema
     {
-        if (!$this->huwelijkSchema = $this->entityManager->getRepository(Schema::class)->findOneBy(['reference' => 'https://klantenBundle.commonground.nu/klant.klant.schema.json'])) {
-            isset($this->io) && $this->io->error('No schema found for https://klantenBundle.commonground.nu/klant.klant.schema.json');
+        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
+        if ($schema === null) {
+            $this->logger->error("No schema found for $reference");
+            isset($this->io) && $this->io->error("No schema found for $reference");
+        }//end if
 
-            throw new Exception('No schema found for https://klantenBundle.commonground.nu/klant.klant.schema.json');
-
-            return null;
-        }
-
-        return $this->huwelijkSchema;
-    }
+        return $schema;
+    }//end getSchema()
 
     /**
      * Validate huwelijk type.
@@ -110,7 +117,7 @@ class CreateMarriageService
     private function validateType(array $huwelijk)
     {
         if (isset($huwelijk['type'])) {
-            if (!$typeProductObject = $this->objectRepo->find($huwelijk['type'])) {
+            if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
                 isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
 
                 return false;
@@ -133,7 +140,7 @@ class CreateMarriageService
         }
 
         return true;
-    }
+    }//end validateType()
 
     /**
      * Validate huwelijk type.
@@ -143,7 +150,7 @@ class CreateMarriageService
     private function validateCeremonie(array $huwelijk)
     {
         if (isset($huwelijk['ceremonie'])) {
-            if (!$ceremonieProductObject = $this->objectRepo->find($huwelijk['ceremonie'])) {
+            if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
                 isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
 
                 return false;
@@ -166,27 +173,14 @@ class CreateMarriageService
         }
 
         return true;
-    }
-
-    /**
-     * Validate the huwelijk object.
-     */
-    private function validateMarriage(array $huwelijk)
-    {
-        $this->validateType($huwelijk);
-        $this->validateCeremonie($huwelijk);
-    }
+    }//end validateCeremonie()
 
     /**
      * This function creates a person object for the given user
      */
     private function createPerson(): ?ObjectEntity
     {
-        if (!$personSchema = $this->getPersonSchema()) {
-            isset($this->io) && $this->io->error('No PersonSchema found when trying to post a huwelijk');
-
-            return null;
-        }
+        $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
 
         // @TODO BRP person has to be set to the klantObject
         // @TODO get user/ person from jwt token and create a person object
@@ -213,7 +207,7 @@ class CreateMarriageService
         $this->entityManager->persist($person);
 
         return $person;
-    }
+    }//end createPerson()
 
     /**
      * This function validates and creates the huwelijk object
@@ -221,15 +215,10 @@ class CreateMarriageService
      */
     private function createMarriage(array $huwelijk, ?string $id): ?array
     {
-        // test
-        if (!$huwelijkSchema = $this->getHuwelijkSchema()) {
-            isset($this->io) && $this->io->error('No HuwelijkSchema found when trying to post a huwelijk');
-
-            return null;
-        }
+        $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
 
         if (isset($this->data['response']['id'])) {
-            if (!$huwelijkObject = $this->objectRepo->find($this->data['response']['id'])) {
+            if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($this->data['response']['id'])) {
                 isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $this->data['response']['id']); // @TODO throw exception ?
 
                 return null;
@@ -250,7 +239,7 @@ class CreateMarriageService
 
                 $peron = $this->createPerson();
                 // creates an assent and add the person to the partners of this merriage
-                $partnerAssent = $this->handleAssentService->handleAssent($peron);
+                $partnerAssent = $this->handleAssentService->handleAssent($peron, 'requester', $this->data);
                 $huwelijkObject->setValue('partners', [$partnerAssent]);
 
                 $huwelijk = $huwelijkObject->toArray();
@@ -262,7 +251,7 @@ class CreateMarriageService
         return [];
 
         // @TODO delete the huwelijk object if validation failed
-    }
+    }//end createMarriage()
 
     /**
      * Creates the marriage request object.
@@ -303,5 +292,5 @@ class CreateMarriageService
         $this->data['response'] = $huwelijk;
 
         return $this->data;
-    }
+    }//end createMarriageHandler()
 }

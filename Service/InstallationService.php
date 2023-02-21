@@ -4,6 +4,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
+use App\Entity\Gateway as Source;
 use App\Entity\Action;
 use App\Entity\CollectionEntity;
 use App\Entity\Cronjob;
@@ -47,12 +48,8 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-        //        ['name' => 'EnterpriseSearch API Search', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-search-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'EnterpriseSearch API Private', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-private-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'OpenPub API', 'location' => 'https://openweb.{yourDomain}/wp-json/wp/v2',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'none', 'configuration' => ['verify' => false]]
+        ['name' => 'Messagebird', 'location' => 'https://rest.messagebird.com',
+            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!'],
     ];
 
     public const ACTION_HANDLERS = [
@@ -245,7 +242,7 @@ class InstallationService implements InstallerInterface
         foreach ($objectsThatShouldHaveEndpoints as $objectThatShouldHaveEndpoint) {
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $objectThatShouldHaveEndpoint['reference']]);
             if ($entity instanceof Entity && !$endpointRepository->findOneBy(['name' => $entity->getName()])) {
-                $endpoint = new Endpoint($entity, $objectThatShouldHaveEndpoint['path'], $objectThatShouldHaveEndpoint['methods']);
+                $endpoint = new Endpoint($entity, null, $objectThatShouldHaveEndpoint);
 
                 if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.huwelijk.created']);
@@ -410,6 +407,8 @@ class InstallationService implements InstallerInterface
 
         // create collection prefix
         $this->createCollections();
+
+        $this->createSources($this::SOURCES);
 
         // cretae endpoints
         $this->createEndpoints($this::SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS);

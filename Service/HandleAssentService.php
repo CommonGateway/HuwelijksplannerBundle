@@ -2,13 +2,17 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
+use App\Entity\Action;
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
+use App\Event\ActionEvent;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
+use FontLib\Table\Type\os2;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,20 +20,55 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class HandleAssentService
 {
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
-    private SymfonyStyle $io;
-
-    private array $data;
-    private array $configuration;
-    private ?Schema $assentSchema;
 
     /**
-     * @param EntityManagerInterface $entityManager
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
+
+    /**
+     * @var MessageBirdService
+     */
+    private MessageBirdService $messageBirdService;
+
+
+    /**
+     * @var SymfonyStyle
+     */
+    private SymfonyStyle $io;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var array
+     */
+    private array $data;
+
+    /**
+     * @var array
+     */
+    private array $configuration;
+
+    /**
+     * @param EntityManagerInterface $entityManager The Entity Manager
+     * @param EventDispatcherInterface $eventDispatcher The Event Dispatcher
+     * @param MessageBirdService $messageBirdService The MessageBird Service
      */
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher,
+        MessageBirdService $messageBirdService
     ) {
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->messageBirdService = $messageBirdService;
         $this->data = [];
         $this->configuration = [];
     }
@@ -46,41 +85,127 @@ class HandleAssentService
         $this->io = $io;
 
         return $this;
-    }
+    }//end setStyle()
 
     /**
-     * Get the assent schema.
+     * Get a schema by reference.
      *
-     * @return bool
+     * @param string $reference The reference to look for
+     *
+     * @return Schema|null
      */
-    private function getAssentSchema()
+    public function getSchema(string $reference): ?Schema
     {
-        if (!$this->assentSchema = $this->entityManager->getRepository(Schema::class)->findOneBy(['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json'])) {
-            isset($this->io) && $this->io->error('No schema found for https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
+        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
+        if ($schema === null) {
+            $this->logger->error("No schema found for $reference");
+            isset($this->io) && $this->io->error("No schema found for $reference");
+        }//end if
 
-            throw new Exception('No schema found for https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
+        return $schema;
+    }//end getSchema()
 
-            return null;
+    /**
+     * Get an action by reference.
+     *
+     * @param string $reference The reference to look for
+     *
+     * @return Action|null
+     */
+    public function getAction(string $reference): ?Action
+    {
+        $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $reference]);
+        if ($action === null) {
+            $this->logger->error("No action found for $reference");
+            isset($this->io) && $this->io->error("No action found for $reference");
+        }//end if
+
+        return $action;
+    }//end getAction()
+
+    /**
+     * Sends an emails
+     *
+     * @param object $emailAddresses
+     * @param string $type
+     * @return void
+     */
+    public function sendEmail(object $emailAddresses, string $type, array $data): void
+    {
+        // get action
+        $action = $this->getAction('https://hp.nl/action/hp.HandleSendEmailAction.action.json');
+
+        $config = $action->getConfiguration();
+
+        switch ($type) {
+            case 'requester':
+                $config['subject'] = 'Invite Assent request to requester';
+                break;
+            case 'partner':
+                $config['subject'] = 'Invite Assent request to partner';
+                break;
+            case 'witness':
+                $config['subject'] = 'Invite Assent request to witness';
+                break;
+            default:
+                $config['subject'] = 'Invite Assent request';
+                break;
         }
 
-        return $this->assentSchema;
-    }
+        // ? variables and data
+        foreach ($emailAddresses as $emailAddress) {
+            // set receiver to config
+            $config['receiver'] = $emailAddress->getValue('email');
+            $action->setConfiguration($config);
+
+            $this->entityManager->persist($action);
+            $this->entityManager->flush();
+
+            // throw action event
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'hp.send.email');
+            $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
+        }
+    }//end sendEmail()
+
+    /**
+     * Sends a sms
+     *
+     * @param object $phoneNumbers
+     * @param string $type
+     * @return void
+     */
+    public function sendSms(object $phoneNumbers, string $type): void
+    {
+        switch ($type) {
+            case 'requester':
+                $message = 'Assent request to requester';
+                break;
+            case 'partner':
+                $message = 'Assent request to partner';
+                break;
+            case 'witness':
+                $message = 'Assent request to witness';
+                break;
+            default:
+                $message = 'Assent request';
+                break;
+        }
+
+        foreach ($phoneNumbers as $phoneNumber) {
+            $this->messageBirdService->sendMessage($phoneNumber, $message);
+        }
+    }//end sendSms()
 
     /**
      * Handles the assent for the given person and sends an email or sms
      *
-     * @param array|null $huwelijk
      * @param ObjectEntity|null $person
-     * @param string|null $id
+     * @param string $type
      * @return ObjectEntity|null
      */
-    public function handleAssent(ObjectEntity $person): ?ObjectEntity
+    public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
     {
-        if (!$assentSchema = $this->getAssentSchema()) {
-            isset($this->io) && $this->io->error('No AssentSchema found when trying create an assent');
-
-            return null;
-        }
+        $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
 
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
@@ -100,20 +225,15 @@ class HandleAssentService
         $phoneNumbers = $person->getValue('telefoonnummers');
         $emailAddresses = $person->getValue('emails');
 
-        if (count($phoneNumbers) <= 0 || count($emailAddresses) <= 0) {
+        if ($emailAddresses === [] && $phoneNumbers === []) {
             throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
         }
 
         isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
 
-        foreach ($emailAddresses as $emailAddress) {
-
-        }
-
-        foreach ($phoneNumbers as $phoneNumber) {
-
-        }
+        $this->sendEmail($emailAddresses, $type, $data);
+        $this->sendSms($phoneNumbers, $type);
 
         return $assent;
-    }
+    }//end handleAssent()
 }
