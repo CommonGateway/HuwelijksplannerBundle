@@ -239,7 +239,7 @@ class InvitePartnerService
 
             // creates an assent and add the person to the partners of this merriage
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
-            $huwelijkObject->hydrate($requesterAssent); // @TODO adds to objects to the array, don't know why
+            $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
