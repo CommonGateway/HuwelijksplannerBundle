@@ -10,7 +10,7 @@
   "conditions": {
     "==": [1, 1]
   },
-  "class": "App\\ActionHandler\\InvitePartnerHandler",
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
   "configuration": [],
   "isLockable": false,
   "isEnabled": true

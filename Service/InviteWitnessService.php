@@ -7,10 +7,12 @@ use App\Entity\ObjectEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use App\Exception\GatewayException;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -68,7 +70,7 @@ class InviteWitnessService
         EntityManagerInterface $entityManager,
         HandleAssentService    $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security $security
+        Security               $security
     )
     {
         $this->entityManager = $entityManager;
@@ -112,104 +114,6 @@ class InviteWitnessService
     }//end getSchema()
 
     /**
-     * Validate huwelijk type.
-     */
-    private function validateType(array $huwelijk)
-    {
-        if (isset($huwelijk['type'])) {
-            if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
-                isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
-
-                return false;
-                throw new GatewayException('huwelijk.type not found in the databse with given id');
-            }
-
-            if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
-                isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
-
-                return false;
-                throw new GatewayException('huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap');
-            }
-
-            return true;
-        } else {
-            isset($this->io) && $this->io->error('huwelijk.type is not given');
-
-            return false;
-            throw new GatewayException('huwelijk.type is not given');
-        }
-
-        return true;
-    }//end validateType()
-
-    /**
-     * Validate huwelijk type.
-     *
-     * @return array|bool $huwelijk OR false when invalid huwelijk
-     */
-    private function validateCeremonie(array $huwelijk)
-    {
-        if (isset($huwelijk['ceremonie'])) {
-            if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
-                isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
-
-                return false;
-                throw new GatewayException('huwelijk.ceremonie not found in the databse with given id');
-            }
-
-            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
-
-                return false;
-                throw new GatewayException('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
-            }
-
-            return true;
-        } else {
-            isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
-
-            return false;
-            throw new GatewayException('huwelijk.ceremonie is not given');
-        }
-
-        return true;
-    }//end validateCeremonie()
-
-    /**
-     * This function creates a person object for the given user
-     */
-    private function createPerson(): ?ObjectEntity
-    {
-        $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
-
-        // @TODO BRP person has to be set to the klantObject
-        // @TODO get user/ person from jwt token and create a person object
-        $person = new ObjectEntity($personSchema);
-        $person->hydrate([
-            'bronorganisatie' => null,
-            'klantnummer' => null,
-            'bedrijfsnaam' => null,
-            'functie' => null,
-            'websiteUrl' => null,
-            'voornaam' => $this->security->getUser()->getFirstName(),
-            'voorvoegselAchternaam' => null,
-            'achternaam' => $this->security->getUser()->getLastName(),
-            'telefoonnummers' => null,
-            'emails' => [[
-                'naam' => 'Emailadres van '. $this->security->getUser()->getFirstName(),
-                'email' => $this->security->getUser()->getEmail()
-            ]],
-            'adressen' => null,
-            'subject' => null,
-            'subjectType' => 'natuurlijk_persoon',
-            'subjectIdentificatie' => null,
-        ]);
-        $this->entityManager->persist($person);
-
-        return $person;
-    }//end createPerson()
-
-    /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
      */
@@ -217,40 +121,35 @@ class InviteWitnessService
     {
         $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
 
-        if (isset($this->data['response']['id'])) {
-            if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($this->data['response']['id'])) {
-                isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $this->data['response']['id']); // @TODO throw exception ?
+        if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+            isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $id); // @TODO throw exception ?
 
-                return null;
-                throw new GatewayException('Could not find huwelijk with id ' . $this->data['response']['id']);
-            }
-        } else {
-            $huwelijkObject = new ObjectEntity($huwelijkSchema);
+            return null;
+            throw new GatewayException('Could not find huwelijk with id ' . $id);
         }
+        
+        if (isset($huwelijk['getuigen'])) {
 
-        if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
-
-            // $huwelijk = $this->updateChecklistService->updateChecklist($huwelijk);
-
-            if (!isset($huwelijk['message'])) {
-                $huwelijkObject->hydrate($huwelijk);
-                $this->entityManager->persist($huwelijkObject);
-                $this->entityManager->flush();
-
-                $peron = $this->createPerson();
+            // @TODO check if witness is aldready set or overwrite the witness array
+            $witnessAssents = [];
+            foreach ($huwelijk['getuigen'] as $getuige) {
+                $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
+                $person = new ObjectEntity($personSchema);
+                $person->hydrate($getuige['person']);
+                $this->entityManager->persist($person);
+                
                 // creates an assent and add the person to the partners of this merriage
-                $partnerAssent = $this->handleAssentService->handleAssent($peron, 'requester', $this->data);
-                $huwelijkObject->setValue('partners', [$partnerAssent]);
-
-                $huwelijk = $huwelijkObject->toArray();
-
-                return $huwelijk;
+                $witnessAssents[] = $this->handleAssentService->handleAssent($person, 'witness', $this->data);
             }
+
+            $huwelijkObject->setValue('getuigen', $witnessAssents);
+
+            $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
+
         }
 
-        return [];
-
-        // @TODO delete the huwelijk object if validation failed
+        return $huwelijkObject->toArray();
     }//end createMarriage()
 
     /**
@@ -269,21 +168,35 @@ class InviteWitnessService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        if (!isset($this->data['request'])) {
+        if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['parameters']->getMethod() !== 'PUT') {
-            isset($this->io) && $this->io->error('Not a PUT request');
+        if ($this->data['method'] !== 'PATCH') {
+            isset($this->io) && $this->io->error('Not a PATCH request');
 
-            return ['response' => ['message' => 'Not a PUT request'], 'httpCode' => 400];
+            return $this->data;
         }
 
-        $huwelijk = $this->inviteWitness($this->data['request'], $this->data['response']['id'] ?? null);
+        foreach ($this->data['path'] as $path) {
+            if (Uuid::isValid($path)) {
+                $id = $path;
+            }
+        }
 
-        $this->data['response'] = $huwelijk;
+        if (!isset($id)) {
+            return $this->data;
+        }
+
+        $huwelijk = $this->inviteWitness($this->data['body'], $id);
+
+        $this->data['response'] = new Response(
+            json_encode($huwelijk),
+            Response::HTTP_OK,
+            ['content-type' => 'json']
+        );
 
         return $this->data;
     }//end inviteWitnessHandler()
