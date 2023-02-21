@@ -245,7 +245,7 @@ class InvitePartnerService
             $this->entityManager->flush();
         }
 
-        return $huwelijkObject->toArray(); // @TODO ? throw error
+        return $huwelijkObject->toArray();
     }//end createMarriage()
 
     /**
