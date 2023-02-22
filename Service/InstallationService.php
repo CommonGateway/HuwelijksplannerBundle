@@ -4,13 +4,13 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Gateway as Source;
 use App\Entity\Action;
 use App\Entity\CollectionEntity;
 use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use App\Entity\Entity;
+use App\Entity\Gateway as Source;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -48,8 +48,8 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-        ['name' => 'Messagebird', 'location' => 'https://rest.messagebird.com',
-            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!'],
+        ['name'       => 'Messagebird', 'location' => 'https://rest.messagebird.com',
+            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!', ],
     ];
 
     public const ACTION_HANDLERS = [
