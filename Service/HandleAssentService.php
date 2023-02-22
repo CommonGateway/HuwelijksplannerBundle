@@ -220,6 +220,7 @@ class HandleAssentService
             'revocable'   => true,
         ]);
         $this->entityManager->persist($assent);
+        $this->entityManager->flush();
 
         $phoneNumbers = $person->getValue('telefoonnummers');
         $emailAddresses = $person->getValue('emails');

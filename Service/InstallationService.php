@@ -33,18 +33,18 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS = [
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json',        'path' => 'assents',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.calendar.schema.json',     'path' => 'calendars',     'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json',      'path' => 'availabilities',      'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json',         'path' => 'huwelijk',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json',       'path' => 'medewerkers',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json',       'path' => 'producten',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.accommodation.schema.json',       'path' => 'accommodations',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.message.schema.json',       'path' => 'messages',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sendList.schema.json',       'path' => 'send_lists',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.service.schema.json',       'path' => 'services',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json',       'path' => 'subscribers',        'methods' => []],
-        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json',       'path' => 'calendar/availabilitycheck',        'methods' => ['POST']],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'path' => 'assents', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.calendar.schema.json', 'path' => 'calendars', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json', 'path' => 'availabilities', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'path' => 'huwelijk', 'methods' => ['GET', 'PUT', 'PATCH', 'DELETE']],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json', 'path' => 'medewerkers', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json', 'path' => 'producten', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.accommodation.schema.json', 'path' => 'accommodations', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.message.schema.json', 'path' => 'messages', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.sendList.schema.json', 'path' => 'send_lists', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.service.schema.json', 'path' => 'services', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json', 'path' => 'subscribers', 'methods' => []],
+        ['reference' => 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json', 'path' => 'calendar/availabilitycheck', 'methods' => ['POST']],
     ];
 
     public const SOURCES = [
@@ -55,7 +55,6 @@ class InstallationService implements InstallerInterface
     public const ACTION_HANDLERS = [
         ['name' => 'CreateAvailbility', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateAvailabilityHandler', 'listens' => ['huwelijksplanner.calendar.listens'], 'conditions' => [[1 => 1]]],
         ['name' => 'CreateMarriage', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\CreateMarriageHandler', 'listens' => ['huwelijksplanner.huwelijk.created']],
-        ['name' => 'HandleAssent', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\HandleAssentHandler', 'listens' => ['huwelijksplanner.default.listens']],
         ['name' => 'UpdateChecklist', 'actionHandler' => 'CommonGateway\HuwelijksplannerBundle\ActionHandler\UpdateChecklistHandler', 'listens' => ['huwelijksplanner.default.listens'], 'conditions' => [[1 => 1]]],
     ];
 
@@ -201,11 +200,11 @@ class InstallationService implements InstallerInterface
             $actionHandler = $this->container->get($handler['actionHandler']);
 
             if (array_key_exists('name', $handler)) {
-                if ($this->entityManager->getRepository('App:Action')->findOneBy(['name'=> $handler['name']])) {
+                if ($this->entityManager->getRepository('App:Action')->findOneBy(['name' => $handler['name']])) {
                     (isset($this->io) ? $this->io->writeln(['Action found with name '.$handler['name']]) : '');
                     continue;
                 }
-            } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class'=> get_class($actionHandler)])) {
+            } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class' => get_class($actionHandler)])) {
                 (isset($this->io) ? $this->io->writeln(['Action found for '.$handler['actionHandler']]) : '');
                 continue;
             }
@@ -245,7 +244,8 @@ class InstallationService implements InstallerInterface
                 $endpoint = new Endpoint($entity, null, $objectThatShouldHaveEndpoint);
 
                 if ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json') {
-                    $endpoint->setThrows(['huwelijksplanner.huwelijk.created']);
+                    $endpoint->setThrows(['huwelijksplanner.huwelijk.updated']);
+                    $endpoint->removeEntity($entity);
                 } elseif ($objectThatShouldHaveEndpoint['reference'] == 'https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json') {
                     $endpoint->setThrows(['huwelijksplanner.calendar.listens']);
                     $endpoint->removeEntity($entity);
@@ -255,6 +255,25 @@ class InstallationService implements InstallerInterface
                 $this->entityManager->flush();
                 $endpoints[] = $endpoint;
             }
+        }
+
+        if (!$endpointRepository->findOneBy(['name' => 'Created Huwelijk'])) {
+            $createdEndpoint = new Endpoint();
+            $createdEndpoint->setName('Created Huwelijk');
+            $createdEndpoint->setPath([
+                'hp',
+                'huwelijk',
+                'id',
+            ]);
+            $createdEndpoint->setPathRegex('^hp/huwelijk?$');
+            $createdEndpoint->setMethods(['POST']);
+            $createdEndpoint->setThrows([
+                'huwelijksplanner.huwelijk.created',
+            ]);
+
+            $this->entityManager->persist($createdEndpoint);
+            $this->entityManager->flush();
+            $endpoints[] = $createdEndpoint;
         }
 
         (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
@@ -396,12 +415,31 @@ class InstallationService implements InstallerInterface
     }
 
     /**
+     * This function sets the max depth of all entities to 5.
+     *
+     * @return void
+     */
+    public function setEntityMaxDepth()
+    {
+        $entities = $this->entityManager->getRepository('App:Entity')->findAll();
+        foreach ($entities as $entity) {
+            // set maxDepth for an entity to 5
+            $entity->setMaxDepth(5);
+            $this->entityManager->persist($entity);
+        }
+    }
+
+    /**
      * This function installs the huwelijksplanner bundle assets.
      *
      * @return void
      */
     public function checkDataConsistency(): void
     {
+        // @TODO check if it works only for assent/person object
+        // set all entity maxDepth to 5
+        $this->setEntityMaxDepth();
+
         // Lets create some genneric dashboard cards
         $this->createDashboardCards($this::OBJECTS_THAT_SHOULD_HAVE_CARDS);
 

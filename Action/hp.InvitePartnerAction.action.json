@@ -1,0 +1,17 @@
+{
+  "title": "InvitePartnerAction",
+  "$id": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
+  "$schema": "https://json-schema.org/draft/2020-12/action",
+  "version": "0.0.1",
+  "listens": [
+    "huwelijksplanner.huwelijk.updated"
+  ],
+  "throws": [],
+  "conditions": {
+    "==": [1, 1]
+  },
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
+  "configuration": [],
+  "isLockable": false,
+  "isEnabled": true
+}
