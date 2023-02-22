@@ -1,0 +1,29 @@
+{
+  "title": "HandleSendEmailAction",
+  "$id": "https://hp.nl/action/hp.HandleSendEmailAction.action.json",
+  "$schema": "https://json-schema.org/draft/2020-12/action",
+  "version": "0.0.3",
+  "listens": [
+    "hp.send.email"
+  ],
+  "throws": [],
+  "conditions": {
+    "==": [1, 1]
+  },
+  "class": "App\\ActionHandler\\EmailHandler",
+  "configuration": {
+    "serviceDNS": "mailgun+api",
+    "template": "",
+    "variables": {
+      "subject": "name",
+      "author": "author",
+      "topic": "topic",
+      "description": "description"
+    },
+    "sender": "info@conduction.nl",
+    "receiver": "info@conduction.nl",
+    "subject": "Invite huwelijksplanner"
+  },
+  "isLockable": false,
+  "isEnabled": true
+}

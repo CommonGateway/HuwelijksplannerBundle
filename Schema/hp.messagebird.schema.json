@@ -1,0 +1,77 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "MessageBird",
+    "properties":{
+        "direction": {
+            "type": "string",
+            "enums": [
+                "mt",
+                "mo"
+            ],
+            "description": "Tells you if the message is sent or received.\nmt: mobile terminated (sent to mobile)\nmo: mobile originated (received from mobile)"
+        },
+        "type": {
+            "type": "string",
+            "enums": [
+                "sms",
+                "binary",
+                "flash"
+            ],
+            "description": "The type of message. Values can be: sms, binary, or flash"
+        },
+        "originator": {
+            "type": "string",
+            "maxLength": 11,
+            "description": "The sender of the message. This can be a telephone number (including country code) or an alphanumeric string. In case of an alphanumeric string, the maximum length is 11 characters. You can set a default originator in your account or use inbox to use the Sticky VMN feature."
+        },
+        "body": {
+            "type": "string",
+            "description": "The body of the SMS message."
+        },
+        "reference": {
+            "type": "string",
+            "description": "A client reference."
+        },
+        "reportUrl": {
+            "type": "string",
+            "description": "The status report URL to be used on a per-message basis. reference is required for a status report webhook to be sent."
+        },
+        "validity": {
+            "type": "integer",
+            "description": "The amount of seconds that the message is valid. If a message is not delivered within this time, the message will be discarded."
+        },
+        "gateway": {
+            "type": "integer",
+            "description": "The SMS route that is used to send the message."
+        },
+        "typeDetails": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.typeDetails.schema.json",
+            "description": "A hashmap with extra information."
+        },
+        "datacoding": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "The datacoding used, defaults to plain (GSM 03.38 characters only), or it can be set to unicode (contains non-GSM 03.38 characters) or set to auto and we will set unicode or plain depending on the body content."
+        },
+        "mclass": {
+            "type": "integer",
+            "description": "Indicated the message type. 1 is a normal message, 0 is a flash message. (0-3 are valid values)"
+        },
+        "scheduledDatetime":{
+            "type": "datetime",
+            "description": "The scheduled date and time of the message in RFC3339 format (Y-m-d\\TH:i:sP)"
+        },
+        "createdDatetime": {
+            "type": "datetime",
+            "description": "The date and time of the creation of the message in RFC3339 format (Y-m-d\\TH:i:sP)"
+        },
+        "recipients": {
+            "description": "The hashmap with recipient information.",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.recipients.schema.json"
+        }
+    },
+    "description": "A message to be send with messagebird."
+}

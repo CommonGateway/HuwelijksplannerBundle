@@ -10,6 +10,7 @@ use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use App\Entity\Entity;
+use App\Entity\Gateway as Source;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -47,12 +48,8 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-        //        ['name' => 'EnterpriseSearch API Search', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-search-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'EnterpriseSearch API Private', 'location' => 'https://enterprise-search-ent-http:3002',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => '!secret-ChangeMe!elastic-private-key', 'configuration' => ['verify' => false]],
-        //        ['name' => 'OpenPub API', 'location' => 'https://openweb.{yourDomain}/wp-json/wp/v2',
-        //            'headers' => ['accept' => 'application/json'], 'auth' => 'none', 'configuration' => ['verify' => false]]
+        ['name'       => 'Messagebird', 'location' => 'https://rest.messagebird.com',
+            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!', ],
     ];
 
     public const ACTION_HANDLERS = [
@@ -410,6 +407,8 @@ class InstallationService implements InstallerInterface
 
         // create collection prefix
         $this->createCollections();
+
+        $this->createSources($this::SOURCES);
 
         // cretae endpoints
         $this->createEndpoints($this::SCHEMAS_THAT_SHOULD_HAVE_ENDPOINTS);

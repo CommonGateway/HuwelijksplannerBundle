@@ -1,0 +1,91 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.recipientsItems.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1",
+    "type": "object",
+    "title": "RecipientsItems",
+    "properties":{
+        "recipient": {
+            "type": "string",
+            "description": "The msisdn of the recipient"
+        },
+        "status": {
+            "type": "string",
+            "enums": [
+                "scheduled",
+                "sent",
+                "buffered",
+                "delivered",
+                "expired",
+                "delivery_failed"
+            ],
+            "description": "The status of the message sent to the recipient. Possible values: scheduled, sent, buffered, delivered, expired, and delivery_failed"
+        },
+        "statusReason": {
+            "type": "string",
+            "enums": [
+                "successfully delivered",
+                "pending DLR",
+                "DLR not received",
+                "unknown subscriber",
+                "unavailable subscriber",
+                "expired",
+                "opted out",
+                "received network error",
+                "insufficient balance",
+                "carrier rejected",
+                "capacity limit reached",
+                "generic delivery failure"
+            ],
+            "description": "The details about the message status. Possible values: successfully delivered, pending DLR, DLR not received, unknown subscriber, unavailable subscriber, expired, opted out, received network error, insufficient balance, carrier rejected, capacity limit reached and generic delivery failure. Read more about status reasons: https://developers.messagebird.com/api/sms-messaging/#sms-statuses."
+        },
+        "statusErrorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Extra error code that describes the failure in more detail (optional, null if not available)"
+        },
+        "statusDatetime": {
+            "type": "datetime",
+            "description": "The date and time of the last status in RFC3339 format (Y-m-d\\TH:i:sP)"
+        },
+        "recipientCountry": {
+            "type": "string",
+            "description": "The name of the recipient’s original country, based on MSISDN."
+        },
+        "recipientCountryPrefix": {
+            "type": "integer",
+            "description": "The prefix code for the recipient’s original country, based on MSISDN."
+        },
+        "recipientOperator": {
+            "type": "string",
+            "description": "The name of the operator of the recipient. Identified by MCCMNC of the message."
+        },
+        "mccmnc": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the operator of the message sender. It could have null value if the message isn’t delivered yet."
+        },
+        "mcc": {
+            "type": "string",
+            "nullable": true,
+            "description": "The MCC (Mobile Country Code) part of MCCMNC."
+        },
+        "mnc": {
+            "type": "string",
+            "nullable": true,
+            "description": "The MNC (Mobile Network Code) part of MCCMNC."
+        },
+        "messageLength": {
+            "type": "integer",
+            "description": "The length of the message in characters. Depends on the message datacoding."
+        },
+        "messagePartCount": {
+            "type": "integer",
+            "description": "The count of total messages send. Personalisation not taken in account."
+        },
+        "price": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.price.schema.json",
+            "description": "A hashmap with extra information about how much the message costs."
+        }
+    }
+}
