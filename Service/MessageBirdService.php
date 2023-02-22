@@ -5,15 +5,10 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 use App\Entity\Entity as Schema;
 use App\Entity\Gateway as Source;
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
-use Doctrine\ORM\EntityManagerInterface;
-use CommonGateway\CoreBundle\Service\CallService;
 use App\Service\SynchronizationService;
-use Doctrine\ORM\PersistentCollection;
-use DoctrineExtensions\Query\Mysql\Soundex;
-use Exception;
+use CommonGateway\CoreBundle\Service\CallService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds all the logic for sending a message with messagebird.
@@ -47,7 +42,7 @@ class MessageBirdService
 
     /**
      * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param CallService $callService The Call Service
+     * @param CallService            $callService   The Call Service
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -128,15 +123,16 @@ class MessageBirdService
     }//end importMessage()
 
     /**
-     * Handles sending a message with messagebird
+     * Handles sending a message with messagebird.
      *
      * @param string $recipients
      * @param string $body
+     *
      * @return bool
      */
     public function sendMessage(string $recipients, string $body): bool
     {
-            isset($this->logger) ?? $this->logger->info('Send a message');
+        isset($this->logger) ?? $this->logger->info('Send a message');
 
         $messagebirdEntity = $this->getEntity('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json');
         $source = $this->getSource('https://rest.messagebird.com');
@@ -145,8 +141,8 @@ class MessageBirdService
             'body' => json_encode([
                 'recipients' => $recipients,
                 'originator' => '+31612345678',
-                'body' => $body
-            ])
+                'body'       => $body,
+            ]),
         ];
 
         $response = $this->callService->call($source, '/messages', 'POST', $config);
