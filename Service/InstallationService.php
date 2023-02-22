@@ -4,13 +4,13 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Gateway as Source;
 use App\Entity\Action;
 use App\Entity\CollectionEntity;
 use App\Entity\Cronjob;
 use App\Entity\DashboardCard;
 use App\Entity\Endpoint;
 use App\Entity\Entity;
+use App\Entity\Gateway as Source;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -48,8 +48,8 @@ class InstallationService implements InstallerInterface
     ];
 
     public const SOURCES = [
-        ['name' => 'Messagebird', 'location' => 'https://rest.messagebird.com',
-            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!'],
+        ['name'       => 'Messagebird', 'location' => 'https://rest.messagebird.com',
+            'headers' => ['accept' => 'application/json'], 'auth' => 'apikey', 'apikey' => 'AccessKey !ChangeMe!', ],
     ];
 
     public const ACTION_HANDLERS = [
@@ -157,9 +157,9 @@ class InstallationService implements InstallerInterface
      * @param array $defaultConfig
      * @param array $overrides
      *
-     * @return array
      * @throws Exception
      *
+     * @return array
      */
     public function overrideConfig(array $defaultConfig, array $overrides): array
     {
@@ -201,11 +201,11 @@ class InstallationService implements InstallerInterface
 
             if (array_key_exists('name', $handler)) {
                 if ($this->entityManager->getRepository('App:Action')->findOneBy(['name' => $handler['name']])) {
-                    (isset($this->io) ? $this->io->writeln(['Action found with name ' . $handler['name']]) : '');
+                    (isset($this->io) ? $this->io->writeln(['Action found with name '.$handler['name']]) : '');
                     continue;
                 }
             } elseif ($this->entityManager->getRepository('App:Action')->findOneBy(['class' => get_class($actionHandler)])) {
-                (isset($this->io) ? $this->io->writeln(['Action found for ' . $handler['actionHandler']]) : '');
+                (isset($this->io) ? $this->io->writeln(['Action found for '.$handler['actionHandler']]) : '');
                 continue;
             }
 
@@ -223,7 +223,7 @@ class InstallationService implements InstallerInterface
             $action->setConditions($handler['conditions'] ?? ['==' => [1, 1]]);
 
             $this->entityManager->persist($action);
-            (isset($this->io) ? $this->io->writeln(['Created Action ' . $action->getName() . ' with Handler: ' . $handler['actionHandler']]) : '');
+            (isset($this->io) ? $this->io->writeln(['Created Action '.$action->getName().' with Handler: '.$handler['actionHandler']]) : '');
         }
     }
 
@@ -261,14 +261,14 @@ class InstallationService implements InstallerInterface
             $createdEndpoint = new Endpoint();
             $createdEndpoint->setName('Created Huwelijk');
             $createdEndpoint->setPath([
-                "hp",
-                "huwelijk",
-                "id"
+                'hp',
+                'huwelijk',
+                'id',
             ]);
-            $createdEndpoint->setPathRegex("^hp/huwelijk?$");
+            $createdEndpoint->setPathRegex('^hp/huwelijk?$');
             $createdEndpoint->setMethods(['POST']);
             $createdEndpoint->setThrows([
-                "huwelijksplanner.huwelijk.created"
+                'huwelijksplanner.huwelijk.created',
             ]);
 
             $this->entityManager->persist($createdEndpoint);
@@ -276,7 +276,7 @@ class InstallationService implements InstallerInterface
             $endpoints[] = $createdEndpoint;
         }
 
-        (isset($this->io) ? $this->io->writeln(count($endpoints) . ' Endpoints Created') : '');
+        (isset($this->io) ? $this->io->writeln(count($endpoints).' Endpoints Created') : '');
 
         return $endpoints;
     }
@@ -304,7 +304,7 @@ class InstallationService implements InstallerInterface
             }
         }
 
-        (isset($this->io) ? $this->io->writeln(count($sources) . ' Sources Created') : '');
+        (isset($this->io) ? $this->io->writeln(count($sources).' Sources Created') : '');
 
         return $sources;
     }
@@ -313,7 +313,7 @@ class InstallationService implements InstallerInterface
      * Adds schemas with the given prefix to the given collection.
      *
      * @param CollectionEntity $collection
-     * @param string $schemaPrefix
+     * @param string           $schemaPrefix
      *
      * @return CollectionEntity
      */
@@ -336,8 +336,8 @@ class InstallationService implements InstallerInterface
     {
         $collectionConfigs = [
             [
-                'name' => 'Huwelijksplanner',
-                'prefix' => 'hp',
+                'name'         => 'Huwelijksplanner',
+                'prefix'       => 'hp',
                 'schemaPrefix' => 'https://huwelijksplanner.nl',
             ],
         ];
@@ -354,7 +354,7 @@ class InstallationService implements InstallerInterface
             $this->entityManager->flush();
             $collections[$collectionConfig['name']] = $collection;
         }
-        (isset($this->io) ? $this->io->writeln(count($collections) . ' Collections Created') : '');
+        (isset($this->io) ? $this->io->writeln(count($collections).' Collections Created') : '');
 
         return $collections;
     }
@@ -367,7 +367,7 @@ class InstallationService implements InstallerInterface
     public function createDashboardCards($objectsThatShouldHaveCards): void
     {
         foreach ($objectsThatShouldHaveCards as $object) {
-            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: ' . $object);
+            isset($this->io) && $this->io->writeln('Looking for a dashboard card for: '.$object);
             $entity = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $object]);
             if (
                 !$dashboardCard = $this->entityManager->getRepository('App:DashboardCard')->findOneBy(['entityId' => $entity->getId()])
@@ -384,7 +384,7 @@ class InstallationService implements InstallerInterface
                 isset($this->io) && $this->io->writeln('Dashboard card created');
                 continue;
             } else {
-                isset($this->io) && $this->io->writeln('Entity with reference ' . $object . ' can\'t be found');
+                isset($this->io) && $this->io->writeln('Entity with reference '.$object.' can\'t be found');
             }
             isset($this->io) && $this->io->writeln('Dashboard card found');
         }
@@ -408,14 +408,14 @@ class InstallationService implements InstallerInterface
 
             $this->entityManager->persist($cronjob);
 
-            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for ' . $cronjob->getName()]) : '');
+            (isset($this->io) ? $this->io->writeln(['', 'Created a cronjob for '.$cronjob->getName()]) : '');
         } else {
-            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for ' . $cronjob->getName()]) : '');
+            (isset($this->io) ? $this->io->writeln(['', 'There is alreade a cronjob for '.$cronjob->getName()]) : '');
         }
     }
 
     /**
-     * This function sets the max depth of all entities to 5
+     * This function sets the max depth of all entities to 5.
      *
      * @return void
      */

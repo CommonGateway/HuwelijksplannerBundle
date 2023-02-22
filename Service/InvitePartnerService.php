@@ -4,16 +4,14 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
+use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use App\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Security\Core\Security;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -61,18 +59,17 @@ class InvitePartnerService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param HandleAssentService $handleAssentService The Handle Assent Service
+     * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
-     * @param Security $security The Security
+     * @param Security               $security               The Security
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        HandleAssentService    $handleAssentService,
+        HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security               $security
-    )
-    {
+        Security $security
+    ) {
         $this->entityManager = $entityManager;
         $this->data = [];
         $this->configuration = [];
@@ -123,6 +120,7 @@ class InvitePartnerService
                 isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
 
                 return false;
+
                 throw new GatewayException('huwelijk.type not found in the databse with given id');
             }
 
@@ -130,6 +128,7 @@ class InvitePartnerService
                 isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
 
                 return false;
+
                 throw new GatewayException('huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap');
             }
 
@@ -138,6 +137,7 @@ class InvitePartnerService
             isset($this->io) && $this->io->error('huwelijk.type is not given');
 
             return false;
+
             throw new GatewayException('huwelijk.type is not given');
         }
 
@@ -156,6 +156,7 @@ class InvitePartnerService
                 isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
 
                 return false;
+
                 throw new GatewayException('huwelijk.ceremonie not found in the databse with given id');
             }
 
@@ -163,6 +164,7 @@ class InvitePartnerService
                 isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return false;
+
                 throw new GatewayException('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
             }
 
@@ -171,6 +173,7 @@ class InvitePartnerService
             isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
 
             return false;
+
             throw new GatewayException('huwelijk.ceremonie is not given');
         }
 
@@ -178,7 +181,7 @@ class InvitePartnerService
     }//end validateCeremonie()
 
     /**
-     * This function creates a person object for the given user
+     * This function creates a person object for the given user.
      */
     private function createPerson(): ?ObjectEntity
     {
@@ -188,22 +191,22 @@ class InvitePartnerService
         // @TODO get user/ person from jwt token and create a person object
         $person = new ObjectEntity($personSchema);
         $person->hydrate([
-            'bronorganisatie' => null,
-            'klantnummer' => null,
-            'bedrijfsnaam' => null,
-            'functie' => null,
-            'websiteUrl' => null,
-            'voornaam' => $this->security->getUser()->getFirstName(),
+            'bronorganisatie'       => null,
+            'klantnummer'           => null,
+            'bedrijfsnaam'          => null,
+            'functie'               => null,
+            'websiteUrl'            => null,
+            'voornaam'              => $this->security->getUser()->getFirstName(),
             'voorvoegselAchternaam' => null,
-            'achternaam' => $this->security->getUser()->getLastName(),
-            'telefoonnummers' => null,
-            'emails' => [[
-                'naam' => 'Emailadres van ' . $this->security->getUser()->getFirstName(),
-                'email' => $this->security->getUser()->getEmail()
+            'achternaam'            => $this->security->getUser()->getLastName(),
+            'telefoonnummers'       => null,
+            'emails'                => [[
+                'naam'  => 'Emailadres van '.$this->security->getUser()->getFirstName(),
+                'email' => $this->security->getUser()->getEmail(),
             ]],
-            'adressen' => null,
-            'subject' => null,
-            'subjectType' => 'natuurlijk_persoon',
+            'adressen'             => null,
+            'subject'              => null,
+            'subjectType'          => 'natuurlijk_persoon',
             'subjectIdentificatie' => null,
         ]);
         $this->entityManager->persist($person);
@@ -218,14 +221,14 @@ class InvitePartnerService
     private function invitePartner(array $huwelijk, ?string $id): ?array
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
-            isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $id); // @TODO throw exception ?
+            isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
 
             return null;
-            throw new GatewayException('Could not find huwelijk with id ' . $id);
+
+            throw new GatewayException('Could not find huwelijk with id '.$id);
         }
 
         if (isset($huwelijk['partners']) && count($huwelijk['partners']) === 1) {
-
             if (count($huwelijkObject->getValue('partners')) > 1) {
                 // @TODO update partner?
                 return $huwelijkObject->toArray();
@@ -254,9 +257,9 @@ class InvitePartnerService
      * @param ?array $data
      * @param ?array $configuration
      *
-     * @return ?array
      * @throws Exception
      *
+     * @return ?array
      */
     public function invitePartnerHandler(?array $data = [], ?array $configuration = []): ?array
     {

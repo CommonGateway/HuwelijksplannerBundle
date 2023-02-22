@@ -4,16 +4,14 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
+use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Security;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use App\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Security\Core\Security;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -61,18 +59,17 @@ class InviteWitnessService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param HandleAssentService $handleAssentService The Handle Assent Service
+     * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
-     * @param Security $security The Security
+     * @param Security               $security               The Security
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        HandleAssentService    $handleAssentService,
+        HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security               $security
-    )
-    {
+        Security $security
+    ) {
         $this->entityManager = $entityManager;
         $this->data = [];
         $this->configuration = [];
@@ -122,12 +119,13 @@ class InviteWitnessService
         $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
 
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
-            isset($this->io) && $this->io->error('Could not find huwelijk with id ' . $id); // @TODO throw exception ?
+            isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
 
             return null;
-            throw new GatewayException('Could not find huwelijk with id ' . $id);
+
+            throw new GatewayException('Could not find huwelijk with id '.$id);
         }
-        
+
         if (isset($huwelijk['getuigen'])) {
 
             // @TODO check if witness is aldready set or overwrite the witness array
@@ -137,7 +135,7 @@ class InviteWitnessService
                 $person = new ObjectEntity($personSchema);
                 $person->hydrate($getuige['person']);
                 $this->entityManager->persist($person);
-                
+
                 // creates an assent and add the person to the partners of this merriage
                 $witnessAssents[] = $this->handleAssentService->handleAssent($person, 'witness', $this->data);
             }
@@ -146,7 +144,6 @@ class InviteWitnessService
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-
         }
 
         return $huwelijkObject->toArray();
@@ -158,9 +155,9 @@ class InviteWitnessService
      * @param ?array $data
      * @param ?array $configuration
      *
-     * @return ?array
      * @throws Exception
      *
+     * @return ?array
      */
     public function inviteWitnessHandler(?array $data = [], ?array $configuration = []): ?array
     {

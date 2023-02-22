@@ -8,9 +8,6 @@ use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\PersistentCollection;
-use Exception;
-use FontLib\Table\Type\os2;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +32,6 @@ class HandleAssentService
      */
     private MessageBirdService $messageBirdService;
 
-
     /**
      * @var SymfonyStyle
      */
@@ -57,9 +53,9 @@ class HandleAssentService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param EventDispatcherInterface $eventDispatcher The Event Dispatcher
-     * @param MessageBirdService $messageBirdService The MessageBird Service
+     * @param EntityManagerInterface   $entityManager      The Entity Manager
+     * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
+     * @param MessageBirdService       $messageBirdService The MessageBird Service
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -124,10 +120,11 @@ class HandleAssentService
     }//end getAction()
 
     /**
-     * Sends an emails
+     * Sends an emails.
      *
      * @param object $emailAddresses
      * @param string $type
+     *
      * @return void
      */
     public function sendEmail(object $emailAddresses, string $type, array $data): void
@@ -168,10 +165,11 @@ class HandleAssentService
     }//end sendEmail()
 
     /**
-     * Sends a sms
+     * Sends a sms.
      *
      * @param object $phoneNumbers
      * @param string $type
+     *
      * @return void
      */
     public function sendSms(object $phoneNumbers, string $type): void
@@ -197,10 +195,11 @@ class HandleAssentService
     }//end sendSms()
 
     /**
-     * Handles the assent for the given person and sends an email or sms
+     * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person
-     * @param string $type
+     * @param string            $type
+     *
      * @return ObjectEntity|null
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
@@ -209,16 +208,16 @@ class HandleAssentService
 
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
-            'name' => $person->getValue('voornaam'),
+            'name'        => $person->getValue('voornaam'),
             'description' => null,
-            'request' => null,
-            'forwardUrl' => null,
-            'property' => null,
-            'process' => null,
-            'contact' => $person,
-            'status' => 'requested',
-            'requester' => null, // the bsn of the person
-            'revocable' => true
+            'request'     => null,
+            'forwardUrl'  => null,
+            'property'    => null,
+            'process'     => null,
+            'contact'     => $person,
+            'status'      => 'requested',
+            'requester'   => null, // the bsn of the person
+            'revocable'   => true,
         ]);
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
