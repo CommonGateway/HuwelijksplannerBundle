@@ -12,6 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -63,12 +64,14 @@ class InvitePartnerService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
+     * @param LoggerInterface $logger The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security $security
+        Security $security,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->data = [];
@@ -76,6 +79,7 @@ class InvitePartnerService
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     /**
@@ -118,6 +122,7 @@ class InvitePartnerService
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
+            $this->logger->error('Could not find huwelijk with id '.$id);
 
             return null;
 
@@ -165,12 +170,14 @@ class InvitePartnerService
 
         if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
+            $this->logger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
         if ($this->data['method'] !== 'PATCH') {
             isset($this->io) && $this->io->error('Not a PATCH request');
+            $this->logger->error('Not a PATCH request');
 
             return $this->data;
         }

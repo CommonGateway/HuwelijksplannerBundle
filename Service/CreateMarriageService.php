@@ -11,6 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -62,12 +63,14 @@ class CreateMarriageService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
+     * @param LoggerInterface $logger The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security $security
+        Security $security,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->data = [];
@@ -75,6 +78,7 @@ class CreateMarriageService
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     /**
@@ -112,17 +116,19 @@ class CreateMarriageService
     /**
      * Validate huwelijk type.
      */
-    private function validateType(array $huwelijk)
+    private function validateType(array $huwelijk): array
     {
         if (isset($huwelijk['type'])) {
             if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
                 isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
+                $this->logger->error('huwelijk.type not found in the databse with given id');
 
                 return ['response' => ['message' => 'huwelijk.type not found in the databse with given id'], 'httpCode' => 400];
             }
 
             if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
                 isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
+                $this->logger->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
 
                 return ['response' => ['message' => 'huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap'], 'httpCode' => 400];
             }
@@ -130,13 +136,10 @@ class CreateMarriageService
             return true;
         } else {
             isset($this->io) && $this->io->error('huwelijk.type is not given');
+            $this->logger->error('huwelijk.type is not given');
 
             return ['response' => ['message' => 'huwelijk.type is not given'], 'httpCode' => 400];
-
-            throw new GatewayException('huwelijk.type is not given');
         }
-
-        return true;
     }//end validateType()
 
     /**
@@ -144,17 +147,19 @@ class CreateMarriageService
      *
      * @return array|bool $huwelijk OR false when invalid huwelijk
      */
-    private function validateCeremonie(array $huwelijk)
+    private function validateCeremonie(array $huwelijk): array
     {
         if (isset($huwelijk['ceremonie'])) {
             if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
                 isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
+                $this->logger->error('huwelijk.ceremonie not found in the databse with given id');
 
                 return ['response' => ['message' => 'huwelijk.ceremonie not found in the databse with given id'], 'httpCode' => 400];
             }
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
                 isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+                $this->logger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return ['response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'], 'httpCode' => 400];
             }
@@ -162,11 +167,10 @@ class CreateMarriageService
             return true;
         } else {
             isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
+            $this->logger->error('huwelijk.ceremonie is not given');
 
             return ['response' => ['message' => 'huwelijk.ceremonie is not given'], 'httpCode' => 400];
         }
-
-        return true;
     }//end validateCeremonie()
 
     /**
@@ -222,9 +226,12 @@ class CreateMarriageService
                 $huwelijkObject->hydrate($huwelijk);
                 $this->entityManager->persist($huwelijkObject);
 
-                $peron = $this->createPerson();
+                // create person from logged in user
+                $person = $this->createPerson();
+
+                // @TODO get the person from brp -> add test data user
                 // creates an assent and add the person to the partners of this merriage
-                $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($peron, 'requester', $this->data);
+                $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
                 $huwelijkObject->hydrate($requesterAssent);
 
                 $this->entityManager->persist($huwelijkObject);
@@ -257,12 +264,14 @@ class CreateMarriageService
 
         if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
+            $this->logger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
         if ($this->data['method'] !== 'POST') {
             isset($this->io) && $this->io->error('Not a POST request');
+            $this->logger->error('Not a POST request');
 
             return ['response' => ['message' => 'Not a POST request'], 'httpCode' => 400];
         }

@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for approving or requesting a assent.
@@ -53,18 +54,22 @@ class HandleAssentService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface   $entityManager      The Entity Manager
-     * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
-     * @param MessageBirdService       $messageBirdService The MessageBird Service
+     * @param EntityManagerInterface $entityManager The Entity Manager
+     * @param EventDispatcherInterface $eventDispatcher The Event Dispatcher
+     * @param MessageBirdService $messageBirdService The MessageBird Service
+     * @param LoggerInterface $logger The Logger Interface
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        EntityManagerInterface   $entityManager,
         EventDispatcherInterface $eventDispatcher,
-        MessageBirdService $messageBirdService
-    ) {
+        MessageBirdService       $messageBirdService,
+        LoggerInterface          $logger
+    )
+    {
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->messageBirdService = $messageBirdService;
+        $this->logger = $logger;
         $this->data = [];
         $this->configuration = [];
     }
@@ -198,8 +203,8 @@ class HandleAssentService
      * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person
-     * @param string            $type
-     *
+     * @param string $type
+     * @param array $data
      * @return ObjectEntity|null
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
@@ -208,16 +213,16 @@ class HandleAssentService
 
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
-            'name'        => $person->getValue('voornaam'),
+            'name' => $person->getValue('voornaam'),
             'description' => null,
-            'request'     => null,
-            'forwardUrl'  => null,
-            'property'    => null,
-            'process'     => null,
-            'contact'     => $person,
-            'status'      => 'requested',
-            'requester'   => null, // the bsn of the person
-            'revocable'   => true,
+            'request' => null,
+            'forwardUrl' => null,
+            'property' => null,
+            'process' => null,
+            'contact' => $person,
+            'status' => 'requested',
+            'requester' => null, // the bsn of the person
+            'revocable' => true,
         ]);
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
@@ -229,9 +234,10 @@ class HandleAssentService
             throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
         }
 
+        $this->logger->debug('hier mail of sms versturen en een secret genereren');
         isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
 
-        $this->sendEmail($emailAddresses, $type, $data);
+//        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before 
         $this->sendSms($phoneNumbers, $type);
 
         return $assent;
