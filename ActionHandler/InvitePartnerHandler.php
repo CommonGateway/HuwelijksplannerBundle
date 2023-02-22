@@ -3,9 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService;
 use CommonGateway\HuwelijksplannerBundle\Service\InvitePartnerService;
-use CommonGateway\HuwelijksplannerBundle\Service\InviteWitnessService;
 use Symfony\Component\Security\Core\Security;
 
 class InvitePartnerHandler implements ActionHandlerInterface
