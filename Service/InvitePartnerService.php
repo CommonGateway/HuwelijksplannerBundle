@@ -124,10 +124,18 @@ class InvitePartnerService
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
             $this->logger->error('Could not find huwelijk with id '.$id);
 
-            return null;
+            $this->data['response'] = new Response(
+                json_encode('Could not find huwelijk with id '.$id),
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'json']
+            );
 
-            throw new GatewayException('Could not find huwelijk with id '.$id);
+            return $this->data;
+
         }
+
+        // @TODO check if the requester has already a partner
+        // if so throw error else continue
 
         if (isset($huwelijk['partners']) && count($huwelijk['partners']) === 1) {
             if (count($huwelijkObject->getValue('partners')) > 1) {
