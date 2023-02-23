@@ -1,0 +1,17 @@
+{
+  "title": "CreateMarriageAction",
+  "$id": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
+  "$schema": "https://json-schema.org/draft/2020-12/action",
+  "version": "0.0.1",
+  "listens": [
+    "huwelijksplanner.huwelijk.created"
+  ],
+  "throws": [],
+  "conditions": {
+    "==": [1, 1]
+  },
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
+  "configuration": [],
+  "isLockable": false,
+  "isEnabled": true
+}

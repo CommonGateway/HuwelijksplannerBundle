@@ -8,6 +8,7 @@ use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,15 +57,18 @@ class HandleAssentService
      * @param EntityManagerInterface   $entityManager      The Entity Manager
      * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
      * @param MessageBirdService       $messageBirdService The MessageBird Service
+     * @param LoggerInterface          $logger             The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
-        MessageBirdService $messageBirdService
+        MessageBirdService $messageBirdService,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->messageBirdService = $messageBirdService;
+        $this->logger = $logger;
         $this->data = [];
         $this->configuration = [];
     }
@@ -199,12 +203,15 @@ class HandleAssentService
      *
      * @param ObjectEntity|null $person
      * @param string            $type
+     * @param array             $data
      *
      * @return ObjectEntity|null
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
     {
         $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
+
+        // @TODO generate secret
 
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
@@ -216,7 +223,7 @@ class HandleAssentService
             'process'     => null,
             'contact'     => $person,
             'status'      => 'requested',
-            'requester'   => null, // the bsn of the person
+            'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
             'revocable'   => true,
         ]);
         $this->entityManager->persist($assent);
@@ -229,9 +236,10 @@ class HandleAssentService
             throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
         }
 
+        $this->logger->debug('hier mail of sms versturen en een secret genereren');
         isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
 
-        $this->sendEmail($emailAddresses, $type, $data);
+//        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
         $this->sendSms($phoneNumbers, $type);
 
         return $assent;

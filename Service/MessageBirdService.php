@@ -8,6 +8,8 @@ use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -43,15 +45,18 @@ class MessageBirdService
     /**
      * @param EntityManagerInterface $entityManager The Entity Manager
      * @param CallService            $callService   The Call Service
+     * @param LoggerInterface        $logger        The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CallService $callService,
-        SynchronizationService $synchronizationService
+        SynchronizationService $synchronizationService,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->callService = $callService;
         $this->synchronizationService = $synchronizationService;
+        $this->logger = $logger;
     }
 
     /**
@@ -115,7 +120,7 @@ class MessageBirdService
 
         $synchronization = $this->synchronizationService->findSyncBySource($source, $messagebirdEntity, $message['id']);
 
-        $this->logger->comment('Sending message from '.$message['originator']);
+        $this->logger->debug('Sending message from '.$message['originator']);
 
         $synchronization = $this->synchronizationService->synchronize($synchronization, $message);
 
@@ -132,7 +137,7 @@ class MessageBirdService
      */
     public function sendMessage(string $recipients, string $body): bool
     {
-        isset($this->logger) ?? $this->logger->info('Send a message');
+        $this->logger->debug('Send a message');
 
         $messagebirdEntity = $this->getEntity('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json');
         $source = $this->getSource('https://rest.messagebird.com');
@@ -145,7 +150,13 @@ class MessageBirdService
             ]),
         ];
 
-        $response = $this->callService->call($source, '/messages', 'POST', $config);
+        try {
+            $response = $this->callService->call($source, '/messages', 'POST', $config);
+        } catch (RequestException $exception) {
+            $this->logger->error('Could not send the message with source: '.$source->getName());
+
+            return false;
+        }
 
         $message = json_decode($response->getBody()->getContents(), true);
 
@@ -155,7 +166,7 @@ class MessageBirdService
             return false;
         }
 
-        $this->logger->success('The message was sent successfully');
+        $this->logger->debug('The message was sent successfully');
 
         $messageObject = new ObjectEntity($messagebirdEntity);
         $messageObject->hydrate($message);

@@ -4,9 +4,9 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -63,12 +63,14 @@ class InvitePartnerService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
+     * @param LoggerInterface        $logger                 The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security $security
+        Security $security,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->data = [];
@@ -76,6 +78,7 @@ class InvitePartnerService
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     /**
@@ -118,11 +121,19 @@ class InvitePartnerService
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
+            $this->logger->error('Could not find huwelijk with id '.$id);
 
-            return null;
+            $this->data['response'] = new Response(
+                json_encode('Could not find huwelijk with id '.$id),
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'json']
+            );
 
-            throw new GatewayException('Could not find huwelijk with id '.$id);
+            return $this->data;
         }
+
+        // @TODO check if the requester has already a partner
+        // if so throw error else continue
 
         if (isset($huwelijk['partners']) && count($huwelijk['partners']) === 1) {
             if (count($huwelijkObject->getValue('partners')) > 1) {
@@ -139,6 +150,9 @@ class InvitePartnerService
             // creates an assent and add the person to the partners of this merriage
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
             $huwelijkObject->hydrate($requesterAssent);
+
+            // @TODO update checklist with partners
+//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
@@ -165,12 +179,14 @@ class InvitePartnerService
 
         if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
+            $this->logger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
+        if ($this->data['method'] !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
+            $this->logger->error('Not a PUT request');
 
             return $this->data;
         }
