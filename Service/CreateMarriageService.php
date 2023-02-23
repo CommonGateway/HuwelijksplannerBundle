@@ -290,7 +290,7 @@ class CreateMarriageService
             $huwelijkObject->hydrate($requesterAssent);
 
             // @TODO update checklist with moment
-//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
