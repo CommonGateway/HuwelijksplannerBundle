@@ -211,6 +211,8 @@ class HandleAssentService
     {
         $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
 
+        // @TODO generate secret
+
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
             'name' => $person->getValue('voornaam'),
@@ -221,7 +223,7 @@ class HandleAssentService
             'process' => null,
             'contact' => $person,
             'status' => 'requested',
-            'requester' => null, // the bsn of the person
+            'requester' => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
             'revocable' => true,
         ]);
         $this->entityManager->persist($assent);
@@ -237,7 +239,7 @@ class HandleAssentService
         $this->logger->debug('hier mail of sms versturen en een secret genereren');
         isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
 
-//        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before 
+//        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
         $this->sendSms($phoneNumbers, $type);
 
         return $assent;
