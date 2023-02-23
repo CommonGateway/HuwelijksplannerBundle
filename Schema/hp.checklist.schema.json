@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.checklist.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Checklist",
     "type": "object",
     "properties": {
@@ -30,7 +30,7 @@
             "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
         },
         "zaak": {
-            "$ref": "https://vng.opencatalogi.nl/schemas/zrc.zaak.schema.json",
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json",
             "description": "Onder zaak wordt gecontroleerd op:\n\nafhankenlijk van gemeentenlijke configuratie"
         }
     }

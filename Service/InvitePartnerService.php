@@ -151,8 +151,7 @@ class InvitePartnerService
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
             $huwelijkObject->hydrate($requesterAssent);
 
-            // @TODO update checklist with partners
-//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
