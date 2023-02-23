@@ -288,7 +288,6 @@ class CreateMarriageService
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
             $huwelijkObject->hydrate($requesterAssent);
 
-            // @TODO update checklist with moment
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
@@ -298,8 +297,6 @@ class CreateMarriageService
         }
 
         return ['response' => ['message' => 'Validation failed'], 'httpCode' => 400];
-
-        // @TODO delete the huwelijk object if validation failed
     }//end createMarriage()
 
     /**

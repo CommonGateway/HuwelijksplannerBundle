@@ -147,7 +147,6 @@ class InviteWitnessService
 
             $huwelijkObject->setValue('getuigen', $witnessAssents);
 
-            // @TODO update checklist with getuigen
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
