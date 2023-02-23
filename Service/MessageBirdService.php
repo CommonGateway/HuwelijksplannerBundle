@@ -9,9 +9,8 @@ use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\RequestException;
-use PHPUnit\Exception;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds all the logic for sending a message with messagebird.
@@ -46,7 +45,7 @@ class MessageBirdService
     /**
      * @param EntityManagerInterface $entityManager The Entity Manager
      * @param CallService            $callService   The Call Service
-     * @param LoggerInterface $logger The Logger Interface
+     * @param LoggerInterface        $logger        The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,

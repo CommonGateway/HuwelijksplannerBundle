@@ -8,10 +8,10 @@ use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for approving or requesting a assent.
@@ -54,18 +54,17 @@ class HandleAssentService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param EventDispatcherInterface $eventDispatcher The Event Dispatcher
-     * @param MessageBirdService $messageBirdService The MessageBird Service
-     * @param LoggerInterface $logger The Logger Interface
+     * @param EntityManagerInterface   $entityManager      The Entity Manager
+     * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
+     * @param MessageBirdService       $messageBirdService The MessageBird Service
+     * @param LoggerInterface          $logger             The Logger Interface
      */
     public function __construct(
-        EntityManagerInterface   $entityManager,
+        EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
-        MessageBirdService       $messageBirdService,
-        LoggerInterface          $logger
-    )
-    {
+        MessageBirdService $messageBirdService,
+        LoggerInterface $logger
+    ) {
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->messageBirdService = $messageBirdService;
@@ -203,8 +202,9 @@ class HandleAssentService
      * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person
-     * @param string $type
-     * @param array $data
+     * @param string            $type
+     * @param array             $data
+     *
      * @return ObjectEntity|null
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
@@ -215,16 +215,16 @@ class HandleAssentService
 
         $assent = new ObjectEntity($assentSchema);
         $assent->hydrate([
-            'name' => $person->getValue('voornaam'),
+            'name'        => $person->getValue('voornaam'),
             'description' => null,
-            'request' => null,
-            'forwardUrl' => null,
-            'property' => null,
-            'process' => null,
-            'contact' => $person,
-            'status' => 'requested',
-            'requester' => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
-            'revocable' => true,
+            'request'     => null,
+            'forwardUrl'  => null,
+            'property'    => null,
+            'process'     => null,
+            'contact'     => $person,
+            'status'      => 'requested',
+            'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
+            'revocable'   => true,
         ]);
         $this->entityManager->persist($assent);
         $this->entityManager->flush();

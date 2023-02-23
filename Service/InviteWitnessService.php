@@ -7,12 +7,12 @@ use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
-use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -64,7 +64,7 @@ class InviteWitnessService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface $logger The Logger Interface
+     * @param LoggerInterface        $logger                 The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -125,7 +125,7 @@ class InviteWitnessService
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
             $this->logger->error('Could not find huwelijk with id '.$id);
-            
+
             return null;
 
             throw new GatewayException('Could not find huwelijk with id '.$id);
@@ -173,14 +173,14 @@ class InviteWitnessService
         if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
             $this->logger->error('No data passed');
-            
+
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
         if ($this->data['method'] !== 'PATCH') {
             isset($this->io) && $this->io->error('Not a PATCH request');
             $this->logger->error('Not a PATCH request');
-            
+
             return $this->data;
         }
 
