@@ -7,12 +7,12 @@ use App\Entity\ObjectEntity;
 use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -64,7 +64,7 @@ class InviteWitnessService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $logger                 The Logger Interface
+     * @param LoggerInterface $logger The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -131,9 +131,9 @@ class InviteWitnessService
             throw new GatewayException('Could not find huwelijk with id '.$id);
         }
 
-        if (isset($huwelijk['getuigen'])) {
-
-            // @TODO check if witness is aldready set or overwrite the witness array
+        if (isset($huwelijk['getuigen']) && count($huwelijk['getuigen']) <= 4) {
+            // @TODO overwrite the witness array in the huwelijkObject
+            // @TODO check if witness is aldready set
             $witnessAssents = [];
             foreach ($huwelijk['getuigen'] as $getuige) {
                 $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
@@ -146,6 +146,9 @@ class InviteWitnessService
             }
 
             $huwelijkObject->setValue('getuigen', $witnessAssents);
+
+            // @TODO update checklist with getuigen
+//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
@@ -177,9 +180,9 @@ class InviteWitnessService
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
-            $this->logger->error('Not a PATCH request');
+        if ($this->data['method'] !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
+            $this->logger->error('Not a PUT request');
 
             return $this->data;
         }

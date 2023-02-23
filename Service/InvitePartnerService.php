@@ -4,14 +4,15 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
+use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -63,7 +64,7 @@ class InvitePartnerService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $logger                 The Logger Interface
+     * @param LoggerInterface $logger The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -130,6 +131,7 @@ class InvitePartnerService
             );
 
             return $this->data;
+
         }
 
         // @TODO check if the requester has already a partner
@@ -150,6 +152,9 @@ class InvitePartnerService
             // creates an assent and add the person to the partners of this merriage
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
             $huwelijkObject->hydrate($requesterAssent);
+
+            // @TODO update checklist with partners
+//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
@@ -181,9 +186,9 @@ class InvitePartnerService
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
-            $this->logger->error('Not a PATCH request');
+        if ($this->data['method'] !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
+            $this->logger->error('Not a PUT request');
 
             return $this->data;
         }
