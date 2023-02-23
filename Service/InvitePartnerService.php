@@ -4,15 +4,14 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
-use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -64,7 +63,7 @@ class InvitePartnerService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface $logger The Logger Interface
+     * @param LoggerInterface        $logger                 The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -131,7 +130,6 @@ class InvitePartnerService
             );
 
             return $this->data;
-
         }
 
         // @TODO check if the requester has already a partner
