@@ -13,7 +13,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateAvailabilityService
 {
-    private SymfonyStyle $io;
+    /**
+     * @var SymfonyStyle
+     */
+    private SymfonyStyle $symfonyStyle;
     private array $data;
     private array $configuration;
 
@@ -26,13 +29,13 @@ class CreateAvailabilityService
     /**
      * Set symfony style in order to output to the console.
      *
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $symfonyStyle
      *
      * @return self
      */
-    public function setStyle(SymfonyStyle $io): self
+    public function setStyle(SymfonyStyle $symfonyStyle): self
     {
-        $this->io = $io;
+        $this->symfonyStyle = $symfonyStyle;
 
         return $this;
     }
