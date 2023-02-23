@@ -153,6 +153,9 @@ class InvitePartnerService
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
             $huwelijkObject->hydrate($requesterAssent);
 
+            // @TODO update checklist with partners
+//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
         }
@@ -183,9 +186,9 @@ class InvitePartnerService
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
-            $this->logger->error('Not a PATCH request');
+        if ($this->data['method'] !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
+            $this->logger->error('Not a PUT request');
 
             return $this->data;
         }

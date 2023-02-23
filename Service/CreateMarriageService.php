@@ -4,15 +4,14 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use CommonGateway\CoreBundle\Service\CacheService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
-use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -66,11 +65,11 @@ class CreateMarriageService
 
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
-     * @param CacheService $cacheService The Cache Service
+     * @param CacheService           $cacheService           The Cache Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface $logger The Logger Interface
+     * @param LoggerInterface        $logger                 The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -214,37 +213,37 @@ class CreateMarriageService
             'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
             'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
             'telefoonnummers'       => [[
-                'naam'  => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
+                'naam'           => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
                 'telefoonnummer' => isset($phonenumber) ? $phonenumber : null,
             ]],
             'emails'                => [[
                 'naam'  => isset($naam) ? 'Emailadres van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                'email' => isset($email) ? $email: $this->security->getUser()->getEmail(),
+                'email' => isset($email) ? $email : $this->security->getUser()->getEmail(),
             ]],
             'adressen'             => [[
-                'naam' => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
-                'straatnaam' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('straat') : null,
-                'huisnummer' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummer') : null,
-                'huisletter' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisletter') : null,
+                'naam'                 => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
+                'straatnaam'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('straat') : null,
+                'huisnummer'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummer') : null,
+                'huisletter'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisletter') : null,
                 'huisnummertoevoeging' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummertoevoeging') : null,
-                'postcode' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('postcode') : null,
-                'woonplaatsnaam' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('woonplaats') : null,
-                'landcode' => isset($landVanwaarIngeschreven) && $landVanwaarIngeschreven ? $landVanwaarIngeschreven->getValue('code') : null,
+                'postcode'             => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('postcode') : null,
+                'woonplaatsnaam'       => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('woonplaats') : null,
+                'landcode'             => isset($landVanwaarIngeschreven) && $landVanwaarIngeschreven ? $landVanwaarIngeschreven->getValue('code') : null,
             ]],
             'subject'              => $brpPerson && $brpPerson->getSelf(),
             'subjectType'          => 'natuurlijk_persoon',
             'subjectIdentificatie' => [
-                'inpBsn' => $brpPerson ? $brpPerson->getValue('burgerservicenummer') : $this->security->getUser()->getPerson(),
-                'inpANummer' => $brpPerson !== null ? $brpPerson->getValue('aNummer') : null,
-                'geslachtsnaam' => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : null,
+                'inpBsn'                   => $brpPerson ? $brpPerson->getValue('burgerservicenummer') : $this->security->getUser()->getPerson(),
+                'inpANummer'               => $brpPerson !== null ? $brpPerson->getValue('aNummer') : null,
+                'geslachtsnaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : null,
                 'voorvoegselGeslachtsnaam' => isset($naam) ? $naam && $naam->getValue('voorvoegsel') : null,
-                'voorletters' => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
-                'voornamen' => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
-                'geslachtsaanduiding' => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
-//                'geboortedatum' => null, @TODO
-//                'verblijfsadres' => null, @TODO
-//                'subVerblijfBuitenland' => null, @TODO
-            ]
+                'voorletters'              => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
+                'voornamen'                => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
+                'geslachtsaanduiding'      => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
+                //                'geboortedatum' => null, @TODO
+                //                'verblijfsadres' => null, @TODO
+                //                'subVerblijfBuitenland' => null, @TODO
+            ],
         ]);
         $this->entityManager->persist($person);
         $this->entityManager->flush();
@@ -266,10 +265,10 @@ class CreateMarriageService
         // @TODO validate moment and location
         if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
             $huwelijkArray = [
-                'locatie' => key_exists('locatie', $huwelijk) ? $huwelijk['locatie'] : null,
-                'type'    => $huwelijk['type'],
-                'moment'  => $huwelijk['moment'],
-                'ceremonie' => $huwelijk['ceremonie']
+                'locatie'   => key_exists('locatie', $huwelijk) ? $huwelijk['locatie'] : null,
+                'type'      => $huwelijk['type'],
+                'moment'    => $huwelijk['moment'],
+                'ceremonie' => $huwelijk['ceremonie'],
             ];
 
             $huwelijkObject->hydrate($huwelijkArray);

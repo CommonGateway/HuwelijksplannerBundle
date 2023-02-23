@@ -125,15 +125,15 @@ class InviteWitnessService
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
             $this->logger->error('Could not find huwelijk with id '.$id);
-            
+
             return null;
 
             throw new GatewayException('Could not find huwelijk with id '.$id);
         }
 
-        if (isset($huwelijk['getuigen'])) {
-
-            // @TODO check if witness is aldready set or overwrite the witness array
+        if (isset($huwelijk['getuigen']) && count($huwelijk['getuigen']) <= 4) {
+            // @TODO overwrite the witness array in the huwelijkObject
+            // @TODO check if witness is aldready set
             $witnessAssents = [];
             foreach ($huwelijk['getuigen'] as $getuige) {
                 $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
@@ -146,6 +146,9 @@ class InviteWitnessService
             }
 
             $huwelijkObject->setValue('getuigen', $witnessAssents);
+
+            // @TODO update checklist with getuigen
+//            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
@@ -173,14 +176,14 @@ class InviteWitnessService
         if (!isset($this->data['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
             $this->logger->error('No data passed');
-            
+
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
-            $this->logger->error('Not a PATCH request');
-            
+        if ($this->data['method'] !== 'PUT') {
+            isset($this->io) && $this->io->error('Not a PUT request');
+            $this->logger->error('Not a PUT request');
+
             return $this->data;
         }
 
