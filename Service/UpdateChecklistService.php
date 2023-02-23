@@ -2,12 +2,10 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for checksing data from the marriage request and updating the associated checklist.
@@ -77,130 +75,130 @@ class UpdateChecklistService
      * Checks data from the marriage object and updates the associated checklist.
      *
      * @param ObjectEntity $huwelijk
+     *
      * @return ObjectEntity
      */
-     public function checkHuwelijk(ObjectEntity $huwelijk): ObjectEntity
-     {
+    public function checkHuwelijk(ObjectEntity $huwelijk): ObjectEntity
+    {
+        if (!$checklistObject = $huwelijk->getValue('checklist')) {
+            $checklistSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.checklist.schema.json');
+            $checklistObject = new ObjectEntity($checklistSchema);
+        }
 
-         if (!$checklistObject = $huwelijk->getValue('checklist')) {
-             $checklistSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.checklist.schema.json');
-             $checklistObject = new ObjectEntity($checklistSchema);
-         }
+        $checklist = [];
 
-         $checklist = [];
+        // Check partners
+        if (count($huwelijk->getValue('partners')) < 2) {
+            $checklist['partners'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 partners nodig',
+            ];
+        } elseif (count($huwelijk->getValue('partners')) > 2) {
+            $checklist['partners'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 2 partners worden opgegeven',
+            ];
+        } else {
+            $checklist['partners'] = [
+                'result'  => true,
+                'display' => 'Partners zijn opgegeven',
+            ];
+        }
+        // Check getuigen
+        // @todo eigenlijk is het minimaal 1 en maximaal 2 getuigen per partner
+        if (count($huwelijk->getValue('getuigen')) < 2) {
+            $checklist['getuigen'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 getuigen nodig',
+            ];
+        } elseif (count($huwelijk->getValue('getuigen')) > 4) {
+            $checklist['getuigen'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 4 getuigen worden opgegeven',
+            ];
+        } else {
+            $checklist['getuigen'] = [
+                'result'  => true,
+                'display' => 'Getuigen zijn opgegeven',
+            ];
+        }
 
-         // Check partners
-         if (count($huwelijk->getValue('partners')) < 2) {
-             $checklist['partners'] = [
-                 'result' => false,
-                 'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 partners nodig'
-             ];
-         } elseif (count($huwelijk->getValue('partners')) > 2) {
-             $checklist['partners'] = [
-                 'result' => false,
-                 'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 2 partners worden opgegeven'
-             ];
-         } else {
-             $checklist['partners'] = [
-                 'result' => true,
-                 'display' => 'Partners zijn opgegeven'
-             ];
-         }
-         // Check getuigen
-         // @todo eigenlijk is het minimaal 1 en maximaal 2 getuigen per partner
-         if (count($huwelijk->getValue('getuigen')) < 2) {
-             $checklist['getuigen'] = [
-                 'result' => false,
-                 'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 getuigen nodig'
-             ];
-         } elseif (count($huwelijk->getValue('getuigen')) > 4) {
-             $checklist['getuigen'] = [
-                 'result' => false,
-                 'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 4 getuigen worden opgegeven'
-             ];
-         } else {
-             $checklist['getuigen'] = [
-                 'result' => true,
-                 'display' => 'Getuigen zijn opgegeven'
-             ];
-         }
+        // Kijken naar ambtenaar
+        if (!$huwelijk->getValue('ambtenaar')) {
+            $checklist['ambtenaar'] = [
+                'result'  => false,
+                'display' => 'Nog geen ambtenaar opgegeven',
+            ];
+        } else {
+            $checklist['ambtenaar'] = [
+                'result'  => true,
+                'display' => 'Ambtenaar is opgegeven',
+            ];
+        }
 
-         // Kijken naar ambtenaar
-         if (!$huwelijk->getValue('ambtenaar')) {
-             $checklist['ambtenaar'] = [
-                 'result' => false,
-                 'display' => 'Nog geen ambtenaar opgegeven'
-             ];
-         } else {
-             $checklist['ambtenaar'] = [
-                 'result' => true,
-                 'display' => 'Ambtenaar is opgegeven'
-             ];
-         }
+        // Kijken naar moment
+        // @TODO trouwdatum minimaal 2 weken groter dan aanvraag datum
+        if (!$huwelijk->getValue('moment')) {
+            $checklist['moment'] = [
+                'result'  => false,
+                'display' => 'Nog geen moment opgegeven',
+            ];
+        } else {
+            $checklist['moment'] = [
+                'result'  => true,
+                'display' => 'Moment is opgegeven',
+            ];
+        }
 
-         // Kijken naar moment
-         // @TODO trouwdatum minimaal 2 weken groter dan aanvraag datum
-         if (!$huwelijk->getValue('moment')) {
-             $checklist['moment'] = [
-                 'result' => false,
-                 'display' => 'Nog geen moment opgegeven'
-             ];
-         } else {
-             $checklist['moment'] = [
-                 'result' => true,
-                 'display' => 'Moment is opgegeven'
-             ];
-         }
+        // Kijken naar producten
+        if (!count($huwelijk->getValue('producten')) > 1) {
+            $checklist['producten'] = [
+                'result'  => false,
+                'display' => 'Nog geen producten opgegeven',
+            ];
+        } else {
+            $checklist['producten'] = [
+                'result'  => true,
+                'display' => 'Producten zijn opgegeven',
+            ];
+        }
 
-         // Kijken naar producten
-         if (!count($huwelijk->getValue('producten')) > 1) {
-             $checklist['producten'] = [
-                 'result' => false,
-                 'display' => 'Nog geen producten opgegeven'
-             ];
-         } else {
-             $checklist['producten'] = [
-                 'result' => true,
-                 'display' => 'Producten zijn opgegeven'
-             ];
-         }
+        // Kijken naar order
+        if (!$huwelijk->getValue('order')) {
+            $checklist['order'] = [
+                'result'  => false,
+                'display' => 'Nog geen order opgegeven',
+            ];
+        } else {
+            $checklist['order'] = [
+                'result'  => true,
+                'display' => 'Order is opgegegeven',
+            ];
+        }
 
-         // Kijken naar order
-         if (!$huwelijk->getValue('order')) {
-             $checklist['order'] = [
-                 'result' => false,
-                 'display' => 'Nog geen order opgegeven'
-             ];
-         } else {
-             $checklist['order'] = [
-                 'result' => true,
-                 'display' => 'Order is opgegegeven'
-             ];
-         }
+        // Kijken naar zaak
+        if (!$huwelijk->getValue('zaak')) {
+            $checklist['zaak'] = [
+                'result'  => false,
+                'display' => 'Nog geen zaak opgegeven',
+            ];
+        } else {
+            $checklist['zaak'] = [
+                'result'  => true,
+                'display' => 'Zaak is opgegeven',
+            ];
+        }
 
-         // Kijken naar zaak
-         if (!$huwelijk->getValue('zaak')) {
-             $checklist['zaak'] = [
-                 'result' => false,
-                 'display' => 'Nog geen zaak opgegeven'
-             ];
-         } else {
-             $checklist['zaak'] = [
-                 'result' => true,
-                 'display' => 'Zaak is opgegeven'
-             ];
-         }
+        $checklistObject->hydrate($checklist);
+        $this->entityManager->persist($checklistObject);
 
-         $checklistObject->hydrate($checklist);
-         $this->entityManager->persist($checklistObject);
+        $huwelijk->setValue('checklist', $checklistObject);
+        $this->entityManager->persist($huwelijk);
 
-         $huwelijk->setValue('checklist', $checklistObject);
-         $this->entityManager->persist($huwelijk);
+        $this->entityManager->flush();
 
-         $this->entityManager->flush();
-
-         return $huwelijk;
-     }
+        return $huwelijk;
+    }
 
     /**
      * Checks data from the marriage request and updates the associated checklist.
