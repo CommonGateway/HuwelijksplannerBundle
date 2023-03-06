@@ -1,0 +1,24 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.sdgLocatie.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "SDGLocatie",
+    "properties":{
+        "id": {
+            "type":"string"
+        },
+        "url": {
+            "type":"string"
+        },
+        "owmsIdentifier": {
+            "type":"string"
+        },
+        "owmsPrefLable": {
+            "type":"string"
+        },
+        "owmsEndDate": {
+            "type":"datetime"
+        }
+    }
+}

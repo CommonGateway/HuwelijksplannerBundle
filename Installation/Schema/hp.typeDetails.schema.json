@@ -1,0 +1,13 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.typeDetails.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "TypeDetails",
+    "properties":{
+        "udh": {
+            "type": "string",
+            "description":  "The UDH to prepend to the message payload. This can be used for sending concatenated SMS. Often required to send binary messages."
+        }
+    }
+}

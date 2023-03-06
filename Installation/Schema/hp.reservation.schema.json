@@ -1,0 +1,90 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.reservation.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "Reservation",
+    "type": "object",
+    "description": "A Reservation is a event that is tied to an unique person or resource.",
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "The UUID identifier of this resource.",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "description": "The name of this Reservation.",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "An short description of this Reservation.",
+            "nullable": true
+        },
+        "dateCreated": {
+            "type": "datetime",
+            "description": "The moment this resource was created.",
+            "nullable": true
+        },
+        "dateModified": {
+            "type": "datetime",
+            "description": "The moment this resource last Modified.",
+            "nullable": true
+        },
+        "underName": {
+            "type": "string",
+            "description": "The url of a person who is under name(the requester) of this reservation."
+        },
+        "numberOfParticipants": {
+            "type": "integer",
+            "description": "The number of participants for this reservation."
+        },
+        "event": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
+        },
+        "provider": {
+            "type": "string",
+            "description": "The url of a person or organization who is the provider of this reservation."
+        },
+        "broker": {
+            "type": "string",
+            "description": "The url of a person or organization who is the broker of this reservation.",
+            "nullable": true
+        },
+        "reservationFor": {
+            "type": "string",
+            "description": "The thing -- flight, event, restaurant,etc. being reserved.",
+            "nullable": true
+        },
+        "reservationStatus": {
+            "type": "string",
+            "description": "The current status of the reservation.",
+            "nullable": true
+        },
+        "reservedTicket": {
+            "type": "string",
+            "description": "A ticket associated with the reservation.",
+            "nullable": true
+        },
+        "programMembershipUsed": {
+            "type": "string",
+            "description": "Any membership in a frequent flyer, hotel loyalty program, etc. being applied to the reservation.",
+            "nullable": true
+        },
+        "priceCurrency": {
+            "type": "string",
+            "description": "The currency of this product in an [ISO 4217] (https://en.wikipedia.org/wiki/ISO_4217) format.",
+            "nullable": true
+        },
+        "totalPrice": {
+            "type": "string",
+            "description": "The total price of this reservation.",
+            "nullable": true
+        },
+        "comment": {
+            "type": "string",
+            "description": "Comment for this reservation.",
+            "nullable": true
+        }
+    }
+}

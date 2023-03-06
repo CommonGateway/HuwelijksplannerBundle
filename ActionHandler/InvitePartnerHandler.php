@@ -26,7 +26,7 @@ class InvitePartnerHandler implements ActionHandlerInterface
     {
         return [
             '$id'        => 'https://hp.nl/action/hp.InvitePartnerAction.action.json',
-            '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
+            '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InvitePartner',
             'required'   => [],
         ];

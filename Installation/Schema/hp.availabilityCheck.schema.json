@@ -1,0 +1,33 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "AvailabilityCheck",
+    "type": "object",
+    "properties": {
+        "start": {
+            "type": "datetime",
+            "description": "The start date.",
+            "nullable": true,
+            "searchable": true
+        },
+        "stop": {
+            "type": "datetime",
+            "description": "The end date.",
+            "nullable": true,
+            "searchable": true
+        },
+        "interval": {
+            "type": "string",
+            "description": "The interval.",
+            "nullable": true,
+            "searchable": true
+        },
+        "resources_could": {
+            "type": "string",
+            "description": "The recources.",
+            "nullable": true,
+            "searchable": true
+        }
+    }
+}

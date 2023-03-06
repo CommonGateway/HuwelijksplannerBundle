@@ -1,3 +1,113 @@
 {
-    "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService"
+    "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService",
+  "collections": [
+    {
+      "reference": "https://huwelijksplanner.nl/collection/hp.default.collection.json",
+      "schemaPrefix": "https://huwelijksplanner.nl"
+    }
+  ],
+  "cards": {
+    "schemas": [
+      "https://huwelijksplanner.nl/schemas/hp.assent.schema.json",
+      "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json",
+      "https://huwelijksplanner.nl/schemas/hp.availability.schema.json",
+      "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
+      "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",
+      "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+    ]
+  },
+  "actions": {
+    "handlers": [
+      {
+        "reference": "https://hp.nl/action/hp.CreateAvailabilityAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateAvailabilityHandler",
+        "listens": ["huwelijksplanner.calendar.listens"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
+        "listens": ["huwelijksplanner.huwelijk.created"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.HandleSendEmailAction.action.json",
+        "actionHandler": "App\\ActionHandler\\EmailHandler",
+        "listens": ["hp.send.email"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
+        "listens": ["huwelijksplanner.huwelijk.updated"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
+        "listens": ["huwelijksplanner.huwelijk.updated"]
+      }
+    ]
+  },
+  "endpoints": {
+    "schemas": [
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json",
+        "path": "assents",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json",
+        "path": "calendars",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json",
+        "path": "availabilities",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
+        "path": "huwelijk",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",
+        "path": "medewerkers",
+        "methods": []
+      },
+
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json",
+        "path": "producten",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.accommodation.schema.json",
+        "path": "accommodations",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.message.schema.json",
+        "path": "messages",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.sendList.schema.json",
+        "path": "send_lists",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.service.schema.json",
+        "path": "services",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json",
+        "path": "subscribers",
+        "methods": []
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
+        "path": "calendar/availabilitycheck",
+        "methods": ["POST"]
+      }
+    ]
+  }
 }

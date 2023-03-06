@@ -1,0 +1,22 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "MedewerkerAvailability",
+    "properties":{
+        "ochtend": {
+            "type": "boolean",
+            "required": true
+        },
+        "middag": {
+            "type": "boolean",
+            "required": true
+        }
+    },
+    "description": "Een availability van een medewerker",
+    "required": [
+        "ochtend",
+        "middag"
+    ]
+}

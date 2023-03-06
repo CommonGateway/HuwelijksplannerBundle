@@ -26,7 +26,7 @@ class InviteWitnessHandler implements ActionHandlerInterface
     {
         return [
             '$id'        => 'https://hp.nl/action/hp.InviteWitnessAction.action.json',
-            '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
+            '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InviteWitness',
             'required'   => [],
         ];

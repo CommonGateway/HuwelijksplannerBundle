@@ -1,0 +1,13 @@
+{
+  "title": "Mollie API",
+  "$id": "https://huwelijksplanner.nl/source/hp.mollie.source.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+  "version": "0.0.1",
+  "name": "Mollie API",
+  "location": "https://api.mollie.com",
+  "auth": "apikey",
+  "apikey": "!ChangeMe!",
+  "headers": {
+    "accept": "application/json"
+  }
+}

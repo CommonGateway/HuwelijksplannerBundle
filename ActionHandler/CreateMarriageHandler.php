@@ -26,7 +26,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
     {
         return [
             '$id'        => 'https://vng.opencatalogi.nl/schemas/hp.huwelijk.schema.json',
-            '$schema'    => 'https://json-schema.org/draft/2020-12/schema',
+            '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'CreateMarriage',
             'required'   => ['huwelijksEntityId', 'assentEntityId', 'klantEntityId', 'natuurlijkPersoonEntityId'],
         ];

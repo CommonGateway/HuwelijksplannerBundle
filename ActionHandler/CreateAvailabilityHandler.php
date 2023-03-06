@@ -23,7 +23,7 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
     {
         return [
             '$id'         => 'https://huwelijksplanner.nl/schemas/hp.createAvailability.schema.json',
-            '$schema'     => 'https://json-schema.org/draft/2020-12/schema',
+            '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
             'required'    => [],

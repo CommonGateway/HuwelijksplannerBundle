@@ -1,0 +1,42 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.subscriber.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Subscriber",
+    "properties":{
+        "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "email of the subscriber",
+            "maxLength": 255
+        },
+        "resource": {
+            "type": "string",
+            "nullable": true,
+            "description": "resource of this subscriber, for example: wac/group, uc/user or cc/person",
+            "maxLength": 255
+        },
+        "dateAcceptedOrganisation": {
+            "type": "datetime",
+            "nullable": true,
+            "description": "The moment the invite was accepted by the organization"
+        },
+        "dateAcceptedUser": {
+            "type": "datetime",
+            "nullable": true,
+            "description": "The moment the invite was accepted by the user"
+        },
+        "sendLists": {
+            "type": "array",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.sendList.schema.json"
+            },
+            "required":true
+        }
+    },
+    "description": "SendList is a way for Applications to send messages through email or phone.",
+    "required": [
+        "sendLists"
+    ]
+}

@@ -1,0 +1,103 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "Schedule",
+    "type": "object",
+    "description": "A schedule defines a repeating time period used to describe a regularly occurring Event. At a minimum a schedule will specify repeatFrequency which describes the interval between occurences of the event. Additional information can be provided to specify the schedule more precisely. This includes identifying the day(s) of the week or month when the recurring event wll take place, in addition to its start and end time. Schedules may also have start and end dates to indicate when they are active, e.g. to define a limited calendar of events.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "The name of this Schedule.",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "An short description of this Schedule.",
+            "nullable": true
+        },
+        "daysPerWeek": {
+            "type": "array",
+            "description": "Defines the day(s) a week this recurrence occurs where monday is 1 and sunday is 7.",
+            "nullable": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "daysPerMonth": {
+            "type": "array",
+            "description": "Defines the day(s) a month this recurrence occurs.",
+            "nullable": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "weeksPerYear": {
+            "type": "array",
+            "description": "Defines the week(s) a year this recurrence occurs.",
+            "nullable": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "monthsPerYear": {
+            "type": "array",
+            "description": "Defines the month(s) a year this recurrence occurs.",
+            "nullable": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "exceptDates": {
+            "type": "array",
+            "description": "Defines the day(s) of the month on which a recurring Event takes place. Specified as an Integer between 1-31.",
+            "nullable": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "repeatTill": {
+            "type": "datetime",
+            "description": "The moment this recurrence can be recurred to."
+        },
+        "repeatCount": {
+            "type": "integer",
+            "description": "Defines the number of times a recurring Event will take place.",
+            "nullable": true
+        },
+        "repeatFrequency": {
+            "type": "string",
+            "description": "Defines the frequency at which Event wll occur according to a schedule Schedule. The intervals between events should be defined as a [Duration] (https://en.wikipedia.org/wiki/ISO_8601#Durations) of time.",
+            "nullable": true
+        },
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource.",
+            "nullable": true
+        },
+        "events": {
+            "type": "array",
+            "description": "The events that belong to or are caused by this Schedule.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
+            }
+        },
+        "freebusies": {
+            "type": "array",
+            "description": "The freebusies that belong to or are caused by this Schedule.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
+            }
+        },
+        "todos": {
+            "type": "array",
+            "description": "Todos that belong to this Calendar.",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "name"
+    ]
+}

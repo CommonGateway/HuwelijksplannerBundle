@@ -1,0 +1,37 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailabilities.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "MedewerkerAvailabilities",
+    "properties":{
+        "maandag": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "required": true
+        },
+        "dinsdag": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "required": true
+        },
+        "woensdag": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "required": true
+        },
+        "donderdag": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "required": true
+        },
+        "vrijdag": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
+            "required": true
+        }
+    },
+    "description": "Dit ORC medewerker object vang kiss specifieke wensen af. Let op het is verstandig de medewerker op te halen met ?extend[]=contact&extend[]=calendar zodat de contact en agenda gegevens meteen mee komen. ",
+    "required": [
+        "maandag",
+        "dinsdag",
+        "woensdag",
+        "donderdag",
+        "vrijdag"
+    ]
+}

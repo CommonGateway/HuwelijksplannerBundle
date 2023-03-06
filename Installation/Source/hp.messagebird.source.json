@@ -1,0 +1,13 @@
+{
+  "title": "MessageBird API",
+  "$id": "https://huwelijksplanner.nl/source/hp.messagebird.source.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+  "version": "0.0.1",
+  "name": "MessageBird API",
+  "location": "https://rest.messagebird.com",
+  "auth": "apikey",
+  "apikey": "AccessKey !ChangeMe!",
+  "headers": {
+    "accept": "application/json"
+  }
+}

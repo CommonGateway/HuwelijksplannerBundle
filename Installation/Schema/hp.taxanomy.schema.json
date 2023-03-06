@@ -1,0 +1,27 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.taxanomy.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Taxanomy",
+    "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true,
+            "description": "The unique identiefier of this object"
+        },
+        "name": {
+            "type": "string",
+            "description":"The nema of this taxanomy"
+        },
+        "description": {
+            "type": "string",
+            "description": "The textual description of this taxonomy"
+        },
+        "parent": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.taxanomy.schema.json"
+        }
+    },
+    "description": "Lously bassed on how taxanomies work in wordpress, txoonomies represent a clustering of data. Be it posts, products or otherwise. The taxonomy presents a hyrichal way of ordering this data into a structure.\nTaxonomies them selfs do not link to other objects. Instead objects themself should implement a taxonomie interface in the form of a taxonomy property that contains an array of uri's. And an query parameter to serach for them. e.g. "
+}
