@@ -120,37 +120,46 @@ class InviteWitnessService
      */
     private function inviteWitness(array $huwelijk, ?string $id): ?array
     {
-        $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
-
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
             $this->logger->error('Could not find huwelijk with id '.$id);
 
-            return null;
+            $this->data['response'] = 'Could not find huwelijk with id '.$id;
 
-            throw new GatewayException('Could not find huwelijk with id '.$id);
+            return $this->data;
         }
 
-        if (isset($huwelijk['getuigen']) && count($huwelijk['getuigen']) <= 4) {
-            // @TODO overwrite the witness array in the huwelijkObject
-            // @TODO check if witness is aldready set
-            $witnessAssents = [];
-            foreach ($huwelijk['getuigen'] as $getuige) {
-                $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
-                $person = new ObjectEntity($personSchema);
-                $person->hydrate($getuige['person']);
-                $this->entityManager->persist($person);
+        if (isset($huwelijk['getuigen']) === true
+            && count($huwelijk['getuigen']) <= 4
+        ) {
+            $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
 
-                // creates an assent and add the person to the partners of this merriage
-                $witnessAssents[] = $this->handleAssentService->handleAssent($person, 'witness', $this->data);
+            if (count($huwelijkObject->getValue('getuigen')) === 4) {
+                return $huwelijkObject->toArray();
             }
 
-            $huwelijkObject->setValue('getuigen', $witnessAssents);
+            if (count($huwelijkObject->getValue('getuigen')) === 0) {
+                // @TODO overwrite the witness array in the huwelijkObject
+                // @TODO check if witness is aldready set
+                $witnessAssents = [];
+                foreach ($huwelijk['getuigen'] as $getuige) {
+                    $person = new ObjectEntity($personSchema);
+                    $person->hydrate($getuige['contact']);
+                    $this->entityManager->persist($person);
+
+                    // creates an assent and add the person to the partners of this merriage
+                    $witnessAssents[] = $this->handleAssentService->handleAssent($person, 'witness', $this->data);
+                }
+
+                $huwelijkObject->setValue('getuigen', $witnessAssents);
+
+                $this->entityManager->persist($huwelijkObject);
+                $this->entityManager->flush();
+            }
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
+            return $huwelijkObject->toArray();
         }
 
         return $huwelijkObject->toArray();
@@ -172,21 +181,25 @@ class InviteWitnessService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        if (!isset($this->data['body'])) {
+        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
+            return $this->data;
+        }
+
+        if (!isset($this->data['parameters']['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
             $this->logger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PUT') {
-            isset($this->io) && $this->io->error('Not a PUT request');
-            $this->logger->error('Not a PUT request');
+        if ($this->data['parameters']['method'] !== 'PATCH') {
+            isset($this->io) && $this->io->error('Not a PATCH request');
+            $this->logger->error('Not a PATCH request');
 
             return $this->data;
         }
 
-        foreach ($this->data['path'] as $path) {
+        foreach ($this->data['parameters']['path'] as $path) {
             if (Uuid::isValid($path)) {
                 $id = $path;
             }
@@ -196,13 +209,9 @@ class InviteWitnessService
             return $this->data;
         }
 
-        $huwelijk = $this->inviteWitness($this->data['body'], $id);
+        $huwelijk = $this->inviteWitness($this->data['parameters']['body'], $id);
 
-        $this->data['response'] = new Response(
-            json_encode($huwelijk),
-            Response::HTTP_OK,
-            ['content-type' => 'json']
-        );
+        $this->data['response'] = $huwelijk;
 
         return $this->data;
     }//end inviteWitnessHandler()

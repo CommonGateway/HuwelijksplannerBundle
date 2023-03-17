@@ -22,11 +22,12 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'         => 'https://huwelijksplanner.nl/schemas/hp.createAvailability.schema.json',
+            '$id'         => 'https://hp.nl/ActionHandler/hp.CreateAvailabilityHandler.ActionHandler.json',
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
-            'required'    => [],
+            'required'   => [],
+            'properties' => []
         ];
     }
 

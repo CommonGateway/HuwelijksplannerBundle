@@ -255,38 +255,32 @@ class CreateMarriageService
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
      */
-    private function createMarriage(array $huwelijk): ?array
+    private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
         $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
         $brpSchema = $this->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json');
 
-        $huwelijkObject = new ObjectEntity($huwelijkSchema);
+        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
         // @TODO validate moment and location
-        if ($this->validateType($huwelijk) && $this->validateCeremonie($huwelijk)) {
-            $huwelijkArray = [
-                'locatie'   => key_exists('locatie', $huwelijk) ? $huwelijk['locatie'] : null,
-                'type'      => $huwelijk['type'],
-                'moment'    => $huwelijk['moment'],
-                'ceremonie' => $huwelijk['ceremonie'],
-            ];
-
-            $huwelijkObject->hydrate($huwelijkArray);
-            $this->entityManager->persist($huwelijkObject);
-
+        if ($this->validateType($huwelijk) === true
+            && $this->validateCeremonie($huwelijk) === true
+        ) {
+            
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
+            $brpPerson = null;
             if (count($brpPersons) === 1) {
                 $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
             }
 
             // create person from logged in user and if we have a brp person we set those values
             // if not we set the values from the security object
-            $person = $this->createPerson($huwelijk, $brpPerson ?? null);
+            $person = $this->createPerson($huwelijk, $brpPerson);
 
             // creates an assent and add the person to the partners of this merriage
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
-            $huwelijkObject->hydrate($requesterAssent);
+            $requesterAssent[] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
+            $huwelijkObject->setValue('partners', $requesterAssent);
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
@@ -315,27 +309,28 @@ class CreateMarriageService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        if (!isset($this->data['body'])) {
+        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
+            return $this->data;
+        }
+
+        if (!isset($this->data['parameters']['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
             $this->logger->error('No data passed');
 
-            return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
+
+            return $this->data;
         }
 
-        if ($this->data['method'] !== 'POST') {
+        if ($this->data['parameters']['method'] !== 'POST') {
             isset($this->io) && $this->io->error('Not a POST request');
             $this->logger->error('Not a POST request');
 
-            return ['response' => ['message' => 'Not a POST request'], 'httpCode' => 400];
+            return $this->data;
         }
 
-        $huwelijk = $this->createMarriage($this->data['body']);
+        $huwelijk = $this->createMarriage($this->data['response']['id'], $this->data['parameters']['body']);
 
-        $this->data['response'] = new Response(
-            json_encode($huwelijk),
-            Response::HTTP_OK,
-            ['content-type' => 'json']
-        );
+        $this->data['response'] = $huwelijk;
 
         return $this->data;
     }//end createMarriageHandler()

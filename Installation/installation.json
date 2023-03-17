@@ -26,22 +26,27 @@
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
-        "listens": ["huwelijksplanner.huwelijk.created"]
-      },
-      {
-        "reference": "https://hp.nl/action/hp.HandleSendEmailAction.action.json",
-        "actionHandler": "App\\ActionHandler\\EmailHandler",
-        "listens": ["hp.send.email"]
+        "listens": ["commongateway.object.create"]
       },
       {
         "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
-        "listens": ["huwelijksplanner.huwelijk.updated"]
+        "listens": ["commongateway.object.update"]
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
-        "listens": ["huwelijksplanner.huwelijk.updated"]
+        "listens": ["commongateway.object.update"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateChecklistHandler",
+        "listens": ["huwelijksplanner.default.listens"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
+        "listens": ["huwelijksplanner.create.payment"]
       }
     ]
   },
@@ -65,7 +70,15 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
         "path": "huwelijk",
-        "methods": []
+        "methods": [],
+        "subSchemaEndpoints": [
+          {
+            "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
+            "path": "payment",
+            "methods": ['GET'],
+            "throws": ["huwelijksplanner.create.payment"]
+          }
+        ]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",

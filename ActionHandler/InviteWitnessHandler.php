@@ -25,10 +25,11 @@ class InviteWitnessHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/action/hp.InviteWitnessAction.action.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.InviteWitnessHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InviteWitness',
             'required'   => [],
+            'properties' => []
         ];
     }
 
@@ -42,6 +43,8 @@ class InviteWitnessHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
+        var_dump('inviteWitnessHandler');
+
         return $this->inviteWitnessService->inviteWitnessHandler($data, $configuration, $this->security);
     }
 }

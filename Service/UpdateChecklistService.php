@@ -305,7 +305,7 @@ class UpdateChecklistService
      */
     public function checkHuwelijk(ObjectEntity $huwelijk): ObjectEntity
     {
-        if ($checklistObject = $huwelijk->getValue('checklist') === false) {
+        if (($checklistObject = $huwelijk->getValue('checklist')) === false) {
             $checklistSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.checklist.schema.json');
             $checklistObject = new ObjectEntity($checklistSchema);
         }

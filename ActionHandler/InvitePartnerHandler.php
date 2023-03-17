@@ -25,10 +25,11 @@ class InvitePartnerHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/action/hp.InvitePartnerAction.action.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.InvitePartnerHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InvitePartner',
             'required'   => [],
+            'properties' => []
         ];
     }
 
@@ -42,6 +43,8 @@ class InvitePartnerHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
+        var_dump('invitePartnerHandler');
+
         return $this->invitePartnerService->invitePartnerHandler($data, $configuration, $this->security);
     }
 }

@@ -3,15 +3,16 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
+use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 use CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService;
 
-class UpdateChecklistHandler implements ActionHandlerInterface
+class CreatePaymentHandler implements ActionHandlerInterface
 {
-    private UpdateChecklistService $updateChecklistService;
+    private PaymentService $paymentService;
 
-    public function __construct(UpdateChecklistService $updateChecklistService)
+    public function __construct(PaymentService $paymentService)
     {
-        $this->updateChecklistService = $updateChecklistService;
+        $this->paymentService = $paymentService;
     }
 
     /**
@@ -22,16 +23,16 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/ActionHandler/hp.UpdateChecklistHandler.ActionHandler.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.CreatePaymentHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'      => 'UpdateChecklist',
+            'title'      => 'CreatePayment',
             'required'   => [],
             'properties' => []
         ];
     }
 
     /**
-     * This function runs the updateCheckList function.
+     * This function runs the createPaymentHandler function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -40,6 +41,6 @@ class UpdateChecklistHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->updateChecklistService->updateChecklistHandler($data, $configuration);
+        return $this->paymentService->createPaymentHandler($data, $configuration);
     }
 }

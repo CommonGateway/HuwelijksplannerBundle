@@ -209,31 +209,44 @@ class HandleAssentService
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
     {
-        $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
-
         // @TODO generate secret
 
-        $assent = new ObjectEntity($assentSchema);
-        $assent->hydrate([
-            'name'        => $person->getValue('voornaam'),
-            'description' => null,
-            'request'     => null,
-            'forwardUrl'  => null,
-            'property'    => null,
-            'process'     => null,
-            'contact'     => $person,
-            'status'      => 'requested',
-            'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
-            'revocable'   => true,
-        ]);
-        $this->entityManager->persist($assent);
-        $this->entityManager->flush();
+        // only create a assent for the requester
+        if ($type === 'requester' || $type === 'witness') {
+            $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
 
-        $phoneNumbers = $person->getValue('telefoonnummers');
-        $emailAddresses = $person->getValue('emails');
+            $assent = new ObjectEntity($assentSchema);
+            $assent->hydrate([
+                'name'        => $person->getValue('voornaam'),
+                'description' => null,
+                'request'     => null,
+                'forwardUrl'  => null,
+                'property'    => null,
+                'process'     => null,
+                'contact'     => $person,
+                'status'      => 'requested',
+                'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
+                'revocable'   => true,
+            ]);
+            $this->entityManager->persist($assent);
+            $this->entityManager->flush();
+        }
 
-        if ($emailAddresses === [] && $phoneNumbers === []) {
-            throw new GatewayException('Email or phone number must be present', null, null, ['data' => 'telefoonnummers and/or emails', 'path' => 'Request body', 'responseType' => Response::HTTP_BAD_REQUEST]);
+        if (($phoneNumbers = $person->getValue('telefoonnummers')) === false) {
+            $phoneNumbers = null;
+        }
+
+        if (($emailAddresses = $person->getValue('emails')) === false) {
+            $emailAddresses = null;
+        }
+
+        if ($emailAddresses === null && $phoneNumbers === null) {
+
+            if ($type === 'requester' || $type === 'witness') {
+                return $assent;
+            }
+
+            return $person;
         }
 
         $this->logger->debug('hier mail of sms versturen en een secret genereren');
@@ -242,6 +255,10 @@ class HandleAssentService
 //        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
         $this->sendSms($phoneNumbers, $type);
 
-        return $assent;
+        if ($type === 'requester' || $type === 'witness') {
+            return $assent;
+        }
+
+        return $person;
     }//end handleAssent()
 }

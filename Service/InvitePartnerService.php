@@ -123,33 +123,41 @@ class InvitePartnerService
             isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
             $this->logger->error('Could not find huwelijk with id '.$id);
 
-            $this->data['response'] = new Response(
-                json_encode('Could not find huwelijk with id '.$id),
-                Response::HTTP_BAD_REQUEST,
-                ['content-type' => 'json']
-            );
+            $this->data['response'] = 'Could not find huwelijk with id '.$id;
 
             return $this->data;
         }
-
+        
         // @TODO check if the requester has already a partner
         // if so throw error else continue
 
-        if (isset($huwelijk['partners']) && count($huwelijk['partners']) === 1) {
-            if (count($huwelijkObject->getValue('partners')) > 1) {
+        if (isset($huwelijk['partners']) === true
+            && count($huwelijk['partners']) === 1
+        ) {
+            if (count($huwelijkObject->getValue('partners')) < 2) {
                 // @TODO update partner?
+
                 return $huwelijkObject->toArray();
             }
-
             $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
-            $person = new ObjectEntity($personSchema);
-            $person->hydrate($huwelijk['partners'][0]['person']);
-            $this->entityManager->persist($person);
-            $this->entityManager->flush();
 
-            // creates an assent and add the person to the partners of this merriage
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
-            $huwelijkObject->hydrate($requesterAssent);
+            foreach ($huwelijkObject->getValue('partners') as $partner) {
+                if (empty($partner->getValue('requester')) === false) {
+                    continue;
+                }
+
+                if (empty($person = $partner->getValue('contact')) === true) {
+                    $person = new ObjectEntity($personSchema);
+                }
+
+                $person->hydrate($huwelijk['partners'][0]['contact']);
+                $this->entityManager->persist($person);
+
+                $partner->setValue('contact', $person);
+                $this->entityManager->persist($partner);
+
+                $this->entityManager->flush();
+            }
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
@@ -176,21 +184,25 @@ class InvitePartnerService
         $this->data = $data;
         $this->configuration = $configuration;
 
-        if (!isset($this->data['body'])) {
+        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
+            return $this->data;
+        }
+
+        if (!isset($this->data['parameters']['body'])) {
             isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
             $this->logger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
         }
 
-        if ($this->data['method'] !== 'PUT') {
-            isset($this->io) && $this->io->error('Not a PUT request');
-            $this->logger->error('Not a PUT request');
+        if ($this->data['parameters']['method'] !== 'PATCH') {
+            isset($this->io) && $this->io->error('Not a PATCH request');
+            $this->logger->error('Not a PATCH request');
 
             return $this->data;
         }
 
-        foreach ($this->data['path'] as $path) {
+        foreach ($this->data['parameters']['path'] as $path) {
             if (Uuid::isValid($path)) {
                 $id = $path;
             }
@@ -200,13 +212,9 @@ class InvitePartnerService
             return $this->data;
         }
 
-        $huwelijk = $this->invitePartner($this->data['body'], $id);
+        $huwelijk = $this->invitePartner($this->data['parameters']['body'], $id);
 
-        $this->data['response'] = new Response(
-            json_encode($huwelijk),
-            Response::HTTP_OK,
-            ['content-type' => 'json']
-        );
+        $this->data['response'] = $huwelijk;
 
         return $this->data;
     }//end invitePartnerHandler()
