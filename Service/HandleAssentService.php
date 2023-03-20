@@ -7,6 +7,7 @@ use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
 use App\Exception\GatewayException;
+use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -24,6 +25,11 @@ class HandleAssentService
     private EntityManagerInterface $entityManager;
 
     /**
+     * @var GatewayResourceService
+     */
+    private GatewayResourceService $gatewayResourceService;
+
+    /**
      * @var EventDispatcherInterface
      */
     private EventDispatcherInterface $eventDispatcher;
@@ -34,14 +40,9 @@ class HandleAssentService
     private MessageBirdService $messageBirdService;
 
     /**
-     * @var SymfonyStyle
-     */
-    private SymfonyStyle $symfonyStyle;
-
-    /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private LoggerInterface $pluginLogger;
 
     /**
      * @var array
@@ -55,86 +56,40 @@ class HandleAssentService
 
     /**
      * @param EntityManagerInterface   $entityManager      The Entity Manager
+     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
      * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
      * @param MessageBirdService       $messageBirdService The MessageBird Service
-     * @param LoggerInterface          $logger             The Logger Interface
+     * @param LoggerInterface          $pluginLogger             The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
+        GatewayResourceService $gatewayResourceService,
         EventDispatcherInterface $eventDispatcher,
         MessageBirdService $messageBirdService,
-        LoggerInterface $logger
+        LoggerInterface $pluginLogger
     ) {
         $this->entityManager = $entityManager;
+        $this->gatewayResourceService = $gatewayResourceService;
         $this->eventDispatcher = $eventDispatcher;
         $this->messageBirdService = $messageBirdService;
-        $this->logger = $logger;
+        $this->pluginLogger = $pluginLogger;
         $this->data = [];
         $this->configuration = [];
-    }
-
-    /**
-     * Set symfony style in order to output to the console.
-     *
-     * @param SymfonyStyle $symfonyStyle
-     *
-     * @return self
-     */
-    public function setStyle(SymfonyStyle $symfonyStyle): self
-    {
-        $this->symfonyStyle = $symfonyStyle;
-
-        return $this;
-    }//end setStyle()
-
-    /**
-     * Get a schema by reference.
-     *
-     * @param string $reference The reference to look for
-     *
-     * @return Schema|null
-     */
-    public function getSchema(string $reference): ?Schema
-    {
-        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
-        if ($schema === null) {
-            $this->logger->error("No schema found for $reference");
-            isset($this->io) && $this->io->error("No schema found for $reference");
-        }//end if
-
-        return $schema;
-    }//end getSchema()
-
-    /**
-     * Get an action by reference.
-     *
-     * @param string $reference The reference to look for
-     *
-     * @return Action|null
-     */
-    public function getAction(string $reference): ?Action
-    {
-        $action = $this->entityManager->getRepository('App:Action')->findOneBy(['reference' => $reference]);
-        if ($action === null) {
-            $this->logger->error("No action found for $reference");
-            isset($this->io) && $this->io->error("No action found for $reference");
-        }//end if
-
-        return $action;
-    }//end getAction()
+    }//end __construct()
 
     /**
      * Sends an emails.
      *
-     * @param object $emailAddresses
-     * @param string $type
+     * @param object $emailAddresses The emailaddresses.
+     * @param string $type The type of the assent.
+     * @param string $data The data array of the request.
      *
      * @return void
      */
     public function sendEmail(object $emailAddresses, string $type, array $data): void
     {
-        // get action
-        $action = $this->getAction('https://hp.nl/action/hp.HandleSendEmailAction.action.json');
+        // Get action.
+        $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.HandleSendEmailAction.action.json', 'common-gateway/huwelijksplanner-bundle');
 
         $config = $action->getConfiguration();
 
@@ -151,7 +106,7 @@ class HandleAssentService
             default:
                 $config['subject'] = 'Invite Assent request';
                 break;
-        }
+        }//end switch
 
         // ? variables and data
         foreach ($emailAddresses as $emailAddress) {
@@ -165,14 +120,14 @@ class HandleAssentService
             // throw action event
             $event = new ActionEvent('commongateway.handler.pre', $data, 'hp.send.email');
             $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
-        }
+        }//end foreach
     }//end sendEmail()
 
     /**
      * Sends a sms.
      *
-     * @param object $phoneNumbers
-     * @param string $type
+     * @param object $phoneNumbers The phonenumbers.
+     * @param string $type The type of the assent.
      *
      * @return void
      */
@@ -191,74 +146,61 @@ class HandleAssentService
             default:
                 $message = 'Assent request';
                 break;
-        }
+        }//end switch
 
         foreach ($phoneNumbers as $phoneNumber) {
             $this->messageBirdService->sendMessage($phoneNumber, $message);
-        }
+        }//end foreach
     }//end sendSms()
 
     /**
      * Handles the assent for the given person and sends an email or sms.
      *
-     * @param ObjectEntity|null $person
-     * @param string            $type
-     * @param array             $data
+     * @param ObjectEntity|null $person The person to make an assent for.
+     * @param string            $type The type of assent.
+     * @param array             $data The data of the request.
      *
      * @return ObjectEntity|null
      */
     public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
     {
         // @TODO generate secret
+        $assentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        // only create a assent for the requester
-        if ($type === 'requester' || $type === 'witness') {
-            $assentSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json');
-
-            $assent = new ObjectEntity($assentSchema);
-            $assent->hydrate([
-                'name'        => $person->getValue('voornaam'),
-                'description' => null,
-                'request'     => null,
-                'forwardUrl'  => null,
-                'property'    => null,
-                'process'     => null,
-                'contact'     => $person,
-                'status'      => 'requested',
-                'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
-                'revocable'   => true,
-            ]);
-            $this->entityManager->persist($assent);
-            $this->entityManager->flush();
-        }
-
+        $assent = new ObjectEntity($assentSchema);
+        $assent->hydrate([
+            'name'        => $person->getValue('voornaam'),
+            'description' => null,
+            'request'     => null,
+            'forwardUrl'  => null,
+            'property'    => null,
+            'process'     => null,
+            'contact'     => $person,
+            'status'      => 'requested',
+            'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
+            'revocable'   => true,
+        ]);
+        $this->entityManager->persist($assent);
+        $this->entityManager->flush();
+        
         if (($phoneNumbers = $person->getValue('telefoonnummers')) === false) {
             $phoneNumbers = null;
-        }
+        }//end if
 
         if (($emailAddresses = $person->getValue('emails')) === false) {
             $emailAddresses = null;
-        }
+        }//end if
 
         if ($emailAddresses === null && $phoneNumbers === null) {
 
-            if ($type === 'requester' || $type === 'witness') {
-                return $assent;
-            }
+            return $assent;
+        }//end if
 
-            return $person;
-        }
-
-        $this->logger->debug('hier mail of sms versturen en een secret genereren');
-        isset($this->io) && $this->io->info('hier mail of sms versturen en een secret genereren');
+        $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
 //        $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
         $this->sendSms($phoneNumbers, $type);
 
-        if ($type === 'requester' || $type === 'witness') {
-            return $assent;
-        }
-
-        return $person;
+        return $assent;
     }//end handleAssent()
 }
