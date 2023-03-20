@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class HandleAssentCommand extends Command
 {
+
     /**
      * @var string
      */
@@ -21,14 +22,15 @@ class HandleAssentCommand extends Command
     /**
      * @var HandleAssentService
      */
-    private HandleAssentService $handleAssentService;
+    private HandleAssentService $service;
+
 
     /**
-     * @param HandleAssentService $handleAssentService
+     * @param HandleAssentService $service
      */
-    public function __construct(HandleAssentService $handleAssentService)
+    public function __construct(HandleAssentService $service)
     {
-        $this->handleAssentService = $handleAssentService;
+        $this->service = $service;
         parent::__construct();
 
     }//end __construct()
@@ -50,15 +52,16 @@ class HandleAssentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $this->handleAssentService->setStyle($io);
+        $style = new SymfonyStyle($input, $output);
+        $this->service->setStyle($style);
 
-        if (!$this->handleAssentService->handleAssentHandler([], [])) {
+        if (!$this->service->handleAssentHandler([], [])) {
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
 
     }//end execute()
+
 
 }//end class

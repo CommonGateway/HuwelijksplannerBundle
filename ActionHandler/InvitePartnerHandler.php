@@ -8,23 +8,25 @@ use Symfony\Component\Security\Core\Security;
 
 class InvitePartnerHandler implements ActionHandlerInterface
 {
+
     /**
      * @var InvitePartnerService
      */
-    private InvitePartnerService $invitePartnerService;
+    private InvitePartnerService $service;
 
     /**
      * @var Security
      */
     private Security $security;
 
+
     /**
-     * @param InvitePartnerService $invitePartnerService The invite partner service
+     * @param InvitePartnerService $service The invite partner service
      * @param Security $security THe security
      */
-    public function __construct(InvitePartnerService $invitePartnerService, Security $security)
+    public function __construct(InvitePartnerService $service, Security $security)
     {
-        $this->invitePartnerService = $invitePartnerService;
+        $this->service = $service;
         $this->security = $security;
 
     }//end __construct()
@@ -60,7 +62,7 @@ class InvitePartnerHandler implements ActionHandlerInterface
     {
         var_dump('invitePartnerHandler');
 
-        return $this->invitePartnerService->invitePartnerHandler($data, $configuration, $this->security);
+        return $this->service->invitePartnerHandler($data, $configuration, $this->security);
 
     }//end run()
 

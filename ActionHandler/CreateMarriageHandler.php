@@ -11,20 +11,21 @@ class CreateMarriageHandler implements ActionHandlerInterface
     /**
      * @var CreateMarriageService
      */
-    private CreateMarriageService $createMarriageService;
+    private CreateMarriageService $service;
 
     /**
      * @var Security
      */
     private Security $security;
 
+
     /**
-     * @param CreateMarriageService $createMarriageService The CreateMarriageService
+     * @param CreateMarriageService $service The CreateMarriageService
      * @param Security $security The Security
      */
-    public function __construct(CreateMarriageService $createMarriageService, Security $security)
+    public function __construct(CreateMarriageService $service, Security $security)
     {
-        $this->createMarriageService = $createMarriageService;
+        $this->service = $service;
         $this->security = $security;
 
     }//end __construct()
@@ -59,8 +60,9 @@ class CreateMarriageHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration)
     {
         var_dump('createMarriageHandler');
-        return $this->createMarriageService->createMarriageHandler($data, $configuration, $this->security);
+        return $this->service->createMarriageHandler($data, $configuration, $this->security);
 
     }//end run()
+
 
 }//end class

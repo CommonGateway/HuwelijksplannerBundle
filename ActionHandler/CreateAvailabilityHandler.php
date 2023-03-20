@@ -7,17 +7,19 @@ use CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService;
 
 class CreateAvailabilityHandler implements ActionHandlerInterface
 {
+
     /**
      * @var CreateAvailabilityService
      */
-    private CreateAvailabilityService $createAvailabilityService;
+    private CreateAvailabilityService $service;
+
 
     /**
-     * @param CreateAvailabilityService $createAvailabilityService The CreateAvailabilityService
+     * @param CreateAvailabilityService $service The CreateAvailabilityService
      */
-    public function __construct(CreateAvailabilityService $createAvailabilityService)
+    public function __construct(CreateAvailabilityService $service)
     {
-        $this->createAvailabilityService = $createAvailabilityService;
+        $this->service = $service;
 
     }//end __construct()
 
@@ -51,8 +53,9 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->createAvailabilityService->createAvailabilityHandler($data, $configuration);
+        return $this->service->createAvailabilityHandler($data, $configuration);
 
     }//end run()
+
 
 }//end class

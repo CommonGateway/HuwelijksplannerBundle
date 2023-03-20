@@ -8,17 +8,19 @@ use CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService;
 
 class CreatePaymentHandler implements ActionHandlerInterface
 {
+
     /**
      * @var PaymentService
      */
-    private PaymentService $paymentService;
+    private PaymentService $service;
+
 
     /**
-     * @param PaymentService $paymentService The payment service
+     * @param PaymentService $service The payment service
      */
-    public function __construct(PaymentService $paymentService)
+    public function __construct(PaymentService $service)
     {
-        $this->paymentService = $paymentService;
+        $this->service = $service;
 
     }//end __construct()
 
@@ -51,7 +53,7 @@ class CreatePaymentHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->paymentService->createPaymentHandler($data, $configuration);
+        return $this->service->createPaymentHandler($data, $configuration);
 
     }//end run()
 

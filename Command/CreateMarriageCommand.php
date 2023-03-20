@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateMarriageCommand extends Command
 {
+
     /**
      * @var string
      */
@@ -21,14 +22,15 @@ class CreateMarriageCommand extends Command
     /**
      * @var CreateMarriageService
      */
-    private CreateMarriageService $createMarriageService;
+    private CreateMarriageService $service;
+
 
     /**
-     * @param CreateMarriageService $createMarriageService
+     * @param CreateMarriageService $service
      */
-    public function __construct(CreateMarriageService $createMarriageService)
+    public function __construct(CreateMarriageService $service)
     {
-        $this->createMarriageService = $createMarriageService;
+        $this->service = $service;
         parent::__construct();
 
     }//end __construct()
@@ -53,15 +55,16 @@ class CreateMarriageCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $this->createMarriageService->setStyle($io);
+        $style = new SymfonyStyle($input, $output);
+        $this->service->setStyle($style);
 
-        if (!$this->createMarriageService->createMarriageHandler([], [])) {
+        if (!$this->service->createMarriageHandler([], [])) {
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
 
     }//end execute()
+
 
 }//end class

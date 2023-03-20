@@ -10,14 +10,15 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     /**
      * @var UpdateChecklistService
      */
-    private UpdateChecklistService $updateChecklistService;
+    private UpdateChecklistService $service;
+
 
     /**
-     * @param UpdateChecklistService $updateChecklistService The update checklist Service
+     * @param UpdateChecklistService $service The update checklist Service
      */
-    public function __construct(UpdateChecklistService $updateChecklistService)
+    public function __construct(UpdateChecklistService $service)
     {
-        $this->updateChecklistService = $updateChecklistService;
+        $this->service = $service;
 
     }//end __construct()
 
@@ -49,9 +50,8 @@ class UpdateChecklistHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration): array
     {
-        return $this->updateChecklistService->updateChecklistHandler($data, $configuration);
+        return $this->service->updateChecklistHandler($data, $configuration);
 
     }//end run()
 
-    
 }//end class

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateAvailabilityCommand extends Command
 {
+
     /**
      * @var string
      */
@@ -21,14 +22,15 @@ class CreateAvailabilityCommand extends Command
     /**
      * @var CreateAvailabilityService
      */
-    private CreateAvailabilityService $createAvailabilityService;
+    private CreateAvailabilityService $service;
+
 
     /**
-     * @param CreateAvailabilityService $createAvailabilityService
+     * @param CreateAvailabilityService $service
      */
-    public function __construct(CreateAvailabilityService $createAvailabilityService)
+    public function __construct(CreateAvailabilityService $service)
     {
-        $this->createAvailabilityService = $createAvailabilityService;
+        $this->service = $service;
         parent::__construct();
 
     }//end __construct()
@@ -53,10 +55,10 @@ class CreateAvailabilityCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $this->createAvailabilityService->setStyle($io);
+        $style = new SymfonyStyle($input, $output);
+        $this->service->setStyle($style);
 
-        if (!$this->createAvailabilityService->createAvailabilityHandler([], [])) {
+        if (!$this->service->createAvailabilityHandler([], [])) {
             return Command::FAILURE;
         }
 

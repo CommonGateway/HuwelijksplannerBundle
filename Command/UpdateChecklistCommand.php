@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class UpdateChecklistCommand extends Command
 {
+
     /**
      * @var string
      */
@@ -21,14 +22,15 @@ class UpdateChecklistCommand extends Command
     /**
      * @var UpdateChecklistService
      */
-    private UpdateChecklistService $updateChecklistService;
+    private UpdateChecklistService $service;
+
 
     /**
-     * @param UpdateChecklistService $updateChecklistService
+     * @param UpdateChecklistService $service
      */
-    public function __construct(UpdateChecklistService $updateChecklistService)
+    public function __construct(UpdateChecklistService $service)
     {
-        $this->updateChecklistService = $updateChecklistService;
+        $this->service = $service;
         parent::__construct();
 
     }//end __construct()
@@ -53,10 +55,10 @@ class UpdateChecklistCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $this->updateChecklistService->setStyle($io);
+        $style = new SymfonyStyle($input, $output);
+        $this->service->setStyle($style);
 
-        if (!$this->updateChecklistService->updateChecklistHandler([], [])) {
+        if (!$this->service->updateChecklistHandler([], [])) {
             return Command::FAILURE;
         }
 

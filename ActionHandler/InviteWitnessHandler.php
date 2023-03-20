@@ -8,23 +8,25 @@ use Symfony\Component\Security\Core\Security;
 
 class InviteWitnessHandler implements ActionHandlerInterface
 {
+
     /**
      * @var InviteWitnessService
      */
-    private InviteWitnessService $inviteWitnessService;
+    private InviteWitnessService $service;
 
     /**
      * @var Security
      */
     private Security $security;
 
+
     /**
-     * @param InviteWitnessService $inviteWitnessService The invite witnes service
+     * @param InviteWitnessService $service The invite witnes service
      * @param Security $security The security
      */
-    public function __construct(InviteWitnessService $inviteWitnessService, Security $security)
+    public function __construct(InviteWitnessService $service, Security $security)
     {
-        $this->inviteWitnessService = $inviteWitnessService;
+        $this->service = $service;
         $this->security = $security;
 
     }//end __construct()
@@ -60,7 +62,7 @@ class InviteWitnessHandler implements ActionHandlerInterface
     {
         var_dump('inviteWitnessHandler');
 
-        return $this->inviteWitnessService->inviteWitnessHandler($data, $configuration, $this->security);
+        return $this->service->inviteWitnessHandler($data, $configuration, $this->security);
 
     }//end run()
 
