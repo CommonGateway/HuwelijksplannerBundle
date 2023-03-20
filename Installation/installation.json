@@ -70,15 +70,7 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
         "path": "huwelijk",
-        "methods": [],
-        "subSchemaEndpoints": [
-          {
-            "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
-            "path": "payment",
-            "methods": ['GET'],
-            "throws": ["huwelijksplanner.create.payment"]
-          }
-        ]
+        "methods": []
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",
@@ -120,6 +112,11 @@
         "reference": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
         "path": "calendar/availabilitycheck",
         "methods": ["POST"]
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
+        "path": "payment",
+        "methods": ["GET"]
       }
     ]
   }
