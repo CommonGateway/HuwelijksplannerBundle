@@ -4,6 +4,7 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
+use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -24,9 +25,9 @@ class InvitePartnerService
     private EntityManagerInterface $entityManager;
 
     /**
-     * @var SymfonyStyle
+     * @var GatewayResourceService
      */
-    private SymfonyStyle $symfonyStyle;
+    private GatewayResourceService $gatewayResourceService;
 
     /**
      * @var HandleAssentService
@@ -46,7 +47,7 @@ class InvitePartnerService
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private LoggerInterface $pluginLogger;
 
     /**
      * @var array
@@ -60,59 +61,30 @@ class InvitePartnerService
 
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $logger                 The Logger Interface
+     * @param LoggerInterface        $pluginLogger                 The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
+        GatewayResourceService $gatewayResourceService,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $logger
+        LoggerInterface $pluginLogger
     ) {
         $this->entityManager = $entityManager;
+        $this->gatewayResourceService = $gatewayResourceService;
         $this->data = [];
         $this->configuration = [];
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
-        $this->logger = $logger;
-    }
-
-    /**
-     * Set symfony style in order to output to the console.
-     *
-     * @param SymfonyStyle $symfonyStyle
-     *
-     * @return self
-     */
-    public function setStyle(SymfonyStyle $symfonyStyle): self
-    {
-        $this->symfonyStyle = $symfonyStyle;
-
-        return $this;
-    }
-
-    /**
-     * Get an schema by reference.
-     *
-     * @param string $reference The reference to look for
-     *
-     * @return Schema|null
-     */
-    public function getSchema(string $reference): ?Schema
-    {
-        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
-        if ($schema === null) {
-            $this->logger->error("No schema found for $reference");
-            isset($this->io) && $this->io->error("No schema found for $reference");
-        }//end if
-
-        return $schema;
-    }//end getSchema()
-
+        $this->pluginLogger = $pluginLogger;
+    }//end __construct()
+    
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
@@ -120,53 +92,42 @@ class InvitePartnerService
     private function invitePartner(array $huwelijk, ?string $id): ?array
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
-            isset($this->io) && $this->io->error('Could not find huwelijk with id '.$id); // @TODO throw exception ?
-            $this->logger->error('Could not find huwelijk with id '.$id);
+            $this->pluginLogger->error('Could not find huwelijk with id '.$id);
 
             $this->data['response'] = 'Could not find huwelijk with id '.$id;
 
             return $this->data;
-        }
-        
+        }//end if
+
         // @TODO check if the requester has already a partner
         // if so throw error else continue
 
         if (isset($huwelijk['partners']) === true
             && count($huwelijk['partners']) === 1
         ) {
-            if (count($huwelijkObject->getValue('partners')) < 2) {
+            if (count($huwelijkObject->getValue('partners')) > 1) {
                 // @TODO update partner?
-
                 return $huwelijkObject->toArray();
-            }
-            $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
+            }//end if
 
-            foreach ($huwelijkObject->getValue('partners') as $partner) {
-                if (empty($partner->getValue('requester')) === false) {
-                    continue;
-                }
+            $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-                if (empty($person = $partner->getValue('contact')) === true) {
-                    $person = new ObjectEntity($personSchema);
-                }
+            $person = new ObjectEntity($personSchema);
+            $person->hydrate($huwelijk['partners'][0]['contact']);
+            $this->entityManager->persist($person);
+            $this->entityManager->flush();
 
-                $person->hydrate($huwelijk['partners'][0]['contact']);
-                $this->entityManager->persist($person);
-
-                $partner->setValue('contact', $person);
-                $this->entityManager->persist($partner);
-
-                $this->entityManager->flush();
-            }
-
-            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
+            $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-        }
+
+            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+        }//end if
 
         return $huwelijkObject->toArray();
-    }//end createMarriage()
+    }//end invitePartner()
 
     /**
      * Creates the marriage request object.
@@ -180,37 +141,35 @@ class InvitePartnerService
      */
     public function invitePartnerHandler(?array $data = [], ?array $configuration = []): ?array
     {
-        isset($this->io) && $this->io->success('invitePartnerHandler triggered');
+        $this->pluginLogger->debug('invitePartnerHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
             return $this->data;
-        }
+        }//end if
 
-        if (!isset($this->data['parameters']['body'])) {
-            isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
-            $this->logger->error('No data passed');
+        if (isset($this->data['parameters']['body']) === false) {
+            $this->pluginLogger->error('No data passed');
 
             return ['response' => ['message' => 'No data passed'], 'httpCode' => 400];
-        }
+        }//end if
 
-        if ($this->data['parameters']['method'] !== 'PATCH') {
-            isset($this->io) && $this->io->error('Not a PATCH request');
-            $this->logger->error('Not a PATCH request');
+        if ($this->data['parameters']['method'] !== 'PUT') {
+            $this->pluginLogger->error('Not a PUT request');
 
             return $this->data;
-        }
+        }//end if
 
         foreach ($this->data['parameters']['path'] as $path) {
             if (Uuid::isValid($path)) {
                 $id = $path;
-            }
-        }
+            }//end if
+        }//end foreach
 
-        if (!isset($id)) {
+        if (isset($id) === false) {
             return $this->data;
-        }
+        }//end if
 
         $huwelijk = $this->invitePartner($this->data['parameters']['body'], $id);
 
