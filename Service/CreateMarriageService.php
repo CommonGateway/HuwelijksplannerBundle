@@ -5,6 +5,7 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\CacheService;
+use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -29,9 +30,9 @@ class CreateMarriageService
     private CacheService $cacheService;
 
     /**
-     * @var SymfonyStyle
+     * @var GatewayResourceService
      */
-    private SymfonyStyle $symfonyStyle;
+    private GatewayResourceService $gatewayResourceService;
 
     /**
      * @var HandleAssentService
@@ -51,7 +52,7 @@ class CreateMarriageService
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private LoggerInterface $pluginLogger;
 
     /**
      * @var array
@@ -66,60 +67,31 @@ class CreateMarriageService
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param CacheService           $cacheService           The Cache Service
+     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $logger                 The Logger Interface
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CacheService $cacheService,
+        GatewayResourceService $gatewayResourceService,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $logger
+        LoggerInterface $pluginLogger
     ) {
         $this->entityManager = $entityManager;
         $this->cacheService = $cacheService;
+        $this->gatewayResourceService = $gatewayResourceService;
         $this->data = [];
         $this->configuration = [];
         $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
         $this->security = $security;
-        $this->logger = $logger;
+        $this->pluginLogger = $pluginLogger;
     }
-
-    /**
-     * Set symfony style in order to output to the console.
-     *
-     * @param SymfonyStyle $symfonyStyle
-     *
-     * @return self
-     */
-    public function setStyle(SymfonyStyle $symfonyStyle): self
-    {
-        $this->symfonyStyle = $symfonyStyle;
-
-        return $this;
-    }
-
-    /**
-     * Get an schema by reference.
-     *
-     * @param string $reference The reference to look for
-     *
-     * @return Schema|null
-     */
-    public function getSchema(string $reference): ?Schema
-    {
-        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
-        if ($schema === null) {
-            $this->logger->error("No schema found for $reference");
-            isset($this->io) && $this->io->error("No schema found for $reference");
-        }//end if
-
-        return $schema;
-    }//end getSchema()
 
     /**
      * Validate huwelijk type.
@@ -128,23 +100,21 @@ class CreateMarriageService
     {
         if (isset($huwelijk['type'])) {
             if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
-                isset($this->io) && $this->io->error('huwelijk.type not found in the databse with given id');
-                $this->logger->error('huwelijk.type not found in the databse with given id');
+                $this->pluginLogger->error('huwelijk.type not found in the databse with given id');
 
                 return ['response' => ['message' => 'huwelijk.type not found in the databse with given id'], 'httpCode' => 400];
-            }
+            }//end if
 
+            // @TODO check upnLabel or upnUri
             if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
-                isset($this->io) && $this->io->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
-                $this->logger->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
+                $this->pluginLogger->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
 
                 return ['response' => ['message' => 'huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap'], 'httpCode' => 400];
-            }
+            }//end if
 
             return true;
         } else {
-            isset($this->io) && $this->io->error('huwelijk.type is not given');
-            $this->logger->error('huwelijk.type is not given');
+            $this->pluginLogger->error('huwelijk.type is not given');
 
             return ['response' => ['message' => 'huwelijk.type is not given'], 'httpCode' => 400];
         }
@@ -159,23 +129,20 @@ class CreateMarriageService
     {
         if (isset($huwelijk['ceremonie'])) {
             if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
-                isset($this->io) && $this->io->error('huwelijk.ceremonie not found in the databse with given id');
-                $this->logger->error('huwelijk.ceremonie not found in the databse with given id');
+                $this->pluginLogger->error('huwelijk.ceremonie not found in the databse with given id');
 
                 return ['response' => ['message' => 'huwelijk.ceremonie not found in the databse with given id'], 'httpCode' => 400];
-            }
+            }//end if
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                isset($this->io) && $this->io->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
-                $this->logger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return ['response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'], 'httpCode' => 400];
-            }
+            }//end if
 
             return true;
         } else {
-            isset($this->io) && $this->io->error('huwelijk.ceremonie is not given');
-            $this->logger->error('huwelijk.ceremonie is not given');
+            $this->pluginLogger->error('huwelijk.ceremonie is not given');
 
             return ['response' => ['message' => 'huwelijk.ceremonie is not given'], 'httpCode' => 400];
         }
@@ -186,26 +153,28 @@ class CreateMarriageService
      */
     private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null): ?ObjectEntity
     {
-        $personSchema = $this->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json');
+        $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         if ($brpPerson) {
             $naam = $brpPerson->getValue('naam');
             $verblijfplaats = $brpPerson->getValue('verblijfplaats');
             $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
-        }
+        }//end if
 
         // @TODO check how and if we get the email and phonenumber from the frontend
-        if (key_exists('partners', $huwelijk) && key_exists('person', $huwelijk['partners'][0])) {
+        if (key_exists('partners', $huwelijk) === true 
+            && key_exists('person', $huwelijk['partners'][0])
+        ) {
             $huwelijkPerson = $huwelijk['partners'][0]['person'];
 
-            if (key_exists('emails', $huwelijkPerson)) {
+            if (key_exists('emails', $huwelijkPerson) === true) {
                 $email = $huwelijkPerson['emails'][0]['email'];
-            }
+            }//end if
 
-            if (key_exists('telefoonnummers', $huwelijkPerson)) {
+            if (key_exists('telefoonnummers', $huwelijkPerson) === true) {
                 $phonenumber = $huwelijkPerson['telefoonnummers'][0]['telefoonnummer'];
-            }
-        }
+            }//end if
+        }//end if
 
         $person = new ObjectEntity($personSchema);
         $person->hydrate([
@@ -257,8 +226,8 @@ class CreateMarriageService
      */
     private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
-        $huwelijkSchema = $this->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json');
-        $brpSchema = $this->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json');
+        $huwelijkSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
@@ -266,29 +235,39 @@ class CreateMarriageService
         if ($this->validateType($huwelijk) === true
             && $this->validateCeremonie($huwelijk) === true
         ) {
+            if (key_exists('locatie', $huwelijk) === true) {
+                $huwelijkArray['locatie'] = $huwelijk['locatie'];
+            }//end if
             
+            $huwelijkArray = ['type' => $huwelijk['type'], 'moment' => $huwelijk['moment'], 'ceremonie' => $huwelijk['ceremonie']];
+
+            $huwelijkObject->hydrate($huwelijkArray);
+            $this->entityManager->persist($huwelijkObject);
+
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
             $brpPerson = null;
             if (count($brpPersons) === 1) {
                 $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
-            }
+            }//end if
 
             // create person from logged in user and if we have a brp person we set those values
             // if not we set the values from the security object
             $person = $this->createPerson($huwelijk, $brpPerson);
 
             // creates an assent and add the person to the partners of this merriage
-            $requesterAssent[] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
-            $huwelijkObject->setValue('partners', $requesterAssent);
+            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
+            $huwelijkObject->hydrate($requesterAssent);
+
+            $this->entityManager->persist($huwelijkObject);
+            // after the persist the partner is added to the array
+            $this->entityManager->flush();
+            // after the flush the partner array is empty, also after the commongateway:cache:warmup
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
-
             return $huwelijkObject->toArray();
-        }
+        }//end if
 
         return ['response' => ['message' => 'Validation failed'], 'httpCode' => 400];
     }//end createMarriage()
@@ -305,28 +284,25 @@ class CreateMarriageService
      */
     public function createMarriageHandler(?array $data = [], ?array $configuration = []): ?array
     {
-        isset($this->io) && $this->io->success('createMarriageHandler triggered');
+        $this->pluginLogger->debug('createMarriageHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
             return $this->data;
-        }
+        }//end if
 
-        if (!isset($this->data['parameters']['body'])) {
-            isset($this->io) && $this->io->error('No data passed'); // @TODO throw exception ?
-            $this->logger->error('No data passed');
-
+        if (isset($this->data['parameters']['body']) === false) {
+            $this->pluginLogger->error('No data passed');
 
             return $this->data;
-        }
+        }//end if
 
         if ($this->data['parameters']['method'] !== 'POST') {
-            isset($this->io) && $this->io->error('Not a POST request');
-            $this->logger->error('Not a POST request');
+            $this->pluginLogger->error('Not a POST request');
 
             return $this->data;
-        }
+        }//end if
 
         $huwelijk = $this->createMarriage($this->data['response']['id'], $this->data['parameters']['body']);
 
