@@ -6,6 +6,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -14,31 +15,30 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CreateAvailabilityService
 {
     /**
-     * @var SymfonyStyle
+     * @var LoggerInterface
      */
-    private SymfonyStyle $symfonyStyle;
-    private array $data;
-    private array $configuration;
-
-    public function __construct()
-    {
-        $this->data = [];
-        $this->configuration = [];
-    }
+    private LoggerInterface $pluginLogger;
 
     /**
-     * Set symfony style in order to output to the console.
-     *
-     * @param SymfonyStyle $symfonyStyle
-     *
-     * @return self
+     * @var array
      */
-    public function setStyle(SymfonyStyle $symfonyStyle): self
-    {
-        $this->symfonyStyle = $symfonyStyle;
+    private array $data;
 
-        return $this;
-    }
+    /**
+     * @var array
+     */
+    private array $configuration;
+
+    /**
+     * @param LoggerInterface $pluginLogger The Logger Interface
+     */
+    public function __construct(
+        LoggerInterface $pluginLogger
+    ) {
+        $this->pluginLogger = $pluginLogger;
+        $this->data = [];
+        $this->configuration = [];
+    }//end __construct()
 
     /**
      * Creates availability for someone with given date info.
@@ -52,7 +52,7 @@ class CreateAvailabilityService
      */
     public function createAvailabilityHandler(?array $data = [], ?array $configuration = []): array
     {
-        isset($this->io) && $this->io->success('createAvailabilityHandler triggered');
+        $this->pluginLogger->debug('createAvailabilityHandler triggered');
         $this->data = $data;
         $this->configuration = $configuration;
 
@@ -85,10 +85,10 @@ class CreateAvailabilityService
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
                 'resources' => $resourceArray,
             ];
-        }
+        }//end foreach
 
         $this->data['response'] = $resultArray;
 
         return $this->data;
-    }
+    }//end createAvailabilityHandler()
 }
