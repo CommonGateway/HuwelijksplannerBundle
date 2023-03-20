@@ -3,16 +3,12 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Action;
-use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
-use App\Exception\GatewayException;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for approving or requesting a assent.
@@ -55,11 +51,11 @@ class HandleAssentService
     private array $configuration;
 
     /**
-     * @param EntityManagerInterface   $entityManager      The Entity Manager
-     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
-     * @param EventDispatcherInterface $eventDispatcher    The Event Dispatcher
-     * @param MessageBirdService       $messageBirdService The MessageBird Service
-     * @param LoggerInterface          $pluginLogger             The Logger Interface
+     * @param EntityManagerInterface   $entityManager          The Entity Manager
+     * @param GatewayResourceService   $gatewayResourceService The Gateway Resource Service
+     * @param EventDispatcherInterface $eventDispatcher        The Event Dispatcher
+     * @param MessageBirdService       $messageBirdService     The MessageBird Service
+     * @param LoggerInterface          $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -81,8 +77,8 @@ class HandleAssentService
      * Sends an emails.
      *
      * @param object $emailAddresses The emailaddresses.
-     * @param string $type The type of the assent.
-     * @param string $data The data array of the request.
+     * @param string $type           The type of the assent.
+     * @param string $data           The data array of the request.
      *
      * @return void
      */
@@ -127,7 +123,7 @@ class HandleAssentService
      * Sends a sms.
      *
      * @param object $phoneNumbers The phonenumbers.
-     * @param string $type The type of the assent.
+     * @param string $type         The type of the assent.
      *
      * @return void
      */
@@ -157,8 +153,8 @@ class HandleAssentService
      * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person The person to make an assent for.
-     * @param string            $type The type of assent.
-     * @param array             $data The data of the request.
+     * @param string            $type   The type of assent.
+     * @param array             $data   The data of the request.
      *
      * @return ObjectEntity|null
      */
@@ -182,7 +178,7 @@ class HandleAssentService
         ]);
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
-        
+
         if (($phoneNumbers = $person->getValue('telefoonnummers')) === false) {
             $phoneNumbers = null;
         }//end if
@@ -192,7 +188,6 @@ class HandleAssentService
         }//end if
 
         if ($emailAddresses === null && $phoneNumbers === null) {
-
             return $assent;
         }//end if
 

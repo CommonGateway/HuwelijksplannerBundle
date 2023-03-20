@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\Security;
 
 class InviteWitnessHandler implements ActionHandlerInterface
 {
-
     /**
      * @var InviteWitnessService
      */
@@ -19,18 +18,15 @@ class InviteWitnessHandler implements ActionHandlerInterface
      */
     private Security $security;
 
-
     /**
-     * @param InviteWitnessService $service The invite witnes service
-     * @param Security $security The security
+     * @param InviteWitnessService $service  The invite witnes service
+     * @param Security             $security The security
      */
     public function __construct(InviteWitnessService $service, Security $security)
     {
         $this->service = $service;
         $this->security = $security;
-
     }//end __construct()
-
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -44,11 +40,9 @@ class InviteWitnessHandler implements ActionHandlerInterface
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InviteWitness',
             'required'   => [],
-            'properties' => []
+            'properties' => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the inviteWitnessHandler function.
@@ -63,8 +57,5 @@ class InviteWitnessHandler implements ActionHandlerInterface
         var_dump('inviteWitnessHandler');
 
         return $this->service->inviteWitnessHandler($data, $configuration, $this->security);
-
     }//end run()
-
-
 }//end class
