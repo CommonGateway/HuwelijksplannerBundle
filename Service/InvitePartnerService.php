@@ -86,10 +86,14 @@ class InvitePartnerService
     }//end __construct()
     
     /**
-     * This function validates and creates the huwelijk object
-     * and creates an assent for the current user.
+     * This function validates and creates the huwelijk object and creates an assent for the current user.
+     * 
+     * @param array $huwelijk The huwelijk array from the request.
+     * @param string $id The id of the huwelijk object.
+     * 
+     * @return ?array The updated huwelijk object as array.
      */
-    private function invitePartner(array $huwelijk, ?string $id): ?array
+    private function invitePartner(array $huwelijk, string $id): ?array
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
@@ -132,14 +136,14 @@ class InvitePartnerService
     /**
      * Creates the marriage request object.
      *
-     * @param ?array $data
-     * @param ?array $configuration
+     * @param ?array $data The data array.
+     * @param ?array $configuration The configuration array.
      *
      * @throws Exception
      *
-     * @return ?array
+     * @return array The data array
      */
-    public function invitePartnerHandler(?array $data = [], ?array $configuration = []): ?array
+    public function invitePartnerHandler(?array $data = [], ?array $configuration = []): array
     {
         $this->pluginLogger->debug('invitePartnerHandler triggered');
         $this->data = $data;
