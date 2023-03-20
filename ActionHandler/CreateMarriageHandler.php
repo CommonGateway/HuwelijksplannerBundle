@@ -8,14 +8,25 @@ use Symfony\Component\Security\Core\Security;
 
 class CreateMarriageHandler implements ActionHandlerInterface
 {
+    /**
+     * @var CreateMarriageService
+     */
     private CreateMarriageService $createMarriageService;
+
+    /**
+     * @var Security
+     */
     private Security $security;
 
+    /**
+     * @param CreateMarriageService $createMarriageService The CreateMarriageService
+     * @param Security $security The Security
+     */
     public function __construct(CreateMarriageService $createMarriageService, Security $security)
     {
         $this->createMarriageService = $createMarriageService;
         $this->security = $security;
-    }
+    }//end __construct()
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -31,7 +42,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
-    }
+    }//end getConfiguration()
 
     /**
      * This function runs the createMarriage function.
@@ -45,5 +56,5 @@ class CreateMarriageHandler implements ActionHandlerInterface
     {
         var_dump('createMarriageHandler');
         return $this->createMarriageService->createMarriageHandler($data, $configuration, $this->security);
-    }
-}
+    }//end run()
+}//end class

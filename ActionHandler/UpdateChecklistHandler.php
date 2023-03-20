@@ -7,12 +7,18 @@ use CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService;
 
 class UpdateChecklistHandler implements ActionHandlerInterface
 {
+    /**
+     * @var UpdateChecklistService
+     */
     private UpdateChecklistService $updateChecklistService;
 
+    /**
+     * @param UpdateChecklistService $updateChecklistService The update checklist Service
+     */
     public function __construct(UpdateChecklistService $updateChecklistService)
     {
         $this->updateChecklistService = $updateChecklistService;
-    }
+    }//end __construct()
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -28,7 +34,7 @@ class UpdateChecklistHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
-    }
+    }//end getConfiguration()
 
     /**
      * This function runs the updateCheckList function.
@@ -41,5 +47,5 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->updateChecklistService->updateChecklistHandler($data, $configuration);
-    }
-}
+    }//end run()
+}//end class

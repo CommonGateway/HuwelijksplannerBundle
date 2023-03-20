@@ -8,14 +8,25 @@ use Symfony\Component\Security\Core\Security;
 
 class InvitePartnerHandler implements ActionHandlerInterface
 {
+    /**
+     * @var InvitePartnerService
+     */
     private InvitePartnerService $invitePartnerService;
+
+    /**
+     * @var Security
+     */
     private Security $security;
 
+    /**
+     * @param InvitePartnerService $invitePartnerService The invite partner service
+     * @param Security $security THe security
+     */
     public function __construct(InvitePartnerService $invitePartnerService, Security $security)
     {
         $this->invitePartnerService = $invitePartnerService;
         $this->security = $security;
-    }
+    }//end __construct()
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -31,7 +42,7 @@ class InvitePartnerHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
-    }
+    }//end getConfiguration()
 
     /**
      * This function runs the invitePartnerHandler function.
@@ -46,5 +57,5 @@ class InvitePartnerHandler implements ActionHandlerInterface
         var_dump('invitePartnerHandler');
 
         return $this->invitePartnerService->invitePartnerHandler($data, $configuration, $this->security);
-    }
-}
+    }//end run()
+}//end class
