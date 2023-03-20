@@ -7,6 +7,7 @@ use App\Entity\Gateway as Source;
 use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
+use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
@@ -26,6 +27,11 @@ class MessageBirdService
      * @var CallService
      */
     private CallService $callService;
+    
+    /**
+     * @var GatewayResourceService
+     */
+    private GatewayResourceService $gatewayResourceService;
 
     /**
      * @var SynchronizationService
@@ -33,80 +39,29 @@ class MessageBirdService
     private SynchronizationService $synchronizationService;
 
     /**
-     * @var SymfonyStyle
-     */
-    private SymfonyStyle $symfonyStyle;
-
-    /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private LoggerInterface $pluginLogger;
 
     /**
      * @param EntityManagerInterface $entityManager The Entity Manager
      * @param CallService            $callService   The Call Service
-     * @param LoggerInterface        $logger        The Logger Interface
+     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
+     * @param LoggerInterface        $pluginLogger        The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CallService $callService,
+        GatewayResourceService $gatewayResourceService,
         SynchronizationService $synchronizationService,
-        LoggerInterface $logger
+        LoggerInterface $pluginLogger
     ) {
         $this->entityManager = $entityManager;
         $this->callService = $callService;
+        $this->gatewayResourceService = $gatewayResourceService;
         $this->synchronizationService = $synchronizationService;
-        $this->logger = $logger;
-    }
-
-    /**
-     * Set symfony style in order to output to the console.
-     *
-     * @param SymfonyStyle $symfonyStyle
-     *
-     * @return self
-     */
-    public function setStyle(SymfonyStyle $symfonyStyle): self
-    {
-        $this->symfonyStyle = $symfonyStyle;
-
-        return $this;
-    }//end setStyle()
-
-    /**
-     * Get an schema by reference.
-     *
-     * @param string $reference The reference to look for
-     *
-     * @return Schema|null
-     */
-    public function getEntity(string $reference): ?Schema
-    {
-        $schema = $this->entityManager->getRepository('App:Entity')->findOneBy(['reference' => $reference]);
-        if ($schema === null) {
-            $this->logger->error("No schema found for $reference");
-            isset($this->io) && $this->io->error("No schema found for $reference");
-        }//end if
-
-        return $schema;
-    }//end getSchema()
-
-    /**
-     * Gets source for location.
-     *
-     * @param string $location The location to look for
-     *
-     * @return Source
-     */
-    public function getSource(string $location): Source
-    {
-        $source = $this->entityManager->getRepository('App:Gateway')->findOneBy(['location' => $location]);
-        if ($source === null) {
-            $this->logger->error("No source found for $location");
-        }
-
-        return $source;
-    }//end getSource()
+        $this->pluginLogger = $pluginLogger;
+    }//end __construct()
 
     /**
      * @param $message
@@ -115,12 +70,12 @@ class MessageBirdService
      */
     public function importMessage($message): ?ObjectEntity
     {
-        $messagebirdEntity = $this->getEntity('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json');
-        $source = $this->getSource('https://rest.messagebird.com');
+        $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $source = $this->gatewayResourceService->getSource('https://rest.messagebird.com', 'common-gateway/huwelijksplanner-bundle');
 
         $synchronization = $this->synchronizationService->findSyncBySource($source, $messagebirdEntity, $message['id']);
 
-        $this->logger->debug('Sending message from '.$message['originator']);
+        $this->pluginLogger->debug('Sending message from '.$message['originator']);
 
         $synchronization = $this->synchronizationService->synchronize($synchronization, $message);
 
@@ -137,36 +92,30 @@ class MessageBirdService
      */
     public function sendMessage(string $recipients, string $body): bool
     {
-        $this->logger->debug('Send a message');
+        $this->pluginLogger->debug('Send a message');
 
-        $messagebirdEntity = $this->getEntity('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json');
-        $source = $this->getSource('https://rest.messagebird.com');
+        $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $source = $this->gatewayResourceService->getSource('https://rest.messagebird.com', 'common-gateway/huwelijksplanner-bundle');
 
-        $config = [
-            'body' => json_encode([
-                'recipients' => $recipients,
-                'originator' => '+31612345678',
-                'body'       => $body,
-            ]),
-        ];
+        $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => '+31612345678', 'body'       => $body,]),];
 
         try {
             $response = $this->callService->call($source, '/messages', 'POST', $config);
         } catch (RequestException $exception) {
-            $this->logger->error('Could not send the message with source: '.$source->getName());
+            $this->pluginLogger->error('Could not send the message with source: '.$source->getName());
 
             return false;
         }
 
         $message = json_decode($response->getBody()->getContents(), true);
 
-        if (!$message) {
-            $this->logger->error('Could not send the message with source: '.$source->getName());
+        if (empty($message) === true) {
+            $this->pluginLogger->error('Could not send the message with source: '.$source->getName());
 
             return false;
-        }
+        }//end if
 
-        $this->logger->debug('The message was sent successfully');
+        $this->pluginLogger->debug('The message was sent successfully');
 
         $messageObject = new ObjectEntity($messagebirdEntity);
         $messageObject->hydrate($message);
