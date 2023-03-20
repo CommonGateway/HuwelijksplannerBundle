@@ -13,7 +13,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class UpdateChecklistCommand extends Command
 {
-
     /**
      * @var string
      */
@@ -24,7 +23,6 @@ class UpdateChecklistCommand extends Command
      */
     private UpdateChecklistService $service;
 
-
     /**
      * @param UpdateChecklistService $service The UpdateChecklistService
      */
@@ -32,9 +30,7 @@ class UpdateChecklistCommand extends Command
     {
         $this->service = $service;
         parent::__construct();
-
     }//end __construct()
-
 
     /**
      * @return void
@@ -44,13 +40,12 @@ class UpdateChecklistCommand extends Command
         $this
             ->setDescription('Checks marriage data and updates the associated checklist')
             ->setHelp('Checks marriage data and updates the associated checklist');
-
     }//end configure()
 
-
     /**
-     * @param InputInterface $input The input
+     * @param InputInterface  $input  The input
      * @param OutputInterface $output The ouput
+     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -63,8 +58,5 @@ class UpdateChecklistCommand extends Command
         }
 
         return Command::SUCCESS;
-
     }//end execute()
-
-
 }//end class

@@ -2,18 +2,15 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
-use App\Exception\GatewayException;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -66,7 +63,7 @@ class InviteWitnessService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $pluginLogger                 The Logger Interface
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -88,11 +85,10 @@ class InviteWitnessService
 
     /**
      * This function gets the emails of the witnesses of the marriage that were already added.
-     * 
-     * @param ObjectEntity $huwelijkObject The huwelijksobject.
-     * 
-     * @return array The emails of the witnesses.
      *
+     * @param ObjectEntity $huwelijkObject The huwelijksobject.
+     *
+     * @return array The emails of the witnesses.
      */
     private function getHuwelijkWitnessesEmails(ObjectEntity $huwelijkObject): array
     {
@@ -121,12 +117,11 @@ class InviteWitnessService
 
     /**
      * This function creates witnesses from the given data.
-     * 
-     * @param array $huwelijk The huwelijk array from the request.
-     * @param array $witnessAssentsEmail The emails of the witnesses that are already added to the marriage.
-     * 
-     * @return array The witnesses assents array.
      *
+     * @param array $huwelijk            The huwelijk array from the request.
+     * @param array $witnessAssentsEmail The emails of the witnesses that are already added to the marriage.
+     *
+     * @return array The witnesses assents array.
      */
     private function createWitnesses(array $huwelijk, array $witnessAssentsEmail): array
     {
@@ -135,12 +130,10 @@ class InviteWitnessService
 
         $witnessAssents['getuigen'] = [];
         foreach ($huwelijk['getuigen'] as $getuige) {
-
             if (key_exists('contact', $getuige) === true
                 && key_exists('emails', $getuige['contact']) === true
                 && is_array($getuige['contact']['emails']) === true
             ) {
-
                 if (in_array($getuige['contact']['emails'][0]['email'], $witnessAssentsEmail) === true) {
                     $this->pluginLogger->error('This witness is already added.');
                     continue;
@@ -171,28 +164,26 @@ class InviteWitnessService
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
-     * 
-     * @param array $huwelijk The huwelijk array from the request.
-     * @param string $id The id of the huwelijk.
-     * 
+     *
+     * @param array  $huwelijk The huwelijk array from the request.
+     * @param string $id       The id of the huwelijk.
      * @param array the huwelijksobject as array.
      */
     private function inviteWitness(array $huwelijk, string $id): array
     {
         if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
-            
+
             return $huwelijkObject->toArray();
         }//end if
-        
+
         if (isset($huwelijk['getuigen']) === true
             && count($huwelijk['getuigen']) <= 4
         ) {
-
             if (count($huwelijkObject->getValue('getuigen')) === 4) {
                 return $huwelijkObject->toArray();
             }//end if
-            
+
             // @TODO Check if there are duplicates in the huwelijk getuigen array.
 
             // Get the emails of the witnesses to validate.
@@ -215,7 +206,7 @@ class InviteWitnessService
     /**
      * Creates the marriage request object.
      *
-     * @param ?array $data The data array.
+     * @param ?array $data          The data array.
      * @param ?array $configuration The configuration array.
      *
      * @throws Exception

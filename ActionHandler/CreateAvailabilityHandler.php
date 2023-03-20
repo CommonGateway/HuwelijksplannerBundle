@@ -7,12 +7,10 @@ use CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService;
 
 class CreateAvailabilityHandler implements ActionHandlerInterface
 {
-
     /**
      * @var CreateAvailabilityService
      */
     private CreateAvailabilityService $service;
-
 
     /**
      * @param CreateAvailabilityService $service The CreateAvailabilityService
@@ -20,9 +18,7 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
     public function __construct(CreateAvailabilityService $service)
     {
         $this->service = $service;
-
     }//end __construct()
-
 
     /**
      *  This function returns the required configuration as a [json-schema](https://json-schema.org/) array.
@@ -36,12 +32,10 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
             '$schema'     => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'       => 'CreateAvailability',
             'description' => 'This handler returns a welcoming string',
-            'required'   => [],
-            'properties' => []
+            'required'    => [],
+            'properties'  => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the createAvailability service.
@@ -54,8 +48,5 @@ class CreateAvailabilityHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->service->createAvailabilityHandler($data, $configuration);
-
     }//end run()
-
-
 }//end class

@@ -2,12 +2,11 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\ObjectEntity;
 use App\Entity\Gateway as Source;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -69,7 +68,7 @@ class PaymentService
             throw new Exception('No api key set on mollie api source');
 
             return false;
-        } 
+        }
 
         return true;
     }
@@ -97,8 +96,6 @@ class PaymentService
         return [];
     }
 
-    
-
     /**
      * Creates payment for given marriage.
      *
@@ -114,7 +111,6 @@ class PaymentService
         $this->configuration = $configuration;
 
         $payment = $this->createPayment();
-
 
         return ['response' => ['test' => 'test']];
     }

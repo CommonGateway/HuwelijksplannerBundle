@@ -7,7 +7,6 @@ use DatePeriod;
 use DateTime;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for creating availability.

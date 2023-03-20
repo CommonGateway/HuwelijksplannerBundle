@@ -13,7 +13,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class HandleAssentCommand extends Command
 {
-
     /**
      * @var string
      */
@@ -24,7 +23,6 @@ class HandleAssentCommand extends Command
      */
     private HandleAssentService $service;
 
-
     /**
      * @param HandleAssentService $service The HandleAssentService
      */
@@ -32,22 +30,19 @@ class HandleAssentCommand extends Command
     {
         $this->service = $service;
         parent::__construct();
-
     }//end __construct()
-
 
     protected function configure(): void
     {
         $this
             ->setDescription('Requests or approves a assent')
             ->setHelp('Requests or approves a assent');
-
     }//end configure()
 
-
     /**
-     * @param InputInterface $input The input
+     * @param InputInterface  $input  The input
      * @param OutputInterface $output The ouput
+     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,8 +55,5 @@ class HandleAssentCommand extends Command
         }
 
         return Command::SUCCESS;
-
     }//end execute()
-
-
 }//end class

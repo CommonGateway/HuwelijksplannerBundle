@@ -12,14 +12,12 @@ class UpdateChecklistHandler implements ActionHandlerInterface
      */
     private UpdateChecklistService $service;
 
-
     /**
      * @param UpdateChecklistService $service The update checklist Service
      */
     public function __construct(UpdateChecklistService $service)
     {
         $this->service = $service;
-
     }//end __construct()
 
     /**
@@ -34,11 +32,9 @@ class UpdateChecklistHandler implements ActionHandlerInterface
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'UpdateChecklist',
             'required'   => [],
-            'properties' => []
+            'properties' => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the updateCheckList function.
@@ -51,7 +47,5 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->service->updateChecklistHandler($data, $configuration);
-
     }//end run()
-
 }//end class

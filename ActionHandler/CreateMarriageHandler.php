@@ -18,18 +18,15 @@ class CreateMarriageHandler implements ActionHandlerInterface
      */
     private Security $security;
 
-
     /**
-     * @param CreateMarriageService $service The CreateMarriageService
-     * @param Security $security The Security
+     * @param CreateMarriageService $service  The CreateMarriageService
+     * @param Security              $security The Security
      */
     public function __construct(CreateMarriageService $service, Security $security)
     {
         $this->service = $service;
         $this->security = $security;
-
     }//end __construct()
-
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -43,11 +40,9 @@ class CreateMarriageHandler implements ActionHandlerInterface
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'CreateMarriage',
             'required'   => [],
-            'properties' => []
+            'properties' => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the createMarriage function.
@@ -60,9 +55,7 @@ class CreateMarriageHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration)
     {
         var_dump('createMarriageHandler');
+
         return $this->service->createMarriageHandler($data, $configuration, $this->security);
-
     }//end run()
-
-
 }//end class

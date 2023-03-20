@@ -4,12 +4,7 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\CollectionEntity;
-use App\Entity\Cronjob;
-use App\Entity\DashboardCard;
-use App\Entity\Endpoint;
 use App\Entity\Entity;
-use App\Entity\Gateway as Source;
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
