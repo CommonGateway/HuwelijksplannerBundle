@@ -26,7 +26,7 @@ class CreateAvailabilityCommand extends Command
 
 
     /**
-     * @param CreateAvailabilityService $service
+     * @param CreateAvailabilityService $service The CreateAvailabilityService
      */
     public function __construct(CreateAvailabilityService $service)
     {

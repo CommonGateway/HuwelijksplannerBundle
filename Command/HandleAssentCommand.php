@@ -26,7 +26,7 @@ class HandleAssentCommand extends Command
 
 
     /**
-     * @param HandleAssentService $service
+     * @param HandleAssentService $service The HandleAssentService
      */
     public function __construct(HandleAssentService $service)
     {

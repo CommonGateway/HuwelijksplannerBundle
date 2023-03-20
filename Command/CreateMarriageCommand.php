@@ -26,7 +26,7 @@ class CreateMarriageCommand extends Command
 
 
     /**
-     * @param CreateMarriageService $service
+     * @param CreateMarriageService $service The CreateMarriageService
      */
     public function __construct(CreateMarriageService $service)
     {

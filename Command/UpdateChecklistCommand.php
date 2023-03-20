@@ -26,7 +26,7 @@ class UpdateChecklistCommand extends Command
 
 
     /**
-     * @param UpdateChecklistService $service
+     * @param UpdateChecklistService $service The UpdateChecklistService
      */
     public function __construct(UpdateChecklistService $service)
     {
