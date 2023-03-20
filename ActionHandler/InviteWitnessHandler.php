@@ -26,7 +26,9 @@ class InviteWitnessHandler implements ActionHandlerInterface
     {
         $this->inviteWitnessService = $inviteWitnessService;
         $this->security = $security;
+
     }//end __construct()
+
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -42,7 +44,9 @@ class InviteWitnessHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
+
     }//end getConfiguration()
+
 
     /**
      * This function runs the inviteWitnessHandler function.
@@ -57,5 +61,8 @@ class InviteWitnessHandler implements ActionHandlerInterface
         var_dump('inviteWitnessHandler');
 
         return $this->inviteWitnessService->inviteWitnessHandler($data, $configuration, $this->security);
+
     }//end run()
+
+
 }//end class

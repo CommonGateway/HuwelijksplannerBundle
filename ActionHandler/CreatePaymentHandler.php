@@ -19,7 +19,9 @@ class CreatePaymentHandler implements ActionHandlerInterface
     public function __construct(PaymentService $paymentService)
     {
         $this->paymentService = $paymentService;
+
     }//end __construct()
+
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -35,7 +37,9 @@ class CreatePaymentHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
+
     }//end getConfiguration()
+
 
     /**
      * This function runs the createPaymentHandler function.
@@ -48,5 +52,8 @@ class CreatePaymentHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->paymentService->createPaymentHandler($data, $configuration);
+
     }//end run()
+
+
 }//end class

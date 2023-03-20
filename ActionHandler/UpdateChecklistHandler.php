@@ -18,6 +18,7 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     public function __construct(UpdateChecklistService $updateChecklistService)
     {
         $this->updateChecklistService = $updateChecklistService;
+
     }//end __construct()
 
     /**
@@ -34,7 +35,9 @@ class UpdateChecklistHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => []
         ];
+
     }//end getConfiguration()
+
 
     /**
      * This function runs the updateCheckList function.
@@ -47,5 +50,8 @@ class UpdateChecklistHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->updateChecklistService->updateChecklistHandler($data, $configuration);
+
     }//end run()
+
+    
 }//end class

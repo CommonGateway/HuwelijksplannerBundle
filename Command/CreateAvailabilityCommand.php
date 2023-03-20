@@ -13,22 +13,44 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateAvailabilityCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'huwelijksplanner:calendar:execute';
+
+    /**
+     * @var CreateAvailabilityService
+     */
     private CreateAvailabilityService $createAvailabilityService;
 
+    /**
+     * @param CreateAvailabilityService $createAvailabilityService
+     */
     public function __construct(CreateAvailabilityService $createAvailabilityService)
     {
         $this->createAvailabilityService = $createAvailabilityService;
         parent::__construct();
-    }
 
+    }//end __construct()
+
+
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
             ->setDescription('Creates availability for someone with given date info')
             ->setHelp('Creates availability for someone with given date info');
-    }
 
+    }//end configure()
+
+
+    /**
+     * @param InputInterface $input The input
+     * @param OutputInterface $output The ouput
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -39,5 +61,8 @@ class CreateAvailabilityCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-}
+
+    }//end execute()
+
+
+}//end class

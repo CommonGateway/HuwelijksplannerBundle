@@ -13,22 +13,41 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class HandleAssentCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'huwelijksplanner:assent:execute';
+
+    /**
+     * @var HandleAssentService
+     */
     private HandleAssentService $handleAssentService;
 
+    /**
+     * @param HandleAssentService $handleAssentService
+     */
     public function __construct(HandleAssentService $handleAssentService)
     {
         $this->handleAssentService = $handleAssentService;
         parent::__construct();
-    }
+
+    }//end __construct()
+
 
     protected function configure(): void
     {
         $this
             ->setDescription('Requests or approves a assent')
             ->setHelp('Requests or approves a assent');
-    }
 
+    }//end configure()
+
+
+    /**
+     * @param InputInterface $input The input
+     * @param OutputInterface $output The ouput
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -39,5 +58,7 @@ class HandleAssentCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-}
+
+    }//end execute()
+
+}//end class

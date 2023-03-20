@@ -13,22 +13,44 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class UpdateChecklistCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'huwelijksplanner:check:execute';
+
+    /**
+     * @var UpdateChecklistService
+     */
     private UpdateChecklistService $updateChecklistService;
 
+    /**
+     * @param UpdateChecklistService $updateChecklistService
+     */
     public function __construct(UpdateChecklistService $updateChecklistService)
     {
         $this->updateChecklistService = $updateChecklistService;
         parent::__construct();
-    }
 
+    }//end __construct()
+
+
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
             ->setDescription('Checks marriage data and updates the associated checklist')
             ->setHelp('Checks marriage data and updates the associated checklist');
-    }
 
+    }//end configure()
+
+
+    /**
+     * @param InputInterface $input The input
+     * @param OutputInterface $output The ouput
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -39,5 +61,8 @@ class UpdateChecklistCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-}
+
+    }//end execute()
+
+
+}//end class
