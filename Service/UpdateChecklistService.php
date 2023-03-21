@@ -2,19 +2,16 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds al the logic for checksing data from the marriage request and updating the associated checklist.
  */
 class UpdateChecklistService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -58,10 +55,10 @@ class UpdateChecklistService
     }//end __construct()
 
     /**
-     * Checks the partners of the huwelijk
+     * Checks the partners of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -87,10 +84,10 @@ class UpdateChecklistService
     }//end checkHuwelijkPartners()
 
     /**
-     * Checks the witnesses of the huwelijk
+     * Checks the witnesses of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -117,10 +114,10 @@ class UpdateChecklistService
     }//end checkHuwelijkWitnesses()
 
     /**
-     * Checks the offeser of the huwelijk
+     * Checks the offeser of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -139,10 +136,10 @@ class UpdateChecklistService
     }//end checkHuwelijkOfficer()
 
     /**
-     * Checks the moment of the huwelijk
+     * Checks the moment of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -162,10 +159,10 @@ class UpdateChecklistService
     }//end checkHuwelijkMoment()
 
     /**
-     * Checks the products of the huwelijk
+     * Checks the products of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -185,10 +182,10 @@ class UpdateChecklistService
     }//end checkHuwelijkProducts()
 
     /**
-     * Checks the order of the huwelijk
+     * Checks the order of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -207,10 +204,10 @@ class UpdateChecklistService
     }//end checkHuwelijkOrder()
 
     /**
-     * Checks the case of the huwelijk
+     * Checks the case of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return ObjectEntity The huwelijk object with updated/created checklist
      */
@@ -218,12 +215,12 @@ class UpdateChecklistService
     {
         // Kijken naar zaak.
         if ($huwelijk->getValue('zaak') === false) {
-            $checklist['zaak'] = ['result' => false, 'display' => 'Nog geen zaak opgegeven',];
+            $checklist['zaak'] = ['result' => false, 'display' => 'Nog geen zaak opgegeven'];
 
             return $checklist;
         }//end if
 
-        $checklist['zaak'] = ['result' => true, 'display' => 'Zaak is opgegeven',];
+        $checklist['zaak'] = ['result' => true, 'display' => 'Zaak is opgegeven'];
 
         return $checklist;
     }//end checkHuwelijkCase()

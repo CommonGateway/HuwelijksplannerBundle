@@ -2,8 +2,6 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Entity as Schema;
-use App\Entity\Gateway as Source;
 use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
@@ -11,7 +9,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * This service holds all the logic for sending a message with messagebird.
@@ -27,7 +24,7 @@ class MessageBirdService
      * @var CallService
      */
     private CallService $callService;
-    
+
     /**
      * @var GatewayResourceService
      */
@@ -44,10 +41,10 @@ class MessageBirdService
     private LoggerInterface $pluginLogger;
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param CallService            $callService   The Call Service
+     * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param CallService            $callService            The Call Service
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
-     * @param LoggerInterface        $pluginLogger        The Logger Interface
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -97,7 +94,7 @@ class MessageBirdService
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $source = $this->gatewayResourceService->getSource('https://rest.messagebird.com', 'common-gateway/huwelijksplanner-bundle');
 
-        $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => '+31612345678', 'body'       => $body,]),];
+        $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => '+31612345678', 'body'       => $body])];
 
         try {
             $response = $this->callService->call($source, '/messages', 'POST', $config);

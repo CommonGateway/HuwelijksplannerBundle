@@ -13,7 +13,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateMarriageCommand extends Command
 {
-
     /**
      * @var string
      */
@@ -24,7 +23,6 @@ class CreateMarriageCommand extends Command
      */
     private CreateMarriageService $service;
 
-
     /**
      * @param CreateMarriageService $service The CreateMarriageService
      */
@@ -32,9 +30,7 @@ class CreateMarriageCommand extends Command
     {
         $this->service = $service;
         parent::__construct();
-
     }//end __construct()
-
 
     /**
      * @return void
@@ -44,13 +40,12 @@ class CreateMarriageCommand extends Command
         $this
             ->setDescription('Creates a marriage request object')
             ->setHelp('Creates a marriage request object');
-
     }//end configure()
 
-
     /**
-     * @param InputInterface $input The input
+     * @param InputInterface  $input  The input
      * @param OutputInterface $output The ouput
+     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -63,8 +58,5 @@ class CreateMarriageCommand extends Command
         }
 
         return Command::SUCCESS;
-
     }//end execute()
-
-
 }//end class

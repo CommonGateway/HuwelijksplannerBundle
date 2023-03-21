@@ -2,17 +2,15 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -65,7 +63,7 @@ class InvitePartnerService
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
-     * @param LoggerInterface        $pluginLogger                 The Logger Interface
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -84,13 +82,13 @@ class InvitePartnerService
         $this->security = $security;
         $this->pluginLogger = $pluginLogger;
     }//end __construct()
-    
+
     /**
      * This function validates and creates the huwelijk object and creates an assent for the current user.
-     * 
-     * @param array $huwelijk The huwelijk array from the request.
-     * @param string $id The id of the huwelijk object.
-     * 
+     *
+     * @param array  $huwelijk The huwelijk array from the request.
+     * @param string $id       The id of the huwelijk object.
+     *
      * @return ?array The updated huwelijk object as array.
      */
     private function invitePartner(array $huwelijk, string $id): ?array
@@ -136,7 +134,7 @@ class InvitePartnerService
     /**
      * Creates the marriage request object.
      *
-     * @param ?array $data The data array.
+     * @param ?array $data          The data array.
      * @param ?array $configuration The configuration array.
      *
      * @throws Exception

@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\Security;
 
 class InvitePartnerHandler implements ActionHandlerInterface
 {
-
     /**
      * @var InvitePartnerService
      */
@@ -19,18 +18,15 @@ class InvitePartnerHandler implements ActionHandlerInterface
      */
     private Security $security;
 
-
     /**
-     * @param InvitePartnerService $service The invite partner service
-     * @param Security $security THe security
+     * @param InvitePartnerService $service  The invite partner service
+     * @param Security             $security THe security
      */
     public function __construct(InvitePartnerService $service, Security $security)
     {
         $this->service = $service;
         $this->security = $security;
-
     }//end __construct()
-
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -44,11 +40,9 @@ class InvitePartnerHandler implements ActionHandlerInterface
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'InvitePartner',
             'required'   => [],
-            'properties' => []
+            'properties' => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the invitePartnerHandler function.
@@ -63,8 +57,5 @@ class InvitePartnerHandler implements ActionHandlerInterface
         var_dump('invitePartnerHandler');
 
         return $this->service->invitePartnerHandler($data, $configuration, $this->security);
-
     }//end run()
-
-
 }//end class

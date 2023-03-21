@@ -2,17 +2,15 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
-use App\Entity\Entity as Schema;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 /**
  * This service holds al the logic for creating the marriage request object.
@@ -162,7 +160,7 @@ class CreateMarriageService
         }//end if
 
         // @TODO check how and if we get the email and phonenumber from the frontend
-        if (key_exists('partners', $huwelijk) === true 
+        if (key_exists('partners', $huwelijk) === true
             && key_exists('person', $huwelijk['partners'][0])
         ) {
             $huwelijkPerson = $huwelijk['partners'][0]['person'];
@@ -238,7 +236,7 @@ class CreateMarriageService
             if (key_exists('locatie', $huwelijk) === true) {
                 $huwelijkArray['locatie'] = $huwelijk['locatie'];
             }//end if
-            
+
             $huwelijkArray = ['type' => $huwelijk['type'], 'moment' => $huwelijk['moment'], 'ceremonie' => $huwelijk['ceremonie']];
 
             $huwelijkObject->hydrate($huwelijkArray);
