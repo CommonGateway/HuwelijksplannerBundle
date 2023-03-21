@@ -54,8 +54,6 @@ class CreateMarriageHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
-        var_dump('createMarriageHandler');
-
         return $this->service->createMarriageHandler($data, $configuration, $this->security);
     }//end run()
 }//end class
