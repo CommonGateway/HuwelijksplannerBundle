@@ -17,6 +17,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
  */
 class CreateMarriageService
 {
+
     /**
      * @var EntityManagerInterface
      */
@@ -62,6 +63,7 @@ class CreateMarriageService
      */
     private array $configuration;
 
+
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param CacheService           $cacheService           The Cache Service
@@ -80,16 +82,18 @@ class CreateMarriageService
         Security $security,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
-        $this->cacheService = $cacheService;
+        $this->entityManager          = $entityManager;
+        $this->cacheService           = $cacheService;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data = [];
+        $this->data          = [];
         $this->configuration = [];
-        $this->handleAssentService = $handleAssentService;
+        $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security = $security;
+        $this->security     = $security;
         $this->pluginLogger = $pluginLogger;
-    }
+
+    }//end __construct()
+
 
     /**
      * Validate huwelijk type.
@@ -100,23 +104,34 @@ class CreateMarriageService
             if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
                 $this->pluginLogger->error('huwelijk.type not found in the databse with given id');
 
-                return ['response' => ['message' => 'huwelijk.type not found in the databse with given id'], 'httpCode' => 400];
+                return [
+                    'response' => ['message' => 'huwelijk.type not found in the databse with given id'],
+                    'httpCode' => 400,
+                ];
             }//end if
 
             // @TODO check upnLabel or upnUri
             if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
                 $this->pluginLogger->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
 
-                return ['response' => ['message' => 'huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap'], 'httpCode' => 400];
+                return [
+                    'response' => ['message' => 'huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap'],
+                    'httpCode' => 400,
+                ];
             }//end if
 
             return true;
         } else {
             $this->pluginLogger->error('huwelijk.type is not given');
 
-            return ['response' => ['message' => 'huwelijk.type is not given'], 'httpCode' => 400];
-        }
+            return [
+                'response' => ['message' => 'huwelijk.type is not given'],
+                'httpCode' => 400,
+            ];
+        }//end if
+
     }//end validateType()
+
 
     /**
      * Validate huwelijk type.
@@ -129,32 +144,43 @@ class CreateMarriageService
             if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
                 $this->pluginLogger->error('huwelijk.ceremonie not found in the databse with given id');
 
-                return ['response' => ['message' => 'huwelijk.ceremonie not found in the databse with given id'], 'httpCode' => 400];
+                return [
+                    'response' => ['message' => 'huwelijk.ceremonie not found in the databse with given id'],
+                    'httpCode' => 400,
+                ];
             }//end if
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
                 $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
-                return ['response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'], 'httpCode' => 400];
+                return [
+                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
+                    'httpCode' => 400,
+                ];
             }//end if
 
             return true;
         } else {
             $this->pluginLogger->error('huwelijk.ceremonie is not given');
 
-            return ['response' => ['message' => 'huwelijk.ceremonie is not given'], 'httpCode' => 400];
-        }
+            return [
+                'response' => ['message' => 'huwelijk.ceremonie is not given'],
+                'httpCode' => 400,
+            ];
+        }//end if
+
     }//end validateCeremonie()
+
 
     /**
      * This function creates a person object for the given user.
      */
-    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null): ?ObjectEntity
+    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         if ($brpPerson) {
-            $naam = $brpPerson->getValue('naam');
+            $naam           = $brpPerson->getValue('naam');
             $verblijfplaats = $brpPerson->getValue('verblijfplaats');
             $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
         }//end if
@@ -175,48 +201,58 @@ class CreateMarriageService
         }//end if
 
         $person = new ObjectEntity($personSchema);
-        $person->hydrate([
-            'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
-            'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
-            'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
-            'telefoonnummers'       => [[
-                'naam'           => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                'telefoonnummer' => isset($phonenumber) ? $phonenumber : null,
-            ]],
-            'emails'                => [[
-                'naam'  => isset($naam) ? 'Emailadres van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                'email' => isset($email) ? $email : $this->security->getUser()->getEmail(),
-            ]],
-            'adressen'             => [[
-                'naam'                 => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
-                'straatnaam'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('straat') : null,
-                'huisnummer'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummer') : null,
-                'huisletter'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisletter') : null,
-                'huisnummertoevoeging' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummertoevoeging') : null,
-                'postcode'             => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('postcode') : null,
-                'woonplaatsnaam'       => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('woonplaats') : null,
-                'landcode'             => isset($landVanwaarIngeschreven) && $landVanwaarIngeschreven ? $landVanwaarIngeschreven->getValue('code') : null,
-            ]],
-            'subject'              => $brpPerson && $brpPerson->getSelf(),
-            'subjectType'          => 'natuurlijk_persoon',
-            'subjectIdentificatie' => [
-                'inpBsn'                   => $brpPerson ? $brpPerson->getValue('burgerservicenummer') : $this->security->getUser()->getPerson(),
-                'inpANummer'               => $brpPerson !== null ? $brpPerson->getValue('aNummer') : null,
-                'geslachtsnaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : null,
-                'voorvoegselGeslachtsnaam' => isset($naam) ? $naam && $naam->getValue('voorvoegsel') : null,
-                'voorletters'              => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
-                'voornamen'                => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
-                'geslachtsaanduiding'      => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
-                //                'geboortedatum' => null, @TODO
-                //                'verblijfsadres' => null, @TODO
-                //                'subVerblijfBuitenland' => null, @TODO
-            ],
-        ]);
+        $person->hydrate(
+            [
+                'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
+                'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
+                'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
+                'telefoonnummers'       => [
+                    [
+                        'naam'           => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
+                        'telefoonnummer' => isset($phonenumber) ? $phonenumber : null,
+                    ],
+                ],
+                'emails'                => [
+                    [
+                        'naam'  => isset($naam) ? 'Emailadres van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
+                        'email' => isset($email) ? $email : $this->security->getUser()->getEmail(),
+                    ],
+                ],
+                'adressen'              => [
+                    [
+                        'naam'                 => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
+                        'straatnaam'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('straat') : null,
+                        'huisnummer'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummer') : null,
+                        'huisletter'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisletter') : null,
+                        'huisnummertoevoeging' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummertoevoeging') : null,
+                        'postcode'             => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('postcode') : null,
+                        'woonplaatsnaam'       => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('woonplaats') : null,
+                        'landcode'             => isset($landVanwaarIngeschreven) && $landVanwaarIngeschreven ? $landVanwaarIngeschreven->getValue('code') : null,
+                    ],
+                ],
+                'subject'               => $brpPerson && $brpPerson->getSelf(),
+                'subjectType'           => 'natuurlijk_persoon',
+                'subjectIdentificatie'  => [
+                    'inpBsn'                   => $brpPerson ? $brpPerson->getValue('burgerservicenummer') : $this->security->getUser()->getPerson(),
+                    'inpANummer'               => $brpPerson !== null ? $brpPerson->getValue('aNummer') : null,
+                    'geslachtsnaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : null,
+                    'voorvoegselGeslachtsnaam' => isset($naam) ? $naam && $naam->getValue('voorvoegsel') : null,
+                    'voorletters'              => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
+                    'voornamen'                => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
+                    'geslachtsaanduiding'      => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
+                // 'geboortedatum' => null, @TODO
+                // 'verblijfsadres' => null, @TODO
+                // 'subVerblijfBuitenland' => null, @TODO
+                ],
+            ]
+        );
         $this->entityManager->persist($person);
         $this->entityManager->flush();
 
         return $person;
+
     }//end createPerson()
+
 
     /**
      * This function validates and creates the huwelijk object
@@ -225,7 +261,7 @@ class CreateMarriageService
     private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
         $huwelijkSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema      = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
@@ -237,14 +273,18 @@ class CreateMarriageService
                 $huwelijkArray['locatie'] = $huwelijk['locatie'];
             }//end if
 
-            $huwelijkArray = ['type' => $huwelijk['type'], 'moment' => $huwelijk['moment'], 'ceremonie' => $huwelijk['ceremonie']];
+            $huwelijkArray = [
+                'type'      => $huwelijk['type'],
+                'moment'    => $huwelijk['moment'],
+                'ceremonie' => $huwelijk['ceremonie'],
+            ];
 
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
-            $brpPerson = null;
+            $brpPerson  = null;
             if (count($brpPersons) === 1) {
                 $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
             }//end if
@@ -261,14 +301,18 @@ class CreateMarriageService
             // after the persist the partner is added to the array
             $this->entityManager->flush();
             // after the flush the partner array is empty, also after the commongateway:cache:warmup
-
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             return $huwelijkObject->toArray();
         }//end if
 
-        return ['response' => ['message' => 'Validation failed'], 'httpCode' => 400];
+        return [
+            'response' => ['message' => 'Validation failed'],
+            'httpCode' => 400,
+        ];
+
     }//end createMarriage()
+
 
     /**
      * Creates the marriage request object.
@@ -280,10 +324,10 @@ class CreateMarriageService
      *
      * @return ?array
      */
-    public function createMarriageHandler(?array $data = [], ?array $configuration = []): ?array
+    public function createMarriageHandler(?array $data=[], ?array $configuration=[]): ?array
     {
         $this->pluginLogger->debug('createMarriageHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
@@ -307,5 +351,8 @@ class CreateMarriageService
         $this->data['response'] = $huwelijk;
 
         return $this->data;
+
     }//end createMarriageHandler()
-}
+
+
+}//end class
