@@ -304,7 +304,6 @@ class CreateMarriageService
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-            $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
             $this->cacheService->cacheObject($huwelijkObject);
             // @todo this is hacky, the above schould alredy do this
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
