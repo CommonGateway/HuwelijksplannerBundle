@@ -246,7 +246,6 @@ class InviteWitnessService
         }//end if
 
         if (isset($this->data['response']['_self']['id']) === false) {
-
             return $this->data;
         }//end if
 

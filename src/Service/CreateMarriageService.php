@@ -203,9 +203,12 @@ class CreateMarriageService
         $person = new ObjectEntity($personSchema);
         $person->hydrate(
             [
-                'bronorganisatie' => '99999', //@TODO
-                'klantnummer'      => '99999', //@TODO
-                'websiteUrl'       => 'www.example.com', //@TODO
+                'bronorganisatie'       => '99999',
+            // @TODO
+                'klantnummer'           => '99999',
+            // @TODO
+                'websiteUrl'            => 'www.example.com',
+            // @TODO
                 'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
                 'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
                 'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
@@ -263,7 +266,7 @@ class CreateMarriageService
      */
     private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
-        $brpSchema      = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
@@ -302,8 +305,8 @@ class CreateMarriageService
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
             $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
-            $this->cacheService->cacheObject($huwelijkObject); /* @todo this is hacky, the above schould alredy do this */
-
+            $this->cacheService->cacheObject($huwelijkObject);
+            // @todo this is hacky, the above schould alredy do this
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             return $huwelijkObject->toArray();
