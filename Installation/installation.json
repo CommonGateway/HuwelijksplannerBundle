@@ -47,6 +47,11 @@
         "reference": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
         "listens": ["huwelijksplanner.get.payment"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.MollieWebhookAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\MollieWebhookHandler",
+        "listens": ["huwelijksplanner.get.webhook"]
       }
     ]
   },
@@ -114,6 +119,22 @@
         "methods": [
           "POST"
         ]
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
+        "path": "payment",
+        "methods": [
+          "GET"
+        ],
+        "throws": ["huwelijksplanner.get.payment"]
+      },
+      {
+        "reference": "https://huwelijksplanner.nl/schemas/hp.mollieWebhook.schema.json",
+        "path": "mollie/webhook",
+        "methods": [
+          "GET"
+        ],
+        "throws": ["huwelijksplanner.get.webhook"]
       }
     ]
   }
