@@ -18,6 +18,7 @@ use Doctrine\Persistence\ObjectRepository;
  */
 class MollieWebhookService
 {
+
     /**
      * @var EntityManagerInterface
      */
@@ -53,10 +54,11 @@ class MollieWebhookService
      */
     private array $configuration;
 
+
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager Interface.
-     * @param CallService $callService The Call Service.
-     * @param SynchronizationService $syncService The Synchronization Service.
+     * @param EntityManagerInterface $entityManager          The Entity Manager Interface.
+     * @param CallService            $callService            The Call Service.
+     * @param SynchronizationService $syncService            The Synchronization Service.
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service.
      * @param LoggerInterface        $pluginLogger           The Logger Interface.
      */
@@ -67,15 +69,17 @@ class MollieWebhookService
         GatewayResourceService $gatewayResourceService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
-        $this->callService = $callService;
-        $this->syncService = $syncService;
+        $this->entityManager          = $entityManager;
+        $this->callService            = $callService;
+        $this->syncService            = $syncService;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->pluginLogger = $pluginLogger;
+        $this->pluginLogger           = $pluginLogger;
 
-        $this->data = [];
+        $this->data          = [];
         $this->configuration = [];
+
     }//end __construct()
+
 
     /**
      * Check the auth of the given source.
@@ -87,13 +91,15 @@ class MollieWebhookService
     public function checkSourceAuth(Source $source): bool
     {
         if ($source->getApiKey() === null) {
-            $this->pluginLogger->error('No auth set for Source: '.$source->getName().'.', ['plugin'=>'common-gateway/huwelijksplanner-bundle']);
+            $this->pluginLogger->error('No auth set for Source: '.$source->getName().'.', ['plugin' => 'common-gateway/huwelijksplanner-bundle']);
 
             return false;
         }//end if
 
         return true;
-    }//end checkGithubAuth()
+
+    }//end checkSourceAuth()
+
 
     /**
      * Creates payment for given marriage.
@@ -103,10 +109,10 @@ class MollieWebhookService
      *
      * @return array
      */
-    public function mollieWebhookHandler(?array $data = [], ?array $configuration = []): array
+    public function mollieWebhookHandler(?array $data=[], ?array $configuration=[]): array
     {
         $this->pluginLogger->debug('mollieWebhookHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         if (empty($this->data['parameters']['body']['id']) === true) {
@@ -116,22 +122,30 @@ class MollieWebhookService
         $id = $this->data['parameters']['body']['id'];
 
         $mollieEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.mollie.source.json', 'common-gateway/huwelijksplanner-bundle');
+        $source       = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.mollie.source.json', 'common-gateway/huwelijksplanner-bundle');
         if ($this->checkSourceAuth($source) === false) {
-            return ['message' => 'No authorization set for the mollie source.', 'status' => 400];
+            return [
+                'message' => 'No authorization set for the mollie source.',
+                'status'  => 400,
+            ];
         }//end if
 
         try {
             $response = $this->callService->call($source, '/v2/payments/'.$id, 'GET');
-            $payment = json_decode($response->getBody()->getContents(), true);
+            $payment  = json_decode($response->getBody()->getContents(), true);
         } catch (ClientException $exception) {
-            $this->pluginLogger->error('Could not get a payment with source: ' . $source->getName() . ' and id: '.$id);
+            $this->pluginLogger->error('Could not get a payment with source: '.$source->getName().' and id: '.$id);
         }
 
         if (empty($payment) === true) {
-            $this->pluginLogger->error('Could not get a payment with source: ' . $source->getName() . ' and id: '.$id);
+            $this->pluginLogger->error('Could not get a payment with source: '.$source->getName().' and id: '.$id);
 
-            return ['response' => ['message' => 'Could not get a payment with source: ' . $source->getName() . ' and id: '.$id, 'status' => 400]];
+            return [
+                'response' => [
+                    'message' => 'Could not get a payment with source: '.$source->getName().' and id: '.$id,
+                    'status'  => 400,
+                ],
+            ];
         }//end if
 
         $synchronization = $this->syncService->findSyncBySource($source, $mollieEntity, $this->data['parameters']['body']['id']);
@@ -142,5 +156,8 @@ class MollieWebhookService
         $this->data['response'] = $synchronization->getObject()->toArray();
 
         return $this->data;
-    }//end createPaymentHandler()
-}
+
+    }//end mollieWebhookHandler()
+
+
+}//end class
