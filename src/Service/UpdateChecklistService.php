@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
  */
 class UpdateChecklistService
 {
+
     /**
      * @var EntityManagerInterface
      */
@@ -37,6 +38,7 @@ class UpdateChecklistService
      */
     private array $configuration;
 
+
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
@@ -47,12 +49,14 @@ class UpdateChecklistService
         GatewayResourceService $gatewayResourceService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->pluginLogger = $pluginLogger;
-        $this->data = [];
+        $this->pluginLogger           = $pluginLogger;
+        $this->data          = [];
         $this->configuration = [];
+
     }//end __construct()
+
 
     /**
      * Checks the partners of the huwelijk.
@@ -67,21 +71,32 @@ class UpdateChecklistService
         // Check partners.
         $partnersCount = count($huwelijk->getValue('partners'));
         if ($partnersCount < 2) {
-            $checklist['partners'] = ['result' => false, 'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 partners nodig'];
+            $checklist['partners'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 partners nodig',
+            ];
 
             return $checklist;
         }//end if
 
         if ($partnersCount > 2) {
-            $checklist['partners'] = ['result' => false, 'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 2 partners worden opgegeven'];
+            $checklist['partners'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 2 partners worden opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['partners'] = ['result'  => true, 'display' => 'Partners zijn opgegeven'];
+        $checklist['partners'] = [
+            'result'  => true,
+            'display' => 'Partners zijn opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkPartners()
+
 
     /**
      * Checks the witnesses of the huwelijk.
@@ -97,21 +112,32 @@ class UpdateChecklistService
         // @todo eigenlijk is het minimaal 1 en maximaal 2 getuigen per partner.
         $witnessCount = count($huwelijk->getValue('getuigen'));
         if ($witnessCount < 2) {
-            $checklist['getuigen'] = ['result' => false, 'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 getuigen nodig'];
+            $checklist['getuigen'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap zijn minimaal 2 getuigen nodig',
+            ];
 
             return $checklist;
         }//end if
 
         if ($witnessCount > 4) {
-            $checklist['getuigen'] = ['result' => false, 'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 4 getuigen worden opgegeven'];
+            $checklist['getuigen'] = [
+                'result'  => false,
+                'display' => 'Voor een huwelijk/partnerschap kunnen maximaal 4 getuigen worden opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['getuigen'] = ['result' => true, 'display' => 'Getuigen zijn opgegeven'];
+        $checklist['getuigen'] = [
+            'result'  => true,
+            'display' => 'Getuigen zijn opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkWitnesses()
+
 
     /**
      * Checks the offeser of the huwelijk.
@@ -125,15 +151,23 @@ class UpdateChecklistService
     {
         // Kijken naar ambtenaar.
         if ($huwelijk->getValue('ambtenaar') === false) {
-            $checklist['ambtenaar'] = ['result' => false, 'display' => 'Nog geen ambtenaar opgegeven'];
+            $checklist['ambtenaar'] = [
+                'result'  => false,
+                'display' => 'Nog geen ambtenaar opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['ambtenaar'] = ['result' => true, 'display' => 'Ambtenaar is opgegeven'];
+        $checklist['ambtenaar'] = [
+            'result'  => true,
+            'display' => 'Ambtenaar is opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkOfficer()
+
 
     /**
      * Checks the moment of the huwelijk.
@@ -148,15 +182,23 @@ class UpdateChecklistService
         // Kijken naar moment.
         // @TODO trouwdatum minimaal 2 weken groter dan aanvraag datum.
         if ($huwelijk->getValue('moment') === false) {
-            $checklist['moment'] = ['result' => false, 'display' => 'Nog geen moment opgegeven'];
+            $checklist['moment'] = [
+                'result'  => false,
+                'display' => 'Nog geen moment opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['moment'] = ['result' => true, 'display' => 'Moment is opgegeven'];
+        $checklist['moment'] = [
+            'result'  => true,
+            'display' => 'Moment is opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkMoment()
+
 
     /**
      * Checks the products of the huwelijk.
@@ -171,15 +213,23 @@ class UpdateChecklistService
         // Kijken naar producten.
         $productsCount = count($huwelijk->getValue('producten'));
         if ($productsCount === 0) {
-            $checklist['producten'] = ['result' => false, 'display' => 'Nog geen producten opgegeven'];
+            $checklist['producten'] = [
+                'result'  => false,
+                'display' => 'Nog geen producten opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['producten'] = ['result' => true, 'display' => 'Producten zijn opgegeven'];
+        $checklist['producten'] = [
+            'result'  => true,
+            'display' => 'Producten zijn opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkProducts()
+
 
     /**
      * Checks the order of the huwelijk.
@@ -193,15 +243,23 @@ class UpdateChecklistService
     {
         // Kijken naar order.
         if ($huwelijk->getValue('order') === false) {
-            $checklist['order'] = ['result' => false, 'display' => 'Nog geen order opgegeven'];
+            $checklist['order'] = [
+                'result'  => false,
+                'display' => 'Nog geen order opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['order'] = ['result' => true, 'display' => 'Order is opgegegeven'];
+        $checklist['order'] = [
+            'result'  => true,
+            'display' => 'Order is opgegegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkOrder()
+
 
     /**
      * Checks the case of the huwelijk.
@@ -215,15 +273,23 @@ class UpdateChecklistService
     {
         // Kijken naar zaak.
         if ($huwelijk->getValue('zaak') === false) {
-            $checklist['zaak'] = ['result' => false, 'display' => 'Nog geen zaak opgegeven'];
+            $checklist['zaak'] = [
+                'result'  => false,
+                'display' => 'Nog geen zaak opgegeven',
+            ];
 
             return $checklist;
         }//end if
 
-        $checklist['zaak'] = ['result' => true, 'display' => 'Zaak is opgegeven'];
+        $checklist['zaak'] = [
+            'result'  => true,
+            'display' => 'Zaak is opgegeven',
+        ];
 
         return $checklist;
+
     }//end checkHuwelijkCase()
+
 
     /**
      * Checks data from the marriage object and updates the associated checklist.
@@ -258,5 +324,8 @@ class UpdateChecklistService
         $this->entityManager->flush();
 
         return $huwelijk;
+
     }//end checkHuwelijk()
-}
+
+
+}//end class

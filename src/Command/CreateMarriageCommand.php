@@ -2,35 +2,39 @@
 
 namespace CommonGateway\HuwelijksplannerBundle\Command;
 
-use CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService;
+use CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Command to execute the CreateAvailabilityService.
+ * Command to execute the CreateMarriageService.
  */
-class CreateAvailabilityCommand extends Command
+class CreateMarriageCommand extends Command
 {
+
     /**
      * @var string
      */
-    protected static $defaultName = 'huwelijksplanner:calendar:execute';
+    protected static $defaultName = 'huwelijksplanner:create:execute';
 
     /**
-     * @var CreateAvailabilityService
+     * @var CreateMarriageService
      */
-    private CreateAvailabilityService $service;
+    private CreateMarriageService $service;
+
 
     /**
-     * @param CreateAvailabilityService $service The CreateAvailabilityService
+     * @param CreateMarriageService $service The CreateMarriageService
      */
-    public function __construct(CreateAvailabilityService $service)
+    public function __construct(CreateMarriageService $service)
     {
         $this->service = $service;
         parent::__construct();
+
     }//end __construct()
+
 
     /**
      * @return void
@@ -38,9 +42,11 @@ class CreateAvailabilityCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Creates availability for someone with given date info')
-            ->setHelp('Creates availability for someone with given date info');
+            ->setDescription('Creates a marriage request object')
+            ->setHelp('Creates a marriage request object');
+
     }//end configure()
+
 
     /**
      * @param InputInterface  $input  The input
@@ -53,10 +59,13 @@ class CreateAvailabilityCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $this->service->setStyle($style);
 
-        if (!$this->service->createAvailabilityHandler([], [])) {
+        if (!$this->service->createMarriageHandler([], [])) {
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
+
     }//end execute()
+
+
 }//end class

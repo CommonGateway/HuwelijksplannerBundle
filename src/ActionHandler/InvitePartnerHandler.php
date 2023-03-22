@@ -3,30 +3,34 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\InviteWitnessService;
+use CommonGateway\HuwelijksplannerBundle\Service\InvitePartnerService;
 use Symfony\Component\Security\Core\Security;
 
-class InviteWitnessHandler implements ActionHandlerInterface
+class InvitePartnerHandler implements ActionHandlerInterface
 {
+
     /**
-     * @var InviteWitnessService
+     * @var InvitePartnerService
      */
-    private InviteWitnessService $service;
+    private InvitePartnerService $service;
 
     /**
      * @var Security
      */
     private Security $security;
 
+
     /**
-     * @param InviteWitnessService $service  The invite witnes service
-     * @param Security             $security The security
+     * @param InvitePartnerService $service  The invite partner service
+     * @param Security             $security THe security
      */
-    public function __construct(InviteWitnessService $service, Security $security)
+    public function __construct(InvitePartnerService $service, Security $security)
     {
-        $this->service = $service;
+        $this->service  = $service;
         $this->security = $security;
+
     }//end __construct()
+
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -36,16 +40,18 @@ class InviteWitnessHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/ActionHandler/hp.InviteWitnessHandler.ActionHandler.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.InvitePartnerHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'      => 'InviteWitness',
+            'title'      => 'InvitePartner',
             'required'   => [],
             'properties' => [],
         ];
+
     }//end getConfiguration()
 
+
     /**
-     * This function runs the inviteWitnessHandler function.
+     * This function runs the invitePartnerHandler function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -54,8 +60,11 @@ class InviteWitnessHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
-        var_dump('inviteWitnessHandler');
+        var_dump('invitePartnerHandler');
 
-        return $this->service->inviteWitnessHandler($data, $configuration, $this->security);
+        return $this->service->invitePartnerHandler($data, $configuration, $this->security);
+
     }//end run()
+
+
 }//end class

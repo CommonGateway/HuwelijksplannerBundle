@@ -3,30 +3,34 @@
 namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService;
+use CommonGateway\HuwelijksplannerBundle\Service\InviteWitnessService;
 use Symfony\Component\Security\Core\Security;
 
-class CreateMarriageHandler implements ActionHandlerInterface
+class InviteWitnessHandler implements ActionHandlerInterface
 {
+
     /**
-     * @var CreateMarriageService
+     * @var InviteWitnessService
      */
-    private CreateMarriageService $service;
+    private InviteWitnessService $service;
 
     /**
      * @var Security
      */
     private Security $security;
 
+
     /**
-     * @param CreateMarriageService $service  The CreateMarriageService
-     * @param Security              $security The Security
+     * @param InviteWitnessService $service  The invite witnes service
+     * @param Security             $security The security
      */
-    public function __construct(CreateMarriageService $service, Security $security)
+    public function __construct(InviteWitnessService $service, Security $security)
     {
-        $this->service = $service;
+        $this->service  = $service;
         $this->security = $security;
+
     }//end __construct()
+
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -36,16 +40,18 @@ class CreateMarriageHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/ActionHandler/hp.CreateMarriageHandler.ActionHandler.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.InviteWitnessHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'      => 'CreateMarriage',
+            'title'      => 'InviteWitness',
             'required'   => [],
             'properties' => [],
         ];
+
     }//end getConfiguration()
 
+
     /**
-     * This function runs the createMarriage function.
+     * This function runs the inviteWitnessHandler function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action
@@ -54,8 +60,11 @@ class CreateMarriageHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
-        var_dump('createMarriageHandler');
+        var_dump('inviteWitnessHandler');
 
-        return $this->service->createMarriageHandler($data, $configuration, $this->security);
+        return $this->service->inviteWitnessHandler($data, $configuration, $this->security);
+
     }//end run()
+
+
 }//end class
