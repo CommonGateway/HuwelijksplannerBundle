@@ -46,7 +46,7 @@
       {
         "reference": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
-        "listens": ["huwelijksplanner.create.payment"]
+        "listens": ["huwelijksplanner.get.payment"]
       }
     ]
   },
@@ -111,12 +111,9 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
         "path": "calendar/availabilitycheck",
-        "methods": ["POST"]
-      },
-      {
-        "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
-        "path": "payment",
-        "methods": ["GET"]
+        "methods": [
+          "POST"
+        ]
       }
     ]
   }

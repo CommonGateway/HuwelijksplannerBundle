@@ -1,0 +1,13 @@
+{
+    "title": "Payment",
+    "$id": "https://huwelijksplanner.nl/PaymentEndpoint/oc.payment.endpoint.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Endpoint.schema.json",
+    "version": "0.0.1",
+    "description": "Payment Endpoint",
+    "path": ["hp", "payment"],
+    "pathRegex": "^(hp/payment)$",
+    "methods": ["GET"],
+    "throws": [
+        "huwelijksplanner.get.payment"
+    ]
+}

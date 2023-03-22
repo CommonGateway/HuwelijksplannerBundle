@@ -161,7 +161,7 @@ class InviteWitnessService
             $this->entityManager->persist($person);
 
             // creates an assent and add the person to the partners of this merriage
-            $witnessAssents['getuigen'][] = $this->handleAssentService->handleAssent($person, 'witness', $this->data);
+            $witnessAssents['getuigen'][] = $this->handleAssentService->handleAssent($person, 'witness', $this->data)->getId()->toString();
         }//end foreach
 
         return $witnessAssents;
@@ -195,7 +195,7 @@ class InviteWitnessService
             // @TODO Check if there are duplicates in the huwelijk getuigen array.
             // Get the emails of the witnesses to validate.
             $witnessAssentsEmail = $this->getHuwelijkWitnessesEmails($huwelijkObject);
-            // Create the witnesses
+            // Create the witnesses.
             $witnessAssents = $this->createWitnesses($huwelijk, $witnessAssentsEmail);
             $huwelijkObject->hydrate($witnessAssents);
 
@@ -203,8 +203,6 @@ class InviteWitnessService
             $this->entityManager->flush();
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
-
-            return $huwelijkObject->toArray();
         }//end if
 
         return $huwelijkObject->toArray();
@@ -247,17 +245,12 @@ class InviteWitnessService
             return $this->data;
         }//end if
 
-        foreach ($this->data['parameters']['path'] as $path) {
-            if (Uuid::isValid($path)) {
-                $id = $path;
-            }
-        }//end foreach
+        if (isset($this->data['response']['_self']['id']) === false) {
 
-        if (isset($id) === false) {
             return $this->data;
         }//end if
 
-        $huwelijk = $this->inviteWitness($this->data['parameters']['body'], $id);
+        $huwelijk = $this->inviteWitness($this->data['parameters']['body'], $this->data['response']['_self']['id']);
 
         $this->data['response'] = $huwelijk;
 
