@@ -35,11 +35,12 @@ class CreateAvailabilityService
      */
     private EntityManagerInterface $entityManager;
 
+
     /**
      * @param LoggerInterface $pluginLogger The Logger Interface
      */
     public function __construct(
-        LoggerInterface        $pluginLogger,
+        LoggerInterface $pluginLogger,
         EntityManagerInterface $entityManager
     ) {
         $this->pluginLogger  = $pluginLogger;
@@ -48,6 +49,7 @@ class CreateAvailabilityService
         $this->configuration = [];
 
     }//end __construct()
+
 
     /**
      * Creates availability for someone with given date info.
@@ -77,31 +79,29 @@ class CreateAvailabilityService
         // @TODO get products from params
         $ceremonie = $this->data['parameters']->get('?');
         // @TODO end
-
         // @TODO get availability for products
         $availabilityEntity = $this->entityManager->getRepository('App:Entity')->findBy(['reference' => 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json']);
-        $resourceAttribute = $this->entityManager->getRepository('App:Attribute')->findBy(['name' => 'resource', 'entity' => $availabilityEntity]);
+        $resourceAttribute  = $this->entityManager->getRepository('App:Attribute')->findBy(['name' => 'resource', 'entity' => $availabilityEntity]);
         // @TODO end
-
         // @TODO Repeat for all products
-        $resourceValues = $this->entityManager->getRepository('App:Value')->findBy(['attribute' => $resourceAttribute, 'stringValue' => $ceremonie]);
+        $resourceValues         = $this->entityManager->getRepository('App:Value')->findBy(['attribute' => $resourceAttribute, 'stringValue' => $ceremonie]);
         $ceremonieAvailabilties = [];
         foreach ($resourceValues as $value) {
             $ceremonieAvailabilties = $value->getObject()->toArray();
         }
 
         foreach ($ceremonieAvailabilties as $availability) {
-            $start = new DateTime($availability['startDate']);
+            $start      = new DateTime($availability['startDate']);
             $startStamp = $start->getTimestamp();
-            $end   = new DateTime($availability['endDate']);
-            $endStamp = $end->getTimestamp();
+            $end        = new DateTime($availability['endDate']);
+            $endStamp   = $end->getTimestamp();
 
             if (( $givenBeginStamp > $startStamp && $givenBeginStamp < $endStamp ) || ( $endStamp > $startStamp && $endStamp < $endStamp )) {
                 return ['response' => ['message' => 'Ceremonie not available on given date']];
             }
         }
+
         // @TODO end
-        
         // @TODO this code creates a availability?
         $resultArray = [];
         foreach ($period as $currentDate) {
@@ -113,13 +113,13 @@ class CreateAvailabilityService
             $dayStop->setTime(17, 0);
 
             $formattedCurrentDate = $currentDate->format('Y-m-d\TH:i:sO');
-            $formattedDayStart = $dayStart->format('Y-m-d\TH:i:sO');
-            $formattedDayStop = $dayStop->format('Y-m-d\TH:i:sO');
+            $formattedDayStart    = $dayStart->format('Y-m-d\TH:i:sO');
+            $formattedDayStop     = $dayStop->format('Y-m-d\TH:i:sO');
 
             $currentDateStamp = $currentDate->getTimestamp();
-            $dayStartStamp = $dayStart->getTimestamp();
-            $dayStopStamp = $dayStart->getTimestamp();
-            
+            $dayStartStamp    = $dayStart->getTimestamp();
+            $dayStopStamp     = $dayStart->getTimestamp();
+
             if ($currentDateStamp >= $dayStartStamp && $currentDateStamp < $dayStopStamp) {
                 $resourceArray = $this->data['parameters']->get('resources_could');
             } else {
@@ -134,7 +134,6 @@ class CreateAvailabilityService
             ];
         }//end foreach
         // @TODO end
-
         $this->data['response'] = $resultArray;
 
         return $this->data;
