@@ -21,7 +21,7 @@
       {
         "reference": "https://hp.nl/action/hp.CreateAvailabilityAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateAvailabilityHandler",
-        "listens": ["huwelijksplanner.calendar.listens"]
+        "listens": ["huwelijksplanner.get.availability"]
       },
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
@@ -112,8 +112,9 @@
         "reference": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
         "path": "calendar/availabilitycheck",
         "methods": [
-          "POST"
-        ]
+          "GET"
+        ],
+        "throws": ["huwelijksplanner.get.availability"]
       }
     ]
   }
