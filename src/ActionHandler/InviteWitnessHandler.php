@@ -60,8 +60,6 @@ class InviteWitnessHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
-        var_dump('inviteWitnessHandler');
-
         return $this->service->inviteWitnessHandler($data, $configuration, $this->security);
 
     }//end run()

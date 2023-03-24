@@ -60,8 +60,6 @@ class InvitePartnerHandler implements ActionHandlerInterface
      */
     public function run(array $data, array $configuration)
     {
-        var_dump('invitePartnerHandler');
-
         return $this->service->invitePartnerHandler($data, $configuration, $this->security);
 
     }//end run()

@@ -13,19 +13,19 @@
 	"homepage" : "https://commongatway.nl",
 	"license": "EUPL-1.2",
 	"minimum-stability" : "dev",
-	"require": {
-		"php": ">=7.4",
-		"commongateway/corebundle": ">=1.0.33",
-		"common-gateway/brp-bundle": ">=0.0.23",
-		"common-gateway/klanten-bundle": ">=0.0.34",
-		"common-gateway/zgw-bundle": ">=0.1.30"
-	},
+    "require": {
+        "php": ">=7.4",
+        "commongateway/corebundle": ">=1.0.33",
+        "common-gateway/brp-bundle": ">=0.0.23",
+        "common-gateway/klanten-bundle": ">=0.0.34",
+        "common-gateway/zgw-bundle": ">=0.1.30"
+    },
 	"require-dev" : {
 		"symfony/dependency-injection" : "~3.4|~4.1|~5.0"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"CommonGateway\\HuwelijksplannerBundle\\" : ""
+			"CommonGateway\\HuwelijksplannerBundle\\" : "src/"
 		}
 	},
 	"scripts": {

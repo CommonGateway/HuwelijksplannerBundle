@@ -72,7 +72,7 @@ class MessageBirdService
     public function importMessage($message): ?ObjectEntity
     {
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source            = $this->gatewayResourceService->getSource('https://rest.messagebird.com', 'common-gateway/huwelijksplanner-bundle');
+        $source            = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
 
         $synchronization = $this->synchronizationService->findSyncBySource($source, $messagebirdEntity, $message['id']);
 
@@ -98,7 +98,7 @@ class MessageBirdService
         $this->pluginLogger->debug('Send a message');
 
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source            = $this->gatewayResourceService->getSource('https://rest.messagebird.com', 'common-gateway/huwelijksplanner-bundle');
+        $source            = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
 
         $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => '+31612345678', 'body' => $body])];
 

@@ -115,6 +115,12 @@ class InvitePartnerService
                 return $huwelijkObject->toArray();
             }//end if
 
+            if (count($huwelijkObject->getValue('partners')) !== 1) {
+                $this->pluginLogger->error('You cannot add a partner before the requester is set.');
+
+                return $huwelijkObject;
+            }//end if
+
             $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
             $person = new ObjectEntity($personSchema);
@@ -122,7 +128,9 @@ class InvitePartnerService
             $this->entityManager->persist($person);
             $this->entityManager->flush();
 
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data);
+            $partners = $huwelijkObject->getValue('partners');
+            $requesterAssent['partners'][] = $partners[0]->getId()->toString();
+            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data)->getId()->toString();
             $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);
@@ -171,17 +179,11 @@ class InvitePartnerService
             return $this->data;
         }//end if
 
-        foreach ($this->data['parameters']['path'] as $path) {
-            if (Uuid::isValid($path)) {
-                $id = $path;
-            }//end if
-        }//end foreach
-
-        if (isset($id) === false) {
+        if (isset($this->data['response']['_self']['id']) === false) {
             return $this->data;
         }//end if
 
-        $huwelijk = $this->invitePartner($this->data['parameters']['body'], $id);
+        $huwelijk = $this->invitePartner($this->data['parameters']['body'], $this->data['response']['_self']['id']);
 
         $this->data['response'] = $huwelijk;
 

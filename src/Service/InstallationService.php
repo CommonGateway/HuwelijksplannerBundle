@@ -60,9 +60,20 @@ class InstallationService implements InstallerInterface
     {
         $entities = $this->entityManager->getRepository('App:Entity')->findAll();
         foreach ($entities as $entity) {
-            // set maxDepth for an entity to 5
-            $entity->setMaxDepth(5);
-            $this->entityManager->persist($entity);
+
+            // Unsets the persist of the huwelijk entity and molly entity.
+            if ($entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.mollie.schema.json'
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json') {
+                $entity->setPersist(false);
+                $this->entityManager->persist($entity);
+            }
+
+            if ($entity->getMaxDepth() !== 5) {
+                // Set maxDepth for an entity to 5.
+                $entity->setMaxDepth(5);
+                $this->entityManager->persist($entity);
+            }
         }
     }
 

@@ -203,6 +203,12 @@ class CreateMarriageService
         $person = new ObjectEntity($personSchema);
         $person->hydrate(
             [
+                'bronorganisatie'       => '99999',
+            // @TODO
+                'klantnummer'           => '99999',
+            // @TODO
+                'websiteUrl'            => 'www.example.com',
+            // @TODO
                 'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
                 'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
                 'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
@@ -260,8 +266,7 @@ class CreateMarriageService
      */
     private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
-        $huwelijkSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $brpSchema      = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
@@ -294,13 +299,13 @@ class CreateMarriageService
             $person = $this->createPerson($huwelijk, $brpPerson);
 
             // creates an assent and add the person to the partners of this merriage
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'requester', $this->data);
+            $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data)->getId()->toString();
             $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);
-            // after the persist the partner is added to the array
             $this->entityManager->flush();
-            // after the flush the partner array is empty, also after the commongateway:cache:warmup
+            $this->cacheService->cacheObject($huwelijkObject);
+            // @todo this is hacky, the above schould alredy do this
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
             return $huwelijkObject->toArray();
