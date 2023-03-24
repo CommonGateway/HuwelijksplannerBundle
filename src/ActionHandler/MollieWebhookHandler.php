@@ -33,9 +33,9 @@ class MollieWebhookHandler implements ActionHandlerInterface
     public function getConfiguration(): array
     {
         return [
-            '$id'        => 'https://hp.nl/ActionHandler/hp.CreatePaymentHandler.ActionHandler.json',
+            '$id'        => 'https://hp.nl/ActionHandler/hp.MollieWebhookHandler.ActionHandler.json',
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
-            'title'      => 'CreatePayment',
+            'title'      => 'MollieWebhook',
             'required'   => [],
             'properties' => [],
         ];
@@ -44,7 +44,7 @@ class MollieWebhookHandler implements ActionHandlerInterface
 
 
     /**
-     * This function runs the createPaymentHandler function.
+     * This function runs the mollieWebhookHandler function.
      *
      * @param array $data          The data from the call
      * @param array $configuration The configuration of the action

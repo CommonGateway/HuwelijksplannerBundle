@@ -259,6 +259,68 @@ class CreateMarriageService
 
     }//end createPerson()
 
+    /**
+     * Validate huwelijk type.
+     */
+    private function calculatePrice(ObjectEntity $sdgProduct, ObjectEntity $huwelijk)
+    {
+        // update huwelijk object with price of the ceremonie
+        $vertalingen = $sdgProduct->getValue('vertalingen');
+        foreach ($vertalingen as $vertaling) {
+            $price = $vertaling->getValue('kostenEnBetaalmethoden');
+
+            if ($price === 'Geen extra kosten') {
+                return $huwelijk;
+            }//end if
+
+            $explodedPrice = explode(',', $price);
+            $kosten = $huwelijk->getValue('kosten');
+
+            if ($kosten === null) {
+                $amount = $kosten;
+            }//end if
+
+            if ($kosten !== null) {
+                $explodedKosten = explode(' ', $kosten);
+
+                if (count($explodedKosten) === 1) {
+                    $amount = $explodedKosten[0];
+                }//end if
+
+                if (count($explodedKosten) === 2) {
+                    $amount = $explodedKosten[1];
+                }//end if
+            }//end if
+
+            $kosten = $amount + $explodedPrice[0];
+            $huwelijk->setValue('kosten', 'EUR '.$kosten);
+            $this->entityManager->persist($huwelijk);
+            $this->entityManager->flush();
+
+            return $huwelijk;
+        }//end foreach
+    }
+
+    /**
+     * Validate huwelijk type.
+     */
+    private function updateMarriagePrice(ObjectEntity $huwelijk)
+    {
+        // @TODO has the type also has a price?
+//        if (($typeObject = $huwelijk->getValue('type')) !== false){
+//            $this->calculatePrice($typeObject, $huwelijk);
+//        }
+        if (($ceremonieObject = $huwelijk->getValue('ceremonie')) !== false){
+            $this->calculatePrice($ceremonieObject, $huwelijk);
+        }
+        if (($location = $huwelijk->getValue('locatie')) !== false){
+            $this->calculatePrice($location, $huwelijk);
+        }
+        if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false){
+            $this->calculatePrice($ambtenaar, $huwelijk);
+        }
+    }
+
 
     /**
      * This function validates and creates the huwelijk object
@@ -274,6 +336,7 @@ class CreateMarriageService
         if ($this->validateType($huwelijk) === true
             && $this->validateCeremonie($huwelijk) === true
         ) {
+            // ambtenaar en locatie
             if (key_exists('locatie', $huwelijk) === true) {
                 $huwelijkArray['locatie'] = $huwelijk['locatie'];
             }//end if
@@ -282,10 +345,16 @@ class CreateMarriageService
                 'type'      => $huwelijk['type'],
                 'moment'    => $huwelijk['moment'],
                 'ceremonie' => $huwelijk['ceremonie'],
+                'ambtenaar' => $huwelijk['ambtenaar'],
             ];
+
+            // @TODO hier een functie aanroepen om de kosten te bereken
 
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
+
+            $this->updateMarriagePrice($huwelijkObject);
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
