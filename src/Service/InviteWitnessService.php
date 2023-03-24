@@ -77,12 +77,12 @@ class InviteWitnessService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data          = [];
-        $this->configuration = [];
+        $this->data                   = [];
+        $this->configuration          = [];
         $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security     = $security;
-        $this->pluginLogger = $pluginLogger;
+        $this->security               = $security;
+        $this->pluginLogger           = $pluginLogger;
 
     }//end __construct()
 
@@ -105,7 +105,7 @@ class InviteWitnessService
             }//end if
 
             $witnessAssentPerson = $this->entityManager->getRepository('App:ObjectEntity')->find($witnessAssentPersonId);
-            $emails = $witnessAssentPerson->getValue('emails');
+            $emails              = $witnessAssentPerson->getValue('emails');
 
             if ($emails[0] === null) {
                 continue;

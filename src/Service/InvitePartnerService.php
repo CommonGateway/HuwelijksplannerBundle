@@ -77,12 +77,12 @@ class InvitePartnerService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data          = [];
-        $this->configuration = [];
+        $this->data                   = [];
+        $this->configuration          = [];
         $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security     = $security;
-        $this->pluginLogger = $pluginLogger;
+        $this->security               = $security;
+        $this->pluginLogger           = $pluginLogger;
 
     }//end __construct()
 
