@@ -1,0 +1,21 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "MollieLinks",
+    "properties":{
+        "self": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json"
+        },
+        "checkout": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json"
+        },
+        "dashboard": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json"
+        },
+        "documentation": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json"
+        }
+    }
+}
