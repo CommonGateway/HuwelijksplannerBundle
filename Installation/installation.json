@@ -46,7 +46,12 @@
       {
         "reference": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
-        "listens": ["huwelijksplanner.get.payment"]
+        "listens": ["huwelijksplanner.get.payment"],
+        "configuration": {
+          "redirectUrl": "http://localhost/api/frontend_link",
+          "webhookUrl": "http://localhost/api/mollie/webhook",
+          "method": ["ideal"]
+        }
       },
       {
         "reference": "https://hp.nl/action/hp.MollieWebhookAction.action.json",
