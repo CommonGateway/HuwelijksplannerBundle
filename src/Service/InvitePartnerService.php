@@ -128,7 +128,7 @@ class InvitePartnerService
             $this->entityManager->persist($person);
             $this->entityManager->flush();
 
-            $partners = $huwelijkObject->getValue('partners');
+            $partners                      = $huwelijkObject->getValue('partners');
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data)->getId()->toString();
             $huwelijkObject->hydrate($requesterAssent);
