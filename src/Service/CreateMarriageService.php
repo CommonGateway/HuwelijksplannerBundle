@@ -259,6 +259,7 @@ class CreateMarriageService
 
     }//end createPerson()
 
+
     /**
      * Validate huwelijk type.
      */
@@ -274,7 +275,7 @@ class CreateMarriageService
             }//end if
 
             $explodedPrice = explode(',', $price);
-            $kosten = $huwelijk->getValue('kosten');
+            $kosten        = $huwelijk->getValue('kosten');
 
             if ($kosten === null) {
                 $amount = $kosten;
@@ -292,14 +293,16 @@ class CreateMarriageService
                 }//end if
             }//end if
 
-            $kosten = $amount + $explodedPrice[0];
+            $kosten = ($amount + $explodedPrice[0]);
             $huwelijk->setValue('kosten', 'EUR '.$kosten);
             $this->entityManager->persist($huwelijk);
             $this->entityManager->flush();
 
             return $huwelijk;
         }//end foreach
-    }
+
+    }//end calculatePrice()
+
 
     /**
      * Validate huwelijk type.
@@ -307,19 +310,22 @@ class CreateMarriageService
     private function updateMarriagePrice(ObjectEntity $huwelijk)
     {
         // @TODO has the type also has a price?
-//        if (($typeObject = $huwelijk->getValue('type')) !== false){
-//            $this->calculatePrice($typeObject, $huwelijk);
-//        }
-        if (($ceremonieObject = $huwelijk->getValue('ceremonie')) !== false){
+        // if (($typeObject = $huwelijk->getValue('type')) !== false){
+        // $this->calculatePrice($typeObject, $huwelijk);
+        // }
+        if (($ceremonieObject = $huwelijk->getValue('ceremonie')) !== false) {
             $this->calculatePrice($ceremonieObject, $huwelijk);
         }
-        if (($location = $huwelijk->getValue('locatie')) !== false){
+
+        if (($location = $huwelijk->getValue('locatie')) !== false) {
             $this->calculatePrice($location, $huwelijk);
         }
-        if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false){
+
+        if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false) {
             $this->calculatePrice($ambtenaar, $huwelijk);
         }
-    }
+
+    }//end updateMarriagePrice()
 
 
     /**
@@ -349,7 +355,6 @@ class CreateMarriageService
             ];
 
             // @TODO hier een functie aanroepen om de kosten te bereken
-
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
