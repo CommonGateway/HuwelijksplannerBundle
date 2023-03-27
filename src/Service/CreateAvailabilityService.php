@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * This service holds al the logic for creating availability.
- * 
+ *
  * @author   Barry Brands barry@conduction.nl
  * @package  common-gateway/huwelijksplanner-bundle
  * @category Service
@@ -63,14 +63,14 @@ class CreateAvailabilityService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (isset($this->data['parameters']['query']['start']) === false ||
-            isset($this->data['parameters']['query']['stop']) === false || 
-            isset($this->data['parameters']['query']['interval']) === false ||
-            isset($this->data['parameters']['query']['resources_could']) === false) {
-
+        if (isset($this->data['parameters']['query']['start']) === false
+            || isset($this->data['parameters']['query']['stop']) === false
+            || isset($this->data['parameters']['query']['interval']) === false
+            || isset($this->data['parameters']['query']['resources_could']) === false
+        ) {
             return [
-                'response' => ['message' => 'Add a start, stop (both datetime), interval (dateinterval) and resources_could[] (product id\'s) to your query paramterse on this endpoint.'],
-                'responseCode' => 400
+                'response'     => ['message' => 'Add a start, stop (both datetime), interval (dateinterval) and resources_could[] (product id\'s) to your query paramterse on this endpoint.'],
+                'responseCode' => 400,
             ];
         }//end if
 
