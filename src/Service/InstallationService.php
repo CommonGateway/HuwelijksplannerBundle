@@ -63,7 +63,8 @@ class InstallationService implements InstallerInterface
 
             // Unsets the persist of the huwelijk entity and molly entity.
             if ($entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'
-                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.mollie.schema.json') {
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.mollie.schema.json'
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json') {
                 $entity->setPersist(false);
                 $this->entityManager->persist($entity);
             }

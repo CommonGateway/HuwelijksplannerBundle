@@ -85,12 +85,12 @@ class CreateMarriageService
         $this->entityManager          = $entityManager;
         $this->cacheService           = $cacheService;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data          = [];
-        $this->configuration = [];
+        $this->data                   = [];
+        $this->configuration          = [];
         $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security     = $security;
-        $this->pluginLogger = $pluginLogger;
+        $this->security               = $security;
+        $this->pluginLogger           = $pluginLogger;
 
     }//end __construct()
 
@@ -180,8 +180,8 @@ class CreateMarriageService
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         if ($brpPerson) {
-            $naam           = $brpPerson->getValue('naam');
-            $verblijfplaats = $brpPerson->getValue('verblijfplaats');
+            $naam                                       = $brpPerson->getValue('naam');
+            $verblijfplaats                             = $brpPerson->getValue('verblijfplaats');
             $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
         }//end if
 

@@ -21,7 +21,7 @@
       {
         "reference": "https://hp.nl/action/hp.CreateAvailabilityAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateAvailabilityHandler",
-        "listens": ["huwelijksplanner.calendar.listens"]
+        "listens": ["huwelijksplanner.get.availability"]
       },
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
