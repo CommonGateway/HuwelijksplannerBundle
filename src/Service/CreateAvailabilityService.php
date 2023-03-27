@@ -59,10 +59,10 @@ class CreateAvailabilityService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $begin = new DateTime($this->data['parameters']->get('start'));
-        $end   = new DateTime($this->data['parameters']->get('stop'));
+        $begin = new DateTime($this->data['parameters']['query']['start']);
+        $end   = new DateTime($this->data['parameters']['query']['stop']);
 
-        $interval = new DateInterval($this->data['parameters']->get('interval'));
+        $interval = new DateInterval($this->data['parameters']['query']['interval']);
         $period   = new DatePeriod($begin, $interval, $end);
 
         $resultArray = [];
@@ -76,7 +76,7 @@ class CreateAvailabilityService
 
             // @TODO Add format 'c'
             if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
-                $resourceArray = $this->data['parameters']->get('resources_could');
+                $resourceArray = $this->data['parameters']['query']['resources_could'];
             } else {
                 $resourceArray = [];
             }
