@@ -1,0 +1,22 @@
+<?php
+return (object)[
+    'rootNamespace' => 'CommonGateway\HuwelijksplannerBundle',
+    'destDirectory' => 'docs/classes',
+    'format' => 'github',
+    'classes' => [
+        '\CommonGateway\HuwelijksplannerBundle\Service\InstallationService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\HandleAssentService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\InstallationService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\InvitePartnerService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\InviteWitnessService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\MessageBirdService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\PaymentService',
+        '\CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService',
+        '\CommonGateway\HuwelijksplannerBundle\Command\CreateAvailabilityCommand',
+        '\CommonGateway\HuwelijksplannerBundle\Command\CreateMarriageCommand',
+        '\CommonGateway\HuwelijksplannerBundle\Command\HandleAssentCommand',
+        '\CommonGateway\HuwelijksplannerBundle\Command\UpdateChecklistCommand'
+    ],
+];

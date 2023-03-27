@@ -1,0 +1,64 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Mollie",
+    "properties":{
+        "resource": {
+            "type": "string",
+            "example": "payment"
+        },
+        "mode": {
+            "type": "string",
+            "example": "test"
+        },
+        "createdAt": {
+            "type": "string",
+            "example": "2018-03-12T11:51:35+00:00"
+        },
+        "amount": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieAmount.schema.json"
+        },
+        "description": {
+            "type": "string",
+            "example": "Order 66"
+        },
+        "method": {
+            "type": "string"
+        },
+        "metadata": {
+            "type": "array"
+        },
+        "status": {
+            "type": "string",
+            "example": "open"
+        },
+        "isCancelable": {
+            "type": "boolean"
+        },
+        "expiresAt": {
+            "type": "string",
+            "example": "2018-03-12T12:06:35+00:00"
+        },
+        "details": {
+            "type": "array"
+        },
+        "profileId": {
+            "type": "string",
+            "example": "pfl_7N5qjbu42V"
+        },
+        "sequenceType": {
+            "type": "string",
+            "example": "oneoff"
+        },
+        "redirectUrl": {
+            "type": "string",
+            "example": "https://www.example.org/payment/completed"
+        },
+        "_links": {
+            "type": "array"
+        }
+    }
+
+}

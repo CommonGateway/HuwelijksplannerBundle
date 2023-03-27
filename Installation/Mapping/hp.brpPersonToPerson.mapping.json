@@ -1,0 +1,37 @@
+{
+  "title": "BrpPersonToPerson",
+  "$id": "https://huwelijksplanner.nl/mapping/hp.brpPersonToPerson.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "voornaam": "naam.voornamen",
+    "voorvoegselAchternaam": "naam.voorvoegsel",
+    "achternaam": "naam.geslachtsnaam",
+    "adressen.0.naam": "Adres",
+    "adressen.0.straatnaam": "verblijfplaats.straatnaam",
+    "adressen.0.huisnummer": "verblijfplaats.huisnummer",
+    "adressen.0.huisletter": "verblijfplaats.huisletter",
+    "adressen.0.huisnummertoevoeging": "verblijfplaats.huisnummertoevoeging",
+    "adressen.0.postcode": "verblijfplaats.postcode",
+    "adressen.0.woonplaatsnaam": "{% if verblijfplaats.woonplaats %}{{verblijfplaats.woonplaats}}{% else %}adressen.0.woonplaatsnaam{% endif %}",
+    "adressen.0.landcode": "{% if verblijfplaats.landVanwaarIngeschreven %}{% if verblijfplaats.landVanwaarIngeschreven.code %}{{verblijfplaats.landVanwaarIngeschreven.code}}{% else %}adressen.0.landcode{% endif %}{% endif %}",
+    "subjectType": "natuurlijk_persoon",
+    "subjectIdentificatie.inpBsn": "burgerservicenummer",
+    "subjectIdentificatie.inpANummer": "aNummer",
+    "subjectIdentificatie.geslachtsnaam": "naam.geslachtsnaam",
+    "subjectIdentificatie.voorvoegselGeslachtsnaam": "naam.voorvoegselGeslachtsnaam",
+    "subjectIdentificatie.voorletters": "naam.voorletters",
+    "subjectIdentificatie.voornamen": "naam.voornamen",
+    "subjectIdentificatie.geslachtsaanduiding": "geslachtsaanduiding"
+  },
+  "cast": {
+    "verblijfplaats.straatnaam": "keyCantBeValue",
+    "verblijfplaats.huisnummer": "keyCantBeValue",
+    "verblijfplaats.huisletter": "keyCantBeValue",
+    "verblijfplaats.huisnummertoevoeging": "keyCantBeValue",
+    "verblijfplaats.postcode": "keyCantBeValue",
+    "verblijfplaats.woonplaatsnaam": "keyCantBeValue",
+    "verblijfplaats.landcode": "keyCantBeValue"
+  }
+}

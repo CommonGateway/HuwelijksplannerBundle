@@ -1,0 +1,82 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "Calendar",
+    "type": "object",
+    "description": "A Calendar is a collection of event ties to an unque person or resource.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "The name of this Calendar",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "description": "An short description of this Calendar.",
+            "nullable": true
+        },
+        "organization": {
+            "type": "string",
+            "description": "A specific commonground organisation.",
+            "nullable": true
+        },
+        "person": {
+            "type": "string",
+            "description": "A specific commonground person from the contact catalogus.",
+            "nullable": true
+        },
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource.",
+            "nullable": true
+        },
+        "events": {
+            "type": "array",
+            "description": "Events that belong to this Calendar.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.event.schema.json"
+            }
+        },
+        "schedules": {
+            "type": "array",
+            "description": "Schedules that belong to this Calendar.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.schedule.schema.json"
+            }
+        },
+        "freebusies": {
+            "type": "array",
+            "description": "that belong to this Calendar.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.freebusy.schema.json"
+            }
+        },
+        "journals": {
+            "type": "array",
+            "description": "journals that belong to this Calendar.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.journal.schema.json"
+            }
+        },
+        "todos": {
+            "type": "array",
+            "description": "todos that belong to this Calendar.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "timeZone": {
+            "type": "string",
+            "description": "The time zone of this calendar.",
+            "required": true
+        },
+        "availabilities": {
+            "type": "array",
+            "description": "Availability that belong to this Calendar.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json"
+            }
+        }
+    }
+}

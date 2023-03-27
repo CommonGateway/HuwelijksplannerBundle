@@ -1,0 +1,31 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.availability.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "Availability",
+    "type": "object",
+    "properties": {
+        "startDate": {
+            "type": "datetime",
+            "description": "The start of the availability block.",
+            "nullable": true
+        },
+        "endDate": {
+            "type": "datetime",
+            "description": "The end of the availability block.",
+            "nullable": true
+        },
+        "available": {
+            "type": "boolean",
+            "description": "Whether the block is available or not."
+        },
+        "resource": {
+            "type": "string",
+            "description": "A specific commonground resource",
+            "nullable": true
+        },
+        "calendar": {
+            "ref": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json"
+        }
+    }
+}

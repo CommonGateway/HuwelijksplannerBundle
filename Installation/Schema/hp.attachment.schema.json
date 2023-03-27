@@ -1,0 +1,27 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.attachment.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Attachment",
+    "properties":{
+        "name": {
+            "type": "string"
+        },
+        "uri": {
+            "type":"string",
+            "nullable": true,
+            "maxLength": 255,
+            "description": "Either a contact component person or contact list that will recieve this message"
+        },
+        "mime": {
+            "type":"string"
+        },
+        "resources":{
+            "type": "array",
+            "items": {
+                "format": "string"
+            }
+        }
+    }
+}

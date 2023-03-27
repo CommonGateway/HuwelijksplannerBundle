@@ -1,0 +1,16 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.check.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1.0",
+    "title": "Check",
+    "type": "object",
+    "properties": {
+        "result": {
+            "type": "boolean"
+        },
+        "display": {
+            "type": "string",
+            "example": "Uw heeft uw huwelijk betaald"
+        }
+    }
+}

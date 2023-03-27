@@ -1,0 +1,32 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.recipients.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Recipients",
+    "properties":{
+        "totalCount": {
+            "type": "integer",
+            "description":  "The total count of recipients."
+        },
+        "totalSentCount": {
+            "type": "integer",
+            "description":  "The count of recipients that have the message pending (status sent, and buffered)."
+        },
+        "totalDeliveredCount": {
+            "type": "integer",
+            "description":  "The count of recipients where the message is delivered (status delivered)."
+        },
+        "totalDeliveryFailedCount": {
+            "type": "integer",
+            "description":  "The count of recipients where the delivery has failed (status delivery_failed)."
+        },
+        "items": {
+            "type": "array",
+            "description":  "An array of recipient hashmaps.",
+            "items": {
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.recipientsItems.schema.json"
+            }
+        }
+    }
+}

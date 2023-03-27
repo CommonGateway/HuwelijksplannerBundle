@@ -1,0 +1,17 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.mollieAmount.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Mollie Amount",
+    "properties":{
+      "value": {
+        "type": "string",
+        "example": "1.00"
+      },
+      "currency": {
+        "type": "string",
+        "example": "EUR"
+      }
+    }
+}

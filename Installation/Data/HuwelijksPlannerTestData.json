@@ -1,0 +1,750 @@
+{
+    "https://huwelijksplanner.nl/schemas/hp.assent.schema.json": [
+        {
+            "token":"string",
+               "name":"Partner",
+               "description":"Partner van ..",
+               "request":null,
+               "forwardUrl;":null,
+               "property":null,
+               "process":null,
+               "contact":"partner_klant_id",
+               "person":null,
+               "status":"requested",
+               "requester":"019655344",
+               "revocable":true
+        },
+        {
+                "token":"string",
+                "name":"Getuige",
+                "description":"Getuige voor huwelijk",
+                "request":null,
+                "forwardUrl;":null,
+                "property":null,
+                "process":null,
+                "contact":"getuige_klant_id",
+                "person":null,
+                "requester":"019655344",
+                "revocable":true
+        },
+        {
+                "token":"string",
+                "name":"Instemmings gemeente",
+                "description":"Gemeente Utrecht",
+                "request":null,
+                "forwardUrl;":null,
+                "property":null,
+                "process":null,
+                "contact":"gemeente id?",
+                "person":null,
+                "status":"requested",
+                "requester":"471608130",
+                "revocable":true
+        }
+    ],
+    "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json": [
+      {
+        "_id":"e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+        "upnLabel":"balie",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"9d901cde-deab-45da-98df-e4115f32b92e",
+        "upnLabel":"trouwzaal",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a",
+        "upnLabel":"loge",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"23d33183-a857-4661-8f9d-fbb8ff5215c7",
+        "upnLabel":"eigen locatie",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"4a96dcc4-66e4-46b9-b785-3cc89931a3e2",
+        "upnLabel":"toegewezen",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"03c794db-3643-4703-8353-68cf7de77dc3",
+        "upnLabel":"keuze trouwambtenaar ",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id":"e4c2f87c-fb22-484f-9748-87242f7b3d53",
+        "upnLabel":"eigen trouwambtenaar",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten": []
+      },
+      {
+        "_id": "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
+        "upnLabel":"gratis trouwen",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties":[],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks":[],
+            "synonyms":[],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten":[
+          "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+          "4a96dcc4-66e4-46b9-b785-3cc89931a3e2"
+        ]
+      },
+      {
+        "_id": "868da2b9-242d-4053-8e21-8a9ef66bd15c",
+        "upnLabel":"flits/balliehuwelijk",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten":[
+          "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+          "4a96dcc4-66e4-46b9-b785-3cc89931a3e2"
+        ]
+      },
+      {
+        "_id": "31816698-10a0-41d6-8d0f-9108306491c0",
+        "upnLabel":"eenvoudig huwelijk",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten":[
+          "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+          "9d901cde-deab-45da-98df-e4115f32b92e",
+          "fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a",
+          "4a96dcc4-66e4-46b9-b785-3cc89931a3e2",
+          "03c794db-3643-4703-8353-68cf7de77dc3"
+        ]
+      },
+      {
+        "_id": "f30d4d56-c38d-4dca-ba5a-027ac154b899",
+        "upnLabel":"uitgebreid huwelijk",
+        "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+        "versie":0,
+        "publicatieDatum":"2022-01-04T11:27:57",
+        "productAanwezig":true,
+        "productValtOnder": null,
+        "verantwoordelijkeOrganisatie":{
+          "url": null,
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "bevoegdeOrganisatie":{
+          "naam":"Utrecht",
+          "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+          "owmsPrefLabel":"Utrecht",
+          "owmsEndDate":null
+        },
+        "catalogus":"huwelijk",
+        "locaties": [],
+        "doelgroep":"eu-burger",
+        "vertalingen":[
+          {
+            "taal":"nl",
+            "productTitelDecentraal": null,
+            "specifiekeTekst": null,
+            "procedureBeschrijving": null,
+            "kostenEnBetaalmethoden": null,
+            "uitersteTermijn": null,
+            "conditions": null,
+            "notice": null,
+            "decentraleProcedureLink": null,
+            "vereisten": null,
+            "bewijs": null,
+            "contact": null,
+            "verwijzingLinks": [],
+            "synonyms": [],
+            "wtdBijGeenReactie": null,
+            "datumWijziging":"2022-01-04T11:29:26",
+            "deskMemo": null,
+            "productAanwezigToelichting": null,
+            "productValtOnderToelichting": null
+          }
+        ],
+        "gerelateerdeProducten":[
+          "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+          "9d901cde-deab-45da-98df-e4115f32b92e",
+          "fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a",
+          "23d33183-a857-4661-8f9d-fbb8ff5215c7",
+          "4a96dcc4-66e4-46b9-b785-3cc89931a3e2",
+          "03c794db-3643-4703-8353-68cf7de77dc3",
+          "e4c2f87c-fb22-484f-9748-87242f7b3d53"
+        ]
+      },
+        {
+            "upnLabel":"huwelijk",
+            "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+            "versie":0,
+            "publicatieDatum":"2022-01-04T11:27:57",
+            "productAanwezig":true,
+            "productValtOnder": null,
+            "verantwoordelijkeOrganisatie":{
+                "url": null,
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "bevoegdeOrganisatie":{
+                "naam":"Utrecht",
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "catalogus":"huwelijk",
+            "locaties": [],
+            "doelgroep":"eu-burger",
+            "vertalingen":[
+                {
+                    "taal":"nl",
+                    "productTitelDecentraal": null,
+                    "specifiekeTekst": null,
+                    "procedureBeschrijving": null,
+                    "kostenEnBetaalmethoden": null,
+                    "uitersteTermijn": null,
+                    "conditions": null,
+                    "notice": null,
+                    "decentraleProcedureLink": null,
+                    "vereisten": null,
+                    "bewijs": null,
+                    "contact": null,
+                    "verwijzingLinks": [],
+                    "synonyms": [],
+                    "wtdBijGeenReactie": null,
+                    "datumWijziging":"2022-01-04T11:29:26",
+                    "deskMemo": null,
+                    "productAanwezigToelichting": null,
+                    "productValtOnderToelichting": null
+                }
+            ],
+            "gerelateerdeProducten":[
+              "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
+              "868da2b9-242d-4053-8e21-8a9ef66bd15c",
+              "31816698-10a0-41d6-8d0f-9108306491c0",
+              "f30d4d56-c38d-4dca-ba5a-027ac154b899"
+            ]
+        },
+        {
+            "url":"http://pdc.data.ergens.nl/sdg/api/v1/producten/f3603321-b592-41b5-a2c7-949f493dbd99",
+            "upnLabel":"Partnerschap",
+            "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+            "versie":0,
+            "publicatieDatum":"2022-01-04T11:27:57",
+            "productAanwezig":true,
+            "productValtOnder": null,
+            "verantwoordelijkeOrganisatie":{
+                "url": null,
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "bevoegdeOrganisatie":{
+                "naam":"Utrecht",
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "catalogus":"partnerschap",
+            "locaties": [],
+            "doelgroep":"eu-burger",
+            "vertalingen":[
+                {
+                    "taal":"nl",
+                    "productTitelDecentraal": null,
+                    "specifiekeTekst": null,
+                    "procedureBeschrijving": null,
+                    "kostenEnBetaalmethoden": null,
+                    "uitersteTermijn": null,
+                    "conditions": null,
+                    "notice": null,
+                    "decentraleProcedureLink": null,
+                    "vereisten": null,
+                    "bewijs": null,
+                    "contact": null,
+                    "verwijzingLinks": [],
+                    "synonyms": [],
+                    "wtdBijGeenReactie": null,
+                    "datumWijziging":"2022-01-04T11:29:26",
+                    "deskMemo": null,
+                    "productAanwezigToelichting": null,
+                    "productValtOnderToelichting": null
+                }
+            ],
+            "gerelateerdeProducten":[
+            "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
+            "868da2b9-242d-4053-8e21-8a9ef66bd15c",
+            "31816698-10a0-41d6-8d0f-9108306491c0",
+            "f30d4d56-c38d-4dca-ba5a-027ac154b899"
+          ]
+        },
+        {
+            "url":"http://pdc.data.ergens.nl/sdg/api/v1/producten/f3603321-b592-41b5-a2c7-949f493dbd99",
+            "upnLabel":"Omzetting",
+            "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+            "versie":0,
+            "publicatieDatum":"2022-01-04T11:27:57",
+            "productAanwezig":true,
+            "productValtOnder": null,
+            "verantwoordelijkeOrganisatie":{
+                "url": null,
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "bevoegdeOrganisatie":{
+                "naam":"Utrecht",
+                "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+                "owmsPrefLabel":"Utrecht",
+                "owmsEndDate":null
+            },
+            "catalogus":"omzetting",
+            "locaties": [],
+            "doelgroep":"eu-burger",
+            "vertalingen":[
+                {
+                    "taal":"nl",
+                    "productTitelDecentraal": null,
+                    "specifiekeTekst": null,
+                    "procedureBeschrijving": null,
+                    "kostenEnBetaalmethoden": null,
+                    "uitersteTermijn": null,
+                    "conditions": null,
+                    "notice": null,
+                    "decentraleProcedureLink": null,
+                    "vereisten": null,
+                    "bewijs": null,
+                    "contact": null,
+                    "verwijzingLinks": [],
+                    "synonyms": [],
+                    "wtdBijGeenReactie": null,
+                    "datumWijziging":"2022-01-04T11:29:26",
+                    "deskMemo": null,
+                    "productAanwezigToelichting": null,
+                    "productValtOnderToelichting": null
+                }
+            ],
+            "gerelateerdeProducten":[
+               "868da2b9-242d-4053-8e21-8a9ef66bd15c"
+            ]
+        }
+    ]
+}
