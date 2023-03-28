@@ -12,6 +12,8 @@ use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -164,21 +166,15 @@ class PaymentService
         // @TODO add the values amount from huwelijk object etc to array
         $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $huwelijkId = $this->data['parameters']['query']['huwelijk'];
+        $huwelijkId = $this->data['query']['huwelijk'];
 
         if ($huwelijkId === null) {
-            return [
-                'message' => 'No huwelijk id given in the parameter huwelijk.',
-                'status'  => 400,
-            ];
+            throw new BadRequestHttpException('No huwelijk id given in the parameter huwelijk.');
         }//end if
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
         if ($huwelijkObject instanceof ObjectEntity === false) {
-            return [
-                'message' => 'Cannot find huwelijk with given id: '.$huwelijkId,
-                'status'  => 400,
-            ];
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$huwelijkId);
         }//end if
 
         $explodedAmount = explode(' ', $huwelijkObject->getValue('kosten'));
@@ -213,16 +209,16 @@ class PaymentService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if ($this->data['parameters']['endpoint']->getMethod() !== 'GET') {
+        if ($this->data['method'] !== 'GET') {
             $this->pluginLogger->error('Not a GET request');
 
-            return $this->data;
+            throw new MethodNotAllowedHttpException('This method is not supported.');
         }//end if
 
         $payment = $this->createPayment();
 
         if ($payment !== null) {
-            $this->data['response'] = $payment;
+            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
         }
 
         return $this->data;
