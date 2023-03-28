@@ -746,5 +746,15 @@
                "868da2b9-242d-4053-8e21-8a9ef66bd15c"
             ]
         }
+    ],
+    "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json": [
+        {
+            "user": "marcelo@huwelijksplanner.online",
+            "contact": "marcelo@huwelijksplanner.online",
+            "department": "Gemeente Utrecht",
+            "function": "medewerker",
+            "skills": ["social", "contact"],
+            "description": ["Medewerker gemeente Utrecht"]
+        }
     ]
 }
