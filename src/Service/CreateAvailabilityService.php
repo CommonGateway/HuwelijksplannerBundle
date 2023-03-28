@@ -7,9 +7,14 @@ use DatePeriod;
 use DateTime;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This service holds al the logic for creating availability.
+ *
+ * @author   Barry Brands barry@conduction.nl
+ * @package  common-gateway/huwelijksplanner-bundle
+ * @category Service
  */
 class CreateAvailabilityService
 {
@@ -59,10 +64,21 @@ class CreateAvailabilityService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $begin = new DateTime($this->data['parameters']->get('start'));
-        $end   = new DateTime($this->data['parameters']->get('stop'));
+        if (isset($this->data['parameters']['query']['start']) === false
+            || isset($this->data['parameters']['query']['stop']) === false
+            || isset($this->data['parameters']['query']['interval']) === false
+            || isset($this->data['parameters']['query']['resources_could']) === false
+        ) {
+            return [
+                'response'     => ['message' => 'Add a start, stop (both datetime), interval (dateinterval) and resources_could[] (product id\'s) to your query paramterse on this endpoint.'],
+                'responseCode' => 400,
+            ];
+        }//end if
 
-        $interval = new DateInterval($this->data['parameters']->get('interval'));
+        $begin = new DateTime($this->data['query']['start']);
+        $end   = new DateTime($this->data['query']['stop']);
+
+        $interval = new DateInterval($this->data['query']['interval']);
         $period   = new DatePeriod($begin, $interval, $end);
 
         $resultArray = [];
@@ -76,22 +92,22 @@ class CreateAvailabilityService
 
             // @TODO Add format 'c'
             if ($currentDate->format('Y-m-d H:i:s') >= $dayStart->format('Y-m-d H:i:s') && $currentDate->format('Y-m-d H:i:s') < $dayStop->format('Y-m-d H:i:s')) {
-                $resourceArray = $this->data['parameters']->get('resources_could');
+                $resourceArray = $this->data['query']['resources_could'];
             } else {
                 $resourceArray = [];
             }
 
             // end voorbeeld code
             $resultArray[$currentDate->format('Y-m-d')][] = [
-            // @TODO Add format 'c'
+                // @TODO Add format 'c'
                 'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
-            // @TODO Add format 'c'
+                // @TODO Add format 'c'
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
                 'resources' => $resourceArray,
             ];
         }//end foreach
 
-        $this->data['response'] = $resultArray;
+        $this->data['response'] = new Response(json_encode($resultArray), 200);
 
         return $this->data;
 
