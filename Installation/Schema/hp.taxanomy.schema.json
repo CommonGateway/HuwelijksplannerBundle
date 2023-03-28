@@ -1,6 +1,6 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.taxanomy.schema.json",
-    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+  "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
     "version": "0.1",
     "type": "object",
     "title": "Taxanomy",

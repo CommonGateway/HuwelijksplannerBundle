@@ -116,5 +116,90 @@
         ]
       }
     ]
-  }
+  },
+  "users": [
+    {
+        "$id": "https://huwelijksplanner.nl/user/paula.user.json",
+        "version": "0.0.1",
+        "name": "paula@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "paula@huwelijksplanner.online",
+        "person": "999993653",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/MarryingGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/kristin.user.json",
+        "version": "0.0.1",
+        "name": "kristin@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "kristin@huwelijksplanner.online",
+        "person": "999990172",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/MarryingGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/felix.user.json",
+        "version": "0.0.1",
+        "name": "felix@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "felix@huwelijksplanner.online",
+        "person": "999993872",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/johannes.user.json",
+        "version": "0.0.1",
+        "name": "johannes@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "johannes@huwelijksplanner.online",
+        "person": "432156782",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/aaron.user.json",
+        "version": "0.0.1",
+        "name": "aaron@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "aaron@huwelijksplanner.online",
+        "person": "654321782",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/lammert.user.json",
+        "version": "0.0.1",
+        "name": "lammert@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "lammert@huwelijksplanner.online",
+        "person": "123456782",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/marcelo.user.json",
+        "version": "0.0.1",
+        "name": "marcelo@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "marcelo@huwelijksplanner.online",
+        "securityGroups": [
+            "https://huwelijksplanner.nl/SecurityGroup/MedewerkerGroup.schema.json"
+        ] 
+    },
+    {
+        "$id": "https://huwelijksplanner.nl/user/admin.user.json",
+        "version": "0.0.1",
+        "name": "admin@huwelijksplanner.online",
+        "password": "!ChangeMe!",
+        "email": "admin@huwelijksplanner.online"
+    }
+]
 }
