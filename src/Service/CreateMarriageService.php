@@ -267,17 +267,17 @@ class CreateMarriageService
 
     }//end createPerson()
 
+
     /**
      * Get price from a single product.
-     * 
-     * @param  array       $product
-     * 
+     *
+     * @param array $product
+     *
      * @return string|null Price.
      */
     private function getProductPrice(array $product)
     {
         if (isset($product['vertalingen'][0]['kosten'])) {
-            
             return $product['vertalingen'][0]['kosten'];
         }//end if
 
@@ -285,11 +285,12 @@ class CreateMarriageService
 
     }//end getProductPrice()
 
+
     /**
      * Get product prices from this marriage.
-     * 
-     * @param  array $huwelijk 
-     * 
+     *
+     * @param array $huwelijk
+     *
      * @return array $productPrices
      */
     private function getProductPrices(array $huwelijk): array
@@ -305,6 +306,7 @@ class CreateMarriageService
 
                         $extraProductArray && $productPrices[] = $this->getProductPrice($extraProductArray);
                     }
+
                     continue;
                 }//end if
 
@@ -319,6 +321,7 @@ class CreateMarriageService
         return $productPrices;
 
     }//end getProductPrices()
+
 
     /**
      * This function validates and creates the huwelijk object
