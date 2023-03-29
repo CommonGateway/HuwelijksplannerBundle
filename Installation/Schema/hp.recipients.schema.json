@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Recipients",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "totalCount": {
             "type": "integer",
             "description":  "The total count of recipients."

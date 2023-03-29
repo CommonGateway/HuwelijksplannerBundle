@@ -5,6 +5,10 @@
     "type": "object",
     "title": "MedewerkerAvailabilities",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "maandag": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.medewerkerAvailability.schema.json",
             "required": true

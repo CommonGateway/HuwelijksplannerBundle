@@ -6,7 +6,8 @@
     "title": "SDGLocatie",
     "properties":{
         "id": {
-            "type":"string"
+            "type": "string",
+            "format": "uuid"
         },
         "url": {
             "type":"string"

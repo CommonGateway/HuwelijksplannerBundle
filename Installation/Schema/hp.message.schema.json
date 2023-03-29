@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Message",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "receiver": {
             "type": "string",
             "nullable": true,

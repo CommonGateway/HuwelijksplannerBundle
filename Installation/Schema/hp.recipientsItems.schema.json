@@ -5,6 +5,10 @@
     "type": "object",
     "title": "RecipientsItems",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "recipient": {
             "type": "string",
             "description": "The msisdn of the recipient"

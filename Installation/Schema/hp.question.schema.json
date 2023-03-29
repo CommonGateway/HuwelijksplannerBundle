@@ -6,9 +6,8 @@
     "title": "Question",
     "properties":{
         "id": {
-            "type": "integer",
-            "format": "uuid",
-            "readOnly": "true"
+          "type": "string",
+          "format": "uuid"
         },
         "author": {
             "type": "string",

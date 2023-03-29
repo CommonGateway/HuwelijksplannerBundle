@@ -5,6 +5,10 @@
     "type": "object",
     "title": "SDGVertaling",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "taal": {
             "type":"string"
         },

@@ -5,6 +5,10 @@
     "title": "Check",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "result": {
             "type": "boolean"
         },

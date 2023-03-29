@@ -5,6 +5,10 @@
     "type": "object",
     "title": "TypeDetails",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "udh": {
             "type": "string",
             "description":  "The UDH to prepend to the message payload. This can be used for sending concatenated SMS. Often required to send binary messages."

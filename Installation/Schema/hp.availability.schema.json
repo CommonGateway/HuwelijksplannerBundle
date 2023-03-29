@@ -5,6 +5,10 @@
     "title": "Availability",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "startDate": {
             "type": "datetime",
             "description": "The start of the availability block.",

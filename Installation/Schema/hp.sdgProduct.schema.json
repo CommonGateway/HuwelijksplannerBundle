@@ -5,6 +5,10 @@
     "type": "object",
     "title": "SDGProduct",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "url": {
             "type":"string"
         },

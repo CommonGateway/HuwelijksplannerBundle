@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Assent",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "token": {
             "type": "string",
             "description": "A secret token used to validate the assent",
