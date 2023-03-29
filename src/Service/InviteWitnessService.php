@@ -98,7 +98,6 @@ class InviteWitnessService
     {
         $witnessEmail = [];
         foreach ($witnesses as $witness) {
-
             if (key_exists('contact', $witness) === false
                 && key_exists('emails', $witness['contact']) === false
                 && is_array($witness['contact']['emails']) === false
@@ -121,13 +120,14 @@ class InviteWitnessService
         }
 
         return $witnesses;
-    }//end getHuwelijkWitnessesEmails()
+
+    }//end getWitnesses()
 
 
     /**
      * This function creates witnesses from the given data.
      *
-     * @param array $witnesses           The witnesses from the request.
+     * @param array $witnesses The witnesses from the request.
      *
      * @return array The witnesses assents array.
      */
@@ -138,7 +138,6 @@ class InviteWitnessService
 
         $witnessAssents['getuigen'] = [];
         foreach ($witnesses as $getuige) {
-
             $emailObject = new ObjectEntity($emailSchema);
             $emailObject->setValue('email', $getuige['contact']['emails'][0]['email']);
             $emailObject->setValue('naam', $getuige['contact']['emails'][0]['naam']);
@@ -184,14 +183,13 @@ class InviteWitnessService
         if (isset($huwelijk['getuigen']) === true
             && count($huwelijk['getuigen']) <= 4
         ) {
-
             $huwelijkObject->getValue('getuigen')->clear();
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
 
             // Check if there are duplicates in the huwelijk getuigen array.
             $witnesses = $this->getWitnesses($huwelijk['getuigen']);
-            
+
             if (key_exists('response', $witnesses)) {
                 return $this->data;
             }//end if
