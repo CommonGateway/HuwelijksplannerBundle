@@ -153,13 +153,13 @@ class PaymentService
                 if ($key === 'producten') {
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
-                        if ($extraProduct !== null) {
-                            if (is_array($extraProduct) === false) {
-                                $extraProduct = $this->getProductObject($extraProduct);
-                            }//end if
-                            if ($extraProduct !== null) {
-                                $productPrices[] = $this->getProductPrice($extraProduct);
-                            }//end if
+                        if (is_array($extraProduct) === false) {
+                            $extraProduct = $this->getProductObject($extraProduct);
+                            $productPrices[] = $this->getProductPrice($extraProduct);
+                            continue;
+                        }//end if
+                        if (is_array($extraProduct) === true) {
+                            $productPrices[] = $this->getProductPrice($extraProduct);
                         }//end if
                     }//end foreach
 
@@ -167,13 +167,12 @@ class PaymentService
                 }//end if
 
                 // @todo move this to validation
-                if ($value !== null) {
-                    if (is_array($value) === false) {
-                        $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
-                    }//end if
-                    if ($productObject !== null) {
-                        $productPrices[] = $this->getProductPrice($productObject);
-                    }//end if
+                if (is_array($value) === false) {
+                    $productObject = $this->getProductObject($value);
+                    $productPrices[] = $this->getProductPrice($productObject);
+                }//end if
+                if (is_array($value) === true) {
+                    $productPrices[] = $this->getProductPrice($value);
                 }//end if
             }//end if
         }//end foreach
