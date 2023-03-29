@@ -302,7 +302,7 @@ class CreateMarriageService
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
                         $extraProduct !== null && $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
-                        $extraProductArray = $extraProductObject->toArray() ?? null;
+                        $extraProductArray                            = $extraProductObject->toArray() ?? null;
 
                         $extraProductArray && $productPrices[] = $this->getProductPrice($extraProductArray);
                     }
@@ -312,7 +312,7 @@ class CreateMarriageService
 
                 // @todo move this to validation
                 $value !== null && $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
-                $productObjectArray = $productObject->toArray() ?? null;
+                $productObjectArray               = $productObject->toArray() ?? null;
 
                 $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
             }//end if

@@ -118,7 +118,7 @@ class PaymentService
         $currency   = new Currency($currency);
         $totalPrice = new Money(0, $currency);
 
-        foreach($prices as $price) {
+        foreach ($prices as $price) {
             $totalPrice = $totalPrice->add(new Money($price, $currency));
         }
 
