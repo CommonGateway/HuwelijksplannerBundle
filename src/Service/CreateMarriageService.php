@@ -267,62 +267,6 @@ class CreateMarriageService
 
     }//end createPerson()
 
-
-    /**
-     * Get price from a single product.
-     *
-     * @param array $product
-     *
-     * @return string|null Price.
-     */
-    private function getProductPrice(array $product)
-    {
-        if (isset($product['vertalingen'][0]['kosten'])) {
-            return $product['vertalingen'][0]['kosten'];
-        }//end if
-
-        return null;
-
-    }//end getProductPrice()
-
-
-    /**
-     * Get product prices from this marriage.
-     *
-     * @param array $huwelijk
-     *
-     * @return array $productPrices
-     */
-    private function getProductPrices(array $huwelijk): array
-    {
-        $productPrices = [];
-        foreach ($huwelijk as $key => $value) {
-            if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
-                if ($key === 'producten') {
-                    foreach ($value as $extraProduct) {
-                        // @todo move this to validation
-                        $extraProduct !== null && $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
-                        $extraProductArray = $extraProductObject->toArray() ?? null;
-
-                        $extraProductArray && $productPrices[] = $this->getProductPrice($extraProductArray);
-                    }
-
-                    continue;
-                }//end if
-
-                // @todo move this to validation
-                $value !== null && $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
-                $productObjectArray = $productObject->toArray() ?? null;
-
-                $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
-            }//end if
-        }//end foreach
-
-        return $productPrices;
-
-    }//end getProductPrices()
-
-
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
@@ -350,9 +294,9 @@ class CreateMarriageService
             ];
 
             // Get all prices from the products
-            $productPrices = $this->getProductPrices($huwelijkObject->toArray());
+            $productPrices = $this->paymentService->getProductPrices($huwelijkObject->toArray());
             // Calculate new price
-            $huwelijk['kosten'] = $this->paymentService->calculatePrice($productPrices, 'EUR');
+            $huwelijk['kosten'] = 'EUR ' . (string) $this->paymentService->calculatePrice($productPrices, 'EUR');
 
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
