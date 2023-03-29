@@ -104,27 +104,28 @@ class PaymentService
 
     }//end checkSourceAuth()
 
+
     /**
      * Calculates total price with given prices and currency.
-     * 
-     * @param  array       prices.
-     * @param  string|null ISO 4271 currency.
-     * 
+     *
+     * @param array       prices.
+     * @param string|null ISO 4271 currency.
+     *
      * @return string total price.
      */
-    public function calculatePrice(array $prices, ?string $currency = 'EUR'): string
+    public function calculatePrice(array $prices, ?string $currency='EUR'): string
     {
-        $currency = new Currency($currency);
+        $currency   = new Currency($currency);
         $totalPrice = new Money(0, $currency);
 
-        foreach($prices as $price) {
+        foreach ($prices as $price) {
             $moneyToAdd = new Money($price, $currency);
             $totalPrice->add($moneyToAdd);
         }
 
         return true;
 
-    }//end calulatePrice()
+    }//end calculatePrice()
 
 
     /**
