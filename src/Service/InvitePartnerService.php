@@ -97,7 +97,9 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, string $id): ?array
     {
-        if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
 
             $this->data['response'] = 'Could not find huwelijk with id '.$id;
@@ -118,7 +120,9 @@ class InvitePartnerService
             if (count($huwelijkObject->getValue('partners')) !== 1) {
                 $this->pluginLogger->error('You cannot add a partner before the requester is set.');
 
-                return $huwelijkObject;
+                $this->data['response'] = 'You cannot add a partner before the requester is set.';
+
+                return $this->data;
             }//end if
 
             $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -173,8 +177,8 @@ class InvitePartnerService
             ];
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PUT') {
-            $this->pluginLogger->error('Not a PUT request');
+        if ($this->data['parameters']['method'] !== 'PATCH') {
+            $this->pluginLogger->error('Not a PATCH request');
 
             return $this->data;
         }//end if

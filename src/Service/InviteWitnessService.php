@@ -179,10 +179,13 @@ class InviteWitnessService
      */
     private function inviteWitness(array $huwelijk, string $id): array
     {
-        if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
 
-            return $huwelijkObject->toArray();
+            $this->data['response'] = 'Could not find huwelijk with id '.$id;
+
+            return $this->data;
         }//end if
 
         if (isset($huwelijk['getuigen']) === true
@@ -239,8 +242,8 @@ class InviteWitnessService
             ];
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PUT') {
-            $this->pluginLogger->error('Not a PUT request');
+        if ($this->data['parameters']['method'] !== 'PATCH') {
+            $this->pluginLogger->error('Not a PATCH request');
 
             return $this->data;
         }//end if
