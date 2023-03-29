@@ -155,10 +155,11 @@ class PaymentService
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
                         if (is_array($extraProduct) === false) {
-                            $extraProduct = $this->getProductObject($extraProduct);
+                            $extraProduct    = $this->getProductObject($extraProduct);
                             $productPrices[] = $this->getProductPrice($extraProduct);
                             continue;
                         }//end if
+
                         if (is_array($extraProduct) === true) {
                             $productPrices[] = $this->getProductPrice($extraProduct);
                         }//end if
@@ -169,9 +170,10 @@ class PaymentService
 
                 // @todo move this to validation
                 if (is_array($value) === false) {
-                    $productObject = $this->getProductObject($value);
+                    $productObject   = $this->getProductObject($value);
                     $productPrices[] = $this->getProductPrice($productObject);
                 }//end if
+
                 if (is_array($value) === true) {
                     $productPrices[] = $this->getProductPrice($value);
                 }//end if
