@@ -104,6 +104,7 @@ class PaymentService
 
     }//end checkSourceAuth()
 
+
     /**
      * Get price from a single product.
      * 
@@ -129,20 +130,19 @@ class PaymentService
     private function getProductPrice(array $product)
     {
         if (isset($product['vertalingen'][0]['kosten'])) {
-            
             return $product['vertalingen'][0]['kosten'];
-            
         }//end if
 
         return null;
 
     }//end getProductPrice()
 
+
     /**
      * Get product prices from this marriage.
-     * 
-     * @param  array $huwelijk 
-     * 
+     *
+     * @param array $huwelijk
+     *
      * @return array $productPrices
      */
     public function getProductPrices(array $huwelijk): array
@@ -162,6 +162,7 @@ class PaymentService
                             }//end if
                         }//end if
                     }//end foreach
+
                     continue;
                 }//end if
 
@@ -181,27 +182,28 @@ class PaymentService
 
     }//end getProductPrices()
 
+
     /**
      * Calculates total price with given prices and currency.
-     * 
-     * @param  array       prices.
-     * @param  string|null ISO 4271 currency.
-     * 
+     *
+     * @param array       prices.
+     * @param string|null ISO 4271 currency.
+     *
      * @return string total price.
      */
-    public function calculatePrice(array $prices, ?string $currency = 'EUR'): string
+    public function calculatePrice(array $prices, ?string $currency='EUR'): string
     {
-        $currency = new Currency($currency);
+        $currency   = new Currency($currency);
         $totalPrice = new Money(0, $currency);
 
-        foreach($prices as $price) {
-            $price = str_replace('EUR ', '', $price);
+        foreach ($prices as $price) {
+            $price      = str_replace('EUR ', '', $price);
             $totalPrice = $totalPrice->add(new Money($price, $currency));
         }
 
         return $totalPrice->getAmount();
 
-    }//end calulatePrice()
+    }//end calculatePrice()
 
 
     /**
@@ -278,11 +280,10 @@ class PaymentService
             throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$huwelijkId);
         }//end if
 
-
         // Get all prices from the products
         $productPrices = $this->getProductPrices($huwelijkObject->toArray());
         // Calculate new price
-        $kosten = 'EUR ' . $this->calculatePrice($productPrices, 'EUR');
+        $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
 
         $explodedAmount = explode(' ', $kosten);
 

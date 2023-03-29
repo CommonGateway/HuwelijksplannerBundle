@@ -267,6 +267,7 @@ class CreateMarriageService
 
     }//end createPerson()
 
+
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
@@ -296,7 +297,7 @@ class CreateMarriageService
             // Get all prices from the products
             $productPrices = $this->paymentService->getProductPrices($huwelijkObject->toArray());
             // Calculate new price
-            $huwelijk['kosten'] = 'EUR ' . (string) $this->paymentService->calculatePrice($productPrices, 'EUR');
+            $huwelijk['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
 
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
