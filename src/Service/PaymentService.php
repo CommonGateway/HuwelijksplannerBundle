@@ -107,9 +107,9 @@ class PaymentService
 
     /**
      * Get price from a single product.
-     * 
-     * @param  string      $productId
-     * 
+     *
+     * @param string $productId
+     *
      * @return array       Product object.
      */
     private function getProductObject(string $productId): array
@@ -120,11 +120,12 @@ class PaymentService
 
     }//end getProductObject()
 
+
     /**
      * Get price from a single product.
-     * 
-     * @param  array       $product
-     * 
+     *
+     * @param array $product
+     *
      * @return string|null Price.
      */
     private function getProductPrice(array $product)
