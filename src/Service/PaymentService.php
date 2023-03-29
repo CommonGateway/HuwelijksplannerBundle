@@ -159,7 +159,6 @@ class PaymentService
                             $productPrices[] = $this->getProductPrice($extraProduct);
                             continue;
                         }//end if
-
                         if (is_array($extraProduct) === true) {
                             $productPrices[] = $this->getProductPrice($extraProduct);
                         }//end if
@@ -173,7 +172,6 @@ class PaymentService
                     $productObject = $this->getProductObject($value);
                     $productPrices[] = $this->getProductPrice($productObject);
                 }//end if
-
                 if (is_array($value) === true) {
                     $productPrices[] = $this->getProductPrice($value);
                 }//end if
