@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Money\Currency;
 use Money\Money;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -107,9 +108,9 @@ class PaymentService
 
     /**
      * Get price from a single product.
-     *
-     * @param string $productId
-     *
+     * 
+     * @param  string      $productId
+     * 
      * @return array       Product object.
      */
     private function getProductObject(string $productId): array
@@ -120,12 +121,11 @@ class PaymentService
 
     }//end getProductObject()
 
-
     /**
      * Get price from a single product.
-     *
-     * @param array $product
-     *
+     * 
+     * @param  array       $product
+     * 
      * @return string|null Price.
      */
     private function getProductPrice(array $product)
@@ -154,7 +154,7 @@ class PaymentService
                 if ($key === 'producten') {
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
-                        if (is_array($extraProduct) === false) {
+                        if ($value !== null && is_array($extraProduct) === false) {
                             $extraProduct = $this->getProductObject($extraProduct);
                             $productPrices[] = $this->getProductPrice($extraProduct);
                             continue;
@@ -168,7 +168,7 @@ class PaymentService
                 }//end if
 
                 // @todo move this to validation
-                if (is_array($value) === false) {
+                if ($value !== null && is_array($value) === false) {
                     $productObject = $this->getProductObject($value);
                     $productPrices[] = $this->getProductPrice($productObject);
                 }//end if
@@ -258,6 +258,30 @@ class PaymentService
 
     }//end createMolliePayment()
 
+    /**
+     * Validates huwelijk id in query and gets object.
+     * 
+     * @param array $query.
+     * 
+     * @throws BadRequestHttpException If id not found or valid.
+     * 
+     * @return ObjectEntity Huwelijk.
+     */
+    private function validateHuwelijkId(array $query): ObjectEntity
+    {
+        if (isset($query['huwelijk']) === false || Uuid::isValid($query['huwelijk']) === false) {
+            throw new BadRequestHttpException('No huwelijk id given or false id in the query parameter huwelijk.');
+        }//end if
+
+        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['huwelijk']);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: ' . $query['huwelijk']);
+        }//end if
+
+        return $huwelijkObject;
+
+    }//end validateHuwelijkId()
+
 
     /**
      * Creates a payment object.
@@ -269,21 +293,12 @@ class PaymentService
         // @TODO add the values amount from huwelijk object etc to array
         $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $huwelijkId = $this->data['query']['huwelijk'];
-
-        if ($huwelijkId === null) {
-            throw new BadRequestHttpException('No huwelijk id given in the parameter huwelijk.');
-        }//end if
-
-        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
-        if ($huwelijkObject instanceof ObjectEntity === false) {
-            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$huwelijkId);
-        }//end if
+        $huwelijkObject = $this->validateHuwelijkId($this->data['query']);
 
         // Get all prices from the products
         $productPrices = $this->getProductPrices($huwelijkObject->toArray());
         // Calculate new price
-        $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
+        $kosten = 'EUR ' . $this->calculatePrice($productPrices, 'EUR');
 
         $explodedAmount = explode(' ', $kosten);
 
@@ -292,7 +307,7 @@ class PaymentService
                 'currency' => $explodedAmount[0],
                 'value'    => $explodedAmount[1],
             ],
-            'description' => 'Payment made for huwelijk with id: '.$huwelijkId,
+            'description' => 'Payment made for huwelijk with id: ' . $huwelijkObject->getId()->toString(),
             'redirectUrl' => $this->configuration['redirectUrl'],
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
