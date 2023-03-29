@@ -107,6 +107,21 @@ class PaymentService
     /**
      * Get price from a single product.
      * 
+     * @param  string      $productId
+     * 
+     * @return array       Product object.
+     */
+    private function getProductObject(string $productId): array
+    {
+        $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($productId);
+
+        return $productObject->toArray() ?? null;
+
+    }//end getProductObject()
+
+    /**
+     * Get price from a single product.
+     * 
      * @param  array       $product
      * 
      * @return string|null Price.
@@ -139,13 +154,12 @@ class PaymentService
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
                         if ($extraProduct !== null) {
-                            $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
-                            if (isset($extraProductObject) === true) {
-                                $extraProductArray = $extraProductObject->toArray() ?? null;
-                            }
-                            if (isset($extraProductArray) === true) {
-                                $productPrices[] = $this->getProductPrice($extraProductArray);
-                            }
+                            if (is_array($extraProduct) === false) {
+                                $extraProduct = $this->getProductObject($extraProduct);
+                            }//end if
+                            if ($extraProduct !== null) {
+                                $productPrices[] = $this->getProductPrice($extraProduct);
+                            }//end if
                         }//end if
                     }//end foreach
                     continue;
@@ -153,14 +167,13 @@ class PaymentService
 
                 // @todo move this to validation
                 if ($value !== null) {
-                     $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
-                     if (isset($productObject) === true) {
-                         $productObjectArray = $productObject->toArray() ?? null;
-                     }
-                     if (isset($productObjectArray) === true) {
-                         $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
-                     }
+                    if (is_array($value) === false) {
+                        $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
                     }//end if
+                    if ($productObject !== null) {
+                        $productPrices[] = $this->getProductPrice($productObject);
+                    }//end if
+                }//end if
             }//end if
         }//end foreach
 
