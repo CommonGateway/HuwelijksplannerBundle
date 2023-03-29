@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
+use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
@@ -54,6 +55,11 @@ class CreateMarriageService
     private LoggerInterface $pluginLogger;
 
     /**
+     * @var PaymentService
+     */
+    private PaymentService $paymentService;
+
+    /**
      * @var array
      */
     private array $data;
@@ -80,7 +86,8 @@ class CreateMarriageService
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        PaymentService $paymentService
     ) {
         $this->entityManager          = $entityManager;
         $this->cacheService           = $cacheService;
@@ -91,6 +98,7 @@ class CreateMarriageService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
+        $this->paymentService         = $paymentService;
 
     }//end __construct()
 
@@ -259,74 +267,50 @@ class CreateMarriageService
 
     }//end createPerson()
 
+    /**
+     * Get price from a single product.
+     * 
+     * @param  array       $product
+     * 
+     * @return string|null Price.
+     */
+    private function getProductPrice(array $product)
+    {
+        if (isset($product['vertalingen'][0]['kosten'])) {
+            
+            return $product['vertalingen'][0]['kosten'];
+        }//end if
+
+        return null;
+
+    }//end getProductPrice()
 
     /**
-     * Validate huwelijk type.
+     * Get product prices from this marriage.
+     * 
+     * @param  array $huwelijk 
+     * 
+     * @return array $productPrices
      */
-    private function calculatePrice(ObjectEntity $sdgProduct, ObjectEntity $huwelijk)
+    private function getProductPrices(array $huwelijk): array
     {
-        // update huwelijk object with price of the ceremonie
-        $vertalingen = $sdgProduct->getValue('vertalingen');
-        foreach ($vertalingen as $vertaling) {
-            $price = $vertaling->getValue('kostenEnBetaalmethoden');
-
-            if ($price === 'Geen extra kosten') {
-                return $huwelijk;
-            }//end if
-
-            $explodedPrice = explode(',', $price);
-            $kosten        = $huwelijk->getValue('kosten');
-
-            if ($kosten === null) {
-                $amount = $kosten;
-            }//end if
-
-            if ($kosten !== null) {
-                $explodedKosten = explode(' ', $kosten);
-
-                if (count($explodedKosten) === 1) {
-                    $amount = $explodedKosten[0];
+        $productPrices = [];
+        foreach ($huwelijk as $key => $value) {
+            if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
+                if ($key === 'producten') {
+                    foreach ($value as $extraProduct) {
+                        $productPrices[] = $this->getProductPrice($extraProduct);
+                    }
+                    continue;
                 }//end if
 
-                if (count($explodedKosten) === 2) {
-                    $amount = $explodedKosten[1];
-                }//end if
+                $productPrices[] = $this->getProductPrice($value);
             }//end if
-
-            $kosten = ($amount + $explodedPrice[0]);
-            $huwelijk->setValue('kosten', 'EUR '.$kosten);
-            $this->entityManager->persist($huwelijk);
-            $this->entityManager->flush();
-
-            return $huwelijk;
         }//end foreach
 
-    }//end calculatePrice()
+        return $productPrices;
 
-
-    /**
-     * Validate huwelijk type.
-     */
-    private function updateMarriagePrice(ObjectEntity $huwelijk)
-    {
-        // @TODO has the type also has a price?
-        // if (($typeObject = $huwelijk->getValue('type')) !== false){
-        // $this->calculatePrice($typeObject, $huwelijk);
-        // }
-        if (($ceremonieObject = $huwelijk->getValue('ceremonie')) !== false) {
-            $this->calculatePrice($ceremonieObject, $huwelijk);
-        }
-
-        if (($location = $huwelijk->getValue('locatie')) !== false) {
-            $this->calculatePrice($location, $huwelijk);
-        }
-
-        if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false) {
-            $this->calculatePrice($ambtenaar, $huwelijk);
-        }
-
-    }//end updateMarriagePrice()
-
+    }//end getProductPrices()
 
     /**
      * This function validates and creates the huwelijk object
@@ -359,7 +343,10 @@ class CreateMarriageService
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
 
-            $this->updateMarriagePrice($huwelijkObject);
+            // Get all prices from the products
+            $productPrices = $this->getProductPrices($huwelijkObject->toArray());
+            // Calculate new price
+            $huwelijk['kosten'] = $this->paymentService->calculatePrice($productPrices, 'EUR');
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
