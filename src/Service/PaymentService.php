@@ -138,19 +138,29 @@ class PaymentService
                 if ($key === 'producten') {
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
-                        $extraProduct !== null && $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
-                        $extraProductArray = $extraProductObject->toArray() ?? null;
-
-                        $extraProductArray && $productPrices[] = $this->getProductPrice($extraProductArray);
-                    }
+                        if ($extraProduct !== null) {
+                            $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
+                            if (isset($extraProductObject) === true) {
+                                $extraProductArray = $extraProductObject->toArray() ?? null;
+                            }
+                            if (isset($extraProductArray) === true) {
+                                $productPrices[] = $this->getProductPrice($extraProductArray);
+                            }
+                        }//end if
+                    }//end foreach
                     continue;
                 }//end if
 
                 // @todo move this to validation
-                $value !== null && $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
-                $productObjectArray = $productObject->toArray() ?? null;
-
-                $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
+                if ($value !== null) {
+                     $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
+                     if (isset($productObject) === true) {
+                         $productObjectArray = $productObject->toArray() ?? null;
+                     }
+                     if (isset($productObjectArray) === true) {
+                         $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
+                     }
+                    }//end if
             }//end if
         }//end foreach
 
