@@ -118,11 +118,10 @@ class PaymentService
         $totalPrice = new Money(0, $currency);
 
         foreach($prices as $price) {
-            $moneyToAdd = new Money($price, $currency);
-            $totalPrice->add($moneyToAdd);
+            $totalPrice = $totalPrice->add(new Money($price, $currency));
         }
 
-        return true;
+        return $totalPrice->getAmount();
 
     }//end calulatePrice()
 

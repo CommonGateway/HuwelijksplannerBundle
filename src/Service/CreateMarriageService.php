@@ -158,11 +158,11 @@ class CreateMarriageService
                 ];
             }//end if
 
-            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/baliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
+                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return [
-                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
+                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
                     'httpCode' => 400,
                 ];
             }//end if
@@ -299,12 +299,20 @@ class CreateMarriageService
             if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
                 if ($key === 'producten') {
                     foreach ($value as $extraProduct) {
-                        $productPrices[] = $this->getProductPrice($extraProduct);
+                        // @todo move this to validation
+                        $extraProduct !== null && $extraProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($extraProduct);
+                        $extraProductArray = $extraProductObject->toArray() ?? null;
+
+                        $extraProductArray && $productPrices[] = $this->getProductPrice($extraProductArray);
                     }
                     continue;
                 }//end if
 
-                $productPrices[] = $this->getProductPrice($value);
+                // @todo move this to validation
+                $value !== null && $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
+                $productObjectArray = $productObject->toArray() ?? null;
+
+                $productObjectArray && $productPrices[] = $this->getProductPrice($productObjectArray);
             }//end if
         }//end foreach
 
@@ -338,15 +346,14 @@ class CreateMarriageService
                 'ambtenaar' => $huwelijk['ambtenaar'],
             ];
 
-            // @TODO hier een functie aanroepen om de kosten te bereken
-            $huwelijkObject->hydrate($huwelijkArray);
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
-
             // Get all prices from the products
             $productPrices = $this->getProductPrices($huwelijkObject->toArray());
             // Calculate new price
             $huwelijk['kosten'] = $this->paymentService->calculatePrice($productPrices, 'EUR');
+
+            $huwelijkObject->hydrate($huwelijkArray);
+            $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
