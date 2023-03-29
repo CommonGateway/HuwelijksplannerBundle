@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
  */
 class MessageBirdService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -41,7 +40,6 @@ class MessageBirdService
      */
     private LoggerInterface $pluginLogger;
 
-
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param CallService            $callService            The Call Service
@@ -55,14 +53,12 @@ class MessageBirdService
         SynchronizationService $synchronizationService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager          = $entityManager;
-        $this->callService            = $callService;
+        $this->entityManager = $entityManager;
+        $this->callService = $callService;
         $this->gatewayResourceService = $gatewayResourceService;
         $this->synchronizationService = $synchronizationService;
-        $this->pluginLogger           = $pluginLogger;
-
+        $this->pluginLogger = $pluginLogger;
     }//end __construct()
-
 
     /**
      * @param $message
@@ -72,7 +68,7 @@ class MessageBirdService
     public function importMessage($message): ?ObjectEntity
     {
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source            = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
+        $source = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
 
         $synchronization = $this->synchronizationService->findSyncBySource($source, $messagebirdEntity, $message['id']);
 
@@ -81,9 +77,7 @@ class MessageBirdService
         $synchronization = $this->synchronizationService->synchronize($synchronization, $message);
 
         return $synchronization->getObject();
-
     }//end importMessage()
-
 
     /**
      * Handles sending a message with messagebird.
@@ -98,7 +92,7 @@ class MessageBirdService
         $this->pluginLogger->debug('Send a message');
 
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source            = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
+        $source = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
 
         $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => '+31612345678', 'body' => $body])];
 
@@ -127,8 +121,5 @@ class MessageBirdService
         $this->entityManager->flush();
 
         return true;
-
     }//end sendMessage()
-
-
 }//end class

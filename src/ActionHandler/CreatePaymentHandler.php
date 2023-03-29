@@ -7,12 +7,10 @@ use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
 class CreatePaymentHandler implements ActionHandlerInterface
 {
-
     /**
      * @var PaymentService
      */
     private PaymentService $service;
-
 
     /**
      * @param PaymentService $service The payment service
@@ -20,9 +18,7 @@ class CreatePaymentHandler implements ActionHandlerInterface
     public function __construct(PaymentService $service)
     {
         $this->service = $service;
-
     }//end __construct()
-
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -38,9 +34,7 @@ class CreatePaymentHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => [],
         ];
-
     }//end getConfiguration()
-
 
     /**
      * This function runs the createPaymentHandler function.
@@ -53,8 +47,5 @@ class CreatePaymentHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->service->createPaymentHandler($data, $configuration);
-
     }//end run()
-
-
 }//end class

@@ -13,7 +13,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateAvailabilityCommand extends Command
 {
-
     /**
      * @var string
      */
@@ -24,7 +23,6 @@ class CreateAvailabilityCommand extends Command
      */
     private CreateAvailabilityService $service;
 
-
     /**
      * @param CreateAvailabilityService $service The CreateAvailabilityService
      */
@@ -32,9 +30,7 @@ class CreateAvailabilityCommand extends Command
     {
         $this->service = $service;
         parent::__construct();
-
     }//end __construct()
-
 
     /**
      * @return void
@@ -44,9 +40,7 @@ class CreateAvailabilityCommand extends Command
         $this
             ->setDescription('Creates availability for someone with given date info')
             ->setHelp('Creates availability for someone with given date info');
-
     }//end configure()
-
 
     /**
      * @param InputInterface  $input  The input
@@ -64,8 +58,5 @@ class CreateAvailabilityCommand extends Command
         }
 
         return Command::SUCCESS;
-
     }//end execute()
-
-
 }//end class
