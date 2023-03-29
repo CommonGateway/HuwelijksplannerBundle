@@ -9,9 +9,8 @@ use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
-use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 

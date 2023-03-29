@@ -7,7 +7,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -97,7 +96,6 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, string $id): ?array
     {
-
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
         if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);

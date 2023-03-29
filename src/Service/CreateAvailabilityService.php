@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * This service holds al the logic for creating availability.
  *
- * @author   Barry Brands barry@conduction.nl
- * @package  common-gateway/huwelijksplanner-bundle
+ * @author Barry Brands barry@conduction.nl
+ *
  * @category Service
  */
 class CreateAvailabilityService

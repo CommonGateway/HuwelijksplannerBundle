@@ -3,15 +3,12 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Gateway as Source;
-use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
-use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
-use Doctrine\Persistence\ObjectRepository;
 
 /**
  * This service holds al the logic for mollie payments.

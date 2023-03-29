@@ -7,7 +7,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
