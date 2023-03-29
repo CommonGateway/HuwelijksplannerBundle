@@ -3,10 +3,16 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Gateway as Source;
+use App\Entity\ObjectEntity;
+use App\Service\SynchronizationService;
+use CommonGateway\CoreBundle\Service\CallService;
+use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
-use Exception;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -14,96 +20,176 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PaymentService
 {
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
 
-    private SymfonyStyle $io;
+    /**
+     * @var CallService
+     */
+    private CallService $callService;
 
-    private ObjectRepository $sourceRepo;
+    /**
+     * @var SynchronizationService
+     */
+    private SynchronizationService $syncService;
 
-    private ?Source $mollieAPI;
+    /**
+     * @var GatewayResourceService
+     */
+    private GatewayResourceService $gatewayResourceService;
 
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $pluginLogger;
+
+    /**
+     * @var array
+     */
     private array $data;
 
+    /**
+     * @var array
+     */
     private array $configuration;
 
 
     /**
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface $entityManager          The Entity Manager Interface.
+     * @param CallService            $callService            The Call Service.
+     * @param SynchronizationService $syncService            The Synchronization Service.
+     * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service.
+     * @param LoggerInterface        $pluginLogger           The Logger Interface.
      */
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CallService $callService,
+        SynchronizationService $syncService,
+        GatewayResourceService $gatewayResourceService,
+        LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityManager          = $entityManager;
+        $this->callService            = $callService;
+        $this->syncService            = $syncService;
+        $this->gatewayResourceService = $gatewayResourceService;
+        $this->pluginLogger           = $pluginLogger;
 
-        $this->sourceRepo = $this->entityManager->getRepository(Source::class);
+        $this->data          = [];
+        $this->configuration = [];
 
     }//end __construct()
 
 
     /**
-     * Set symfony style in order to output to the console.
+     * Check the auth of the given source.
      *
-     * @param SymfonyStyle $io
+     * @param Source $source The given source to check the api key.
      *
-     * @return self
+     * @return bool If the api key is set or not.
      */
-    public function setStyle(SymfonyStyle $io): self
+    public function checkSourceAuth(Source $source): bool
     {
-        $this->io = $io;
-
-        return $this;
-
-    }//end setStyle()
-
-
-    /**
-     * Get the mollie api source.
-     *
-     * @return bool
-     */
-    private function getMollieSource(): bool
-    {
-        if (!$this->mollieAPI = $this->sourceRepo->findOneBy(['location' => 'https://api.mollie.com'])) {
-            isset($this->io) && $this->io->error('No source found for https://api.mollie.com');
-
-            throw new Exception('No source found for https://api.mollie.com');
+        if ($source->getApiKey() === null) {
+            $this->pluginLogger->error('No auth set for Source: '.$source->getName().'.', ['plugin' => 'common-gateway/huwelijksplanner-bundle']);
 
             return false;
-        }
-
-        if (!$this->mollieAPI->getApiKey()) {
-            isset($this->io) && $this->io->error('No api key set on mollie api source');
-
-            throw new Exception('No api key set on mollie api source');
-
-            return false;
-        }
+        }//end if
 
         return true;
 
-    }//end getMollieSource()
+    }//end checkSourceAuth()
+
+
+    /**
+     * Creates a payment object.
+     * The required fields in the paymentArray are:
+     * The amount object with currency and value.
+     * The string descrtiption.
+     * The string redirectUrl were mollie has to redirect to after the payment.
+     * The method array with the payment methods.
+     *
+     * @param array $paymentArray The body for the payment request.
+     *
+     * @return array|null
+     */
+    public function createMolliePayment(array $paymentArray): ?array
+    {
+        $mollieEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $source       = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.mollie.source.json', 'common-gateway/huwelijksplanner-bundle');
+        if ($this->checkSourceAuth($source) === false) {
+            return [
+                'message' => 'No authorization set for the mollie source.',
+                'status'  => 400,
+            ];
+        }//end if
+
+        $queryConfig = ['body' => \Safe\json_encode($paymentArray)];
+
+        try {
+            $response = $this->callService->call($source, '/v2/payments', 'POST', $queryConfig);
+            $payment  = json_decode($response->getBody()->getContents(), true);
+        } catch (ClientException $exception) {
+            $this->pluginLogger->error('Could not post a payment with source: '.$source->getName());
+        }
+
+        if (empty($payment) === true) {
+            $this->pluginLogger->error('Could not post a payment with source: '.$source->getName());
+
+            return [
+                'message' => 'Could not post a payment with source: '.$source->getName(),
+                'status'  => 400,
+            ];
+        }//end if
+
+        $this->pluginLogger->debug('The message was sent successfully');
+
+        $synchronization = $this->syncService->findSyncBySource($source, $mollieEntity, $payment['id']);
+        $this->pluginLogger->debug('Sync with id: '.$synchronization->getId()->toString());
+
+        $synchronization = $this->syncService->synchronize($synchronization, $payment);
+
+        return $synchronization->getObject()->toArray();
+
+    }//end createMolliePayment()
 
 
     /**
      * Creates a payment object.
      *
-     * @return array
+     * @return array|null
      */
-    public function createPayment(): array
+    public function createPayment(): ?array
     {
-        isset($this->io) && $this->io->success('createPayment triggered');
+        // @TODO add the values amount from huwelijk object etc to array
+        $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $huwelijkId = $this->data['parameters']->query->get('huwelijk') ?? null;
-        // @TODO Validate hywelijk
-        if (!$huwelijkId) {
-            // @TODO throw exception
-            return [];
-        }
+        $huwelijkId = $this->data['query']['huwelijk'];
 
-        $this->getMollieSource();
+        if ($huwelijkId === null) {
+            throw new BadRequestHttpException('No huwelijk id given in the parameter huwelijk.');
+        }//end if
 
-        // @TODO create mollie payment
-        return [];
+        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$huwelijkId);
+        }//end if
+
+        $explodedAmount = explode(' ', $huwelijkObject->getValue('kosten'));
+
+        $paymentArray = [
+            'amount'      => [
+                'currency' => $explodedAmount[0],
+                'value'    => $explodedAmount[1],
+            ],
+            'description' => 'Payment made for huwelijk with id: '.$huwelijkId,
+            'redirectUrl' => $this->configuration['redirectUrl'],
+            'webhookUrl'  => $this->configuration['webhookUrl'],
+            'method'      => $this->configuration['method'],
+        ];
+
+        return $this->createMolliePayment($paymentArray);
 
     }//end createPayment()
 
@@ -118,13 +204,23 @@ class PaymentService
      */
     public function createPaymentHandler(?array $data=[], ?array $configuration=[]): array
     {
-        isset($this->io) && $this->io->success('createPaymentHandler function triggered');
+        $this->pluginLogger->debug('createPaymentHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
 
+        if ($this->data['method'] !== 'GET') {
+            $this->pluginLogger->error('Not a GET request');
+
+            throw new MethodNotAllowedHttpException('This method is not supported.');
+        }//end if
+
         $payment = $this->createPayment();
 
-        return ['response' => ['test' => 'test']];
+        if ($payment !== null) {
+            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+        }
+
+        return $this->data;
 
     }//end createPaymentHandler()
 

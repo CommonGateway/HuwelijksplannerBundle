@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Mollie",
     "properties":{
+      "id": {
+        "type": "string",
+        "example": "tr_7UhSN1zuXS"
+      },
         "resource": {
             "type": "string",
             "example": "payment"
@@ -55,6 +59,10 @@
         "redirectUrl": {
             "type": "string",
             "example": "https://www.example.org/payment/completed"
+        },
+        "webhookUrl": {
+          "type": "string",
+          "example": "https://webshop.example.org/payments/webhook/"
         },
         "_links": {
             "type": "array"
