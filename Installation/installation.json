@@ -122,8 +122,9 @@
         "reference": "https://huwelijksplanner.nl/schemas/hp.availabilityCheck.schema.json",
         "path": "calendar/availabilitycheck",
         "methods": [
-          "POST"
-        ]
+          "GET"
+        ],
+        "throws": ["huwelijksplanner.calendar.listens"]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.mollie.schema.json",
