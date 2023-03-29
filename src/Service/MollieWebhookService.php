@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
  */
 class MollieWebhookService
 {
+
     /**
      * @var EntityManagerInterface
      */
@@ -50,6 +51,7 @@ class MollieWebhookService
      */
     private array $configuration;
 
+
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager Interface.
      * @param CallService            $callService            The Call Service.
@@ -64,15 +66,17 @@ class MollieWebhookService
         GatewayResourceService $gatewayResourceService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
-        $this->callService = $callService;
-        $this->syncService = $syncService;
+        $this->entityManager          = $entityManager;
+        $this->callService            = $callService;
+        $this->syncService            = $syncService;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->pluginLogger = $pluginLogger;
+        $this->pluginLogger           = $pluginLogger;
 
-        $this->data = [];
+        $this->data          = [];
         $this->configuration = [];
+
     }//end __construct()
+
 
     /**
      * Check the auth of the given source.
@@ -90,7 +94,9 @@ class MollieWebhookService
         }//end if
 
         return true;
+
     }//end checkSourceAuth()
+
 
     /**
      * Creates payment for given marriage.
@@ -100,10 +106,10 @@ class MollieWebhookService
      *
      * @return array
      */
-    public function mollieWebhookHandler(?array $data = [], ?array $configuration = []): array
+    public function mollieWebhookHandler(?array $data=[], ?array $configuration=[]): array
     {
         $this->pluginLogger->debug('mollieWebhookHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         if (empty($this->data['parameters']['body']['id']) === true) {
@@ -113,7 +119,7 @@ class MollieWebhookService
         $id = $this->data['parameters']['body']['id'];
 
         $mollieEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $source = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.mollie.source.json', 'common-gateway/huwelijksplanner-bundle');
+        $source       = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.mollie.source.json', 'common-gateway/huwelijksplanner-bundle');
         if ($this->checkSourceAuth($source) === false) {
             return [
                 'message' => 'No authorization set for the mollie source.',
@@ -123,7 +129,7 @@ class MollieWebhookService
 
         try {
             $response = $this->callService->call($source, '/v2/payments/'.$id, 'GET');
-            $payment = json_decode($response->getBody()->getContents(), true);
+            $payment  = json_decode($response->getBody()->getContents(), true);
         } catch (ClientException $exception) {
             $this->pluginLogger->error('Could not get a payment with source: '.$source->getName().' and id: '.$id);
         }
@@ -147,5 +153,8 @@ class MollieWebhookService
         $this->data['response'] = $synchronization->getObject()->toArray();
 
         return $this->data;
+
     }//end mollieWebhookHandler()
+
+
 }//end class

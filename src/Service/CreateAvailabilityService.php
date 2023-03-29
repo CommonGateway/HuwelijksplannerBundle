@@ -12,12 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * This service holds al the logic for creating availability.
  *
- * @author   Barry Brands barry@conduction.nl
+ * @author Barry Brands barry@conduction.nl
  *
  * @category Service
  */
 class CreateAvailabilityService
 {
+
     /**
      * @var LoggerInterface
      */
@@ -33,16 +34,19 @@ class CreateAvailabilityService
      */
     private array $configuration;
 
+
     /**
      * @param LoggerInterface $pluginLogger The Logger Interface
      */
     public function __construct(
         LoggerInterface $pluginLogger
     ) {
-        $this->pluginLogger = $pluginLogger;
-        $this->data = [];
+        $this->pluginLogger  = $pluginLogger;
+        $this->data          = [];
         $this->configuration = [];
+
     }//end __construct()
+
 
     /**
      * Creates availability for someone with given date info.
@@ -54,10 +58,10 @@ class CreateAvailabilityService
      *
      * @return array
      */
-    public function createAvailabilityHandler(?array $data = [], ?array $configuration = []): array
+    public function createAvailabilityHandler(?array $data=[], ?array $configuration=[]): array
     {
         $this->pluginLogger->debug('createAvailabilityHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         if (isset($this->data['parameters']['query']['start']) === false
@@ -72,16 +76,16 @@ class CreateAvailabilityService
         }//end if
 
         $begin = new DateTime($this->data['query']['start']);
-        $end = new DateTime($this->data['query']['stop']);
+        $end   = new DateTime($this->data['query']['stop']);
 
         $interval = new DateInterval($this->data['query']['interval']);
-        $period = new DatePeriod($begin, $interval, $end);
+        $period   = new DatePeriod($begin, $interval, $end);
 
         $resultArray = [];
         foreach ($period as $currentDate) {
             // start voorbeeld code
             $dayStart = clone $currentDate;
-            $dayStop = clone $currentDate;
+            $dayStop  = clone $currentDate;
 
             $dayStart->setTime(9, 0);
             $dayStop->setTime(17, 0);
@@ -106,5 +110,8 @@ class CreateAvailabilityService
         $this->data['response'] = new Response(json_encode($resultArray), 200);
 
         return $this->data;
+
     }//end createAvailabilityHandler()
+
+
 }//end class

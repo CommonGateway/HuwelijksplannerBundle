@@ -7,10 +7,12 @@ use CommonGateway\HuwelijksplannerBundle\Service\MollieWebhookService;
 
 class MollieWebhookHandler implements ActionHandlerInterface
 {
+
     /**
      * @var MollieWebhookService
      */
     private MollieWebhookService $service;
+
 
     /**
      * @param MollieWebhookService $service The mollie webhook service
@@ -18,7 +20,9 @@ class MollieWebhookHandler implements ActionHandlerInterface
     public function __construct(MollieWebhookService $service)
     {
         $this->service = $service;
+
     }//end __construct()
+
 
     /**
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
@@ -34,7 +38,9 @@ class MollieWebhookHandler implements ActionHandlerInterface
             'required'   => [],
             'properties' => [],
         ];
+
     }//end getConfiguration()
+
 
     /**
      * This function runs the mollieWebhookHandler function.
@@ -47,5 +53,8 @@ class MollieWebhookHandler implements ActionHandlerInterface
     public function run(array $data, array $configuration): array
     {
         return $this->service->mollieWebhookHandler($data, $configuration);
+
     }//end run()
+
+
 }//end class
