@@ -108,9 +108,9 @@ class PaymentService
 
     /**
      * Get price from a single product.
-     * 
-     * @param  string      $productId
-     * 
+     *
+     * @param string $productId
+     *
      * @return array       Product object.
      */
     private function getProductObject(string $productId): array
@@ -121,11 +121,12 @@ class PaymentService
 
     }//end getProductObject()
 
+
     /**
      * Get price from a single product.
-     * 
-     * @param  array       $product
-     * 
+     *
+     * @param array $product
+     *
      * @return string|null Price.
      */
     private function getProductPrice(array $product)
@@ -155,10 +156,11 @@ class PaymentService
                     foreach ($value as $extraProduct) {
                         // @todo move this to validation
                         if ($value !== null && is_array($extraProduct) === false) {
-                            $extraProduct = $this->getProductObject($extraProduct);
+                            $extraProduct    = $this->getProductObject($extraProduct);
                             $productPrices[] = $this->getProductPrice($extraProduct);
                             continue;
                         }//end if
+
                         if (is_array($extraProduct) === true) {
                             $productPrices[] = $this->getProductPrice($extraProduct);
                         }//end if
@@ -169,9 +171,10 @@ class PaymentService
 
                 // @todo move this to validation
                 if ($value !== null && is_array($value) === false) {
-                    $productObject = $this->getProductObject($value);
+                    $productObject   = $this->getProductObject($value);
                     $productPrices[] = $this->getProductPrice($productObject);
                 }//end if
+
                 if (is_array($value) === true) {
                     $productPrices[] = $this->getProductPrice($value);
                 }//end if
@@ -258,13 +261,14 @@ class PaymentService
 
     }//end createMolliePayment()
 
+
     /**
      * Validates huwelijk id in query and gets object.
-     * 
+     *
      * @param array $query.
-     * 
+     *
      * @throws BadRequestHttpException If id not found or valid.
-     * 
+     *
      * @return ObjectEntity Huwelijk.
      */
     private function validateHuwelijkId(array $query): ObjectEntity
@@ -275,7 +279,7 @@ class PaymentService
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['huwelijk']);
         if ($huwelijkObject instanceof ObjectEntity === false) {
-            throw new BadRequestHttpException('Cannot find huwelijk with given id: ' . $query['huwelijk']);
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$query['huwelijk']);
         }//end if
 
         return $huwelijkObject;
@@ -298,7 +302,7 @@ class PaymentService
         // Get all prices from the products
         $productPrices = $this->getProductPrices($huwelijkObject->toArray());
         // Calculate new price
-        $kosten = 'EUR ' . $this->calculatePrice($productPrices, 'EUR');
+        $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
 
         $explodedAmount = explode(' ', $kosten);
 
@@ -307,7 +311,7 @@ class PaymentService
                 'currency' => $explodedAmount[0],
                 'value'    => $explodedAmount[1],
             ],
-            'description' => 'Payment made for huwelijk with id: ' . $huwelijkObject->getId()->toString(),
+            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
             'redirectUrl' => $this->configuration['redirectUrl'],
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],

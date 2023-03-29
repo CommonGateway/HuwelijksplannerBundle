@@ -144,7 +144,7 @@ class MollieWebhookService
                 'response' => [
                     'message' => 'Could not get a payment with source: '.$source->getName().' and id: '.$id,
                     'status'  => 400,
-                ]
+                ],
             ];
         }//end if
 
@@ -154,7 +154,7 @@ class MollieWebhookService
                 'response' => [
                     'message' => 'Payment object created from mollie but no checkout url provided',
                     'status'  => 502,
-                ]
+                ],
             ];
         }//end if
 
