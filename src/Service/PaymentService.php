@@ -107,9 +107,9 @@ class PaymentService
 
     /**
      * Get price from a single product.
-     * 
-     * @param  string      $productId
-     * 
+     *
+     * @param string $productId
+     *
      * @return array       Product object.
      */
     private function getProductObject(string $productId): array
@@ -120,11 +120,12 @@ class PaymentService
 
     }//end getProductObject()
 
+
     /**
      * Get price from a single product.
-     * 
-     * @param  array       $product
-     * 
+     *
+     * @param array $product
+     *
      * @return string|null Price.
      */
     private function getProductPrice(array $product)
@@ -157,6 +158,7 @@ class PaymentService
                             if (is_array($extraProduct) === false) {
                                 $extraProduct = $this->getProductObject($extraProduct);
                             }//end if
+
                             if ($extraProduct !== null) {
                                 $productPrices[] = $this->getProductPrice($extraProduct);
                             }//end if
@@ -171,6 +173,7 @@ class PaymentService
                     if (is_array($value) === false) {
                         $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($value);
                     }//end if
+
                     if ($productObject !== null) {
                         $productPrices[] = $this->getProductPrice($productObject);
                     }//end if
