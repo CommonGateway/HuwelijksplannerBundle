@@ -1,0 +1,12 @@
+{
+    "$id": "https://huwelijksplanner.nl/SecurityGroup/Medewerker.securityGroup.json",
+    "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
+    "version": "0.0.1",
+    "title": "Medewerker group",
+    "scopes": ["get.huwelijk", "put.huwelijk", "patch.huwelijk", "post.huwelijk",
+                "get.assent", "put.assent", "patch.assent", "post.assent",
+                "get.payment", "put.payment", "patch.payment", "post.payment",
+                "get.availability", "put.availability", "patch.availability", "post.availability",
+                "get.sdgproduct", "put.sdgproduct", "patch.sdgproduct", "post.sdgproduct"
+    ]      
+}
