@@ -17,6 +17,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
  */
 class CreateMarriageService
 {
+
     /**
      * @var EntityManagerInterface
      */
@@ -62,6 +63,7 @@ class CreateMarriageService
      */
     private array $configuration;
 
+
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param CacheService           $cacheService           The Cache Service
@@ -80,16 +82,18 @@ class CreateMarriageService
         Security $security,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager = $entityManager;
-        $this->cacheService = $cacheService;
+        $this->entityManager          = $entityManager;
+        $this->cacheService           = $cacheService;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data = [];
-        $this->configuration = [];
-        $this->handleAssentService = $handleAssentService;
+        $this->data                   = [];
+        $this->configuration          = [];
+        $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security = $security;
-        $this->pluginLogger = $pluginLogger;
+        $this->security               = $security;
+        $this->pluginLogger           = $pluginLogger;
+
     }//end __construct()
+
 
     /**
      * Validate huwelijk type.
@@ -125,7 +129,9 @@ class CreateMarriageService
                 'httpCode' => 400,
             ];
         }//end if
+
     }//end validateType()
+
 
     /**
      * Validate huwelijk type.
@@ -162,18 +168,20 @@ class CreateMarriageService
                 'httpCode' => 400,
             ];
         }//end if
+
     }//end validateCeremonie()
+
 
     /**
      * This function creates a person object for the given user.
      */
-    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null): ?ObjectEntity
+    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         if ($brpPerson) {
-            $naam = $brpPerson->getValue('naam');
-            $verblijfplaats = $brpPerson->getValue('verblijfplaats');
+            $naam                                       = $brpPerson->getValue('naam');
+            $verblijfplaats                             = $brpPerson->getValue('verblijfplaats');
             $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
         }//end if
 
@@ -248,7 +256,9 @@ class CreateMarriageService
         $this->entityManager->flush();
 
         return $person;
+
     }//end createPerson()
+
 
     /**
      * Validate huwelijk type.
@@ -265,7 +275,7 @@ class CreateMarriageService
             }//end if
 
             $explodedPrice = explode(',', $price);
-            $kosten = $huwelijk->getValue('kosten');
+            $kosten        = $huwelijk->getValue('kosten');
 
             if ($kosten === null) {
                 $amount = $kosten;
@@ -290,7 +300,9 @@ class CreateMarriageService
 
             return $huwelijk;
         }//end foreach
+
     }//end calculatePrice()
+
 
     /**
      * Validate huwelijk type.
@@ -312,7 +324,9 @@ class CreateMarriageService
         if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false) {
             $this->calculatePrice($ambtenaar, $huwelijk);
         }
+
     }//end updateMarriagePrice()
+
 
     /**
      * This function validates and creates the huwelijk object
@@ -349,7 +363,7 @@ class CreateMarriageService
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
-            $brpPerson = null;
+            $brpPerson  = null;
             if (count($brpPersons) === 1) {
                 $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
             }//end if
@@ -375,7 +389,9 @@ class CreateMarriageService
             'response' => ['message' => 'Validation failed'],
             'httpCode' => 400,
         ];
+
     }//end createMarriage()
+
 
     /**
      * Creates the marriage request object.
@@ -387,10 +403,10 @@ class CreateMarriageService
      *
      * @return ?array
      */
-    public function createMarriageHandler(?array $data = [], ?array $configuration = []): ?array
+    public function createMarriageHandler(?array $data=[], ?array $configuration=[]): ?array
     {
         $this->pluginLogger->debug('createMarriageHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
@@ -414,5 +430,8 @@ class CreateMarriageService
         $this->data['response'] = $huwelijk;
 
         return $this->data;
+
     }//end createMarriageHandler()
+
+
 }//end class
