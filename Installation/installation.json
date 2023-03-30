@@ -1,5 +1,5 @@
 {
-    "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService",
+  "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService",
   "collections": [
     {
       "reference": "https://huwelijksplanner.nl/collection/hp.default.collection.json",
