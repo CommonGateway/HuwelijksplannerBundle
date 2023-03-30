@@ -125,6 +125,13 @@
         </properties>
     </rule>
 
+    <rule ref= "Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="125"/>
+            <property name="absoluteLineLimit" value="150"/>
+        </properties>
+    </rule>
+
     <!-- Private methods MUST not be prefixed with an underscore -->
     <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
         <type>error</type>
