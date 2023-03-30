@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class PaymentService
 {
+
     private EntityManagerInterface $entityManager;
 
     private SymfonyStyle $io;
@@ -25,6 +26,7 @@ class PaymentService
 
     private array $configuration;
 
+
     /**
      * @param EntityManagerInterface $entityManager
      */
@@ -34,7 +36,9 @@ class PaymentService
         $this->entityManager = $entityManager;
 
         $this->sourceRepo = $this->entityManager->getRepository(Source::class);
+
     }//end __construct()
+
 
     /**
      * Set symfony style in order to output to the console.
@@ -48,7 +52,9 @@ class PaymentService
         $this->io = $io;
 
         return $this;
+
     }//end setStyle()
+
 
     /**
      * Get the mollie api source.
@@ -74,7 +80,9 @@ class PaymentService
         }
 
         return true;
+
     }//end getMollieSource()
+
 
     /**
      * Creates a payment object.
@@ -96,7 +104,9 @@ class PaymentService
 
         // @TODO create mollie payment
         return [];
+
     }//end createPayment()
+
 
     /**
      * Creates payment for given marriage.
@@ -106,14 +116,17 @@ class PaymentService
      *
      * @return array
      */
-    public function createPaymentHandler(?array $data = [], ?array $configuration = []): array
+    public function createPaymentHandler(?array $data=[], ?array $configuration=[]): array
     {
         isset($this->io) && $this->io->success('createPaymentHandler function triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         $payment = $this->createPayment();
 
         return ['response' => ['test' => 'test']];
+
     }//end createPaymentHandler()
+
+
 }//end class
