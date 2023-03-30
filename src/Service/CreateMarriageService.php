@@ -150,7 +150,7 @@ class CreateMarriageService
                 ];
             }//end if
 
-            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
+            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/baliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
                 $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return [
