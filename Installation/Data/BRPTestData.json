@@ -12,12 +12,45 @@
           "voornamen": "Paula",
           "aanduidingNaamgebruik": "eigen"
         },
+        "gezagsverhouding":{
+            "indicatieCurateleRegister": false,
+            "indicatieGezagMinderjarige": "ouder1_en_ouder2",
+            "inOnderzoek": {
+                "indicatieCurateleRegister": false,
+                "indicatieGezagMinderjarige": false,
+                "datumIngangOnderzoek": {
+                    "dag": 12,
+                    "datum": "1990-12-12",
+                    "jaar": 1990,
+                    "maand": 12
+                }
+            }
+        },
         "geboorte": {
           "datumOnvolledig": {
             "dag": 1,
             "datum": "1985-12-01",
             "jaar": 1985,
             "maand": 12
+          },
+          "land": {
+            "code": "6030",
+            "omschrijving": "Nederland"
+          },
+          "plaats": {
+            "code": "1000",
+            "omschrijving": "Amsterdam"
+          },
+          "inOnderzoek": {
+            "datum": false,
+            "land": false,
+            "plaats": false,
+            "datumIngangOnderzoek": {
+                "dag": 1,
+                "datum": "1985-12-01",
+                "jaar": 1985,
+                "maand": 12
+            }
           }
         },
         "ouders": [
@@ -85,7 +118,8 @@
               "maand": 11
             },
             "nationaliteit": {
-              "code": "6030"
+              "code": "6030",
+              "omschrijving": "Nederlands"
             },
             "redenOpname": {
               "code": "301"
@@ -181,12 +215,45 @@
           "voornamen": "Kristin",
           "aanduidingNaamgebruik": "eigen"
         },
+        "gezagsverhouding":{
+            "indicatieCurateleRegister": false,
+            "indicatieGezagMinderjarige": "ouder1_en_ouder2",
+            "inOnderzoek": {
+                "indicatieCurateleRegister": false,
+                "indicatieGezagMinderjarige": false,
+                "datumIngangOnderzoek": {
+                    "dag": 12,
+                    "datum": "1990-12-12",
+                    "jaar": 1990,
+                    "maand": 12
+                }
+            }
+        },
         "geboorte": {
           "datumOnvolledig": {
             "dag": 17,
             "datum": "1965-09-17",
             "jaar": 1965,
             "maand": 9
+          },
+          "land": {
+            "code": "6030",
+            "omschrijving": "Nederland"
+          },
+          "plaats": {
+            "code": "1000",
+            "omschrijving": "Amsterdam"
+          },
+          "inOnderzoek": {
+            "datum": false,
+            "land": false,
+            "plaats": false,
+            "datumIngangOnderzoek": {
+                "dag": 17,
+                "datum": "1965-09-17",
+                "jaar": 1965,
+                "maand": 9
+            }
           }
         },
         "ouders": [
@@ -254,7 +321,8 @@
               "maand": 11
             },
             "nationaliteit": {
-              "code": "6030"
+              "code": "6030",
+              "omschrijving": "Nederlands"
             },
             "redenOpname": {
               "code": "301"
