@@ -1,6 +1,7 @@
 {
   "https://huwelijksplanner.nl/schemas/hp.assent.schema.json": [
     {
+      "id": "305bc2a4-a239-46de-ab9f-6eb6d0bcb8f6",
       "token":"string",
       "name":"Partner",
       "description":"Partner van ..",
@@ -15,6 +16,7 @@
       "revocable":true
     },
     {
+      "id": "31988c82-a197-44d5-b7a6-e9caa57d4c92",
       "token":"string",
       "name":"Getuige",
       "description":"Getuige voor huwelijk",
@@ -28,6 +30,7 @@
       "revocable":true
     },
     {
+      "id": "d049998e-ddbf-4f6c-9e93-69297d0d2677",
       "token":"string",
       "name":"Instemmings gemeente",
       "description":"Gemeente Utrecht",
@@ -660,6 +663,7 @@
       ]
     },
     {
+      "id": "5877dfa1-bcd9-4673-bb4e-e9a4da98ec0d",
       "upnLabel":"huwelijk",
       "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
       "versie":0,
@@ -690,6 +694,7 @@
       ]
     },
     {
+      "id": "20054883-db2c-4c82-b432-1d04c61313c0",
       "url":"http://pdc.data.ergens.nl/sdg/api/v1/producten/f3603321-b592-41b5-a2c7-949f493dbd99",
       "upnLabel":"Partnerschap",
       "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
@@ -721,6 +726,7 @@
       ]
     },
     {
+      "id": "8c4ca91f-0bb1-4497-a278-34c2af6b870b",
       "url":"http://pdc.data.ergens.nl/sdg/api/v1/producten/f3603321-b592-41b5-a2c7-949f493dbd99",
       "upnLabel":"Omzetting",
       "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
@@ -751,6 +757,7 @@
   ],
   "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json": [
     {
+      "id": "d369b08e-a415-4497-b966-5649f79e8ef2",
       "user": "marcelo@huwelijksplanner.online",
       "contact": "marcelo@huwelijksplanner.online",
       "department": "Gemeente Utrecht",
