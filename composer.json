@@ -16,9 +16,9 @@
     "require": {
         "php": ">=7.4",
         "commongateway/corebundle": "dev-feature/HP-83/installationService-users",
-        "common-gateway/brp-bundle": ">=0.0.23",
-        "common-gateway/klanten-bundle": ">=0.0.34",
-        "common-gateway/zgw-bundle": ">=0.1.30"
+        "common-gateway/brp-bundle": "dev-feature/HP-83/test-users",
+        "common-gateway/klanten-bundle": "dev-feature/HP-83/test-users",
+        "common-gateway/zgw-bundle": "dev-feature/HP-83/test-users"
     },
 	"require-dev" : {
 		"symfony/dependency-injection" : "~3.4|~4.1|~5.0"
