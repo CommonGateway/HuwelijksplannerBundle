@@ -15,10 +15,10 @@
 	"minimum-stability" : "dev",
     "require": {
         "php": ">=7.4",
-        "commongateway/corebundle": "dev-feature/HP-83/installationService-users",
-        "common-gateway/brp-bundle": "dev-feature/HP-83/test-users",
-        "common-gateway/klanten-bundle": "dev-feature/HP-83/test-users",
-        "common-gateway/zgw-bundle": "dev-feature/HP-83/test-users"
+        "commongateway/corebundle": ">=1.0.51",
+        "common-gateway/brp-bundle": ">=0.1.4",
+        "common-gateway/klanten-bundle": ">=0.1.3",
+        "common-gateway/zgw-bundle": ">=0.1.34"
     },
 	"require-dev" : {
 		"symfony/dependency-injection" : "~3.4|~4.1|~5.0"
