@@ -7,7 +7,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -17,7 +16,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
  */
 class InvitePartnerService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -58,7 +56,6 @@ class InvitePartnerService
      */
     private array $configuration;
 
-
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
@@ -75,17 +72,15 @@ class InvitePartnerService
         Security $security,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager          = $entityManager;
+        $this->entityManager = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data          = [];
+        $this->data = [];
         $this->configuration = [];
-        $this->handleAssentService    = $handleAssentService;
+        $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security     = $security;
+        $this->security = $security;
         $this->pluginLogger = $pluginLogger;
-
     }//end __construct()
-
 
     /**
      * This function validates and creates the huwelijk object and creates an assent for the current user.
@@ -140,9 +135,7 @@ class InvitePartnerService
         }//end if
 
         return $huwelijkObject->toArray();
-
     }//end invitePartner()
-
 
     /**
      * Creates the marriage request object.
@@ -154,10 +147,10 @@ class InvitePartnerService
      *
      * @return array The data array
      */
-    public function invitePartnerHandler(?array $data=[], ?array $configuration=[]): array
+    public function invitePartnerHandler(?array $data = [], ?array $configuration = []): array
     {
         $this->pluginLogger->debug('invitePartnerHandler triggered');
-        $this->data          = $data;
+        $this->data = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
@@ -188,8 +181,5 @@ class InvitePartnerService
         $this->data['response'] = $huwelijk;
 
         return $this->data;
-
     }//end invitePartnerHandler()
-
-
 }//end class

@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface;
  */
 class CreateAvailabilityService
 {
-
     /**
      * @var LoggerInterface
      */
@@ -29,19 +28,16 @@ class CreateAvailabilityService
      */
     private array $configuration;
 
-
     /**
      * @param LoggerInterface $pluginLogger The Logger Interface
      */
     public function __construct(
         LoggerInterface $pluginLogger
     ) {
-        $this->pluginLogger  = $pluginLogger;
-        $this->data          = [];
+        $this->pluginLogger = $pluginLogger;
+        $this->data = [];
         $this->configuration = [];
-
     }//end __construct()
-
 
     /**
      * Creates availability for someone with given date info.
@@ -53,23 +49,23 @@ class CreateAvailabilityService
      *
      * @return array
      */
-    public function createAvailabilityHandler(?array $data=[], ?array $configuration=[]): array
+    public function createAvailabilityHandler(?array $data = [], ?array $configuration = []): array
     {
         $this->pluginLogger->debug('createAvailabilityHandler triggered');
-        $this->data          = $data;
+        $this->data = $data;
         $this->configuration = $configuration;
 
         $begin = new DateTime($this->data['parameters']->get('start'));
-        $end   = new DateTime($this->data['parameters']->get('stop'));
+        $end = new DateTime($this->data['parameters']->get('stop'));
 
         $interval = new DateInterval($this->data['parameters']->get('interval'));
-        $period   = new DatePeriod($begin, $interval, $end);
+        $period = new DatePeriod($begin, $interval, $end);
 
         $resultArray = [];
         foreach ($period as $currentDate) {
             // start voorbeeld code
             $dayStart = clone $currentDate;
-            $dayStop  = clone $currentDate;
+            $dayStop = clone $currentDate;
 
             $dayStart->setTime(9, 0);
             $dayStop->setTime(17, 0);
@@ -83,9 +79,9 @@ class CreateAvailabilityService
 
             // end voorbeeld code
             $resultArray[$currentDate->format('Y-m-d')][] = [
-            // @TODO Add format 'c'
+                // @TODO Add format 'c'
                 'start'     => $currentDate->format('Y-m-d\TH:i:sO'),
-            // @TODO Add format 'c'
+                // @TODO Add format 'c'
                 'stop'      => $currentDate->add($interval)->format('Y-m-d\TH:i:sO'),
                 'resources' => $resourceArray,
             ];
@@ -94,8 +90,5 @@ class CreateAvailabilityService
         $this->data['response'] = $resultArray;
 
         return $this->data;
-
     }//end createAvailabilityHandler()
-
-
 }//end class

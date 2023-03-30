@@ -15,7 +15,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class HandleAssentService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -51,7 +50,6 @@ class HandleAssentService
      */
     private array $configuration;
 
-
     /**
      * @param EntityManagerInterface   $entityManager          The Entity Manager
      * @param GatewayResourceService   $gatewayResourceService The Gateway Resource Service
@@ -66,16 +64,14 @@ class HandleAssentService
         MessageBirdService $messageBirdService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager          = $entityManager;
+        $this->entityManager = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->eventDispatcher        = $eventDispatcher;
-        $this->messageBirdService     = $messageBirdService;
-        $this->pluginLogger           = $pluginLogger;
-        $this->data          = [];
+        $this->eventDispatcher = $eventDispatcher;
+        $this->messageBirdService = $messageBirdService;
+        $this->pluginLogger = $pluginLogger;
+        $this->data = [];
         $this->configuration = [];
-
     }//end __construct()
-
 
     /**
      * Sends an emails.
@@ -94,18 +90,18 @@ class HandleAssentService
         $config = $action->getConfiguration();
 
         switch ($type) {
-        case 'requester':
-            $config['subject'] = 'Invite Assent request to requester';
-            break;
-        case 'partner':
-            $config['subject'] = 'Invite Assent request to partner';
-            break;
-        case 'witness':
-            $config['subject'] = 'Invite Assent request to witness';
-            break;
-        default:
-            $config['subject'] = 'Invite Assent request';
-            break;
+            case 'requester':
+                $config['subject'] = 'Invite Assent request to requester';
+                break;
+            case 'partner':
+                $config['subject'] = 'Invite Assent request to partner';
+                break;
+            case 'witness':
+                $config['subject'] = 'Invite Assent request to witness';
+                break;
+            default:
+                $config['subject'] = 'Invite Assent request';
+                break;
         }//end switch
 
         // ? variables and data
@@ -121,9 +117,7 @@ class HandleAssentService
             $event = new ActionEvent('commongateway.handler.pre', $data, 'hp.send.email');
             $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
         }//end foreach
-
     }//end sendEmail()
-
 
     /**
      * Sends a sms.
@@ -136,26 +130,24 @@ class HandleAssentService
     public function sendSms(object $phoneNumbers, string $type): void
     {
         switch ($type) {
-        case 'requester':
-            $message = 'Assent request to requester';
-            break;
-        case 'partner':
-            $message = 'Assent request to partner';
-            break;
-        case 'witness':
-            $message = 'Assent request to witness';
-            break;
-        default:
-            $message = 'Assent request';
-            break;
+            case 'requester':
+                $message = 'Assent request to requester';
+                break;
+            case 'partner':
+                $message = 'Assent request to partner';
+                break;
+            case 'witness':
+                $message = 'Assent request to witness';
+                break;
+            default:
+                $message = 'Assent request';
+                break;
         }//end switch
 
         foreach ($phoneNumbers as $phoneNumber) {
             $this->messageBirdService->sendMessage($phoneNumber, $message);
         }//end foreach
-
     }//end sendSms()
-
 
     /**
      * Handles the assent for the given person and sends an email or sms.
@@ -207,8 +199,5 @@ class HandleAssentService
         $this->sendSms($phoneNumbers, $type);
 
         return $assent;
-
     }//end handleAssent()
-
-
 }//end class

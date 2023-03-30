@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
  */
 class UpdateChecklistService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -38,7 +37,6 @@ class UpdateChecklistService
      */
     private array $configuration;
 
-
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
@@ -49,14 +47,12 @@ class UpdateChecklistService
         GatewayResourceService $gatewayResourceService,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager          = $entityManager;
+        $this->entityManager = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->pluginLogger           = $pluginLogger;
-        $this->data          = [];
+        $this->pluginLogger = $pluginLogger;
+        $this->data = [];
         $this->configuration = [];
-
     }//end __construct()
-
 
     /**
      * Checks the partners of the huwelijk.
@@ -94,9 +90,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkPartners()
-
 
     /**
      * Checks the witnesses of the huwelijk.
@@ -135,9 +129,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkWitnesses()
-
 
     /**
      * Checks the offeser of the huwelijk.
@@ -165,9 +157,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkOfficer()
-
 
     /**
      * Checks the moment of the huwelijk.
@@ -196,9 +186,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkMoment()
-
 
     /**
      * Checks the products of the huwelijk.
@@ -227,9 +215,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkProducts()
-
 
     /**
      * Checks the order of the huwelijk.
@@ -257,9 +243,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkOrder()
-
 
     /**
      * Checks the case of the huwelijk.
@@ -287,9 +271,7 @@ class UpdateChecklistService
         ];
 
         return $checklist;
-
     }//end checkHuwelijkCase()
-
 
     /**
      * Checks data from the marriage object and updates the associated checklist.
@@ -324,8 +306,5 @@ class UpdateChecklistService
         $this->entityManager->flush();
 
         return $huwelijk;
-
     }//end checkHuwelijk()
-
-
 }//end class

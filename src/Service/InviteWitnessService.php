@@ -7,7 +7,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -17,7 +16,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
  */
 class InviteWitnessService
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -58,7 +56,6 @@ class InviteWitnessService
      */
     private array $configuration;
 
-
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
@@ -75,17 +72,15 @@ class InviteWitnessService
         Security $security,
         LoggerInterface $pluginLogger
     ) {
-        $this->entityManager          = $entityManager;
+        $this->entityManager = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data          = [];
+        $this->data = [];
         $this->configuration = [];
-        $this->handleAssentService    = $handleAssentService;
+        $this->handleAssentService = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security     = $security;
+        $this->security = $security;
         $this->pluginLogger = $pluginLogger;
-
     }//end __construct()
-
 
     /**
      * This function gets the emails of the witnesses of the marriage that were already added.
@@ -117,9 +112,7 @@ class InviteWitnessService
         }//end foreach
 
         return $witnessAssentsEmail;
-
     }//end getHuwelijkWitnessesEmails()
-
 
     /**
      * This function creates witnesses from the given data.
@@ -132,7 +125,7 @@ class InviteWitnessService
     private function createWitnesses(array $huwelijk, array $witnessAssentsEmail): array
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $emailSchema  = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $emailSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $witnessAssents['getuigen'] = [];
         foreach ($huwelijk['getuigen'] as $getuige) {
@@ -150,7 +143,7 @@ class InviteWitnessService
                 $emailObject->setValue('naam', $getuige['contact']['emails'][0]['naam']);
                 $this->entityManager->persist($emailObject);
 
-                $emailArray   = [];
+                $emailArray = [];
                 $emailArray[] = $emailObject->getId()->toString();
                 unset($getuige['contact']['emails']);
                 $getuige['contact']['emails'] = $emailArray;
@@ -165,16 +158,14 @@ class InviteWitnessService
         }//end foreach
 
         return $witnessAssents;
-
     }//end createWitnesses()
-
 
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
      *
-     * @param array                              $huwelijk The huwelijk array from the request.
-     * @param string                             $id       The id of the huwelijk.
+     * @param array  $huwelijk The huwelijk array from the request.
+     * @param string $id       The id of the huwelijk.
      * @param array the huwelijksobject as array.
      */
     private function inviteWitness(array $huwelijk, string $id): array
@@ -206,9 +197,7 @@ class InviteWitnessService
         }//end if
 
         return $huwelijkObject->toArray();
-
     }//end inviteWitness()
-
 
     /**
      * Creates the marriage request object.
@@ -220,10 +209,10 @@ class InviteWitnessService
      *
      * @return ?array The data array.
      */
-    public function inviteWitnessHandler(?array $data=[], ?array $configuration=[]): ?array
+    public function inviteWitnessHandler(?array $data = [], ?array $configuration = []): ?array
     {
         $this->pluginLogger->debug('inviteWitnessHandler triggered');
-        $this->data          = $data;
+        $this->data = $data;
         $this->configuration = $configuration;
 
         if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
@@ -254,8 +243,5 @@ class InviteWitnessService
         $this->data['response'] = $huwelijk;
 
         return $this->data;
-
     }//end inviteWitnessHandler()
-
-
 }//end class
