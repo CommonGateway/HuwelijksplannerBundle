@@ -187,9 +187,9 @@ class CreateMarriageService
 
         // @TODO check how and if we get the email and phonenumber from the frontend
         if (key_exists('partners', $huwelijk) === true
-            && key_exists('person', $huwelijk['partners'][0])
+            && key_exists('contact', $huwelijk['partners'][0])
         ) {
-            $huwelijkPerson = $huwelijk['partners'][0]['person'];
+            $huwelijkPerson = $huwelijk['partners'][0]['contact'];
 
             if (key_exists('emails', $huwelijkPerson) === true) {
                 $email = $huwelijkPerson['emails'][0]['email'];
