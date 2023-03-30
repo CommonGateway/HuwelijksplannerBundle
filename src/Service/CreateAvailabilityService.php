@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * This service holds al the logic for creating availability.
  *
- * @author   Barry Brands barry@conduction.nl
- * @package  common-gateway/huwelijksplanner-bundle
+ * @author Barry Brands barry@conduction.nl
+ *
  * @category Service
  */
 class CreateAvailabilityService
@@ -64,10 +64,10 @@ class CreateAvailabilityService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (isset($this->data['parameters']['query']['start']) === false
-            || isset($this->data['parameters']['query']['stop']) === false
-            || isset($this->data['parameters']['query']['interval']) === false
-            || isset($this->data['parameters']['query']['resources_could']) === false
+        if (isset($this->data['query']['start']) === false
+            || isset($this->data['query']['stop']) === false
+            || isset($this->data['query']['interval']) === false
+            || isset($this->data['query']['resources_could']) === false
         ) {
             return [
                 'response'     => ['message' => 'Add a start, stop (both datetime), interval (dateinterval) and resources_could[] (product id\'s) to your query paramterse on this endpoint.'],

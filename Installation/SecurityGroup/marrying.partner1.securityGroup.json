@@ -1,0 +1,14 @@
+{
+  "$id": "https://huwelijksplanner.nl/SecurityGroup/marrying.partner1.securityGroup.json",
+  "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
+  "version": "0.0.1",
+  "title": "Marrying Partner2 SecurityGroup",
+  "scopes": [
+    "get.Huwelijk", "patch.Huwelijk", "post.Huwelijk",
+    "get.Klant", "patch.Klant",
+    "get.IngeschrevenPersoon",
+    "get.Mollie",
+    "get.Availability",
+    "get.SDGProduct"
+  ]
+}

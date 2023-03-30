@@ -52,8 +52,8 @@ class UpdateChecklistService
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
         $this->pluginLogger           = $pluginLogger;
-        $this->data          = [];
-        $this->configuration = [];
+        $this->data                   = [];
+        $this->configuration          = [];
 
     }//end __construct()
 
