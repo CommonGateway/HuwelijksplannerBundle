@@ -152,7 +152,7 @@
       "email": "paula@huwelijksplanner.online",
       "person": "999993653",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/MarryingGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/marrying.partner1.securityGroup.json"
       ]
     },
     {
@@ -162,7 +162,7 @@
       "email": "kristin@huwelijksplanner.online",
       "person": "999990172",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/MarryingGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/marrying.partner2.securityGroup.json"
       ]
     },
     {
@@ -172,7 +172,7 @@
       "email": "felix@huwelijksplanner.online",
       "person": "999993872",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json"
       ]
     },
     {
@@ -182,7 +182,7 @@
       "email": "johannes@huwelijksplanner.online",
       "person": "432156782",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json"
       ]
     },
     {
@@ -192,7 +192,7 @@
       "email": "aaron@huwelijksplanner.online",
       "person": "654321782",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json"
       ]
     },
     {
@@ -202,7 +202,7 @@
       "email": "lammert@huwelijksplanner.online",
       "person": "123456782",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/AssentGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json"
       ]
     },
     {
@@ -211,7 +211,7 @@
       "name": "marcelo@huwelijksplanner.online",
       "email": "marcelo@huwelijksplanner.online",
       "securityGroups": [
-        "https://huwelijksplanner.nl/SecurityGroup/MedewerkerGroup.securityGroup.json"
+        "https://huwelijksplanner.nl/SecurityGroup/medewerker.securityGroup.json"
       ]
     },
     {

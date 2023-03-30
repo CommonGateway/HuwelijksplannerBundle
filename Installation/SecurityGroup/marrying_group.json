@@ -1,9 +1,0 @@
-{
-    "$id": "https://huwelijksplanner.nl/SecurityGroup/MarryingGroup.securityGroup.json",
-    "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
-    "version": "0.0.1",
-    "title": "Marrying group",
-    "scopes": ["get.huwelijk", "put.huwelijk", "patch.huwelijk", "post.huwelijk",
-                "get.assent", "put.assent", "patch.assent", "post.assent"
-    ]
-}
