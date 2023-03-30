@@ -71,8 +71,8 @@ class HandleAssentService
         $this->eventDispatcher        = $eventDispatcher;
         $this->messageBirdService     = $messageBirdService;
         $this->pluginLogger           = $pluginLogger;
-        $this->data          = [];
-        $this->configuration = [];
+        $this->data                   = [];
+        $this->configuration          = [];
 
     }//end __construct()
 

@@ -47,14 +47,12 @@
         "vertalingen": {
             "type": "array",
             "items": {
-              "type": "object",
               "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgVertaling.schema.json"
             }
         },
         "gerelateerdeProducten": {
             "type":"array",
             "items": {
-              "type": "object",
               "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
             }
         }
