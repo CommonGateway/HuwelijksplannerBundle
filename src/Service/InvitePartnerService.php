@@ -124,26 +124,18 @@ class InvitePartnerService
             }//end if
 
             $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-            $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+            $brpSchema    = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-            if(isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === true) {
+            if (isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === true) {
                 $brpPerson = $this->entityManager->getRepository('App:ObjectEntity')->findByEntity(
                     $brpSchema,
                     ['burgerservicenummer' => $huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']]
                 );
-                if($brpPerson[0] instanceof ObjectEntity === true) {
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voornaam']              =
-                    $huwelijk['partners'][0]['contact']['voornaam']                                      =
-                        $brpPerson->getValue('naam')->getValue('voornamen');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['achternaam']            =
-                    $huwelijk['partners'][0]['contact']['achternaam']                                    =
-                        $brpPerson->getValue('naam')->getValue('achternaam');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voorvoegselAchternaam'] =
-                    $huwelijk['partners'][0]['contact']['voorvoegselAchternaam']                         =
-                        $brpPerson->getValue('naam')->getValue('voorvoegsel');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['geboortedatum']         =
-                    $huwelijk['partners'][0]['contact']['geboortedatum']                                 =
-                        $brpPerson->getValue('geboorte')->getValue('datumOnvolledig')->getValue('datum');
+                if ($brpPerson[0] instanceof ObjectEntity === true) {
+                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voornaam']              = $huwelijk['partners'][0]['contact']['voornaam']                                      = $brpPerson->getValue('naam')->getValue('voornamen');
+                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['achternaam']            = $huwelijk['partners'][0]['contact']['achternaam']                                    = $brpPerson->getValue('naam')->getValue('achternaam');
+                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voorvoegselAchternaam'] = $huwelijk['partners'][0]['contact']['voorvoegselAchternaam']                         = $brpPerson->getValue('naam')->getValue('voorvoegsel');
+                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['geboortedatum']         = $huwelijk['partners'][0]['contact']['geboortedatum']                                 = $brpPerson->getValue('geboorte')->getValue('datumOnvolledig')->getValue('datum');
                 }
             }
 
