@@ -144,17 +144,7 @@ class MollieWebhookService
                 'response' => [
                     'message' => 'Could not get a payment with source: '.$source->getName().' and id: '.$id,
                     'status'  => 400,
-                ]
-            ];
-        }//end if
-
-        // If we dont have a checkout url from mollie return a 502.
-        if (isset($payment['_links']['checkout']) === false) {
-            return [
-                'response' => [
-                    'message' => 'Payment object created from mollie but no checkout url provided',
-                    'status'  => 502,
-                ]
+                ],
             ];
         }//end if
 
@@ -163,7 +153,9 @@ class MollieWebhookService
 
         $synchronization = $this->syncService->synchronize($synchronization, $payment);
 
-        return ['response' => ['checkout' => $payment['_links']['checkout']]];
+        $this->data['response'] = $synchronization->getObject()->toArray();
+
+        return $this->data;
 
     }//end mollieWebhookHandler()
 
