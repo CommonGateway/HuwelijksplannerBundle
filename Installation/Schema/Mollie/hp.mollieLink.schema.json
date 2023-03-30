@@ -5,6 +5,10 @@
     "type": "object",
     "title": "MollieLink",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "href": {
             "type": "string",
             "format": "url"

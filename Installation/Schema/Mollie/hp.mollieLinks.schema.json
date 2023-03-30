@@ -5,6 +5,10 @@
     "type": "object",
     "title": "MollieLinks",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "self": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.mollieLinks.schema.json"
         },
