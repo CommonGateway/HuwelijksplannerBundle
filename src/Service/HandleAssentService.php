@@ -181,7 +181,7 @@ class HandleAssentService
                 'property'    => null,
                 'process'     => null,
                 'contact'     => $person,
-                'status'      => 'requested',
+                'status'      => $type === 'requester' || ($type === 'partner' && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== null) ? 'granted' : 'requested',
                 'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
                 'revocable'   => true,
             ]
@@ -203,8 +203,10 @@ class HandleAssentService
 
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
-        // $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
-        $this->sendSms($phoneNumbers, $type);
+        if($assent->getValue('status') !== 'granted') {
+            // $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
+            $this->sendSms($phoneNumbers, $type);
+        }
 
         return $assent;
 
