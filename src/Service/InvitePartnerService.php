@@ -138,9 +138,9 @@ class InvitePartnerService
 
             $person = $this->createPerson($huwelijk, $brpPerson);
 
-//            $person = new ObjectEntity($personSchema);
-//            $person->hydrate($huwelijk['partners'][0]['contact']);
-//            $this->entityManager->persist($person);
+            // $person = new ObjectEntity($personSchema);
+            // $person->hydrate($huwelijk['partners'][0]['contact']);
+            // $this->entityManager->persist($person);
             $this->entityManager->flush();
 
             $partners                      = $huwelijkObject->getValue('partners');
@@ -206,6 +206,7 @@ class InvitePartnerService
 
     }//end invitePartnerHandler()
 
+
     /**
      * This function creates a person object for the given BRP person.
      *
@@ -216,7 +217,7 @@ class InvitePartnerService
      *
      * @return ObjectEntity The person in the contact.
      */
-    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null): ?ObjectEntity
+    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
