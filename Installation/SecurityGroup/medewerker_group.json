@@ -1,5 +1,5 @@
 {
-    "$id": "https://huwelijksplanner.nl/SecurityGroup/Medewerker.securityGroup.json",
+    "$id": "https://huwelijksplanner.nl/SecurityGroup/MedewerkerGroup.securityGroup.json",
     "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
     "version": "0.0.1",
     "title": "Medewerker group",
