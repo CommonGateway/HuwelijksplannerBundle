@@ -3,6 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -57,6 +58,10 @@ class InvitePartnerService
      */
     private array $configuration;
 
+    private AssentService $assentService;
+
+    private CacheService $cacheService;
+
 
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
@@ -72,7 +77,9 @@ class InvitePartnerService
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        AssentService $assentService,
+        CacheService $cacheService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
@@ -82,6 +89,8 @@ class InvitePartnerService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
+        $this->assentService          = $assentService;
+        $this->cacheService           = $cacheService;
 
     }//end __construct()
 
@@ -124,37 +133,29 @@ class InvitePartnerService
             }//end if
 
             $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-            $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+            $brpSchema    = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-            if(isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === true) {
-                $brpPerson = $this->entityManager->getRepository('App:ObjectEntity')->findByEntity(
-                    $brpSchema,
-                    ['burgerservicenummer' => $huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']]
-                );
-                if($brpPerson[0] instanceof ObjectEntity === true) {
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voornaam']              =
-                    $huwelijk['partners'][0]['contact']['voornaam']                                      =
-                        $brpPerson->getValue('naam')->getValue('voornamen');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['achternaam']            =
-                    $huwelijk['partners'][0]['contact']['achternaam']                                    =
-                        $brpPerson->getValue('naam')->getValue('achternaam');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['voorvoegselAchternaam'] =
-                    $huwelijk['partners'][0]['contact']['voorvoegselAchternaam']                         =
-                        $brpPerson->getValue('naam')->getValue('voorvoegsel');
-                    $huwelijk['partners'][0]['contact']['subjectIdentificatie']['geboortedatum']         =
-                    $huwelijk['partners'][0]['contact']['geboortedatum']                                 =
-                        $brpPerson->getValue('geboorte')->getValue('datumOnvolledig')->getValue('datum');
-                }
-            }
+            $brpPerson = null;
+            if (isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === true) {
+                $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']], [$brpSchema->getId()->toString()])['results'];
+                if (count($brpPersons) === 1) {
+                    $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
+                }//end if
+            }//end if
 
-            $person = new ObjectEntity($personSchema);
-            $person->hydrate($huwelijk['partners'][0]['contact']);
-            $this->entityManager->persist($person);
+
+            $person = $this->assentService->createPerson($huwelijk, $brpPerson);
+
+            // $person = new ObjectEntity($personSchema);
+            // $person->hydrate($huwelijk['partners'][0]['contact']);
+            // $this->entityManager->persist($person);
             $this->entityManager->flush();
 
             $partners                      = $huwelijkObject->getValue('partners');
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
             $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data)->getId()->toString();
+            var_dump($requesterAssent);
+
             $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);

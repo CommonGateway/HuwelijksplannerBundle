@@ -203,10 +203,11 @@ class HandleAssentService
 
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
-        if($assent->getValue('status') !== 'granted') {
+        if ($assent->getValue('status') !== 'granted') {
             // $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
             $this->sendSms($phoneNumbers, $type);
         }
+
 
         return $assent;
 

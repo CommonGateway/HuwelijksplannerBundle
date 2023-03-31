@@ -63,6 +63,8 @@ class CreateMarriageService
      */
     private array $configuration;
 
+    private AssentService $assentService;
+
 
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
@@ -80,7 +82,8 @@ class CreateMarriageService
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        AssentService $assentService
     ) {
         $this->entityManager          = $entityManager;
         $this->cacheService           = $cacheService;
@@ -91,6 +94,7 @@ class CreateMarriageService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
+        $this->assentService          = $assentService;
 
     }//end __construct()
 
@@ -150,7 +154,7 @@ class CreateMarriageService
                 ];
             }//end if
 
-            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/balliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
+            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/baliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
                 $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return [
@@ -170,95 +174,6 @@ class CreateMarriageService
         }//end if
 
     }//end validateCeremonie()
-
-
-    /**
-     * This function creates a person object for the given user.
-     */
-    private function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
-    {
-        $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-
-        if ($brpPerson) {
-            $naam                                       = $brpPerson->getValue('naam');
-            $verblijfplaats                             = $brpPerson->getValue('verblijfplaats');
-            $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
-        }//end if
-
-        // @TODO check how and if we get the email and phonenumber from the frontend
-        if (key_exists('partners', $huwelijk) === true
-            && key_exists('person', $huwelijk['partners'][0])
-        ) {
-            $huwelijkPerson = $huwelijk['partners'][0]['person'];
-
-            if (key_exists('emails', $huwelijkPerson) === true) {
-                $email = $huwelijkPerson['emails'][0]['email'];
-            }//end if
-
-            if (key_exists('telefoonnummers', $huwelijkPerson) === true) {
-                $phonenumber = $huwelijkPerson['telefoonnummers'][0]['telefoonnummer'];
-            }//end if
-        }//end if
-
-        $person = new ObjectEntity($personSchema);
-        $person->hydrate(
-            [
-                'bronorganisatie'       => '99999',
-                // @TODO
-                'klantnummer'           => '99999',
-                // @TODO
-                'websiteUrl'            => 'www.example.com',
-                // @TODO
-                'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
-                'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
-                'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
-                'telefoonnummers'       => [
-                    [
-                        'naam'           => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                        'telefoonnummer' => isset($phonenumber) ? $phonenumber : null,
-                    ],
-                ],
-                'emails'                => [
-                    [
-                        'naam'  => isset($naam) ? 'Emailadres van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                        'email' => isset($email) ? $email : $this->security->getUser()->getEmail(),
-                    ],
-                ],
-                'adressen'              => [
-                    [
-                        'naam'                 => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
-                        'straatnaam'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('straat') : null,
-                        'huisnummer'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummer') : null,
-                        'huisletter'           => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisletter') : null,
-                        'huisnummertoevoeging' => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('huisnummertoevoeging') : null,
-                        'postcode'             => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('postcode') : null,
-                        'woonplaatsnaam'       => isset($verblijfplaats) && $verblijfplaats ? $verblijfplaats->getValue('woonplaats') : null,
-                        'landcode'             => isset($landVanwaarIngeschreven) && $landVanwaarIngeschreven ? $landVanwaarIngeschreven->getValue('code') : null,
-                    ],
-                ],
-                'subject'               => $brpPerson && $brpPerson->getSelf(),
-                'subjectType'           => 'natuurlijk_persoon',
-                'subjectIdentificatie'  => [
-                    'inpBsn'                   => $brpPerson ? $brpPerson->getValue('burgerservicenummer') : $this->security->getUser()->getPerson(),
-                    'inpANummer'               => $brpPerson !== null ? $brpPerson->getValue('aNummer') : null,
-                    'geslachtsnaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : null,
-                    'voorvoegselGeslachtsnaam' => isset($naam) ? $naam && $naam->getValue('voorvoegsel') : null,
-                    'voorletters'              => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
-                    'voornamen'                => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
-                    'geslachtsaanduiding'      => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
-                    // 'geboortedatum' => null, @TODO
-                    // 'verblijfsadres' => null, @TODO
-                    // 'subVerblijfBuitenland' => null, @TODO
-                ],
-            ]
-        );
-        $this->entityManager->persist($person);
-        $this->entityManager->flush();
-
-        return $person;
-
-    }//end createPerson()
-
 
     /**
      * Validate huwelijk type.
@@ -370,7 +285,7 @@ class CreateMarriageService
 
             // create person from logged in user and if we have a brp person we set those values
             // if not we set the values from the security object
-            $person = $this->createPerson($huwelijk, $brpPerson);
+            $person = $this->assentService->createPerson($huwelijk, $brpPerson);
 
             // creates an assent and add the person to the partners of this merriage
             $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data)->getId()->toString();
