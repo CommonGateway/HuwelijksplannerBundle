@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Money\Currency;
+use Money\Money;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This service holds al the logic for mollie payments.
@@ -113,6 +116,112 @@ class PaymentService
 
 
     /**
+     * Get price from a single product.
+     *
+     * @param string $productId ID of a product.
+     *
+     * @return array Product object.
+     */
+    private function getProductObject(string $productId): array
+    {
+        $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($productId);
+
+        return $productObject->toArray() ?? null;
+
+    }//end getProductObject()
+
+
+    /**
+     * Get price from a single product.
+     *
+     * @param array $product Product object as array.
+     *
+     * @return string|null Price of the product.
+     */
+    private function getProductPrice(array $product)
+    {
+        if (isset($product['vertalingen'][0]['kosten'])) {
+            return $product['vertalingen'][0]['kosten'];
+        }//end if
+
+        return null;
+
+    }//end getProductPrice()
+
+
+    /**
+     * Get product prices from this marriage.
+     *
+     * @param array $huwelijk Huwelijk object as array.
+     *
+     * @return array $productPrices Array of all product prices.
+     */
+    public function getProductPrices(array $huwelijk): array
+    {
+        $productPrices = [];
+
+        // @todo Refactor/cleanup this code.
+        // @todo if/foreach nesting to deep, 3 max. Create more functions for this.
+        foreach ($huwelijk as $key => $value) {
+            if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
+                if ($key === 'producten') {
+                    foreach ($value as $extraProduct) {
+                        // @todo move this to validation
+                        if ($value !== null && is_array($extraProduct) === false) {
+                            $extraProduct    = $this->getProductObject($extraProduct);
+                            $productPrices[] = $this->getProductPrice($extraProduct);
+                            continue;
+                        }//end if
+
+                        if (is_array($extraProduct) === true) {
+                            $productPrices[] = $this->getProductPrice($extraProduct);
+                        }//end if
+                    }//end foreach
+
+                    continue;
+                }//end if
+
+                // @todo move this to validation
+                if ($value !== null && is_array($value) === false) {
+                    $productObject   = $this->getProductObject($value);
+                    $productPrices[] = $this->getProductPrice($productObject);
+                }//end if
+
+                if (is_array($value) === true) {
+                    $productPrices[] = $this->getProductPrice($value);
+                }//end if
+            }//end if
+        }//end foreach
+
+        return $productPrices;
+
+    }//end getProductPrices()
+
+
+    /**
+     * Calculates total price with given prices and currency.
+     *
+     * @param array       $prices   Array of prices to accumulate.
+     * @param string|null $currency ISO 4271 currency.
+     *
+     * @return string Total price after acummulation.
+     */
+    public function calculatePrice(array $prices, ?string $currency='EUR'): string
+    {
+        $currency   = new Currency($currency);
+        $totalPrice = new Money(0, $currency);
+
+        foreach ($prices as $price) {
+            $price      = str_replace('EUR ', '', $price);
+            $totalPrice = $totalPrice->add(new Money($price, $currency));
+        }
+
+        return $totalPrice->getAmount();
+
+    }//end calculatePrice()
+
+
+    /**
      * Creates a payment object.
      * The required fields in the paymentArray are:
      * The amount object with currency and value.
@@ -122,7 +231,7 @@ class PaymentService
      *
      * @param array $paymentArray The body for the payment request.
      *
-     * @return array|null
+     * @return array|null Syncrhonization object or a error repsonse or null.
      */
     public function createMolliePayment(array $paymentArray): ?array
     {
@@ -166,34 +275,55 @@ class PaymentService
 
 
     /**
+     * Validates huwelijk id in query and gets object.
+     *
+     * @param array $query Paramters from a request.
+     *
+     * @throws BadRequestHttpException If id not found or valid.
+     *
+     * @return ObjectEntity Huwelijk object.
+     */
+    private function validateHuwelijkId(array $query): ObjectEntity
+    {
+        if (isset($query['huwelijk']) === false || Uuid::isValid($query['huwelijk']) === false) {
+            throw new BadRequestHttpException('No huwelijk id given or false id in the query parameter huwelijk.');
+        }//end if
+
+        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['huwelijk']);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$query['huwelijk']);
+        }//end if
+
+        return $huwelijkObject;
+
+    }//end validateHuwelijkId()
+
+
+    /**
      * Creates a payment object.
      *
-     * @return array|null
+     * @return array|null Payment object as array or null.
      */
     public function createPayment(): ?array
     {
         // @TODO add the values amount from huwelijk object etc to array
         $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $huwelijkId = $this->data['query']['huwelijk'];
+        $huwelijkObject = $this->validateHuwelijkId($this->data['query']);
 
-        if ($huwelijkId === null) {
-            throw new BadRequestHttpException('No huwelijk id given in the parameter huwelijk.');
-        }//end if
+        // Get all prices from the products
+        $productPrices = $this->getProductPrices($huwelijkObject->toArray());
+        // Calculate new price
+        $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
 
-        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
-        if ($huwelijkObject instanceof ObjectEntity === false) {
-            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$huwelijkId);
-        }//end if
-
-        $explodedAmount = explode(' ', $huwelijkObject->getValue('kosten'));
+        $explodedAmount = explode(' ', $kosten);
 
         $paymentArray = [
             'amount'      => [
                 'currency' => $explodedAmount[0],
                 'value'    => $explodedAmount[1],
             ],
-            'description' => 'Payment made for huwelijk with id: '.$huwelijkId,
+            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
             'redirectUrl' => $this->configuration['redirectUrl'],
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
@@ -215,10 +345,10 @@ class PaymentService
     /**
      * Creates payment for given marriage.
      *
-     * @param ?array $data
-     * @param ?array $configuration
+     * @param ?array $data          Data this service might need from a Action.
+     * @param ?array $configuration Configuraiton this service might need from a Action.
      *
-     * @return array
+     * @return array Response array that will be returned to RequestService.
      */
     public function createPaymentHandler(?array $data=[], ?array $configuration=[]): array
     {
@@ -234,8 +364,18 @@ class PaymentService
 
         $payment = $this->createPayment();
 
+        // If we dont have a checkout url from mollie return a 502.
+        if (isset($payment['_links']['checkout']) === false) {
+            return [
+                'response' => [
+                    'message' => 'Payment object created from mollie but no checkout url provided',
+                    'status'  => 502,
+                ],
+            ];
+        }//end if
+
         if ($payment !== null) {
-             $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+            $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
         }
 
         return $this->data;

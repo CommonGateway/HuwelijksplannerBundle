@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
+use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
@@ -54,6 +55,11 @@ class CreateMarriageService
     private LoggerInterface $pluginLogger;
 
     /**
+     * @var PaymentService
+     */
+    private PaymentService $paymentService;
+
+    /**
      * @var array
      */
     private array $data;
@@ -83,6 +89,7 @@ class CreateMarriageService
         UpdateChecklistService $updateChecklistService,
         Security $security,
         LoggerInterface $pluginLogger,
+        PaymentService $paymentService,
         AssentService $assentService
     ) {
         $this->entityManager          = $entityManager;
@@ -94,6 +101,7 @@ class CreateMarriageService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
+        $this->paymentService         = $paymentService;
         $this->assentService          = $assentService;
 
     }//end __construct()
@@ -155,10 +163,10 @@ class CreateMarriageService
             }//end if
 
             if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/baliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
+                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
 
                 return [
-                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/balliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
+                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
                     'httpCode' => 400,
                 ];
             }//end if
@@ -174,74 +182,6 @@ class CreateMarriageService
         }//end if
 
     }//end validateCeremonie()
-
-
-    /**
-     * Validate huwelijk type.
-     */
-    private function calculatePrice(ObjectEntity $sdgProduct, ObjectEntity $huwelijk)
-    {
-        // update huwelijk object with price of the ceremonie
-        $vertalingen = $sdgProduct->getValue('vertalingen');
-        foreach ($vertalingen as $vertaling) {
-            $price = $vertaling->getValue('kostenEnBetaalmethoden');
-
-            if ($price === 'Geen extra kosten') {
-                return $huwelijk;
-            }//end if
-
-            $explodedPrice = explode(',', $price);
-            $kosten        = $huwelijk->getValue('kosten');
-
-            if ($kosten === null) {
-                $amount = $kosten;
-            }//end if
-
-            if ($kosten !== null) {
-                $explodedKosten = explode(' ', $kosten);
-
-                if (count($explodedKosten) === 1) {
-                    $amount = $explodedKosten[0];
-                }//end if
-
-                if (count($explodedKosten) === 2) {
-                    $amount = $explodedKosten[1];
-                }//end if
-            }//end if
-
-            $kosten = ($amount + $explodedPrice[0]);
-            $huwelijk->setValue('kosten', 'EUR '.$kosten);
-            $this->entityManager->persist($huwelijk);
-            $this->entityManager->flush();
-
-            return $huwelijk;
-        }//end foreach
-
-    }//end calculatePrice()
-
-
-    /**
-     * Validate huwelijk type.
-     */
-    private function updateMarriagePrice(ObjectEntity $huwelijk)
-    {
-        // @TODO has the type also has a price?
-        // if (($typeObject = $huwelijk->getValue('type')) !== false){
-        // $this->calculatePrice($typeObject, $huwelijk);
-        // }
-        if (($ceremonieObject = $huwelijk->getValue('ceremonie')) !== false) {
-            $this->calculatePrice($ceremonieObject, $huwelijk);
-        }
-
-        if (($location = $huwelijk->getValue('locatie')) !== false) {
-            $this->calculatePrice($location, $huwelijk);
-        }
-
-        if (($ambtenaar = $huwelijk->getValue('ambtenaar')) !== false) {
-            $this->calculatePrice($ambtenaar, $huwelijk);
-        }
-
-    }//end updateMarriagePrice()
 
 
     /**
@@ -270,12 +210,14 @@ class CreateMarriageService
                 'ambtenaar' => $huwelijk['ambtenaar'],
             ];
 
-            // @TODO hier een functie aanroepen om de kosten te bereken
+            // Get all prices from the products
+            $productPrices = $this->paymentService->getProductPrices($huwelijkArray);
+            // Calculate new price
+            $huwelijkArray['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
+
             $huwelijkObject->hydrate($huwelijkArray);
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-
-            $this->updateMarriagePrice($huwelijkObject);
 
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
