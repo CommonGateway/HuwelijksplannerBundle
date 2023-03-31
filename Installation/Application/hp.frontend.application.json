@@ -6,6 +6,5 @@
   "description": "The Huwelijksplanner Front-end Application. (Domain is used for redirecting after a payment, this might change)",
   "domains": [
     "utrecht-huwelijksplanner.frameless.io"
-  ],
-  "organization": "a1c8e0b6-2f78-480d-a9fb-9792142f4761"
+  ]
 }
