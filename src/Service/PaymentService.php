@@ -10,7 +10,9 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Money\Currency;
@@ -49,6 +51,11 @@ class PaymentService
     private LoggerInterface $pluginLogger;
 
     /**
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
+
+    /**
      * @var array
      */
     private array $data;
@@ -65,19 +72,22 @@ class PaymentService
      * @param SynchronizationService $syncService            The Synchronization Service.
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service.
      * @param LoggerInterface        $pluginLogger           The Logger Interface.
+     * @param SessionInterface       $session                The session.
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CallService $callService,
         SynchronizationService $syncService,
         GatewayResourceService $gatewayResourceService,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        SessionInterface $session
     ) {
         $this->entityManager          = $entityManager;
         $this->callService            = $callService;
         $this->syncService            = $syncService;
         $this->gatewayResourceService = $gatewayResourceService;
         $this->pluginLogger           = $pluginLogger;
+        $this->session                = $session;
 
         $this->data          = [];
         $this->configuration = [];
@@ -110,9 +120,9 @@ class PaymentService
      *
      * @param string $productId ID of a product.
      *
-     * @return array Product object.
+     * @return array|null Product object.
      */
-    private function getProductObject(string $productId): array
+    private function getProductObject(string $productId): ?array
     {
         $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($productId);
 
@@ -202,8 +212,10 @@ class PaymentService
         $totalPrice = new Money(0, $currency);
 
         foreach ($prices as $price) {
-            $price      = str_replace('EUR ', '', $price);
-            $totalPrice = $totalPrice->add(new Money($price, $currency));
+            $price = str_replace('EUR ', '', $price);
+            if ($price > 0) {
+                $totalPrice = $totalPrice->add(new Money($price, $currency));
+            }
         }
 
         return $totalPrice->getAmount();
@@ -308,18 +320,25 @@ class PaymentService
 
         $explodedAmount = explode(' ', $kosten);
 
-        $paymentArray = [
-            'amount'      => [
-                'currency' => $explodedAmount[0],
-                'value'    => $explodedAmount[1],
-            ],
-            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
-            'redirectUrl' => $this->configuration['redirectUrl'],
-            'webhookUrl'  => $this->configuration['webhookUrl'],
-            'method'      => $this->configuration['method'],
-        ];
+        // $paymentArray = [
+        // 'amount'      => [
+        // 'currency' => $explodedAmount[0],
+        // 'value'    => $explodedAmount[1],
+        // ],
+        // 'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
+        // 'redirectUrl' => $this->configuration['redirectUrl'],
+        // 'webhookUrl'  => $this->configuration['webhookUrl'],
+        // 'method'      => $this->configuration['method'],
+        // ];
+        // return $this->createMolliePayment($paymentArray);
+        // todo: temporary, redirect to return [redirectUrl]. Instead of this $paymentArray and return^
+        $domain      = 'utrecht-huwelijksplanner.frameless.io';
+        $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
+        if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
+            $domain = $application->getDomains()[0];
+        }
 
-        return $this->createMolliePayment($paymentArray);
+        return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/succes'];
 
     }//end createPayment()
 
@@ -346,18 +365,19 @@ class PaymentService
 
         $payment = $this->createPayment();
 
+        // todo: temp disabled
         // If we dont have a checkout url from mollie return a 502.
-        if (isset($payment['_links']['checkout']) === false) {
-            return [
-                'response' => [
-                    'message' => 'Payment object created from mollie but no checkout url provided',
-                    'status'  => 502,
-                ],
-            ];
-        }//end if
-
+        // if (isset($payment['_links']['checkout']) === false) {
+        // return [
+        // 'response' => [
+        // 'message' => 'Payment object created from mollie but no checkout url provided',
+        // 'status'  => 502,
+        // ],
+        // ];
+        // }//end if
         if ($payment !== null) {
-            $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
+            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+            // $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
         }
 
         return $this->data;
