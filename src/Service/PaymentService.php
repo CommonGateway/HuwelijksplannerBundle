@@ -151,6 +151,7 @@ class PaymentService
         $productPrices = [];
 
         // @todo Refactor/cleanup this code.
+        // @todo if/foreach nesting to deep, 3 max. Create more functions for this.
         foreach ($huwelijk as $key => $value) {
             if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
                 if ($key === 'producten') {
