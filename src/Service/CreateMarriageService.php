@@ -212,11 +212,11 @@ class CreateMarriageService
         $person->hydrate(
             [
                 'bronorganisatie'       => '99999',
-            // @TODO
+                // @TODO
                 'klantnummer'           => '99999',
-            // @TODO
+                // @TODO
                 'websiteUrl'            => 'www.example.com',
-            // @TODO
+                // @TODO
                 'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
                 'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
                 'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
@@ -254,9 +254,9 @@ class CreateMarriageService
                     'voorletters'              => isset($naam) && $naam ? $naam->getValue('voorletters') : null,
                     'voornamen'                => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
                     'geslachtsaanduiding'      => $brpPerson ? $brpPerson->getValue('geslachtsaanduiding') : null,
-                // 'geboortedatum' => null, @TODO
-                // 'verblijfsadres' => null, @TODO
-                // 'subVerblijfBuitenland' => null, @TODO
+                    // 'geboortedatum' => null, @TODO
+                    // 'verblijfsadres' => null, @TODO
+                    // 'subVerblijfBuitenland' => null, @TODO
                 ],
             ]
         );

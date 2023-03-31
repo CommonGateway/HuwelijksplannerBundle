@@ -7,7 +7,6 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -90,71 +89,63 @@ class InviteWitnessService
     /**
      * This function gets the emails of the witnesses of the marriage that were already added.
      *
-     * @param ObjectEntity $huwelijkObject The huwelijksobject.
+     * @param array $witnesses The huwelijk witnesses array.
      *
      * @return array The emails of the witnesses.
      */
-    private function getHuwelijkWitnessesEmails(ObjectEntity $huwelijkObject): array
+    private function getWitnesses(array $witnesses): array
     {
-        $witnessAssentsEmail = [];
-        foreach ($huwelijkObject->getValue('getuigen') as $witnessObject) {
-            $witnessAssentPersonId = $witnessObject->getValue('contact');
+        $witnessEmail = [];
+        foreach ($witnesses as $witness) {
+            if (key_exists('contact', $witness) === false
+                && key_exists('emails', $witness['contact']) === false
+                && is_array($witness['contact']['emails']) === false
+                && key_exists('email', $witness['contact']['emails'][0])
+            ) {
+                $this->data['response'] = 'No email is set for the witness';
 
-            if ($witnessAssentPersonId === null) {
-                continue;
-            }//end if
+                return $this->data;
+            }
 
-            $witnessAssentPerson = $this->entityManager->getRepository('App:ObjectEntity')->find($witnessAssentPersonId);
-            $emails              = $witnessAssentPerson->getValue('emails');
-
-            if ($emails[0] === null) {
-                continue;
-            }//end if
-
-            $email = $emails[0];
-
-            $witnessAssentsEmail[] = $email->getValue('email');
+            $witnessEmail[] = $witness['contact']['emails'][0]['email'];
         }//end foreach
 
-        return $witnessAssentsEmail;
+        $uniqueArray = array_unique($witnessEmail);
 
-    }//end getHuwelijkWitnessesEmails()
+        if (count($uniqueArray) !== count($witnessEmail)) {
+            $this->data['response'] = 'There are duplicate emails given.';
+
+            return $this->data;
+        }
+
+        return $witnesses;
+
+    }//end getWitnesses()
 
 
     /**
      * This function creates witnesses from the given data.
      *
-     * @param array $huwelijk            The huwelijk array from the request.
-     * @param array $witnessAssentsEmail The emails of the witnesses that are already added to the marriage.
+     * @param array $witnesses The witnesses from the request.
      *
      * @return array The witnesses assents array.
      */
-    private function createWitnesses(array $huwelijk, array $witnessAssentsEmail): array
+    private function createWitnesses(array $witnesses): array
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $emailSchema  = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         $witnessAssents['getuigen'] = [];
-        foreach ($huwelijk['getuigen'] as $getuige) {
-            if (key_exists('contact', $getuige) === true
-                && key_exists('emails', $getuige['contact']) === true
-                && is_array($getuige['contact']['emails']) === true
-            ) {
-                if (in_array($getuige['contact']['emails'][0]['email'], $witnessAssentsEmail) === true) {
-                    $this->pluginLogger->error('This witness is already added.');
-                    continue;
-                }//end if
+        foreach ($witnesses as $getuige) {
+            $emailObject = new ObjectEntity($emailSchema);
+            $emailObject->setValue('email', $getuige['contact']['emails'][0]['email']);
+            $emailObject->setValue('naam', $getuige['contact']['emails'][0]['naam']);
+            $this->entityManager->persist($emailObject);
 
-                $emailObject = new ObjectEntity($emailSchema);
-                $emailObject->setValue('email', $getuige['contact']['emails'][0]['email']);
-                $emailObject->setValue('naam', $getuige['contact']['emails'][0]['naam']);
-                $this->entityManager->persist($emailObject);
-
-                $emailArray   = [];
-                $emailArray[] = $emailObject->getId()->toString();
-                unset($getuige['contact']['emails']);
-                $getuige['contact']['emails'] = $emailArray;
-            }//end if
+            $emailArray   = [];
+            $emailArray[] = $emailObject->getId()->toString();
+            unset($getuige['contact']['emails']);
+            $getuige['contact']['emails'] = $emailArray;
 
             $person = new ObjectEntity($personSchema);
             $person->hydrate($getuige['contact']);
@@ -179,24 +170,32 @@ class InviteWitnessService
      */
     private function inviteWitness(array $huwelijk, string $id): array
     {
-        if (!$huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id)) {
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
+        if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
 
-            return $huwelijkObject->toArray();
+            $this->data['response'] = 'Could not find huwelijk with id '.$id;
+
+            return $this->data;
         }//end if
 
         if (isset($huwelijk['getuigen']) === true
             && count($huwelijk['getuigen']) <= 4
         ) {
-            if (count($huwelijkObject->getValue('getuigen')) === 4) {
-                return $huwelijkObject->toArray();
+            $huwelijkObject->getValue('getuigen')->clear();
+            $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
+
+            // Check if there are duplicates in the huwelijk getuigen array.
+            $witnesses = $this->getWitnesses($huwelijk['getuigen']);
+
+            if (key_exists('response', $witnesses)) {
+                return $this->data;
             }//end if
 
-            // @TODO Check if there are duplicates in the huwelijk getuigen array.
-            // Get the emails of the witnesses to validate.
-            $witnessAssentsEmail = $this->getHuwelijkWitnessesEmails($huwelijkObject);
             // Create the witnesses.
-            $witnessAssents = $this->createWitnesses($huwelijk, $witnessAssentsEmail);
+            $witnessAssents = $this->createWitnesses($witnesses);
+
             $huwelijkObject->hydrate($witnessAssents);
 
             $this->entityManager->persist($huwelijkObject);
@@ -239,8 +238,8 @@ class InviteWitnessService
             ];
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PUT') {
-            $this->pluginLogger->error('Not a PUT request');
+        if ($this->data['parameters']['method'] !== 'PATCH') {
+            $this->pluginLogger->error('Not a PATCH request');
 
             return $this->data;
         }//end if

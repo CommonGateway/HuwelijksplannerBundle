@@ -1,570 +1,835 @@
 {
-  "https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json": [
-    {
-      "burgerservicenummer": "999993653",
-      "aNummer": "8940402024",
-      "geheimhoudingPersoonsgegevens": false,
-      "leeftijd": 36,
-      "geslachtsaanduiding": "vrouw",
-      "naam": {
-        "geslachtsnaam": "Sayer",
-        "voorletters": "P.",
-        "voornamen": "Paula",
-        "aanduidingNaamgebruik": "eigen"
-      },
-      "geboorte": {
-        "datumOnvolledig": {
-          "dag": 1,
-          "datum": "1985-12-01",
-          "jaar": 1985,
-          "maand": 12
-        }
-      },
-      "ouders": [
-        {
-          "geslachtsaanduiding": "vrouw",
-          "naam": {
-            "voornamen": "Hilda",
-            "geslachtsnaam": "Banis"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 12,
-              "datum": "1956-12-01",
-              "jaar": 1956,
-              "maand": 5
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Clermont-Ferrand"
-            }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1989-05-03",
-            "jaar": 1989,
-            "maand": 5
-          }
+    "https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json": [
+      {
+        "burgerservicenummer": "999993653",
+        "aNummer": "8940402024",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 36,
+        "geslachtsaanduiding": "vrouw",
+        "naam": {
+          "geslachtsnaam": "Sayer",
+          "voorletters": "P.",
+          "voornamen": "Paula",
+          "aanduidingNaamgebruik": "eigen"
         },
-        {
-          "geslachtsaanduiding": "man",
-          "naam": {
-            "voornamen": "Marijn",
-            "geslachtsnaam": "Portman"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 3,
-              "datum": "1955-04-03",
-              "jaar": 1955,
-              "maand": 4
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Toulon"
-            }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
+        "geboorte": {
+          "datumOnvolledig": {
             "dag": 1,
             "datum": "1985-12-01",
             "jaar": 1985,
             "maand": 12
           }
-        }
-      ],
-      "nationaliteiten": [
-        {
-          "datumIngangGeldigheid": {
-            "dag": 5,
-            "datum": "2013-11-05",
-            "jaar": 2013,
-            "maand": 11
-          },
-          "nationaliteit": {
-            "code": "6030"
-          },
-          "redenOpname": {
-            "code": "301"
-          }
-        }
-      ],
-      "partners": [
-        {
-          "naam": {
-            "voornamen": "Ton",
-            "geslachtsnaam": "Swick"
-          },
-          "geslachtsaanduiding": "man",
-          "geboorte": {
-            "datumOnvolledig": {
+        },
+        "ouders": [
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Hilda",
+              "geslachtsnaam": "Banis"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 12,
+                "datum": "1956-12-01",
+                "jaar": 1956,
+                "maand": 5
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
               "dag": 1,
-              "datum": "1976-08-01",
-              "jaar": 1976,
-              "maand": 8
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Saint Amarin"
+              "datum": "1989-05-03",
+              "jaar": 1989,
+              "maand": 5
             }
           },
-          "aangaanHuwelijkPartnerschap": {
-            "datumOnvolledig": {
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Marijn",
+              "geslachtsnaam": "Portman"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
               "dag": 1,
-              "datum": "2008-12-01",
-              "jaar": 2008,
+              "datum": "1985-12-01",
+              "jaar": 1985,
               "maand": 12
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Thann"
             }
-          },
-          "soortVerbintenis": "H"
-        }
-      ],
-      "verblijfplaats": {
-        "straat": "Boterdiep",
-        "huisnummer": 31,
-        "postcode": "3077AW",
-        "woonplaats": "Rotterdam",
-        "functieAdres": "woonadres",
-        "nummeraanduidingIdentificatie": "0599010000208579",
-        "datumInschrijvingInGemeente": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        },
-        "datumAanvangAdreshouding": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        },
-        "datumIngangGeldigheid": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        },
-        "datumVestigingInNederland": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        },
-        "land": {
-          "code": "5002"
-        },
-        "gemeenteVanInschrijving": {
-          "code": "0599"
-        }
-      }
-    },
-    {
-      "burgerservicenummer": "999990172",
-      "aNummer": "4391026595",
-      "geheimhoudingPersoonsgegevens": false,
-      "leeftijd": 56,
-      "geslachtsaanduiding": "vrouw",
-      "naam": {
-        "geslachtsnaam": "Sluiter",
-        "voorletters": "K",
-        "voornamen": "Kristin",
-        "aanduidingNaamgebruik": "eigen"
-      },
-      "geboorte": {
-        "datumOnvolledig": {
-          "dag": 17,
-          "datum": "1965-09-17",
-          "jaar": 1965,
-          "maand": 9
-        }
-      },
-      "ouders": [
-        {
-          "geslachtsaanduiding": "vrouw",
-          "naam": {
-            "voornamen": "Hilda",
-            "geslachtsnaam": "Banis"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 12,
-              "datum": "1956-12-01",
-              "jaar": 1956,
-              "maand": 5
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Clermont-Ferrand"
-            }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1989-05-03",
-            "jaar": 1989,
-            "maand": 5
           }
-        },
-        {
-          "geslachtsaanduiding": "man",
-          "naam": {
-            "voornamen": "Marijn",
-            "geslachtsnaam": "Portman"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 3,
-              "datum": "1955-04-03",
-              "jaar": 1955,
-              "maand": 4
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
             },
-            "land": {
-              "code": "5002"
+            "nationaliteit": {
+              "code": "6030"
             },
-            "plaats": {
-              "omschrijving": "Toulon"
+            "redenOpname": {
+              "code": "301"
             }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1985-12-01",
-            "jaar": 1985,
-            "maand": 12
           }
-        }
-      ],
-      "nationaliteiten": [
-        {
-          "datumIngangGeldigheid": {
-            "dag": 5,
-            "datum": "2013-11-05",
+        ],
+        "partners": [
+          {
+            "naam": {
+              "voornamen": "Ton",
+              "geslachtsnaam": "Swick"
+            },
+            "geslachtsaanduiding": "man",
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 1,
+                "datum": "1976-08-01",
+                "jaar": 1976,
+                "maand": 8
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Saint Amarin"
+              }
+            },
+            "aangaanHuwelijkPartnerschap": {
+              "datumOnvolledig": {
+                "dag": 1,
+                "datum": "2008-12-01",
+                "jaar": 2008,
+                "maand": 12
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Thann"
+              }
+            },
+            "soortVerbintenis": "H"
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Boterdiep",
+          "huisnummer": 31,
+          "postcode": "3077AW",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
             "jaar": 2013,
             "maand": 11
           },
-          "nationaliteit": {
-            "code": "6030"
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
           },
-          "redenOpname": {
-            "code": "301"
-          }
-        }
-      ],
-      "verblijfplaats": {
-        "straat": "Paadje van duizend treê",
-        "huisnummer": 33,
-        "postcode": "3039ME",
-        "woonplaats": "Rotterdam",
-        "functieAdres": "woonadres",
-        "nummeraanduidingIdentificatie": "0599010000208579",
-        "land": {
-          "code": "5002"
-        },
-        "gemeenteVanInschrijving": {
-          "code": "0599"
-        },
-        "datumInschrijvingInGemeente": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        },
-        "datumAanvangAdreshouding": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        },
-        "datumIngangGeldigheid": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        },
-        "datumVestigingInNederland": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        }
-      }
-    },
-    {
-      "burgerservicenummer": "999993872",
-      "aNummer": "6940397872",
-      "geheimhoudingPersoonsgegevens": false,
-      "leeftijd": 63,
-      "geslachtsaanduiding": "man",
-      "naam": {
-        "geslachtsnaam": "Bouck",
-        "voorletters": "F",
-        "voornamen": "Felix",
-        "voorvoegsel": "",
-        "aanduidingNaamgebruik": "eigen"
-      },
-      "geboorte": {
-        "datumOnvolledig": {
-          "dag": 17,
-          "datum": "1959-04-17",
-          "jaar": 1959,
-          "maand": 4
-        }
-      },
-      "ouders": [
-        {
-          "geslachtsaanduiding": "vrouw",
-          "naam": {
-            "voornamen": "Hilda",
-            "geslachtsnaam": "Banis"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 12,
-              "datum": "1956-12-01",
-              "jaar": 1956,
-              "maand": 5
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Clermont-Ferrand"
-            }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1989-05-03",
-            "jaar": 1989,
-            "maand": 5
-          }
-        },
-        {
-          "geslachtsaanduiding": "man",
-          "naam": {
-            "voornamen": "Marijn",
-            "geslachtsnaam": "Portman"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 3,
-              "datum": "1955-04-03",
-              "jaar": 1955,
-              "maand": 4
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Toulon"
-            }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1985-12-01",
-            "jaar": 1985,
-            "maand": 12
-          }
-        }
-      ],
-      "nationaliteiten": [
-        {
           "datumIngangGeldigheid": {
-            "dag": 5,
-            "datum": "2013-11-05",
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
             "jaar": 2013,
             "maand": 11
           },
-          "nationaliteit": {
-            "code": "6030"
+          "land": {
+            "code": "5002"
           },
-          "redenOpname": {
-            "code": "301"
+          "gemeenteVanInschrijving": {
+            "code": "0599"
           }
         }
-      ],
-      "verblijfplaats": {
-        "straat": "Goudsesingel",
-        "huisnummer": 72,
-        "postcode": "3011KD",
-        "woonplaats": "Rotterdam",
-        "functieAdres": "woonadres",
-        "nummeraanduidingIdentificatie": "0599010000208579",
-        "datumVestigingInNederland": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        },
-        "land": {
-          "code": "5002"
-        },
-        "gemeenteVanInschrijving": {
-          "code": "0599"
-        },
-        "datumInschrijvingInGemeente": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
-        },
-        "datumAanvangAdreshouding": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        },
-        "datumIngangGeldigheid": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
-        }
-      }
-    },
-    {
-      "burgerservicenummer": "123456782",
-      "aNummer": "1234567890",
-      "geheimhoudingPersoonsgegevens": false,
-      "leeftijd": 25,
-      "geslachtsaanduiding": "man",
-      "naam": {
-        "geslachtsnaam": "Trease",
-        "voorletters": "L",
-        "voornamen": "Lammert",
-        "voorvoegsel": "van",
-        "aanduidingNaamgebruik": "eigen"
       },
-      "geboorte": {
-        "datumOnvolledig": {
-          "dag": 18,
-          "datum": "1997-01-18",
-          "jaar": 1997,
-          "maand": 1
-        }
-      },
-      "ouders": [
-        {
-          "geslachtsaanduiding": "vrouw",
-          "naam": {
-            "voornamen": "Hilda",
-            "geslachtsnaam": "Banis"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 12,
-              "datum": "1956-12-01",
-              "jaar": 1956,
+      {
+        "burgerservicenummer": "999990172",
+        "aNummer": "4391026595",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 56,
+        "geslachtsaanduiding": "vrouw",
+        "naam": {
+          "geslachtsnaam": "Sluiter",
+          "voorletters": "K",
+          "voornamen": "Kristin",
+          "aanduidingNaamgebruik": "eigen"
+        },
+        "geboorte": {
+          "datumOnvolledig": {
+            "dag": 17,
+            "datum": "1965-09-17",
+            "jaar": 1965,
+            "maand": 9
+          }
+        },
+        "ouders": [
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Hilda",
+              "geslachtsnaam": "Banis"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 12,
+                "datum": "1956-12-01",
+                "jaar": 1956,
+                "maand": 5
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1989-05-03",
+              "jaar": 1989,
               "maand": 5
-            },
-            "land": {
-              "code": "5002"
-            },
-            "plaats": {
-              "omschrijving": "Clermont-Ferrand"
             }
           },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1989-05-03",
-            "jaar": 1989,
-            "maand": 5
-          }
-        },
-        {
-          "geslachtsaanduiding": "man",
-          "naam": {
-            "voornamen": "Marijn",
-            "geslachtsnaam": "Portman"
-          },
-          "geboorte": {
-            "datumOnvolledig": {
-              "dag": 3,
-              "datum": "1955-04-03",
-              "jaar": 1955,
-              "maand": 4
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Marijn",
+              "geslachtsnaam": "Portman"
             },
-            "land": {
-              "code": "5002"
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
             },
-            "plaats": {
-              "omschrijving": "Toulon"
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1985-12-01",
+              "jaar": 1985,
+              "maand": 12
             }
-          },
-          "datumIngangFamilierechtelijkeBetrekking": {
-            "dag": 1,
-            "datum": "1985-12-01",
-            "jaar": 1985,
-            "maand": 12
           }
-        }
-      ],
-      "nationaliteiten": [
-        {
-          "datumIngangGeldigheid": {
-            "dag": 5,
-            "datum": "2013-11-05",
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
+            },
+            "nationaliteit": {
+              "code": "6030"
+            },
+            "redenOpname": {
+              "code": "301"
+            }
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Paadje van duizend treê",
+          "huisnummer": 33,
+          "postcode": "3039ME",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "land": {
+            "code": "5002"
+          },
+          "gemeenteVanInschrijving": {
+            "code": "0599"
+          },
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
             "jaar": 2013,
             "maand": 11
           },
-          "nationaliteit": {
-            "code": "6030"
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
           },
-          "redenOpname": {
-            "code": "301"
+          "datumIngangGeldigheid": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
           }
         }
-      ],
-      "verblijfplaats": {
-        "straat": "Anna van Westrienenstr",
-        "huisnummer": 1,
-        "huisletter": "A",
-        "postcode": "3051EG",
-        "woonplaats": "Rotterdam",
-        "functieAdres": "woonadres",
-        "nummeraanduidingIdentificatie": "0599010000208579",
-        "land": {
-          "code": "5002"
+      },
+      {
+        "burgerservicenummer": "999993872",
+        "aNummer": "6940397872",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 63,
+        "geslachtsaanduiding": "man",
+        "naam": {
+          "geslachtsnaam": "Bouck",
+          "voorletters": "F",
+          "voornamen": "Felix",
+          "voorvoegsel": "",
+          "aanduidingNaamgebruik": "eigen"
         },
-        "gemeenteVanInschrijving": {
-          "code": "0599"
+        "geboorte": {
+          "datumOnvolledig": {
+            "dag": 17,
+            "datum": "1959-04-17",
+            "jaar": 1959,
+            "maand": 4
+          }
         },
-        "datumInschrijvingInGemeente": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
+        "ouders": [
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Hilda",
+              "geslachtsnaam": "Banis"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 12,
+                "datum": "1956-12-01",
+                "jaar": 1956,
+                "maand": 5
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1989-05-03",
+              "jaar": 1989,
+              "maand": 5
+            }
+          },
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Marijn",
+              "geslachtsnaam": "Portman"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1985-12-01",
+              "jaar": 1985,
+              "maand": 12
+            }
+          }
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
+            },
+            "nationaliteit": {
+              "code": "6030"
+            },
+            "redenOpname": {
+              "code": "301"
+            }
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Goudsesingel",
+          "huisnummer": 72,
+          "postcode": "3011KD",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          },
+          "land": {
+            "code": "5002"
+          },
+          "gemeenteVanInschrijving": {
+            "code": "0599"
+          },
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          },
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumIngangGeldigheid": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          }
+        }
+      },
+      {
+        "burgerservicenummer": "432156782",
+        "aNummer": "4321567890",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 30,
+        "geslachtsaanduiding": "man",
+        "naam": {
+          "geslachtsnaam": "Dijk",
+          "voorletters": "J",
+          "voornamen": "Johannes",
+          "voorvoegsel": "van",
+          "aanduidingNaamgebruik": "eigen"
         },
-        "datumAanvangAdreshouding": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
+        "geboorte": {
+          "datumOnvolledig": {
+            "dag": 12,
+            "datum": "1993-03-12",
+            "jaar": 1993,
+            "maand": 3
+          }
         },
-        "datumIngangGeldigheid": {
-          "dag": 8,
-          "datum": "2015-08-08",
-          "jaar": 2015,
-          "maand": 8
+        "ouders": [
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Peter",
+              "geslachtsnaam": "Dijk"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 12,
+                "datum": "1956-12-01",
+                "jaar": 1956,
+                "maand": 5
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1989-05-03",
+              "jaar": 1989,
+              "maand": 5
+            }
+          },
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Marijke",
+              "geslachtsnaam": "van 't Hof"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1985-12-01",
+              "jaar": 1985,
+              "maand": 12
+            }
+          }
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
+            },
+            "nationaliteit": {
+              "code": "6030"
+            },
+            "redenOpname": {
+              "code": "301"
+            }
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Anna van Westrienenstr",
+          "huisnummer": 1,
+          "huisletter": "A",
+          "postcode": "3051EG",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "land": {
+            "code": "5002"
+          },
+          "gemeenteVanInschrijving": {
+            "code": "0599"
+          },
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          },
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumIngangGeldigheid": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          }
+        }
+      },
+      {
+        "burgerservicenummer": "654321782",
+        "aNummer": "6543217890",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 36,
+        "geslachtsaanduiding": "man",
+        "naam": {
+          "geslachtsnaam": "Woodall",
+          "voorletters": "A",
+          "voornamen": "Aaron ",
+          "voorvoegsel": "B.",
+          "aanduidingNaamgebruik": "eigen"
         },
-        "datumVestigingInNederland": {
-          "dag": 2,
-          "datum": "2013-11-02",
-          "jaar": 2013,
-          "maand": 11
+        "geboorte": {
+          "datumOnvolledig": {
+            "dag": 18,
+            "datum": "1997-01-18",
+            "jaar": 1997,
+            "maand": 1
+          }
+        },
+        "ouders": [
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Kelly",
+              "geslachtsnaam": "Wilson"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 1,
+                "datum": "1952-02-01",
+                "jaar": 1952,
+                "maand": 2
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1989-05-03",
+              "jaar": 1989,
+              "maand": 5
+            }
+          },
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Tymen",
+              "geslachtsnaam": "Woodall"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1985-12-01",
+              "jaar": 1985,
+              "maand": 12
+            }
+          }
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
+            },
+            "nationaliteit": {
+              "code": "6030"
+            },
+            "redenOpname": {
+              "code": "301"
+            }
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Anna van Westrienenstr",
+          "huisnummer": 1,
+          "huisletter": "A",
+          "postcode": "3051EG",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "land": {
+            "code": "5002"
+          },
+          "gemeenteVanInschrijving": {
+            "code": "0599"
+          },
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          },
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumIngangGeldigheid": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          }
+        }
+      },
+      {
+        "burgerservicenummer": "123456782",
+        "aNummer": "1234567890",
+        "geheimhoudingPersoonsgegevens": false,
+        "leeftijd": 25,
+        "geslachtsaanduiding": "man",
+        "naam": {
+          "geslachtsnaam": "Trease",
+          "voorletters": "L",
+          "voornamen": "Lammert",
+          "voorvoegsel": "van",
+          "aanduidingNaamgebruik": "eigen"
+        },
+        "geboorte": {
+          "datumOnvolledig": {
+            "dag": 18,
+            "datum": "1997-01-18",
+            "jaar": 1997,
+            "maand": 1
+          }
+        },
+        "ouders": [
+          {
+            "geslachtsaanduiding": "vrouw",
+            "naam": {
+              "voornamen": "Erica",
+              "geslachtsnaam": "Eren"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 12,
+                "datum": "1956-12-01",
+                "jaar": 1956,
+                "maand": 5
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Clermont-Ferrand"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1989-05-03",
+              "jaar": 1989,
+              "maand": 5
+            }
+          },
+          {
+            "geslachtsaanduiding": "man",
+            "naam": {
+              "voornamen": "Clifton",
+              "geslachtsnaam": "Trease"
+            },
+            "geboorte": {
+              "datumOnvolledig": {
+                "dag": 3,
+                "datum": "1955-04-03",
+                "jaar": 1955,
+                "maand": 4
+              },
+              "land": {
+                "code": "5002"
+              },
+              "plaats": {
+                "omschrijving": "Toulon"
+              }
+            },
+            "datumIngangFamilierechtelijkeBetrekking": {
+              "dag": 1,
+              "datum": "1985-12-01",
+              "jaar": 1985,
+              "maand": 12
+            }
+          }
+        ],
+        "nationaliteiten": [
+          {
+            "datumIngangGeldigheid": {
+              "dag": 5,
+              "datum": "2013-11-05",
+              "jaar": 2013,
+              "maand": 11
+            },
+            "nationaliteit": {
+              "code": "6030"
+            },
+            "redenOpname": {
+              "code": "301"
+            }
+          }
+        ],
+        "verblijfplaats": {
+          "straat": "Anna van Westrienenstr",
+          "huisnummer": 1,
+          "huisletter": "A",
+          "postcode": "3051EG",
+          "woonplaats": "Rotterdam",
+          "functieAdres": "woonadres",
+          "nummeraanduidingIdentificatie": "0599010000208579",
+          "land": {
+            "code": "5002"
+          },
+          "gemeenteVanInschrijving": {
+            "code": "0599"
+          },
+          "datumInschrijvingInGemeente": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          },
+          "datumAanvangAdreshouding": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumIngangGeldigheid": {
+            "dag": 8,
+            "datum": "2015-08-08",
+            "jaar": 2015,
+            "maand": 8
+          },
+          "datumVestigingInNederland": {
+            "dag": 2,
+            "datum": "2013-11-02",
+            "jaar": 2013,
+            "maand": 11
+          }
         }
       }
-    }
-  ]
-
-}
+    ]
+  }

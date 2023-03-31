@@ -4,7 +4,6 @@ namespace CommonGateway\HuwelijksplannerBundle\ActionHandler;
 
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
 use CommonGateway\HuwelijksplannerBundle\Service\MollieWebhookService;
-use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
 class MollieWebhookHandler implements ActionHandlerInterface
 {
