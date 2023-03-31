@@ -235,9 +235,7 @@ class PaymentService
         $payment = $this->createPayment();
 
         if ($payment !== null) {
-            // todo: temporary, redirect to redirectUrl.
-            $this->data['response'] = new RedirectResponse($payment['redirectUrl']);
-            // $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+             $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
         }
 
         return $this->data;
