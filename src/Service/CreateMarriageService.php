@@ -183,6 +183,7 @@ class CreateMarriageService
 
     }//end validateCeremonie()
 
+
     /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
