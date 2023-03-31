@@ -120,9 +120,9 @@ class PaymentService
      *
      * @param string $productId ID of a product.
      *
-     * @return array Product object.
+     * @return array|null Product object.
      */
-    private function getProductObject(string $productId): array
+    private function getProductObject(string $productId): ?array
     {
         $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($productId);
 
@@ -318,19 +318,19 @@ class PaymentService
 
         $explodedAmount = explode(' ', $kosten);
 
-        $paymentArray = [
-            'amount'      => [
-                'currency' => $explodedAmount[0],
-                'value'    => $explodedAmount[1],
-            ],
-            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
-            'redirectUrl' => $this->configuration['redirectUrl'],
-            'webhookUrl'  => $this->configuration['webhookUrl'],
-            'method'      => $this->configuration['method'],
-        ];
+//        $paymentArray = [
+//            'amount'      => [
+//                'currency' => $explodedAmount[0],
+//                'value'    => $explodedAmount[1],
+//            ],
+//            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
+//            'redirectUrl' => $this->configuration['redirectUrl'],
+//            'webhookUrl'  => $this->configuration['webhookUrl'],
+//            'method'      => $this->configuration['method'],
+//        ];
 
         // return $this->createMolliePayment($paymentArray);
-        // todo: temporary, redirect to return [redirectUrl]. Instead of this return^
+        // todo: temporary, redirect to return [redirectUrl]. Instead of this $paymentArray and return^
         $domain      = 'utrecht-huwelijksplanner.frameless.io';
         $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
         if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
