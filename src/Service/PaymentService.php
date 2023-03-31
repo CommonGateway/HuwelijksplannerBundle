@@ -10,7 +10,9 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -44,6 +46,11 @@ class PaymentService
      * @var LoggerInterface
      */
     private LoggerInterface $pluginLogger;
+    
+    /**
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
 
     /**
      * @var array
@@ -62,19 +69,22 @@ class PaymentService
      * @param SynchronizationService $syncService            The Synchronization Service.
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service.
      * @param LoggerInterface        $pluginLogger           The Logger Interface.
+     * @param SessionInterface       $session                The session.
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         CallService $callService,
         SynchronizationService $syncService,
         GatewayResourceService $gatewayResourceService,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        SessionInterface $session
     ) {
         $this->entityManager          = $entityManager;
         $this->callService            = $callService;
         $this->syncService            = $syncService;
         $this->gatewayResourceService = $gatewayResourceService;
         $this->pluginLogger           = $pluginLogger;
+        $this->session                = $session;
 
         $this->data          = [];
         $this->configuration = [];
@@ -188,9 +198,18 @@ class PaymentService
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
         ];
-
-        return $this->createMolliePayment($paymentArray);
-
+    
+        //todo: temporary, redirect to redirectUrl. Instead of this return:
+//        return $this->createMolliePayment($paymentArray);
+    
+        $domain = 'utrecht-huwelijksplanner.frameless.io';
+        if ($this->session->get('application')) {
+            $application = $this->entityManager->getRepository('App:Application')->findOneBy(['id' => $this->session->get('application')]);
+            if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
+                $domain = $application->getDomains()[0];
+            }
+        }
+        return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/succes'];
     }//end createPayment()
 
 
@@ -217,7 +236,9 @@ class PaymentService
         $payment = $this->createPayment();
 
         if ($payment !== null) {
-            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+            //todo: temporary, redirect to redirectUrl.
+            $this->data['response'] = RedirectResponse($payment['redirectUrl']);
+//            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
         }
 
         return $this->data;
