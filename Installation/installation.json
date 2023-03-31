@@ -1,5 +1,17 @@
 {
   "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService",
+  "applications": [
+    {
+      "title": "Huwelijksplanner Front-end Application",
+      "$id": "https://huwelijksplanner.nl/application/hp.frontend.application.json",
+      "$schema": "https://docs.commongateway.nl/schemas/Application.schema.json",
+      "version": "0.0.2",
+      "description": "The Huwelijksplanner Front-end Application. (Domain is used for redirecting after a payment, this might change)",
+      "domains": [
+        "utrecht-huwelijksplanner.frameless.io"
+      ]
+    }
+  ],
   "collections": [
     {
       "reference": "https://huwelijksplanner.nl/collection/hp.default.collection.json",
