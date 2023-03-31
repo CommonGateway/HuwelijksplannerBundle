@@ -57,6 +57,11 @@
         "reference": "https://hp.nl/action/hp.MollieWebhookAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\MollieWebhookHandler",
         "listens": ["huwelijksplanner.get.webhook"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.UpdateAssentAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateAssentHandler",
+        "listens": ["huwelijksplanner.endpoint.assent"]
       }
     ]
   },
@@ -65,7 +70,9 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json",
         "path": "assents",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2",
+        "throws": ["huwelijksplanner.endpoint.assent"]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json",

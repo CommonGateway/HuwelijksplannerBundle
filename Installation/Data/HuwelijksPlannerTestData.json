@@ -1,47 +1,4 @@
 {
-  "https://huwelijksplanner.nl/schemas/hp.assent.schema.json": [
-    {
-      "id": "305bc2a4-a239-46de-ab9f-6eb6d0bcb8f6",
-      "token":"string",
-      "name":"Partner",
-      "description":"Partner van ..",
-      "request":null,
-      "forwardUrl;":null,
-      "property":null,
-      "process":null,
-      "person":null,
-      "status":"requested",
-      "requester":"019655344",
-      "revocable":true
-    },
-    {
-      "id": "31988c82-a197-44d5-b7a6-e9caa57d4c92",
-      "token":"string",
-      "name":"Getuige",
-      "description":"Getuige voor huwelijk",
-      "request":null,
-      "forwardUrl;":null,
-      "property":null,
-      "process":null,
-      "person":null,
-      "requester":"019655344",
-      "revocable":true
-    },
-    {
-      "id": "d049998e-ddbf-4f6c-9e93-69297d0d2677",
-      "token":"string",
-      "name":"Instemmings gemeente",
-      "description":"Gemeente Utrecht",
-      "request":null,
-      "forwardUrl;":null,
-      "property":null,
-      "process":null,
-      "person":null,
-      "status":"requested",
-      "requester":"471608130",
-      "revocable":true
-    }
-  ],
   "https://huwelijksplanner.nl/schemas/hp.sdgVertaling.schema.json": [
     {
       "id": "7561d222-3950-4b98-b9d0-fbf4737dae8d",
