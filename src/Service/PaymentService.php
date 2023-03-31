@@ -318,17 +318,16 @@ class PaymentService
 
         $explodedAmount = explode(' ', $kosten);
 
-//        $paymentArray = [
-//            'amount'      => [
-//                'currency' => $explodedAmount[0],
-//                'value'    => $explodedAmount[1],
-//            ],
-//            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
-//            'redirectUrl' => $this->configuration['redirectUrl'],
-//            'webhookUrl'  => $this->configuration['webhookUrl'],
-//            'method'      => $this->configuration['method'],
-//        ];
-
+        // $paymentArray = [
+        // 'amount'      => [
+        // 'currency' => $explodedAmount[0],
+        // 'value'    => $explodedAmount[1],
+        // ],
+        // 'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
+        // 'redirectUrl' => $this->configuration['redirectUrl'],
+        // 'webhookUrl'  => $this->configuration['webhookUrl'],
+        // 'method'      => $this->configuration['method'],
+        // ];
         // return $this->createMolliePayment($paymentArray);
         // todo: temporary, redirect to return [redirectUrl]. Instead of this $paymentArray and return^
         $domain      = 'utrecht-huwelijksplanner.frameless.io';
