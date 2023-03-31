@@ -198,11 +198,10 @@ class PaymentService
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
         ];
-        
+
         // return $this->createMolliePayment($paymentArray);
         // todo: temporary, redirect to return [redirectUrl]. Instead of this return^
-        
-        $domain = 'utrecht-huwelijksplanner.frameless.io';
+        $domain      = 'utrecht-huwelijksplanner.frameless.io';
         $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
         if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
             $domain = $application->getDomains()[0];
