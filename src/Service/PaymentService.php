@@ -365,19 +365,18 @@ class PaymentService
         $payment = $this->createPayment();
 
         // todo: temp disabled
-//        // If we dont have a checkout url from mollie return a 502.
-//        if (isset($payment['_links']['checkout']) === false) {
-//            return [
-//                'response' => [
-//                    'message' => 'Payment object created from mollie but no checkout url provided',
-//                    'status'  => 502,
-//                ],
-//            ];
-//        }//end if
-
+        // If we dont have a checkout url from mollie return a 502.
+        // if (isset($payment['_links']['checkout']) === false) {
+        // return [
+        // 'response' => [
+        // 'message' => 'Payment object created from mollie but no checkout url provided',
+        // 'status'  => 502,
+        // ],
+        // ];
+        // }//end if
         if ($payment !== null) {
             $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
-//            $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
+            // $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
         }
 
         return $this->data;
