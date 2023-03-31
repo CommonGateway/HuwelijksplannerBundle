@@ -108,9 +108,9 @@ class PaymentService
     /**
      * Get price from a single product.
      *
-     * @param string $productId
+     * @param string $productId ID of a product.
      *
-     * @return array       Product object.
+     * @return array Product object.
      */
     private function getProductObject(string $productId): array
     {
@@ -124,9 +124,9 @@ class PaymentService
     /**
      * Get price from a single product.
      *
-     * @param array $product
+     * @param array $product Product object as array.
      *
-     * @return string|null Price.
+     * @return string|null Price of the product.
      */
     private function getProductPrice(array $product)
     {
@@ -142,13 +142,15 @@ class PaymentService
     /**
      * Get product prices from this marriage.
      *
-     * @param array $huwelijk
+     * @param array $huwelijk Huwelijk object as array.
      *
-     * @return array $productPrices
+     * @return array $productPrices Array of all product prices.
      */
     public function getProductPrices(array $huwelijk): array
     {
         $productPrices = [];
+
+        //@todo Refactor/cleanup this code.
         foreach ($huwelijk as $key => $value) {
             if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
                 if ($key === 'producten') {
@@ -188,10 +190,10 @@ class PaymentService
     /**
      * Calculates total price with given prices and currency.
      *
-     * @param array       prices.
-     * @param string|null ISO 4271 currency.
+     * @param array       $prices Array of prices to accumulate.
+     * @param string|null $currency ISO 4271 currency.
      *
-     * @return string total price.
+     * @return string Total price after acummulation.
      */
     public function calculatePrice(array $prices, ?string $currency='EUR'): string
     {
@@ -218,7 +220,7 @@ class PaymentService
      *
      * @param array $paymentArray The body for the payment request.
      *
-     * @return array|null
+     * @return array|null Syncrhonization object or a error repsonse or null.
      */
     public function createMolliePayment(array $paymentArray): ?array
     {
@@ -264,11 +266,11 @@ class PaymentService
     /**
      * Validates huwelijk id in query and gets object.
      *
-     * @param array $query.
+     * @param array $query Paramters from a request.
      *
      * @throws BadRequestHttpException If id not found or valid.
      *
-     * @return ObjectEntity Huwelijk.
+     * @return ObjectEntity Huwelijk object.
      */
     private function validateHuwelijkId(array $query): ObjectEntity
     {
@@ -289,7 +291,7 @@ class PaymentService
     /**
      * Creates a payment object.
      *
-     * @return array|null
+     * @return array|null Payment object as array or null.
      */
     public function createPayment(): ?array
     {
@@ -324,10 +326,10 @@ class PaymentService
     /**
      * Creates payment for given marriage.
      *
-     * @param ?array $data
-     * @param ?array $configuration
+     * @param ?array $data Data this service might need from a Action.
+     * @param ?array $configuration Configuraiton this service might need from a Action.
      *
-     * @return array
+     * @return array Response array that will be returned to RequestService.
      */
     public function createPaymentHandler(?array $data=[], ?array $configuration=[]): array
     {
