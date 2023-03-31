@@ -175,6 +175,7 @@ class CreateMarriageService
 
     }//end validateCeremonie()
 
+
     /**
      * Validate huwelijk type.
      */

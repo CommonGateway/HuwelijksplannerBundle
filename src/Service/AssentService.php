@@ -24,18 +24,21 @@ class AssentService
 
     private CacheService $cacheService;
 
-    public function __construct (
+
+    public function __construct(
         EntityManagerInterface $entityManager,
         Security $security,
         GatewayResourceService $grService,
         CacheService $cacheService
-    ){
+    ) {
         $this->entityManager = $entityManager;
-        $this->security = $security;
-        $this->serializer = new Serializer();
-        $this->grService = $grService;
-        $this->cacheService = $cacheService;
-    }
+        $this->security      = $security;
+        $this->serializer    = new Serializer();
+        $this->grService     = $grService;
+        $this->cacheService  = $cacheService;
+
+    }//end __construct()
+
 
     /**
      * This function creates a person object for the given BRP person.
@@ -47,7 +50,7 @@ class AssentService
      *
      * @return ObjectEntity The person in the contact.
      */
-    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null): ?ObjectEntity
+    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
     {
         $personSchema = $this->grService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
@@ -131,31 +134,33 @@ class AssentService
 
     }//end createPerson()
 
+
     /**
      * This function adds data from a BRP person on updating the assent with status 'granted'.
-     * 
+     *
      * @param array $data   The data from the gateway.
      * @param array $config The configuration array.
-     * 
+     *
      * @return array The updated data.
-     * 
+     *
      * @throws \Safe\Exceptions\JsonException
      */
-    public function updateAssentHandler (array $data, array $config) {
+    public function updateAssentHandler(array $data, array $config)
+    {
         $brpSchema = $this->grService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        if($data['method'] !== 'PATCH') {
+        if ($data['method'] !== 'PATCH') {
             return $data;
         }
 
         $assent = $this->entityManager->getRepository('App:ObjectEntity')->find($data['path']['id']);
-        if($assent instanceof ObjectEntity === false) {
+        if ($assent instanceof ObjectEntity === false) {
             throw new NotFoundHttpException("The assent with id {$data['path']['id']} was not found.");
         }
 
         $assentData = $assent->toArray();
 
-        if($assentData['status'] !== 'granted') {
+        if ($assentData['status'] !== 'granted') {
             return $data;
         }
 
@@ -176,6 +181,8 @@ class AssentService
         $data['response'] = new Response(\Safe\json_encode($assent->toArray()), 200);
 
         return $data;
+
     }//end updateAssentHandler()
 
-}
+
+}//end class

@@ -143,7 +143,6 @@ class InvitePartnerService
                 }//end if
             }//end if
 
-
             $person = $this->assentService->createPerson($huwelijk, $brpPerson);
 
             // $person = new ObjectEntity($personSchema);

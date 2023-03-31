@@ -208,7 +208,6 @@ class HandleAssentService
             $this->sendSms($phoneNumbers, $type);
         }
 
-
         return $assent;
 
     }//end handleAssent()
