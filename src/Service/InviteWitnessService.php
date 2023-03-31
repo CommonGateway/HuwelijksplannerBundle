@@ -3,6 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -47,6 +48,8 @@ class InviteWitnessService
      */
     private LoggerInterface $pluginLogger;
 
+    private CacheService $cacheService;
+
     /**
      * @var array
      */
@@ -72,7 +75,8 @@ class InviteWitnessService
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        CacheService $cacheService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
@@ -82,6 +86,7 @@ class InviteWitnessService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
+        $this->cacheService           = $cacheService;
 
     }//end __construct()
 
@@ -200,6 +205,7 @@ class InviteWitnessService
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
+            $this->cacheService->cacheObject($huwelijkObject);
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
         }//end if
