@@ -9,8 +9,7 @@
       "description": "The Huwelijksplanner Front-end Application. (Domain is used for redirecting after a payment, this might change)",
       "domains": [
         "utrecht-huwelijksplanner.frameless.io"
-      ],
-      "organization": "https://docs.commongateway.nl/organization/default.organization.json"
+      ]
     }
   ],
   "collections": [
