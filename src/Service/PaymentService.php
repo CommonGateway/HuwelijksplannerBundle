@@ -198,15 +198,14 @@ class PaymentService
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
         ];
-
-        // todo: temporary, redirect to redirectUrl. Instead of this return:
+        
         // return $this->createMolliePayment($paymentArray);
+        // todo: temporary, redirect to return [redirectUrl]. Instead of this return^
+        
         $domain = 'utrecht-huwelijksplanner.frameless.io';
-        if ($this->session->get('application')) {
-            $application = $this->entityManager->getRepository('App:Application')->findOneBy(['id' => $this->session->get('application')]);
-            if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
-                $domain = $application->getDomains()[0];
-            }
+        $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
+        if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
+            $domain = $application->getDomains()[0];
         }
 
         return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/succes'];
