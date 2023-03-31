@@ -184,37 +184,39 @@ class CreateMarriageService
 
     }//end validateCeremonie()
 
+
     /**
      * Validates a datetime with given format.
-     * 
+     *
      * @param string      $date   DateTime string.
-     * @param string|null $format DateTime string format. 
-     * 
+     * @param string|null $format DateTime string format.
+     *
      * @return bool       true if valid, false if invalid.
      */
-    private function validateDateWithFormat(string $date, ?string $format = 'Y-m-d\TH:i:s'): bool
+    private function validateDateWithFormat(string $date, ?string $format='Y-m-d\TH:i:s'): bool
     {
         $dateTime = new DateTime();
         $dateTime = $dateTime->createFromFormat($format, $date);
 
-        if ($dateTime === false)  {
+        if ($dateTime === false) {
             return false;
         }
-        
+
         return true;
 
     }//end validateDateWithFormat()
 
+
     /**
      * Validates that datetime is at least 2 weeks in the future.
-     * 
-     * @param  string $date DateTime string.
-     * 
+     *
+     * @param string $date DateTime string.
+     *
      * @return bool   true if valid, false if invalid.
      */
     private function validateDateMinimum(string $date): bool
     {
-        $givenDateTime = new DateTime($date);
+        $givenDateTime   = new DateTime($date);
         $currentDateTime = new DateTime('now');
         $twoWeeksFromNow = $currentDateTime->modify('+2 weeks');
 
@@ -223,14 +225,15 @@ class CreateMarriageService
         }
 
         return true;
-        
+
     }//end validateDateMinimum()
+
 
     /**
      * Validate a Huwelijks moment.
-     * 
-     * @param  array      $huwelijk Huwelijk object as array.
-     * 
+     *
+     * @param array $huwelijk Huwelijk object as array.
+     *
      * @return Response|bool Response array if invalid, bool true if valid.
      */
     private function validateMoment(array $huwelijk)
@@ -238,16 +241,18 @@ class CreateMarriageService
         if (isset($huwelijk['moment']) === false) {
             return ['message' => 'Given moment not given, it is required and must be at least 2 weeks in the future.'];
         }
+
         if ($this->validateDateWithFormat($huwelijk['moment']) === false) {
             return ['message' => 'Given moment invalid format (requires datetime Y-m-dTH:i:s).'];
         }
+
         if ($this->validateDateMinimum($huwelijk['moment']) === false) {
             return ['message' => 'Given moment is not at least 2 weeks in the future.'];
         }
 
         return true;
 
-    }//end validateType()
+    }//end validateMoment()
 
 
     /**
