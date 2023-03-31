@@ -150,7 +150,7 @@ class PaymentService
     {
         $productPrices = [];
 
-        //@todo Refactor/cleanup this code.
+        // @todo Refactor/cleanup this code.
         foreach ($huwelijk as $key => $value) {
             if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
                 if ($key === 'producten') {
@@ -190,7 +190,7 @@ class PaymentService
     /**
      * Calculates total price with given prices and currency.
      *
-     * @param array       $prices Array of prices to accumulate.
+     * @param array       $prices   Array of prices to accumulate.
      * @param string|null $currency ISO 4271 currency.
      *
      * @return string Total price after acummulation.
@@ -326,7 +326,7 @@ class PaymentService
     /**
      * Creates payment for given marriage.
      *
-     * @param ?array $data Data this service might need from a Action.
+     * @param ?array $data          Data this service might need from a Action.
      * @param ?array $configuration Configuraiton this service might need from a Action.
      *
      * @return array Response array that will be returned to RequestService.
