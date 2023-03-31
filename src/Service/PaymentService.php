@@ -213,7 +213,9 @@ class PaymentService
 
         foreach ($prices as $price) {
             $price      = str_replace('EUR ', '', $price);
-            $totalPrice = $totalPrice->add(new Money($price, $currency));
+            if ($price > 0) {
+                $totalPrice = $totalPrice->add(new Money($price, $currency));
+            }
         }
 
         return $totalPrice->getAmount();
