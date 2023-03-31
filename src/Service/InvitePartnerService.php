@@ -149,7 +149,6 @@ class InvitePartnerService
                 $this->entityManager->persist($person);
             }//end if
 
-
             // $person = new ObjectEntity($personSchema);
             // $person->hydrate($huwelijk['partners'][0]['contact']);
             // $this->entityManager->persist($person);
