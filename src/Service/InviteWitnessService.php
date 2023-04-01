@@ -48,8 +48,6 @@ class InviteWitnessService
      */
     private LoggerInterface $pluginLogger;
 
-    private CacheService $cacheService;
-
     /**
      * @var array
      */
@@ -75,8 +73,7 @@ class InviteWitnessService
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
-        LoggerInterface $pluginLogger,
-        CacheService $cacheService
+        LoggerInterface $pluginLogger
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
@@ -86,7 +83,6 @@ class InviteWitnessService
         $this->updateChecklistService = $updateChecklistService;
         $this->security               = $security;
         $this->pluginLogger           = $pluginLogger;
-        $this->cacheService           = $cacheService;
 
     }//end __construct()
 
@@ -205,7 +201,6 @@ class InviteWitnessService
 
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-            $this->cacheService->cacheObject($huwelijkObject);
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
         }//end if
