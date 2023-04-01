@@ -160,8 +160,8 @@ class HandleAssentService
     /**
      * Determines the status of the assent based on if the assent contains the bsn of the assentee.
      *
-     * @param  string       $type   The type of assent.
-     * @param  ObjectEntity $person The assentee of the assent.
+     * @param string       $type   The type of assent.
+     * @param ObjectEntity $person The assentee of the assent.
      *
      * @return string
      */
