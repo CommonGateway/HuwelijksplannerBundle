@@ -160,21 +160,22 @@ class HandleAssentService
     /**
      * Determines the status of the assent based on if the assent contains the bsn of the assentee.
      *
-     * @param string       $type   The type of assent.
-     * @param ObjectEntity $person The assentee of the assent.
+     * @param  string       $type   The type of assent.
+     * @param  ObjectEntity $person The assentee of the assent.
      * @return string
      */
     public function getStatus(string $type, ObjectEntity $person): string
     {
         if ($type === 'requester'
             || ($type === 'partner'
-                && $person->getValue('subjectIdentificatie') !== false
-                && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== false
-            )
+            && $person->getValue('subjectIdentificatie') !== false
+            && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== false)
         ) {
             return 'granted';
         }
+
         return 'requested';
+
     }//end getStatus()
 
 
