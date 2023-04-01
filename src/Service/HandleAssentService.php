@@ -162,6 +162,7 @@ class HandleAssentService
      *
      * @param  string       $type   The type of assent.
      * @param  ObjectEntity $person The assentee of the assent.
+     *
      * @return string
      */
     public function getStatus(string $type, ObjectEntity $person): string

@@ -143,15 +143,14 @@ class InvitePartnerService
                 }//end if
 
                 $person = $this->assentService->createPerson($huwelijk, $brpPerson);
-            } else {
+            }//end if
+
+            if (isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === false) {
                 $person = new ObjectEntity($personSchema);
                 $person->hydrate($huwelijk['partners'][0]['contact']);
                 $this->entityManager->persist($person);
             }//end if
 
-            // $person = new ObjectEntity($personSchema);
-            // $person->hydrate($huwelijk['partners'][0]['contact']);
-            // $this->entityManager->persist($person);
             $this->entityManager->flush();
 
             $partners                      = $huwelijkObject->getValue('partners');
