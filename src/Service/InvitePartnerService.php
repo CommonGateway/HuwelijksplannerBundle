@@ -96,6 +96,41 @@ class InvitePartnerService
 
 
     /**
+     * This function creates the email and sms data.
+     *
+     * @param ObjectEntity $requester      The requester object.
+     * @param ObjectEntity $person         The person object.
+     * @param ObjectEntity $huwelijkObject The huwelijk object.
+     *
+     * @return ?array The updated huwelijk object as array.
+     */
+    private function createEmailAndSmsData(ObjectEntity $requester, ObjectEntity $person, ObjectEntity $huwelijkObject): ?array
+    {
+        $requesterPerson = $requester->getValue('contact');
+
+        $requesterNaam = $requesterPerson->getValue('voornaam').' '.$requesterPerson->getValue('achternaam');
+        $partnerNaam   = $person->getValue('voornaam').' '.$person->getValue('achternaam');
+
+        if ($huwelijkObject->getValue('moment') !== false
+            && $huwelijkObject->getValue('locatie') !== false
+        ) {
+            $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+        }
+
+        $dataArray['response']        = [
+            'name'              => $requesterNaam,
+            'partnerNaam'       => $partnerNaam,
+            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.'om te trouwen.',
+            'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
+        ];
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+
+        return $dataArray;
+
+    }//end createEmailAndSmsData()
+
+
+    /**
      * This function validates and creates the huwelijk object and creates an assent for the current user.
      *
      * @param array  $huwelijk The huwelijk array from the request.
@@ -153,12 +188,20 @@ class InvitePartnerService
 
             $this->entityManager->flush();
 
-            $partners                      = $huwelijkObject->getValue('partners');
+            $partners  = $huwelijkObject->getValue('partners');
+            $dataArray = $this->createEmailAndSmsData($partners[0]);
+
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data)->getId()->toString();
+            $assent                        = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString());
+
+            $assent->setValue('name', $dataArray['response']['assentNaam']);
+            $assent->setValue('description', $dataArray['response']['assentDescription']);
+            $this->entityManager->persist($assent);
+            $this->entityManager->flush();
+
+            $requesterAssent['partners'][] = $assent->getId()->toString();
 
             $huwelijkObject->hydrate($requesterAssent);
-
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
 

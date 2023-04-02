@@ -118,35 +118,53 @@ class PaymentService
     /**
      * Get price from a single product.
      *
-     * @param string $productId ID of a product.
+     * @param string|null $productId ID of a product.
      *
      * @return array|null Product object.
      */
-    private function getProductObject(string $productId): ?array
+    private function getProductObject(?string $productId): ?array
     {
         $productObject = $this->entityManager->getRepository('App:ObjectEntity')->find($productId);
+        if ($productObject instanceof ObjectEntity === false) {
+            return null;
+        }//end if
 
-        return $productObject->toArray() ?? null;
+        return $productObject->toArray();
 
     }//end getProductObject()
 
 
     /**
-     * Get price from a single product.
+     * Get product prices from this marriage.
      *
-     * @param array $product Product object as array.
+     * @param array $products The products array from the marriage.
      *
-     * @return string|null Price of the product.
+     * @return array $productPrices Array of all product prices.
      */
-    private function getProductPrice(array $product)
+    public function getProductArrayPrices(array $products): array
     {
-        if (isset($product['vertalingen'][0]['kosten'])) {
-            return $product['vertalingen'][0]['kosten'];
-        }//end if
+        $productPrices = [];
 
-        return null;
+        foreach ($products as $extraProduct) {
+            // @todo move this to validation
+            if (is_array($extraProduct) === false) {
+                $extraProduct = $this->getProductObject($extraProduct);
+            }//end if
 
-    }//end getProductPrice()
+            if (empty($extraProduct) === true) {
+                continue;
+            }//end if
+
+            if (isset($extraProduct['vertalingen'][0]['kosten']) === false) {
+                continue;
+            }//end if
+
+            $productPrices[] = $extraProduct['vertalingen'][0]['kosten'];
+        }//end foreach
+
+        return $productPrices;
+
+    }//end getProductArrayPrices()
 
 
     /**
@@ -156,46 +174,41 @@ class PaymentService
      *
      * @return array $productPrices Array of all product prices.
      */
-    public function getProductPrices(array $huwelijk): array
+    public function getSDGProductPrices(array $huwelijk): array
     {
-        $productPrices = [];
+        $productArrayPrices = [];
+        $productPrices      = [];
 
-        // @todo Refactor/cleanup this code.
-        // @todo if/foreach nesting to deep, 3 max. Create more functions for this.
         foreach ($huwelijk as $key => $value) {
-            if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten'])) {
-                if ($key === 'producten') {
-                    foreach ($value as $extraProduct) {
-                        // @todo move this to validation
-                        if ($value !== null && is_array($extraProduct) === false) {
-                            $extraProduct    = $this->getProductObject($extraProduct);
-                            $productPrices[] = $this->getProductPrice($extraProduct);
-                            continue;
-                        }//end if
-
-                        if (is_array($extraProduct) === true) {
-                            $productPrices[] = $this->getProductPrice($extraProduct);
-                        }//end if
-                    }//end foreach
-
-                    continue;
-                }//end if
-
-                // @todo move this to validation
-                if ($value !== null && is_array($value) === false) {
-                    $productObject   = $this->getProductObject($value);
-                    $productPrices[] = $this->getProductPrice($productObject);
-                }//end if
-
-                if (is_array($value) === true) {
-                    $productPrices[] = $this->getProductPrice($value);
-                }//end if
+            if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten']) === false) {
+                continue;
             }//end if
+
+            if ($key === 'producten') {
+                $productArrayPrices = $this->getProductArrayPrices($value);
+
+                continue;
+            }//end if
+
+            // @todo move this to validation
+            if (is_array($value) === false) {
+                $value = $this->getProductObject($value);
+            }//end if
+
+            if (empty($value) === true) {
+                continue;
+            }//end if
+
+            if (isset($value['vertalingen'][0]['kosten']) === false) {
+                continue;
+            }//end if
+
+            $productPrices[] = $value['vertalingen'][0]['kosten'];
         }//end foreach
 
-        return $productPrices;
+        return array_merge($productPrices, $productArrayPrices);
 
-    }//end getProductPrices()
+    }//end getSDGProductPrices()
 
 
     /**
@@ -287,13 +300,13 @@ class PaymentService
      */
     private function validateHuwelijkId(array $query): ObjectEntity
     {
-        if (isset($query['huwelijk']) === false || Uuid::isValid($query['huwelijk']) === false) {
-            throw new BadRequestHttpException('No huwelijk id given or false id in the query parameter huwelijk.');
+        if (isset($query['resource']) === false || Uuid::isValid($query['resource']) === false) {
+            throw new BadRequestHttpException('No huwelijk id given or false id in the query parameter resource.');
         }//end if
 
-        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['huwelijk']);
+        $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['resource']);
         if ($huwelijkObject instanceof ObjectEntity === false) {
-            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$query['huwelijk']);
+            throw new BadRequestHttpException('Cannot find huwelijk with given id: '.$query['resource']);
         }//end if
 
         return $huwelijkObject;
