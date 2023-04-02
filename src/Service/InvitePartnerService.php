@@ -118,12 +118,12 @@ class InvitePartnerService
         }
 
         $dataArray['response']        = [
-            'name'              => $requesterNaam,
+            'requesterNaam'     => $requesterNaam,
             'partnerNaam'       => $partnerNaam,
-            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.'om te trouwen.',
+            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.' om te trouwen.',
             'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
         ];
-        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/instemmen?assentId=';
 
         return $dataArray;
 
@@ -189,7 +189,7 @@ class InvitePartnerService
             $this->entityManager->flush();
 
             $partners  = $huwelijkObject->getValue('partners');
-            $dataArray = $this->createEmailAndSmsData($partners[0]);
+            $dataArray = $this->createEmailAndSmsData($partners[0], $person, $huwelijkObject);
 
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
             $assent                        = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString());
