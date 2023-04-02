@@ -132,7 +132,7 @@ class InviteWitnessService
      *
      * @return array The witnesses assents array.
      */
-    private function createWitnesses(array $witnesses, ObjectEntity $huwelijkObject, array $data): array
+    private function createWitnesses(array $witnesses, ObjectEntity $huwelijkObject): array
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $emailSchema  = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -153,11 +153,12 @@ class InviteWitnessService
             $person->hydrate($getuige['contact']);
             $this->entityManager->persist($person);
 
+            $dataArray = $this->createEmailAndSmsData($huwelijkObject);
             // creates an assent and add the person to the partners of this merriage
-            $assent = $this->handleAssentService->handleAssent($person, 'witness', $data, $huwelijkObject->getId()->toString());
+            $assent = $this->handleAssentService->handleAssent($person, 'witness', $dataArray, $huwelijkObject->getId()->toString());
 
-            $assent->setValue('name', $data['response']['assentNaam']);
-            $assent->setValue('description', $data['response']['assentDescription']);
+            $assent->setValue('name', $dataArray['response']['assentNaam']);
+            $assent->setValue('description', $dataArray['response']['assentDescription']);
             $this->entityManager->persist($assent);
             $this->entityManager->flush();
 
@@ -167,6 +168,39 @@ class InviteWitnessService
         return $witnessAssents;
 
     }//end createWitnesses()
+
+
+    /**
+     * This function creates the email and sms data.
+     *
+     * @param ObjectEntity $huwelijkObject The huwelijk object.
+     *
+     * @return ?array The updated huwelijk object as array.
+     */
+    private function createEmailAndSmsData(ObjectEntity $huwelijkObject): ?array
+    {
+        $partnersAssents = $huwelijkObject->getValue('partners');
+
+        if (count($partnersAssents) === 2) {
+            $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[0]->getValue('contact')->getValue('achternaam');
+            $partnerNaam = $partnersAssents[1]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[1]->getValue('contact')->getValue('achternaam');
+
+            if ($huwelijkObject->getValue('moment') !== false
+                && $huwelijkObject->getValue('locatie') !== false
+            ) {
+                $description = 'Op ' . $huwelijkObject->getValue('moment') . ' in '  . $huwelijkObject->getValue('locatie')->getValue('upnLabel') . '. ';
+            }
+            $dataArray['response'] = [
+                'requesterNaam' => $requesterNaam,
+                'partnerNaam' => $partnerNaam,
+                'assentNaam' => 'U bent gevraagd om getuigen te zijn bij het huwelijk van ' . $requesterNaam . ' en ' . $partnerNaam,
+                'assentDescription' => $description . $requesterNaam . ' & ' . $partnerNaam . ' hebben u gevraagd om een reactie te geven op dit verzoek.'
+            ];
+        }
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+
+        return $dataArray;
+    }
 
 
     /**
@@ -202,23 +236,8 @@ class InviteWitnessService
                 return $this->data;
             }//end if
 
-            $partnersAssents = $huwelijkObject->getValue('partners');
-
-            if (count($partnersAssents) === 2) {
-                $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[0]->getValue('contact')->getValue('achternaam');
-                $partnerNaam = $partnersAssents[1]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[1]->getValue('contact')->getValue('achternaam');
-
-                $dataArray['response'] = [
-                    'requesterNaam' => $requesterNaam,
-                    'partnerNaam' => $partnerNaam,
-                    'assentNaam' => 'U bent gevraagd om getuigen te zijn bij het huwelijk van ' . $requesterNaam . ' en ' . $partnerNaam,
-                    'assentDescription' => 'Op ' . $huwelijkObject->getValue('moment') . ' in '  . $huwelijkObject->getValue('locatie')->getValue('upnLabel') . '. ' . $requesterNaam . ' & ' . $partnerNaam . ' hebben u gevraagd om een reactie te geven op dit verzoek.'
-                ];
-            }
-            $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
-
             // Create the witnesses.
-            $witnessAssents = $this->createWitnesses($witnesses, $huwelijkObject, $dataArray);
+            $witnessAssents = $this->createWitnesses($witnesses, $huwelijkObject);
 
             $huwelijkObject->hydrate($witnessAssents);
 
