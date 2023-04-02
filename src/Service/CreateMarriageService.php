@@ -208,10 +208,11 @@ class CreateMarriageService
                 'moment'    => $huwelijk['moment'],
                 'ceremonie' => $huwelijk['ceremonie'],
                 'ambtenaar' => $huwelijk['ambtenaar'],
+                'locatie'  => $huwelijk['locatie'] // @TODO check why the location is not added in the if statement above
             ];
 
             // Get all prices from the products
-            $productPrices = $this->paymentService->getProductPrices($huwelijkArray);
+            $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
             // Calculate new price
             $huwelijkArray['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
 
@@ -231,7 +232,7 @@ class CreateMarriageService
             $person = $this->assentService->createPerson($huwelijk, $brpPerson);
 
             // creates an assent and add the person to the partners of this merriage
-            $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data)->getId()->toString();
+            $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data, $huwelijkObject->getId()->toString())->getId()->toString();
             $huwelijkObject->hydrate($requesterAssent);
 
             $this->entityManager->persist($huwelijkObject);

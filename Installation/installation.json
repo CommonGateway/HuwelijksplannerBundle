@@ -167,6 +167,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/paula.user.json",
       "version": "0.0.1",
+      "name": "paula@huwelijksplanner.online",
       "email": "paula@huwelijksplanner.online",
       "person": "999993653",
       "securityGroups": [
@@ -176,6 +177,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/kristin.user.json",
       "version": "0.0.1",
+      "name": "kristin@huwelijksplanner.online",
       "email": "kristin@huwelijksplanner.online",
       "person": "999990172",
       "securityGroups": [
@@ -185,6 +187,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/felix.user.json",
       "version": "0.0.1",
+      "name": "felix@huwelijksplanner.online",
       "email": "felix@huwelijksplanner.online",
       "person": "999993872",
       "securityGroups": [
@@ -194,6 +197,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/johannes.user.json",
       "version": "0.0.1",
+      "name": "johannes@huwelijksplanner.online",
       "email": "johannes@huwelijksplanner.online",
       "person": "432156782",
       "securityGroups": [
@@ -203,6 +207,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/aaron.user.json",
       "version": "0.0.1",
+      "name": "aaron@huwelijksplanner.online",
       "email": "aaron@huwelijksplanner.online",
       "person": "654321782",
       "securityGroups": [
@@ -212,6 +217,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/lammert.user.json",
       "version": "0.0.1",
+      "name": "lammert@huwelijksplanner.online",
       "email": "lammert@huwelijksplanner.online",
       "person": "123456782",
       "securityGroups": [
@@ -221,6 +227,7 @@
     {
       "$id": "https://huwelijksplanner.nl/user/marcelo.user.json",
       "version": "0.0.1",
+      "name": "marcelo@huwelijksplanner.online",
       "email": "marcelo@huwelijksplanner.online",
       "securityGroups": [
         "https://huwelijksplanner.nl/SecurityGroup/medewerker.securityGroup.json"
@@ -229,7 +236,8 @@
     {
       "$id": "https://huwelijksplanner.nl/user/admin.user.json",
       "version": "0.0.1",
-      "email": "admin2@huwelijksplanner.online",
+      "name": "admin@huwelijksplanner.online",
+      "email": "admin@huwelijksplanner.online",
       "securityGroups": [
         "https://docs.commongateway.nl/securityGroup/default.admin.securityGroup.json"
       ]

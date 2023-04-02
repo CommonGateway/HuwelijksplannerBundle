@@ -3,6 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Action;
+use App\Entity\Gateway as Source;
 use App\Entity\ObjectEntity;
 use App\Event\ActionEvent;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
@@ -76,6 +77,25 @@ class HandleAssentService
 
     }//end __construct()
 
+    /**
+     * Check the auth of the given source.
+     *
+     * @param Source $source The given source to check the api key.
+     *
+     * @return bool If the api key is set or not.
+     */
+    public function checkSourceAuth(Source $source): bool
+    {
+        if ($source->getApiKey() === null) {
+            $this->pluginLogger->error('No auth set for Source: '.$source->getName().'.', ['plugin' => 'common-gateway/huwelijksplanner-bundle']);
+
+            return false;
+        }//end if
+
+        return true;
+
+    }//end checkSourceAuth()
+
 
     /**
      * Sends an emails.
@@ -90,26 +110,37 @@ class HandleAssentService
     {
         // Get action.
         $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.HandleSendEmailAction.action.json', 'common-gateway/huwelijksplanner-bundle');
+        $source = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.sendInBlue.source.json', 'common-gateway/huwelijksplanner-bundle');
+        if ($this->checkSourceAuth($source) === false) {
+            // logger
+        }//end if
 
         $config = $action->getConfiguration();
 
         switch ($type) {
         case 'requester':
-            $config['subject'] = 'Invite Assent request to requester';
+            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+
+            $config['template'] = $config['templateRequester'];
             break;
         case 'partner':
-            $config['subject'] = 'Invite Assent request to partner';
+            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+            $config['template'] = $config['templatePartner'];
             break;
         case 'witness':
-            $config['subject'] = 'Invite Assent request to witness';
+            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+            $config['template'] = $config['templateWitness'];
             break;
         default:
-            $config['subject'] = 'Invite Assent request';
+            // @TODO throw error
             break;
         }//end switch
 
+        $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
+
         // ? variables and data
         foreach ($emailAddresses as $emailAddress) {
+
             // set receiver to config
             $config['receiver'] = $emailAddress->getValue('email');
             $action->setConfiguration($config);
@@ -137,13 +168,13 @@ class HandleAssentService
     {
         switch ($type) {
         case 'requester':
-            $message = 'Assent request to requester';
+            $message = 'Melding Voorgenomen Huwelijk';
             break;
         case 'partner':
-            $message = 'Assent request to partner';
+            $message = 'Melding Voorgenomen Huwelijk';
             break;
         case 'witness':
-            $message = 'Assent request to witness';
+            $message = 'Melding Voorgenomen Huwelijk';
             break;
         default:
             $message = 'Assent request';
@@ -158,15 +189,39 @@ class HandleAssentService
 
 
     /**
+     * Determines the status of the assent based on if the assent contains the bsn of the assentee.
+     *
+     * @param string       $type   The type of assent.
+     * @param ObjectEntity $person The assentee of the assent.
+     *
+     * @return string
+     */
+    public function getStatus(string $type, ObjectEntity $person): string
+    {
+        if ($type === 'requester'
+            || ($type === 'partner'
+            && $person->getValue('subjectIdentificatie') !== false
+            && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== false)
+        ) {
+            return 'granted';
+        }
+
+        return 'requested';
+
+    }//end getStatus()
+
+
+    /**
      * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person The person to make an assent for.
      * @param string            $type   The type of assent.
      * @param array             $data   The data of the request.
+     * @param array             $data   The id of the property this assent is about.
      *
      * @return ObjectEntity|null
      */
-    public function handleAssent(ObjectEntity $person, string $type, array $data): ?ObjectEntity
+    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId): ?ObjectEntity
     {
         // @TODO generate secret
         $assentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -178,10 +233,10 @@ class HandleAssentService
                 'description' => null,
                 'request'     => null,
                 'forwardUrl'  => null,
-                'property'    => null,
+                'property'    => $propertyId,
                 'process'     => null,
                 'contact'     => $person,
-                'status'      => $type === 'requester' || ($type === 'partner' && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== null) ? 'granted' : 'requested',
+                'status'      => $this->getStatus($type, $person),
                 'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
                 'revocable'   => true,
             ]
@@ -204,7 +259,9 @@ class HandleAssentService
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
         if ($assent->getValue('status') !== 'granted') {
-            // $this->sendEmail($emailAddresses, $type, $data); @TODO add mailgun before uncommenting
+            $data['response']['url'] = $data['response']['url'] . $assent->getId()->toString();
+
+            $this->sendEmail($emailAddresses, $type, $data);
             $this->sendSms($phoneNumbers, $type);
         }
 
