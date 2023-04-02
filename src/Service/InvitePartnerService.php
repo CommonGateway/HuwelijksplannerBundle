@@ -94,12 +94,11 @@ class InvitePartnerService
 
     }//end __construct()
 
-
     /**
      * This function creates the email and sms data.
      *
-     * @param ObjectEntity $requester      The requester object.
-     * @param ObjectEntity $person         The person object.
+     * @param ObjectEntity  $requester The requester object.
+     * @param ObjectEntity $person       The person object.
      * @param ObjectEntity $huwelijkObject The huwelijk object.
      *
      * @return ?array The updated huwelijk object as array.
@@ -108,26 +107,24 @@ class InvitePartnerService
     {
         $requesterPerson = $requester->getValue('contact');
 
-        $requesterNaam = $requesterPerson->getValue('voornaam').' '.$requesterPerson->getValue('achternaam');
-        $partnerNaam   = $person->getValue('voornaam').' '.$person->getValue('achternaam');
+        $requesterNaam = $requesterPerson->getValue('voornaam') . ' ' . $requesterPerson->getValue('achternaam');
+        $partnerNaam = $person->getValue('voornaam') . ' ' . $person->getValue('achternaam');
 
         if ($huwelijkObject->getValue('moment') !== false
             && $huwelijkObject->getValue('locatie') !== false
         ) {
-            $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+            $description = 'Op ' . $huwelijkObject->getValue('moment') . ' in '  . $huwelijkObject->getValue('locatie')->getValue('upnLabel') . '. ';
         }
-
-        $dataArray['response']        = [
-            'name'              => $requesterNaam,
-            'partnerNaam'       => $partnerNaam,
-            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.'om te trouwen.',
-            'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
+        $dataArray['response'] = [
+            'requesterNaam' => $requesterNaam,
+            'partnerNaam' => $partnerNaam,
+            'assentNaam' => 'U bent gevraagd door ' . $requesterNaam . ' om te trouwen.',
+            'assentDescription' => $description ?? null . $requesterNaam . ' heeft gevraagd of u dit huwelijk wilt bevestigen.'
         ];
-        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/instemmen?assentId=';
 
         return $dataArray;
-
-    }//end createEmailAndSmsData()
+    }
 
 
     /**
@@ -188,11 +185,11 @@ class InvitePartnerService
 
             $this->entityManager->flush();
 
-            $partners  = $huwelijkObject->getValue('partners');
-            $dataArray = $this->createEmailAndSmsData($partners[0]);
+            $partners = $huwelijkObject->getValue('partners');
+            $dataArray = $this->createEmailAndSmsData($partners[0], $person, $huwelijkObject);
 
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
-            $assent                        = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString());
+            $assent = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString());
 
             $assent->setValue('name', $dataArray['response']['assentNaam']);
             $assent->setValue('description', $dataArray['response']['assentDescription']);

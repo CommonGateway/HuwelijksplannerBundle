@@ -126,9 +126,9 @@ class InviteWitnessService
     /**
      * This function creates witnesses from the given data.
      *
-     * @param array        $witnesses      The witnesses from the request.
+     * @param array $witnesses The witnesses from the request.
      * @param ObjectEntity $huwelijkObject The huwelijks object.
-     * @param array        $data           The data array with information about the marriage.
+     * @param array $data The data array with information about the marriage.
      *
      * @return array The witnesses assents array.
      */
@@ -182,28 +182,25 @@ class InviteWitnessService
         $partnersAssents = $huwelijkObject->getValue('partners');
 
         if (count($partnersAssents) === 2) {
-            $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[0]->getValue('contact')->getValue('achternaam');
-            $partnerNaam   = $partnersAssents[1]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[1]->getValue('contact')->getValue('achternaam');
+            $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[0]->getValue('contact')->getValue('achternaam');
+            $partnerNaam = $partnersAssents[1]->getValue('contact')->getValue('voornaam') . ' ' . $partnersAssents[1]->getValue('contact')->getValue('achternaam');
 
             if ($huwelijkObject->getValue('moment') !== false
                 && $huwelijkObject->getValue('locatie') !== false
             ) {
-                $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+                $description = 'Op ' . $huwelijkObject->getValue('moment') . ' in '  . $huwelijkObject->getValue('locatie')->getValue('upnLabel') . '. ';
             }
-
             $dataArray['response'] = [
-                'requesterNaam'     => $requesterNaam,
-                'partnerNaam'       => $partnerNaam,
-                'assentNaam'        => 'U bent gevraagd om getuigen te zijn bij het huwelijk van '.$requesterNaam.' en '.$partnerNaam,
-                'assentDescription' => $description.$requesterNaam.' & '.$partnerNaam.' hebben u gevraagd om een reactie te geven op dit verzoek.',
+                'requesterNaam' => $requesterNaam,
+                'partnerNaam' => $partnerNaam,
+                'assentNaam' => 'U bent gevraagd om getuigen te zijn bij het huwelijk van ' . $requesterNaam . ' en ' . $partnerNaam,
+                'assentDescription' => $description . $requesterNaam . ' & ' . $partnerNaam . ' hebben u gevraagd om een reactie te geven op dit verzoek.'
             ];
         }
-
         $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
 
         return $dataArray;
-
-    }//end createEmailAndSmsData()
+    }
 
 
     /**

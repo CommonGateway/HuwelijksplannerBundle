@@ -77,7 +77,6 @@ class HandleAssentService
 
     }//end __construct()
 
-
     /**
      * Check the auth of the given source.
      *
@@ -125,11 +124,11 @@ class HandleAssentService
             $config['template'] = $config['templateRequester'];
             break;
         case 'partner':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
+            $config['subject'] = 'Melding Voorgenomen Huwelijk';
             $config['template'] = $config['templatePartner'];
             break;
         case 'witness':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
+            $config['subject'] = 'Melding Voorgenomen Huwelijk';
             $config['template'] = $config['templateWitness'];
             break;
         default:
@@ -141,6 +140,7 @@ class HandleAssentService
 
         // ? variables and data
         foreach ($emailAddresses as $emailAddress) {
+
             // set receiver to config
             $config['receiver'] = $emailAddress->getValue('email');
             $action->setConfiguration($config);
@@ -164,17 +164,17 @@ class HandleAssentService
      *
      * @return void
      */
-    public function sendSms(object $phoneNumbers, string $type): void
+    public function sendSms(object $phoneNumbers, string $type, array $data): void
     {
         switch ($type) {
         case 'requester':
             $message = 'Melding Voorgenomen Huwelijk';
             break;
         case 'partner':
-            $message = 'Melding Voorgenomen Huwelijk';
+            $message = 'Beste '.$data['response']['partnerNaam']. ', ' . $data['response']['assentNaam'] . ' ' . $data['response']['assentDescription'] . ' ' . $data['response']['url'];
             break;
         case 'witness':
-            $message = 'Melding Voorgenomen Huwelijk';
+            $message = 'Beste '.$data['response']['partnerNaam']. ', ' . $data['response']['assentNaam'] . ' ' . $data['response']['assentDescription'] . ' ' . $data['response']['url'];
             break;
         default:
             $message = 'Assent request';
@@ -182,7 +182,7 @@ class HandleAssentService
         }//end switch
 
         foreach ($phoneNumbers as $phoneNumber) {
-            $this->messageBirdService->sendMessage($phoneNumber, $message);
+            $this->messageBirdService->sendMessage($phoneNumber->getValue('telefoonnummer'), $message);
         }//end foreach
 
     }//end sendSms()
@@ -259,10 +259,10 @@ class HandleAssentService
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
         if ($assent->getValue('status') !== 'granted') {
-            $data['response']['url'] = $data['response']['url'].$assent->getId()->toString();
+            $data['response']['url'] = $data['response']['url'] . $assent->getId()->toString();
 
             $this->sendEmail($emailAddresses, $type, $data);
-            $this->sendSms($phoneNumbers, $type);
+            $this->sendSms($phoneNumbers, $type, $data);
         }
 
         return $assent;
