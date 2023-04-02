@@ -158,6 +158,29 @@ class HandleAssentService
 
 
     /**
+     * Determines the status of the assent based on if the assent contains the bsn of the assentee.
+     *
+     * @param string       $type   The type of assent.
+     * @param ObjectEntity $person The assentee of the assent.
+     *
+     * @return string
+     */
+    public function getStatus(string $type, ObjectEntity $person): string
+    {
+        if ($type === 'requester'
+            || ($type === 'partner'
+            && $person->getValue('subjectIdentificatie') !== false
+            && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== false)
+        ) {
+            return 'granted';
+        }
+
+        return 'requested';
+
+    }//end getStatus()
+
+
+    /**
      * Handles the assent for the given person and sends an email or sms.
      *
      * @param ObjectEntity|null $person The person to make an assent for.
@@ -181,7 +204,7 @@ class HandleAssentService
                 'property'    => null,
                 'process'     => null,
                 'contact'     => $person,
-                'status'      => $type === 'requester' || ($type === 'partner' && $person->getValue('subjectIdentificatie')->getValue('inpBsn') !== null) ? 'granted' : 'requested',
+                'status'      => $this->getStatus($type, $person),
                 'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
                 'revocable'   => true,
             ]
