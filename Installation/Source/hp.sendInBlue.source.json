@@ -1,0 +1,13 @@
+{
+  "title": "SendInBlue API",
+  "$id": "https://huwelijksplanner.nl/source/hp.sendInBlue.source.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Gateway.schema.json",
+  "version": "0.0.1",
+  "name": "SendInBlue API",
+  "location": "sendinblue+api://",
+  "auth": "apikey",
+  "apikey": "!ChangeMe!",
+  "headers": {
+    "accept": "application/json"
+  }
+}

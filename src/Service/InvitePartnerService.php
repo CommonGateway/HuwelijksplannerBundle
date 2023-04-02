@@ -152,7 +152,7 @@ class InvitePartnerService
 
             $partners                      = $huwelijkObject->getValue('partners');
             $requesterAssent['partners'][] = $partners[0]->getId()->toString();
-            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data)->getId()->toString();
+            $requesterAssent['partners'][] = $this->handleAssentService->handleAssent($person, 'partner', $this->data, $huwelijkObject->getId()->toString())->getId()->toString();
 
             $huwelijkObject->hydrate($requesterAssent);
 
