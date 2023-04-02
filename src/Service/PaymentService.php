@@ -148,7 +148,7 @@ class PaymentService
         foreach ($products as $extraProduct) {
             // @todo move this to validation
             if (is_array($extraProduct) === false) {
-                $extraProduct    = $this->getProductObject($extraProduct);
+                $extraProduct = $this->getProductObject($extraProduct);
             }//end if
 
             if (empty($extraProduct) === true) {
@@ -163,7 +163,8 @@ class PaymentService
         }//end foreach
 
         return $productPrices;
-    }
+
+    }//end getProductArrayPrices()
 
 
     /**
@@ -176,11 +177,11 @@ class PaymentService
     public function getSDGProductPrices(array $huwelijk): array
     {
         $productArrayPrices = [];
-        $productPrices = [];
+        $productPrices      = [];
 
         foreach ($huwelijk as $key => $value) {
             if (in_array($key, ['type', 'ceremonie', 'locatie', 'ambtenaar', 'producten']) === false) {
-               continue;
+                continue;
             }//end if
 
             if ($key === 'producten') {
@@ -191,7 +192,7 @@ class PaymentService
 
             // @todo move this to validation
             if (is_array($value) === false) {
-                $value    = $this->getProductObject($value);
+                $value = $this->getProductObject($value);
             }//end if
 
             if (empty($value) === true) {
@@ -201,12 +202,13 @@ class PaymentService
             if (isset($value['vertalingen'][0]['kosten']) === false) {
                 continue;
             }//end if
-            
+
             $productPrices[] = $value['vertalingen'][0]['kosten'];
         }//end foreach
 
         return array_merge($productPrices, $productArrayPrices);
-    }//end getProductPrices()
+
+    }//end getSDGProductPrices()
 
 
     /**
@@ -350,6 +352,7 @@ class PaymentService
         }
 
         return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/succes'];
+
     }//end createPayment()
 
 

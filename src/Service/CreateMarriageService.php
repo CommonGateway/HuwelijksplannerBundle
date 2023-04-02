@@ -208,7 +208,8 @@ class CreateMarriageService
                 'moment'    => $huwelijk['moment'],
                 'ceremonie' => $huwelijk['ceremonie'],
                 'ambtenaar' => $huwelijk['ambtenaar'],
-                'locatie'  => $huwelijk['locatie'] // @TODO check why the location is not added in the if statement above
+                'locatie'   => $huwelijk['locatie'],
+            // @TODO check why the location is not added in the if statement above
             ];
 
             // Get all prices from the products

@@ -77,6 +77,7 @@ class HandleAssentService
 
     }//end __construct()
 
+
     /**
      * Check the auth of the given source.
      *
@@ -124,11 +125,11 @@ class HandleAssentService
             $config['template'] = $config['templateRequester'];
             break;
         case 'partner':
-            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+            $config['subject']  = 'Melding Voorgenomen Huwelijk';
             $config['template'] = $config['templatePartner'];
             break;
         case 'witness':
-            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+            $config['subject']  = 'Melding Voorgenomen Huwelijk';
             $config['template'] = $config['templateWitness'];
             break;
         default:
@@ -140,7 +141,6 @@ class HandleAssentService
 
         // ? variables and data
         foreach ($emailAddresses as $emailAddress) {
-
             // set receiver to config
             $config['receiver'] = $emailAddress->getValue('email');
             $action->setConfiguration($config);
@@ -259,7 +259,7 @@ class HandleAssentService
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
         if ($assent->getValue('status') !== 'granted') {
-            $data['response']['url'] = $data['response']['url'] . $assent->getId()->toString();
+            $data['response']['url'] = $data['response']['url'].$assent->getId()->toString();
 
             $this->sendEmail($emailAddresses, $type, $data);
             $this->sendSms($phoneNumbers, $type);
