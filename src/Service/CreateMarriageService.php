@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
+use DateTime;
 use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -185,6 +186,76 @@ class CreateMarriageService
 
 
     /**
+     * Validates a datetime with given format.
+     *
+     * @param string      $date   DateTime string.
+     * @param string|null $format DateTime string format.
+     *
+     * @return bool       true if valid, false if invalid.
+     */
+    private function validateDateWithFormat(string $date, ?string $format='Y-m-d\TH:i:s'): bool
+    {
+        $dateTime = new DateTime();
+        $dateTime = $dateTime->createFromFormat($format, $date);
+
+        if ($dateTime === false) {
+            return false;
+        }
+
+        return true;
+
+    }//end validateDateWithFormat()
+
+
+    /**
+     * Validates that datetime is at least 2 weeks in the future.
+     *
+     * @param string $date DateTime string.
+     *
+     * @return bool   true if valid, false if invalid.
+     */
+    private function validateDateMinimum(string $date): bool
+    {
+        $givenDateTime   = new DateTime($date);
+        $currentDateTime = new DateTime('now');
+        $twoWeeksFromNow = $currentDateTime->modify('+2 weeks');
+
+        if ($givenDateTime->getTimestamp() < $twoWeeksFromNow->getTimestamp()) {
+            return false;
+        }
+
+        return true;
+
+    }//end validateDateMinimum()
+
+
+    /**
+     * Validate a Huwelijks moment.
+     *
+     * @param array $huwelijk Huwelijk object as array.
+     *
+     * @return Response|bool Response array if invalid, bool true if valid.
+     */
+    private function validateMoment(array $huwelijk)
+    {
+        if (isset($huwelijk['moment']) === false) {
+            return ['message' => 'Given moment not given, it is required and must be at least 2 weeks in the future.'];
+        }
+
+        if ($this->validateDateWithFormat($huwelijk['moment']) === false) {
+            return ['message' => 'Given moment invalid format (requires datetime Y-m-dTH:i:s).'];
+        }
+
+        if ($this->validateDateMinimum($huwelijk['moment']) === false) {
+            return ['message' => 'Given moment is not at least 2 weeks in the future.'];
+        }
+
+        return true;
+
+    }//end validateMoment()
+
+
+    /**
      * This function validates and creates the huwelijk object
      * and creates an assent for the current user.
      */
@@ -194,7 +265,15 @@ class CreateMarriageService
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
-        // @TODO validate moment and location
+        // Validates Huwelijk.moment.
+        $validationHuwelijk = $this->validateMoment($huwelijk);
+
+        // If $validationHuwelijk is array it is a error that needs to be returned.
+        if (is_array($validationHuwelijk) === true) {
+            return $validationHuwelijk;
+        }
+
+        // @TODO validate location
         if ($this->validateType($huwelijk) === true
             && $this->validateCeremonie($huwelijk) === true
         ) {
@@ -242,7 +321,7 @@ class CreateMarriageService
             // @todo this is hacky, the above schould alredy do this
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
-            return $huwelijkObject->toArray();
+            return ['response' => $huwelijkObject->toArray()];
         }//end if
 
         return [
