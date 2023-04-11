@@ -657,8 +657,7 @@
       "gerelateerdeProducten":[
         "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
         "868da2b9-242d-4053-8e21-8a9ef66bd15c",
-        "31816698-10a0-41d6-8d0f-9108306491c0",
-        "f30d4d56-c38d-4dca-ba5a-027ac154b899"
+        "31816698-10a0-41d6-8d0f-9108306491c0"
       ]
     },
     {
@@ -689,8 +688,7 @@
       "gerelateerdeProducten":[
         "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
         "868da2b9-242d-4053-8e21-8a9ef66bd15c",
-        "31816698-10a0-41d6-8d0f-9108306491c0",
-        "f30d4d56-c38d-4dca-ba5a-027ac154b899"
+        "31816698-10a0-41d6-8d0f-9108306491c0"
       ]
     },
     {
@@ -719,7 +717,9 @@
       "doelgroep":"eu-burger",
       "vertalingen":["e511dd73-6aac-4f70-af8d-4c4b3b6d480b"],
       "gerelateerdeProducten":[
-         "868da2b9-242d-4053-8e21-8a9ef66bd15c"
+         "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
+         "868da2b9-242d-4053-8e21-8a9ef66bd15c",
+         "31816698-10a0-41d6-8d0f-9108306491c0"
       ]
     }
   ],
