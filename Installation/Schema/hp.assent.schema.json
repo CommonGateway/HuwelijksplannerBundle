@@ -66,6 +66,9 @@
         "revocable": {
             "type": "boolean",
             "default": true
+        },
+        "results": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.assentChecks.schema.json"
         }
     },
     "required": [

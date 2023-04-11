@@ -1,0 +1,18 @@
+{
+    "$id": "https://huwelijksplanner.nl/schemas/hp.assentChecks.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "type": "object",
+    "title": "Assent Checks",
+    "properties":{
+        "noOtherPartnership": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
+        },
+        "noCloseFamily": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
+        },
+        "dataChecked": {
+            "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
+        }
+    }
+}
