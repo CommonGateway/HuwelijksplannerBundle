@@ -21,8 +21,11 @@
         "procedureBeschrijving": {
             "type":"string"
         },
-        "kostenEnBetaalmethoden": {
-            "type":"string"
+        "kosten": {
+           "type":"string"
+        },
+        "betaalmethoden": {
+           "type":"string"
         },
         "uitersteTermijn": {
             "type":"string"

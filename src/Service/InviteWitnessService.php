@@ -126,11 +126,13 @@ class InviteWitnessService
     /**
      * This function creates witnesses from the given data.
      *
-     * @param array $witnesses The witnesses from the request.
+     * @param array        $witnesses      The witnesses from the request.
+     * @param ObjectEntity $huwelijkObject The huwelijks object.
+     * @param array        $data           The data array with information about the marriage.
      *
      * @return array The witnesses assents array.
      */
-    private function createWitnesses(array $witnesses): array
+    private function createWitnesses(array $witnesses, ObjectEntity $huwelijkObject): array
     {
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $emailSchema  = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -151,13 +153,57 @@ class InviteWitnessService
             $person->hydrate($getuige['contact']);
             $this->entityManager->persist($person);
 
+            $dataArray = $this->createEmailAndSmsData($huwelijkObject);
             // creates an assent and add the person to the partners of this merriage
-            $witnessAssents['getuigen'][] = $this->handleAssentService->handleAssent($person, 'witness', $this->data)->getId()->toString();
+            $assent = $this->handleAssentService->handleAssent($person, 'witness', $dataArray, $huwelijkObject->getId()->toString());
+
+            $assent->setValue('name', $dataArray['response']['assentNaam']);
+            $assent->setValue('description', $dataArray['response']['assentDescription']);
+            $this->entityManager->persist($assent);
+            $this->entityManager->flush();
+
+            $witnessAssents['getuigen'][] = $assent->getId()->toString();
         }//end foreach
 
         return $witnessAssents;
 
     }//end createWitnesses()
+
+
+    /**
+     * This function creates the email and sms data.
+     *
+     * @param ObjectEntity $huwelijkObject The huwelijk object.
+     *
+     * @return ?array The updated huwelijk object as array.
+     */
+    private function createEmailAndSmsData(ObjectEntity $huwelijkObject): ?array
+    {
+        $partnersAssents = $huwelijkObject->getValue('partners');
+
+        if (count($partnersAssents) === 2) {
+            $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[0]->getValue('contact')->getValue('achternaam');
+            $partnerNaam   = $partnersAssents[1]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[1]->getValue('contact')->getValue('achternaam');
+
+            if ($huwelijkObject->getValue('moment') !== false
+                && $huwelijkObject->getValue('locatie') !== false
+            ) {
+                $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+            }
+
+            $dataArray['response'] = [
+                'requesterNaam'     => $requesterNaam,
+                'partnerNaam'       => $partnerNaam,
+                'assentNaam'        => 'U bent gevraagd om getuigen te zijn bij het huwelijk van '.$requesterNaam.' en '.$partnerNaam,
+                'assentDescription' => $description.$requesterNaam.' & '.$partnerNaam.' hebben u gevraagd om een reactie te geven op dit verzoek.',
+            ];
+        }
+
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+
+        return $dataArray;
+
+    }//end createEmailAndSmsData()
 
 
     /**
@@ -194,7 +240,7 @@ class InviteWitnessService
             }//end if
 
             // Create the witnesses.
-            $witnessAssents = $this->createWitnesses($witnesses);
+            $witnessAssents = $this->createWitnesses($witnesses, $huwelijkObject);
 
             $huwelijkObject->hydrate($witnessAssents);
 

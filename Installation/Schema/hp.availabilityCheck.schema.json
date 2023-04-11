@@ -28,9 +28,12 @@
             "searchable": true
         },
         "resources_could": {
-            "type": "string",
+            "type": "array",
             "description": "The recources.",
             "nullable": true,
+            "items": {
+                "type": "string"
+            },
             "searchable": true
         }
     }

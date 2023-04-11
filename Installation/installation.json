@@ -1,5 +1,17 @@
 {
   "installationService": "CommonGateway\\HuwelijksplannerBundle\\Service\\InstallationService",
+  "applications": [
+    {
+      "title": "Huwelijksplanner Front-end Application",
+      "$id": "https://huwelijksplanner.nl/application/hp.frontend.application.json",
+      "$schema": "https://docs.commongateway.nl/schemas/Application.schema.json",
+      "version": "0.0.2",
+      "description": "The Huwelijksplanner Front-end Application. (Domain is used for redirecting after a payment, this might change)",
+      "domains": [
+        "utrecht-huwelijksplanner.frameless.io"
+      ]
+    }
+  ],
   "collections": [
     {
       "reference": "https://huwelijksplanner.nl/collection/hp.default.collection.json",
@@ -21,7 +33,7 @@
       {
         "reference": "https://hp.nl/action/hp.CreateAvailabilityAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateAvailabilityHandler",
-        "listens": ["huwelijksplanner.get.availability"]
+        "listens": ["huwelijksplanner.calendar.listens"]
       },
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
@@ -57,6 +69,11 @@
         "reference": "https://hp.nl/action/hp.MollieWebhookAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\MollieWebhookHandler",
         "listens": ["huwelijksplanner.get.webhook"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.UpdateAssentAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateAssentHandler",
+        "listens": ["huwelijksplanner.endpoint.assent"]
       }
     ]
   },
@@ -65,7 +82,9 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json",
         "path": "assents",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2",
+        "throws": ["huwelijksplanner.endpoint.assent"]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.calendar.schema.json",

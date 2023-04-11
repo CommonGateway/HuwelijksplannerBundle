@@ -3,6 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,13 @@ class UpdateChecklistService
     private LoggerInterface $pluginLogger;
 
     /**
+     * The cache service
+     *
+     * @var CacheService
+     */
+    private CacheService $cacheService;
+
+    /**
      * @var array
      */
     private array $data;
@@ -43,15 +51,18 @@ class UpdateChecklistService
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
      * @param LoggerInterface        $pluginLogger           The Logger Interface
+     * @param CacheService           $cacheService           The Cache Service.
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         GatewayResourceService $gatewayResourceService,
-        LoggerInterface $pluginLogger
+        LoggerInterface $pluginLogger,
+        CacheService $cacheService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
         $this->pluginLogger           = $pluginLogger;
+        $this->cacheService           = $cacheService;
         $this->data                   = [];
         $this->configuration          = [];
 
@@ -322,6 +333,8 @@ class UpdateChecklistService
         $this->entityManager->persist($huwelijk);
 
         $this->entityManager->flush();
+
+        $this->cacheService->cacheObject($huwelijk);
 
         return $huwelijk;
 
