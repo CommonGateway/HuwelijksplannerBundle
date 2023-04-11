@@ -55,7 +55,7 @@
             "type": "array",
             "description": "De bij dit huwelijk gekozen extra producten",
             "items": {
-                "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json"
+                "$ref": "https://huwelijksplanner.nl/schemas/hp.sdgVertaling.schema.json"
             }
         },
         "checklist": {
@@ -83,6 +83,10 @@
         },
         "instemmingGemeente": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
+        },
+        "melding": {
+            "type": "boolean",
+            "description": "Melding voorgenomen huwelijk."
         }
     }
 }
