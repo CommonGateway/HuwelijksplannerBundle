@@ -33,27 +33,32 @@
       {
         "reference": "https://hp.nl/action/hp.CreateAvailabilityAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateAvailabilityHandler",
-        "listens": ["huwelijksplanner.calendar.listens"]
+        "listens": ["huwelijksplanner.calendar.listens"],
+        "version": "0.0.2"
       },
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
-        "listens": ["commongateway.object.create"]
+        "listens": ["commongateway.object.create"],
+        "version": "0.0.1"
       },
       {
         "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
-        "listens": ["commongateway.object.update"]
+        "listens": ["commongateway.object.update"],
+        "version": "0.0.1"
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
-        "listens": ["commongateway.object.update"]
+        "listens": ["commongateway.object.update"],
+        "version": "0.0.1"
       },
       {
         "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateChecklistHandler",
-        "listens": ["huwelijksplanner.default.listens"]
+        "listens": ["huwelijksplanner.default.listens"],
+        "version": "0.0.1"
       },
       {
         "reference": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
@@ -63,7 +68,8 @@
           "redirectUrl": "http://localhost/api/frontend_link",
           "webhookUrl": "http://localhost/api/mollie/webhook",
           "method": ["ideal"]
-        }
+        },
+        "version": "0.0.1"
       },
       {
         "reference": "https://hp.nl/action/hp.MollieWebhookAction.action.json",
