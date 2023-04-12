@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Assent Checks",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "noOtherPartnership": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
         },

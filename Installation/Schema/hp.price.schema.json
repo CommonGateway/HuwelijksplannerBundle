@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Price",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "amount": {
             "type": "float",
             "nullable": true,

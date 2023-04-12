@@ -6,7 +6,7 @@
     "title": "User",
     "properties":{
         "id": {
-            "type": "integer",
+            "type": "string",
             "required": true,
             "description": "Unique identifier for the given user."
         },

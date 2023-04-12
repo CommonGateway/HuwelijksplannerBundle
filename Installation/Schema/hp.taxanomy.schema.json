@@ -8,7 +8,6 @@
         "id": {
             "type": "string",
             "format": "uuid",
-            "readOnly": true,
             "description": "The unique identiefier of this object"
         },
         "name": {

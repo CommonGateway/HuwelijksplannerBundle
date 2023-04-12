@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Mollie Amount",
     "properties":{
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
       "value": {
         "type": "string",
         "example": "1.00"

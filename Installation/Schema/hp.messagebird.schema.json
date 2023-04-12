@@ -5,6 +5,10 @@
     "type": "object",
     "title": "MessageBird",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "direction": {
             "type": "string",
             "enums": [

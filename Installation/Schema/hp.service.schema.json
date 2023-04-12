@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Service",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "type": {
             "type": "string",
             "description": "The type of this service, iether use a pre configures service or just plain simple old smtp",

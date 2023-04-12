@@ -5,6 +5,10 @@
     "type": "object",
     "title": "Subscriber",
     "properties":{
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "email": {
             "type": "string",
             "nullable": true,

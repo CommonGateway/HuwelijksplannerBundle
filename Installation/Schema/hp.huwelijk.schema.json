@@ -5,6 +5,10 @@
     "title": "Huwelijk",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "partners": {
             "type": "array",
             "description": "De in dit huwelijk betrokken partners, bestaande uit hun instemmming (Assent) en getuigen.",

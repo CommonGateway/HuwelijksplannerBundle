@@ -5,6 +5,10 @@
     "title": "Checklist",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
         "partners": {
             "description": "Onder partners word gecontroleerd op:\n\nLeeftijd partner 1 (ouder dan 18 op trouwdatum)\nLeeftijd partner 2 (ouder dan 18 op trouwdatum)\nBevestiging partner 1\nBevestiging partner 2\nAantal partners (minimaal 2, maximaal 2)\nHuwelijksstaat partner 1 (geen huidige partner, WORD PAS GECONTROLEERD NA BEVESTIGING BIJDE PARTNERS)\nHuwelijksstaat partner 2 (geen huidige partner, WORD PAS GECONTROLEERD NA BEVESTIGING BIJDE PARTNERS)\nBloedverwantschap (geen fammilie in de tweede graad)",
             "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"

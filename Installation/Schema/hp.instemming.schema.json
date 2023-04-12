@@ -6,7 +6,8 @@
     "title": "Instemming",
     "properties":{
         "id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
         },
         "subject": {
             "type": "string",
