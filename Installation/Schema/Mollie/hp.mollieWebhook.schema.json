@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.mollieWebhook.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "type": "object",
     "title": "MollieWebhook",
     "properties":{

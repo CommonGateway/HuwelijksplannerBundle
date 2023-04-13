@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.resource.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "title": "Resource",
     "type": "object",
     "description": "Describes resources that can be needed for an event.",

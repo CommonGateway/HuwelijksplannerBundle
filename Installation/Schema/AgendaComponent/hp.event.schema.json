@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.event.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "title": "Event",
     "type": "object",
     "description": "An event happening at a certain time and location, such as a concert, lecture, meeting or festival.",
