@@ -327,7 +327,7 @@ class PaymentService
         $huwelijkObject = $this->validateHuwelijkId($this->data['query']);
 
         // Get all prices from the products
-        $productPrices = $this->getProductPrices($huwelijkObject->toArray());
+        $productPrices = $this->getSDGProductPrices($huwelijkObject->toArray());
         // Calculate new price
         $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
 
@@ -351,7 +351,7 @@ class PaymentService
             $domain = $application->getDomains()[0];
         }
 
-        return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/succes'];
+        return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/betaalstatus-verificatie'];
 
     }//end createPayment()
 
