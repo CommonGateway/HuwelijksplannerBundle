@@ -285,7 +285,7 @@ class CreateMarriageService
             return $this->data;
         }//end if
 
-        $huwelijk = $this->createMarriage($this->data['response']['id'], $this->data['parameters']['body']);
+        $huwelijk = $this->createMarriage($this->data['response']['_self']['id'], $this->data['parameters']['body']);
 
         $this->data['response'] = $huwelijk;
 
