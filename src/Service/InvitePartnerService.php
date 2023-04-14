@@ -140,6 +140,7 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, string $id): ?array
     {
+        $this->entityManager->clear();
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
         if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
@@ -158,7 +159,6 @@ class InvitePartnerService
                 // @TODO update partner?
                 return $huwelijkObject->toArray();
             }//end if
-
             if (count($huwelijkObject->getValue('partners')) !== 1) {
                 $this->pluginLogger->error('You cannot add a partner before the requester is set.');
 
