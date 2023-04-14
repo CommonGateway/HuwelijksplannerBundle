@@ -50,7 +50,7 @@ class AssentService
      *
      * @return ObjectEntity The person in the contact.
      */
-    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson = null, ?ObjectEntity $person = null): ?ObjectEntity
+    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null, ?ObjectEntity $person=null): ?ObjectEntity
     {
         $personSchema = $this->grService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
@@ -75,7 +75,7 @@ class AssentService
             }//end if
         }//end if
 
-        if($person === null) {
+        if ($person === null) {
             $person = new ObjectEntity($personSchema);
         }
 
@@ -161,7 +161,7 @@ class AssentService
 
         $person = $assent->getValue('contact');
 
-        if($person === false) {
+        if ($person === false) {
             $person = null;
         }
 

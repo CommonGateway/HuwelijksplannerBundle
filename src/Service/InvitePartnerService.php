@@ -159,6 +159,7 @@ class InvitePartnerService
                 // @TODO update partner?
                 return $huwelijkObject->toArray();
             }//end if
+
             if (count($huwelijkObject->getValue('partners')) !== 1) {
                 $this->pluginLogger->error('You cannot add a partner before the requester is set.');
 
