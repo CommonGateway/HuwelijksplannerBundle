@@ -50,7 +50,7 @@ class AssentService
      *
      * @return ObjectEntity The person in the contact.
      */
-    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null): ?ObjectEntity
+    public function createPerson(array $huwelijk, ?ObjectEntity $brpPerson=null, ?ObjectEntity $person=null): ?ObjectEntity
     {
         $personSchema = $this->grService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
@@ -75,7 +75,10 @@ class AssentService
             }//end if
         }//end if
 
-        $person = new ObjectEntity($personSchema);
+        if ($person === null) {
+            $person = new ObjectEntity($personSchema);
+        }
+
         $person->hydrate(
             [
                 'bronorganisatie'       => '99999',
@@ -87,18 +90,6 @@ class AssentService
                 'voornaam'              => isset($naam) && $naam ? $naam->getValue('voornamen') : $this->security->getUser()->getFirstName(),
                 'voorvoegselAchternaam' => isset($naam) && $naam ? $naam->getValue('voorvoegsel') : null,
                 'achternaam'            => isset($naam) && $naam ? $naam->getValue('geslachtsnaam') : $this->security->getUser()->getLastName(),
-                'telefoonnummers'       => [
-                    [
-                        'naam'           => isset($naam) ? 'Telefoonnummer van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                        'telefoonnummer' => isset($phonenumber) ? $phonenumber : null,
-                    ],
-                ],
-                'emails'                => [
-                    [
-                        'naam'  => isset($naam) ? 'Emailadres van '.$naam->getValue('voornamen') : 'Emailadres van '.$this->security->getUser()->getFirstName(),
-                        'email' => isset($email) ? $email : $this->security->getUser()->getEmail(),
-                    ],
-                ],
                 'adressen'              => [
                     [
                         'naam'                 => isset($naam) && $naam ? 'Adres van '.$naam->getValue('voornamen') : 'Adres van '.$this->security->getUser()->getFirstName(),
@@ -127,6 +118,7 @@ class AssentService
                 ],
             ]
         );
+
         $this->entityManager->persist($person);
         $this->entityManager->flush();
 
@@ -160,10 +152,6 @@ class AssentService
 
         $assentData = $assent->toArray();
 
-        if ($assentData['status'] !== 'granted') {
-            return $data;
-        }
-
         // get brp person from the logged in user
         $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
         $brpPerson  = null;
@@ -171,14 +159,20 @@ class AssentService
             $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
         }//end if
 
-        $person = $this->createPerson([], $brpPerson);
+        $person = $assent->getValue('contact');
+
+        if ($person === false) {
+            $person = null;
+        }
+
+        $person = $this->createPerson([], $brpPerson, $person);
 
         $assent->hydrate(['contact' => $person]);
 
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
 
-        $data['response'] = new Response(\Safe\json_encode($assent->toArray()), 200);
+        $data['response'] = new Response(\Safe\json_encode($assent->toArray()), 200, ['content-type' => 'application/json']);
 
         return $data;
 
