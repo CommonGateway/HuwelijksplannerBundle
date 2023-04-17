@@ -150,24 +150,25 @@ class AssentService
             throw new NotFoundHttpException("The assent with id {$data['path']['id']} was not found.");
         }
 
-        $assentData = $assent->toArray();
 
-        // get brp person from the logged in user
-        $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
-        $brpPerson  = null;
-        if (count($brpPersons) === 1) {
-            $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
-        }//end if
+        if($assent->getValue('status') === 'granted') {
+            // get brp person from the logged in user
+            $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
+            $brpPerson  = null;
+            if (count($brpPersons) === 1) {
+                $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
+            }//end if
 
-        $person = $assent->getValue('contact');
+            $person = $assent->getValue('contact');
 
-        if ($person === false) {
-            $person = null;
+            if ($person === false) {
+                $person = null;
+            }
+
+            $person = $this->createPerson([], $brpPerson, $person);
+
+            $assent->hydrate(['contact' => $person]);
         }
-
-        $person = $this->createPerson([], $brpPerson, $person);
-
-        $assent->hydrate(['contact' => $person]);
 
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
