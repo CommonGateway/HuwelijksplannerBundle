@@ -8,7 +8,7 @@
       "version": "0.0.2",
       "description": "The Huwelijksplanner Front-end Application. (Domain is used for redirecting after a payment, this might change)",
       "domains": [
-        "utrecht-huwelijksplanner.frameless.io"
+        "api.huwelijksplanner.online"
       ]
     }
   ],

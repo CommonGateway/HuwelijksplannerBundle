@@ -298,11 +298,15 @@ class PaymentService
      *
      * @return ObjectEntity Huwelijk object.
      */
-    private function validateHuwelijkId(array $query): ObjectEntity
+    private function validateHuwelijkId(array $query): ?ObjectEntity
     {
-        if (isset($query['resource']) === false || Uuid::isValid($query['resource']) === false) {
-            throw new BadRequestHttpException('No huwelijk id given or false id in the query parameter resource.');
+        if (isset($query['resource']) === false) {
+            return null;
         }//end if
+
+        if (Uuid::isValid($query['resource']) === false) {
+            throw new BadRequestHttpException('False id in the query parameter resource.');
+        }
 
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $query['resource']);
         if ($huwelijkObject instanceof ObjectEntity === false) {
@@ -324,34 +328,46 @@ class PaymentService
         // @TODO add the values amount from huwelijk object etc to array
         $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
+        $redirectUrl = null;
+        $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
+        if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
+            $domain      = $application->getDomains()[0];
+            $redirectUrl = 'https://'.$domain.'/voorgenomen-huwelijk/betalen/betaalstatus-verificatie';
+        }
+
         $huwelijkObject = $this->validateHuwelijkId($this->data['query']);
+        if ($huwelijkObject === null) {
+            return null;
+        }
 
         // Get all prices from the products
         $productPrices = $this->getSDGProductPrices($huwelijkObject->toArray());
+
+        $paymentObject = new ObjectEntity($paymentSchema);
+        $paymentArray  = [
+            'amount'      => [
+                'currency' => 'EUR',
+                'value'    => $this->calculatePrice($productPrices, 'EUR'),
         // Calculate new price
-        $kosten = 'EUR '.$this->calculatePrice($productPrices, 'EUR');
+            ],
+            'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
+            'redirectUrl' => $redirectUrl,
+            'webhookUrl'  => $this->configuration['webhookUrl'],
+            'method'      => $this->configuration['method'],
+            'status'      => 'paid',
+            // @TODO temporary set the status to paid
+        ];
+        $paymentObject->hydrate($paymentArray);
+        $this->entityManager->persist($paymentObject);
+        $this->entityManager->flush();
 
-        $explodedAmount = explode(' ', $kosten);
-
-        // $paymentArray = [
-        // 'amount'      => [
-        // 'currency' => $explodedAmount[0],
-        // 'value'    => $explodedAmount[1],
-        // ],
-        // 'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
-        // 'redirectUrl' => $this->configuration['redirectUrl'],
-        // 'webhookUrl'  => $this->configuration['webhookUrl'],
-        // 'method'      => $this->configuration['method'],
-        // ];
         // return $this->createMolliePayment($paymentArray);
         // todo: temporary, redirect to return [redirectUrl]. Instead of this $paymentArray and return^
-        $domain      = 'utrecht-huwelijksplanner.frameless.io';
-        $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
-        if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
-            $domain = $application->getDomains()[0];
-        }
-
-        return ['redirectUrl' => 'https://'.$domain.'/voorgenomen-huwelijk/betalen/betaalstatus-verificatie'];
+        return [
+            'paymentId'   => $paymentObject->getId()->toString(),
+            'redirectUrl' => $paymentObject->getValue('redirectUrl'),
+        // @TODO set redirectUrl to the checkout url
+        ];
 
     }//end createPayment()
 
@@ -389,7 +405,7 @@ class PaymentService
         // ];
         // }//end if
         if ($payment !== null) {
-            $this->data['response'] = new Response(\Safe\json_encode($payment), 200);
+            $this->data['response'] = new Response(json_encode($payment), 200);
             // $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
         }
 
