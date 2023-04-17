@@ -229,7 +229,7 @@
       "deskMemo": null,
       "productAanwezigToelichting": null,
       "productValtOnderToelichting": null
-    },
+    }
   ],
   "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json": [
     {
@@ -467,7 +467,7 @@
       "doelgroep":"eu-burger",
       "vertalingen":["42cfe5d9-c935-4054-a471-2b6e24f824dd"],
       "gerelateerdeProducten":[
-        "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
+        "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f"
       ]
     },
     {
@@ -497,7 +497,7 @@
       "gerelateerdeProducten":[
         "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
         "9d901cde-deab-45da-98df-e4115f32b92e",
-        "fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a",
+        "fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a"
       ]
     },
     {
