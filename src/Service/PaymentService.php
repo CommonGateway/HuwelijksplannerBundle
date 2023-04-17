@@ -328,10 +328,10 @@ class PaymentService
         // @TODO add the values amount from huwelijk object etc to array
         $paymentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.mollie.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $redirectUrl      = null;
+        $redirectUrl = null;
         $application = $this->entityManager->getRepository('App:Application')->findOneBy(['reference' => 'https://huwelijksplanner.nl/application/hp.frontend.application.json']);
         if ($application !== null && $application->getDomains() !== null && count($application->getDomains()) > 0) {
-            $domain = $application->getDomains()[0];
+            $domain      = $application->getDomains()[0];
             $redirectUrl = 'https://'.$domain.'/voorgenomen-huwelijk/betalen/betaalstatus-verificatie';
         }
 
@@ -344,16 +344,18 @@ class PaymentService
         $productPrices = $this->getSDGProductPrices($huwelijkObject->toArray());
 
         $paymentObject = new ObjectEntity($paymentSchema);
-        $paymentArray = [
+        $paymentArray  = [
             'amount'      => [
                 'currency' => 'EUR',
-                'value'    => $this->calculatePrice($productPrices, 'EUR'), // Calculate new price
+                'value'    => $this->calculatePrice($productPrices, 'EUR'),
+        // Calculate new price
             ],
             'description' => 'Payment made for huwelijk with id: '.$huwelijkObject->getId()->toString(),
             'redirectUrl' => $redirectUrl,
             'webhookUrl'  => $this->configuration['webhookUrl'],
             'method'      => $this->configuration['method'],
-            'status'      => 'paid' // @TODO temporary set the status to paid
+            'status'      => 'paid',
+            // @TODO temporary set the status to paid
         ];
         $paymentObject->hydrate($paymentArray);
         $this->entityManager->persist($paymentObject);
@@ -361,10 +363,10 @@ class PaymentService
 
         // return $this->createMolliePayment($paymentArray);
         // todo: temporary, redirect to return [redirectUrl]. Instead of this $paymentArray and return^
-
         return [
-            'paymentId' => $paymentObject->getId()->toString(),
-            'redirectUrl' => $paymentObject->getValue('redirectUrl') // @TODO set redirectUrl to the checkout url
+            'paymentId'   => $paymentObject->getId()->toString(),
+            'redirectUrl' => $paymentObject->getValue('redirectUrl'),
+        // @TODO set redirectUrl to the checkout url
         ];
 
     }//end createPayment()
