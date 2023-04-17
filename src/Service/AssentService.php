@@ -150,8 +150,7 @@ class AssentService
             throw new NotFoundHttpException("The assent with id {$data['path']['id']} was not found.");
         }
 
-
-        if($assent->getValue('status') === 'granted') {
+        if ($assent->getValue('status') === 'granted') {
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
             $brpPerson  = null;
