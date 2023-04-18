@@ -6,298 +6,109 @@
       "productTitelDecentraal": "balie",
       "specifiekeTekst": "Trouwt aan de balie van de burgelijke stand",
       "procedureBeschrijving": "Bij binnenkomst melden",
-      "kosten": null,
-      "betaalmethoden": null,
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "68edd1a7-74a4-427e-b064-7d28d790175f",
       "taal":"nl",
       "productTitelDecentraal": "trouwzaal",
       "specifiekeTekst": "Trouwt in een trouwzaal van de burgelijke stand",
-      "procedureBeschrijving": null,
       "kosten": "EUR 222",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "55140161-255c-4af1-9aeb-f46c291d9cb0",
       "taal":"nl",
       "productTitelDecentraal": "loge",
       "specifiekeTekst": "Trouwt in een loge",
-      "procedureBeschrijving": null,
       "kosten": "EUR 670",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "a3451553-de67-4396-8b46-84ebad9b5b08",
       "taal":"nl",
       "productTitelDecentraal": "eigen locatie",
       "specifiekeTekst": "Trouwt op eigen locatie",
-      "procedureBeschrijving": null,
       "kosten": "EUR 884",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "8117b09a-1459-4598-93aa-ec9afa5d5883",
       "taal":"nl",
       "productTitelDecentraal": "toegewezen",
       "specifiekeTekst": "Trouwambtenaar toegewezen",
-      "procedureBeschrijving": null,
-      "kosten": null,
-      "betaalmethoden": null,
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "67666934-fcbd-44da-9fc1-80af66df0d49",
       "taal":"nl",
       "productTitelDecentraal": "keuze trouwambtenaar",
       "specifiekeTekst": "Keuze voor een trouwambtenaar",
-      "procedureBeschrijving": null,
       "kosten": "EUR 252",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "c647eb0d-47b1-4187-9d57-7c32f84ce301",
       "taal":"nl",
       "productTitelDecentraal": "eigen trouwambtenaar",
       "specifiekeTekst": "Keuze voor een eigen trouwambtenaar",
-      "procedureBeschrijving": null,
       "kosten": "EUR 362",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "69e41121-8f9d-4da8-9772-a51bc21548db",
       "taal":"nl",
       "productTitelDecentraal": "gratis trouwen",
       "specifiekeTekst": "Gratis trouwen",
-      "procedureBeschrijving": null,
-      "kosten": null,
-      "betaalmethoden": null,
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks":[],
-      "synonyms":[],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "42cfe5d9-c935-4054-a471-2b6e24f824dd",
       "taal":"nl",
       "productTitelDecentraal": "flits/baliehuwelijk",
-      "specifiekeTekst": null,
-      "procedureBeschrijving": null,
       "kosten": "EUR 222",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "94ff7e80-9e1a-4dfe-af06-1d851213508f",
       "taal":"nl",
       "productTitelDecentraal": "eenvoudig huwelijk",
-      "specifiekeTekst": null,
-      "procedureBeschrijving": null,
       "kosten": "EUR 222",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "998206bc-d530-4291-89eb-02ebe21a7289",
       "taal":"nl",
       "productTitelDecentraal": "Wit lederen omslag",
       "specifiekeTekst": "Trouwboekje met wit lederen omslag",
-      "procedureBeschrijving": null,
       "kosten": "EUR 32.50",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "22f40941-72ff-4825-87f4-1a67d6daf7f2",
       "taal":"nl",
       "productTitelDecentraal": "Donkerblauw lederen omslag",
       "specifiekeTekst": "Trouwboekje met donkerblauw lederen omslag",
-      "procedureBeschrijving": null,
       "kosten": "EUR 32.50",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     },
     {
       "id": "c8c733e1-13c8-4d96-a388-de30d787f15b",
       "taal":"nl",
       "productTitelDecentraal": "Rood kunstlederen omslag",
       "specifiekeTekst": "Trouwboekje met rood kunstlederen omslag",
-      "procedureBeschrijving": null,
       "kosten": "EUR 30",
       "betaalmethoden": "ideal",
-      "uitersteTermijn": null,
-      "conditions": null,
-      "notice": null,
-      "decentraleProcedureLink": null,
-      "vereisten": null,
-      "bewijs": null,
-      "contact": null,
-      "verwijzingLinks": [],
-      "synonyms": [],
-      "wtdBijGeenReactie": null,
-      "datumWijziging":"2022-01-04T11:29:26",
-      "deskMemo": null,
-      "productAanwezigToelichting": null,
-      "productValtOnderToelichting": null
+      "datumWijziging":"2022-01-04T11:29:26"
     }
   ],
   "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json": [
@@ -308,24 +119,18 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
-      "vertalingen":["998206bc-d530-4291-89eb-02ebe21a7289", "22f40941-72ff-4825-87f4-1a67d6daf7f2", "c8c733e1-13c8-4d96-a388-de30d787f15b"],
-      "gerelateerdeProducten": []
+      "vertalingen":["998206bc-d530-4291-89eb-02ebe21a7289", "22f40941-72ff-4825-87f4-1a67d6daf7f2", "c8c733e1-13c8-4d96-a388-de30d787f15b"]
     },
     {
       "id":"e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
@@ -334,21 +139,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["7561d222-3950-4b98-b9d0-fbf4737dae8d"],
       "gerelateerdeProducten": ["4a96dcc4-66e4-46b9-b785-3cc89931a3e2"]
@@ -360,21 +160,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["68edd1a7-74a4-427e-b064-7d28d790175f"],
       "gerelateerdeProducten": ["4a96dcc4-66e4-46b9-b785-3cc89931a3e2"]
@@ -386,21 +181,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["55140161-255c-4af1-9aeb-f46c291d9cb0"],
       "gerelateerdeProducten": ["4a96dcc4-66e4-46b9-b785-3cc89931a3e2"]
@@ -412,24 +202,18 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
-      "vertalingen":["a3451553-de67-4396-8b46-84ebad9b5b08"],
-      "gerelateerdeProducten": []
+      "vertalingen":["a3451553-de67-4396-8b46-84ebad9b5b08"]
     },
     {
       "id":"4a96dcc4-66e4-46b9-b785-3cc89931a3e2",
@@ -438,24 +222,18 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
-      "vertalingen":["8117b09a-1459-4598-93aa-ec9afa5d5883"],
-      "gerelateerdeProducten": []
+      "vertalingen":["8117b09a-1459-4598-93aa-ec9afa5d5883"]
     },
     {
       "id":"03c794db-3643-4703-8353-68cf7de77dc3",
@@ -464,24 +242,18 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
-      "vertalingen":["67666934-fcbd-44da-9fc1-80af66df0d49"],
-      "gerelateerdeProducten": []
+      "vertalingen":["67666934-fcbd-44da-9fc1-80af66df0d49"]
     },
     {
       "id":"e4c2f87c-fb22-484f-9748-87242f7b3d53",
@@ -490,24 +262,18 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
-      "vertalingen":["c647eb0d-47b1-4187-9d57-7c32f84ce301"],
-      "gerelateerdeProducten": []
+      "vertalingen":["c647eb0d-47b1-4187-9d57-7c32f84ce301"]
     },
     {
       "id": "0c0767af-e3d4-4ec0-ba9c-571b4c275b71",
@@ -516,21 +282,17 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
         "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties":[],
       "doelgroep":"eu-burger",
       "vertalingen":["69e41121-8f9d-4da8-9772-a51bc21548db"],
       "gerelateerdeProducten":[
@@ -544,21 +306,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["42cfe5d9-c935-4054-a471-2b6e24f824dd"],
       "gerelateerdeProducten":[
@@ -572,21 +329,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["94ff7e80-9e1a-4dfe-af06-1d851213508f"],
       "gerelateerdeProducten":[
@@ -600,21 +352,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["8e7ab383-90d0-4299-8222-21879889c97a"],
       "gerelateerdeProducten":[
@@ -634,21 +381,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"huwelijk",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["1e27d7d6-e3c5-4ce6-8cf2-d85646700980"],
       "gerelateerdeProducten":[
@@ -665,21 +407,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"partnerschap",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["8b7b143e-61aa-498d-8e4a-dc63ec5bb179"],
       "gerelateerdeProducten":[
@@ -696,21 +433,16 @@
       "versie":0,
       "publicatieDatum":"2022-01-04T11:27:57",
       "productAanwezig":true,
-      "productValtOnder": null,
       "verantwoordelijkeOrganisatie": {
-        "url": null,
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "bevoegdeOrganisatie": {
         "naam":"Utrecht",
         "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
-        "owmsPrefLabel":"Utrecht",
-        "owmsEndDate":null
+        "owmsPrefLabel":"Utrecht"
       },
       "catalogus":"omzetting",
-      "locaties": [],
       "doelgroep":"eu-burger",
       "vertalingen":["e511dd73-6aac-4f70-af8d-4c4b3b6d480b"],
       "gerelateerdeProducten":[
