@@ -140,7 +140,7 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, string $id): ?array
     {
-        $this->entityManager->clear();
+        $this->entityManager->clear('App\Entity\ObjectEntity');
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
         if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
