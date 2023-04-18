@@ -229,9 +229,104 @@
       "deskMemo": null,
       "productAanwezigToelichting": null,
       "productValtOnderToelichting": null
+    },
+    {
+      "id": "998206bc-d530-4291-89eb-02ebe21a7289",
+      "taal":"nl",
+      "productTitelDecentraal": "Wit lederen omslag",
+      "specifiekeTekst": "Trouwboekje met wit lederen omslag",
+      "procedureBeschrijving": null,
+      "kosten": "EUR 32.50",
+      "betaalmethoden": "ideal",
+      "uitersteTermijn": null,
+      "conditions": null,
+      "notice": null,
+      "decentraleProcedureLink": null,
+      "vereisten": null,
+      "bewijs": null,
+      "contact": null,
+      "verwijzingLinks": [],
+      "synonyms": [],
+      "wtdBijGeenReactie": null,
+      "datumWijziging":"2022-01-04T11:29:26",
+      "deskMemo": null,
+      "productAanwezigToelichting": null,
+      "productValtOnderToelichting": null
+    },
+    {
+      "id": "22f40941-72ff-4825-87f4-1a67d6daf7f2",
+      "taal":"nl",
+      "productTitelDecentraal": "Donkerblauw lederen omslag",
+      "specifiekeTekst": "Trouwboekje met donkerblauw lederen omslag",
+      "procedureBeschrijving": null,
+      "kosten": "EUR 32.50",
+      "betaalmethoden": "ideal",
+      "uitersteTermijn": null,
+      "conditions": null,
+      "notice": null,
+      "decentraleProcedureLink": null,
+      "vereisten": null,
+      "bewijs": null,
+      "contact": null,
+      "verwijzingLinks": [],
+      "synonyms": [],
+      "wtdBijGeenReactie": null,
+      "datumWijziging":"2022-01-04T11:29:26",
+      "deskMemo": null,
+      "productAanwezigToelichting": null,
+      "productValtOnderToelichting": null
+    },
+    {
+      "id": "c8c733e1-13c8-4d96-a388-de30d787f15b",
+      "taal":"nl",
+      "productTitelDecentraal": "Rood kunstlederen omslag",
+      "specifiekeTekst": "Trouwboekje met rood kunstlederen omslag",
+      "procedureBeschrijving": null,
+      "kosten": "EUR 30",
+      "betaalmethoden": "ideal",
+      "uitersteTermijn": null,
+      "conditions": null,
+      "notice": null,
+      "decentraleProcedureLink": null,
+      "vereisten": null,
+      "bewijs": null,
+      "contact": null,
+      "verwijzingLinks": [],
+      "synonyms": [],
+      "wtdBijGeenReactie": null,
+      "datumWijziging":"2022-01-04T11:29:26",
+      "deskMemo": null,
+      "productAanwezigToelichting": null,
+      "productValtOnderToelichting": null
     }
   ],
   "https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json": [
+    {
+      "id":"0df214cd-167f-47c8-94eb-8b2727083ae0",
+      "upnLabel":"trouwboekje",
+      "upnUri":"http://standaarden.overheid.nl/owms/terms/huwelijk",
+      "versie":0,
+      "publicatieDatum":"2022-01-04T11:27:57",
+      "productAanwezig":true,
+      "productValtOnder": null,
+      "verantwoordelijkeOrganisatie": {
+        "url": null,
+        "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+        "owmsPrefLabel":"Utrecht",
+        "owmsEndDate":null
+      },
+      "bevoegdeOrganisatie": {
+        "naam":"Utrecht",
+        "owmsIdentifier":"http://standaarden.overheid.nl/owms/terms/Utrecht_(gemeente)",
+        "owmsPrefLabel":"Utrecht",
+        "owmsEndDate":null
+      },
+      "catalogus":"huwelijk",
+      "locaties": [],
+      "doelgroep":"eu-burger",
+      "vertalingen":["998206bc-d530-4291-89eb-02ebe21a7289", "22f40941-72ff-4825-87f4-1a67d6daf7f2", "c8c733e1-13c8-4d96-a388-de30d787f15b"],
+      "gerelateerdeProducten": []
+    },
     {
       "id":"e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
       "upnLabel":"balie",
@@ -495,9 +590,7 @@
       "doelgroep":"eu-burger",
       "vertalingen":["94ff7e80-9e1a-4dfe-af06-1d851213508f"],
       "gerelateerdeProducten":[
-        "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f",
-        "9d901cde-deab-45da-98df-e4115f32b92e",
-        "fd9bf10f-f5cc-4404-b667-cb7bb8b2bb2a"
+        "e1b2aa89-dcd8-4b77-96fc-d41501cbc57f"
       ]
     },
     {
@@ -621,7 +714,7 @@
       "doelgroep":"eu-burger",
       "vertalingen":["e511dd73-6aac-4f70-af8d-4c4b3b6d480b"],
       "gerelateerdeProducten":[
-         "868da2b9-242d-4053-8e21-8a9ef66bd15c"
+        "868da2b9-242d-4053-8e21-8a9ef66bd15c"
       ]
     }
   ],
