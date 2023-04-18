@@ -154,7 +154,7 @@ class AssentService
 
         if ($assentData['status'] === 'granted'
             && ($assentData['contact'] === false
-                || $assentData['contact']['klantnummer'] === false)
+            || $assentData['contact']['klantnummer'] === false)
         ) {
             // get brp person from the logged in user
             $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
