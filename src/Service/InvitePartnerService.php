@@ -124,7 +124,7 @@ class InvitePartnerService
             'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.' om te trouwen.',
             'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
         ];
-        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/instemmen?assentId=';
+        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId=';
 
         return $dataArray;
 
