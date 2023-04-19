@@ -131,7 +131,7 @@ class InviteWitnessService
             if ($huwelijkObject->getValue('moment') !== false
                 && $huwelijkObject->getValue('locatie') !== false
             ) {
-                $moment = new DateTime($huwelijkObject->getValue('moment'));
+                $moment      = new DateTime($huwelijkObject->getValue('moment'));
                 $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
             }
 
@@ -172,7 +172,6 @@ class InviteWitnessService
         if (isset($huwelijk['getuigen']) === true
             && count($huwelijk['getuigen']) <= 4
         ) {
-
             // Update the witnesses.
             foreach ($huwelijkObject->getValue('getuigen') as $witness) {
                 $this->updateWitness($witness, $huwelijkObject);
@@ -181,7 +180,6 @@ class InviteWitnessService
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-
         }//end if
 
         return $huwelijkObject->toArray();
