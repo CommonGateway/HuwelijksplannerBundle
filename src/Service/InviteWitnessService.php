@@ -7,6 +7,8 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Safe\DateTime;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -87,87 +89,28 @@ class InviteWitnessService
 
 
     /**
-     * This function gets the emails of the witnesses of the marriage that were already added.
+     * This function updates a witness from the given data.
      *
-     * @param array $witnesses The huwelijk witnesses array.
-     *
-     * @return array The emails of the witnesses.
-     */
-    private function getWitnesses(array $witnesses): array
-    {
-        $witnessEmail = [];
-        foreach ($witnesses as $witness) {
-            if (key_exists('contact', $witness) === false
-                && key_exists('emails', $witness['contact']) === false
-                && is_array($witness['contact']['emails']) === false
-                && key_exists('email', $witness['contact']['emails'][0])
-            ) {
-                $this->data['response'] = 'No email is set for the witness';
-
-                return $this->data;
-            }
-
-            $witnessEmail[] = $witness['contact']['emails'][0]['email'];
-        }//end foreach
-
-        $uniqueArray = array_unique($witnessEmail);
-
-        if (count($uniqueArray) !== count($witnessEmail)) {
-            $this->data['response'] = 'There are duplicate emails given.';
-
-            return $this->data;
-        }
-
-        return $witnesses;
-
-    }//end getWitnesses()
-
-
-    /**
-     * This function creates witnesses from the given data.
-     *
-     * @param array        $witnesses      The witnesses from the request.
+     * @param ObjectEntity $witness        The witness from the huwelijk.
      * @param ObjectEntity $huwelijkObject The huwelijks object.
      * @param array        $data           The data array with information about the marriage.
      *
-     * @return array The witnesses assents array.
+     * @return void
      */
-    private function createWitnesses(array $witnesses, ObjectEntity $huwelijkObject): array
+    private function updateWitness(ObjectEntity $witness, ObjectEntity $huwelijkObject): void
     {
-        $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-        $emailSchema  = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klantEmail.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $person = $witness->getValue('contact');
 
-        $witnessAssents['getuigen'] = [];
-        foreach ($witnesses as $getuige) {
-            $emailObject = new ObjectEntity($emailSchema);
-            $emailObject->setValue('email', $getuige['contact']['emails'][0]['email']);
-            $emailObject->setValue('naam', $getuige['contact']['emails'][0]['naam']);
-            $this->entityManager->persist($emailObject);
+        $dataArray = $this->createEmailAndSmsData($huwelijkObject);
+        // creates an assent and add the person to the partners of this merriage
+        $assent = $this->handleAssentService->handleAssent($person, 'witness', $dataArray, $huwelijkObject->getId()->toString(), $witness);
 
-            $emailArray   = [];
-            $emailArray[] = $emailObject->getId()->toString();
-            unset($getuige['contact']['emails']);
-            $getuige['contact']['emails'] = $emailArray;
+        $assent->setValue('name', $dataArray['response']['assentNaam']);
+        $assent->setValue('description', $dataArray['response']['assentDescription']);
+        $this->entityManager->persist($assent);
+        $this->entityManager->flush();
 
-            $person = new ObjectEntity($personSchema);
-            $person->hydrate($getuige['contact']);
-            $this->entityManager->persist($person);
-
-            $dataArray = $this->createEmailAndSmsData($huwelijkObject);
-            // creates an assent and add the person to the partners of this merriage
-            $assent = $this->handleAssentService->handleAssent($person, 'witness', $dataArray, $huwelijkObject->getId()->toString());
-
-            $assent->setValue('name', $dataArray['response']['assentNaam']);
-            $assent->setValue('description', $dataArray['response']['assentDescription']);
-            $this->entityManager->persist($assent);
-            $this->entityManager->flush();
-
-            $witnessAssents['getuigen'][] = $assent->getId()->toString();
-        }//end foreach
-
-        return $witnessAssents;
-
-    }//end createWitnesses()
+    }//end updateWitness()
 
 
     /**
@@ -188,7 +131,8 @@ class InviteWitnessService
             if ($huwelijkObject->getValue('moment') !== false
                 && $huwelijkObject->getValue('locatie') !== false
             ) {
-                $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+                $moment      = new DateTime($huwelijkObject->getValue('moment'));
+                $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
             }
 
             $dataArray['response'] = [
@@ -228,26 +172,14 @@ class InviteWitnessService
         if (isset($huwelijk['getuigen']) === true
             && count($huwelijk['getuigen']) <= 4
         ) {
-            $huwelijkObject->getValue('getuigen')->clear();
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
-
-            // Check if there are duplicates in the huwelijk getuigen array.
-            $witnesses = $this->getWitnesses($huwelijk['getuigen']);
-
-            if (key_exists('response', $witnesses)) {
-                return $this->data;
-            }//end if
-
-            // Create the witnesses.
-            $witnessAssents = $this->createWitnesses($witnesses, $huwelijkObject);
-
-            $huwelijkObject->hydrate($witnessAssents);
-
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
+            // Update the witnesses.
+            foreach ($huwelijkObject->getValue('getuigen') as $witness) {
+                $this->updateWitness($witness, $huwelijkObject);
+            }
 
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
+            $this->entityManager->persist($huwelijkObject);
+            $this->entityManager->flush();
         }//end if
 
         $this->entityManager->persist($huwelijkObject);
@@ -274,32 +206,27 @@ class InviteWitnessService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
-            return $this->data;
-        }//end if
+        $response       = json_decode($this->data['response']->getContent(), true);
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
 
-        if (isset($this->data['parameters']['body']) === false) {
+        if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
-            return [
-                'response' => ['message' => 'No data passed'],
-                'httpCode' => 400,
-            ];
+            return $this->data;
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PATCH') {
+        if ($this->data['method'] !== 'PATCH') {
             $this->pluginLogger->error('Not a PATCH request');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
             return $this->data;
         }//end if
 
-        if (isset($this->data['response']['_self']['id']) === false) {
-            return $this->data;
-        }//end if
+        $response = json_decode($this->data['response']->getContent(), true);
+        $huwelijk = $this->inviteWitness($this->data['body'], $response['_self']['id']);
 
-        $huwelijk = $this->inviteWitness($this->data['parameters']['body'], $this->data['response']['_self']['id']);
-
-        $this->data['response'] = $huwelijk;
+        $this->data['response'] = new Response(json_encode($huwelijk), 200, ['content-type' => 'application/json']);
 
         return $this->data;
 

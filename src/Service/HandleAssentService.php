@@ -214,19 +214,23 @@ class HandleAssentService
     /**
      * Handles the assent for the given person and sends an email or sms.
      *
-     * @param ObjectEntity|null $person The person to make an assent for.
+     * @param ObjectEntity      $person The person to make/update an assent for.
      * @param string            $type   The type of assent.
      * @param array             $data   The data of the request.
      * @param array             $data   The id of the property this assent is about.
+     * @param ObjectEntity|null $assent The assent of the person
      *
      * @return ObjectEntity|null
      */
-    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId): ?ObjectEntity
+    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId, ?ObjectEntity $assent=null): ?ObjectEntity
     {
         // @TODO generate secret
         $assentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $assent = new ObjectEntity($assentSchema);
+        if ($assent === null) {
+            $assent = new ObjectEntity($assentSchema);
+        }
+
         $assent->hydrate(
             [
                 'name'        => $person->getValue('voornaam'),

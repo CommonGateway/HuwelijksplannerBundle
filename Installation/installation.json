@@ -39,20 +39,20 @@
       {
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
-        "listens": ["commongateway.object.create"],
-        "version": "0.0.1"
+        "listens": ["huwelijksplanner.post.huwelijk"],
+        "version": "0.0.2"
       },
       {
         "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
-        "listens": ["commongateway.object.update"],
-        "version": "0.0.1"
+        "listens": ["huwelijksplanner.patch.partner"],
+        "version": "0.0.2"
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
-        "listens": ["commongateway.object.update"],
-        "version": "0.0.1"
+        "listens": ["huwelijksplanner.patch.witness"],
+        "version": "0.0.2"
       },
       {
         "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",
@@ -105,7 +105,9 @@
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
         "path": "huwelijk",
-        "methods": []
+        "methods": [],
+        "version": "0.0.2",
+        "throws": ["huwelijksplanner.post.huwelijk","huwelijksplanner.patch.partner", "huwelijksplanner.patch.witness"]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",
