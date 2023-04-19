@@ -182,6 +182,9 @@ class InviteWitnessService
             $this->entityManager->flush();
         }//end if
 
+        $this->entityManager->persist($huwelijkObject);
+        $this->entityManager->flush();
+
         return $huwelijkObject->toArray();
 
     }//end inviteWitness()
