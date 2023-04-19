@@ -114,7 +114,7 @@ class InvitePartnerService
         if ($huwelijkObject->getValue('moment') !== false
             && $huwelijkObject->getValue('locatie') !== false
         ) {
-            $moment = new DateTime($huwelijkObject->getValue('moment'));
+            $moment      = new DateTime($huwelijkObject->getValue('moment'));
             $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
         }
 
@@ -173,7 +173,7 @@ class InvitePartnerService
                 foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
                     if ($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn'] === $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
                         $personAssent = $huwelijkPartner;
-                        $person = $this->assentService->createPerson($huwelijk, $brpPerson, $huwelijkPartner->getValue('contact'));
+                        $person       = $this->assentService->createPerson($huwelijk, $brpPerson, $huwelijkPartner->getValue('contact'));
                     }//end if
 
                     if ($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn'] !== $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
@@ -186,11 +186,11 @@ class InvitePartnerService
                 foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
                     if ($huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie') === false) {
                         $personAssent = $huwelijkPartner;
-                        $person = $huwelijkPartner->getValue('contact');
+                        $person       = $huwelijkPartner->getValue('contact');
                     }//end if
 
                     if (($subjectIdentificatie = $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')) !== false) {
-                        if ($subjectIdentificatie->getValue('inpBsn') !== false){
+                        if ($subjectIdentificatie->getValue('inpBsn') !== false) {
                             $partner = $huwelijkPartner->getValue('contact');
                         }
                     }//end if
@@ -200,7 +200,7 @@ class InvitePartnerService
             $this->entityManager->flush();
 
             $dataArray = $this->createEmailAndSmsData($partner, $person, $huwelijkObject);
-            
+
             $assent = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString(), $personAssent);
 
             $assent->setValue('name', $dataArray['response']['assentNaam']);
@@ -238,7 +238,7 @@ class InvitePartnerService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $response = json_decode($this->data['response']->getContent(), true);
+        $response       = json_decode($this->data['response']->getContent(), true);
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
 
         if (isset($this->data['body']) === false) {

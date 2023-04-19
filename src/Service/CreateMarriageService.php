@@ -107,6 +107,7 @@ class CreateMarriageService
 
     }//end __construct()
 
+
     /**
      * This function gets or creates a klant object.
      *
@@ -114,7 +115,7 @@ class CreateMarriageService
      */
     private function getPerson(array $huwelijk): ObjectEntity
     {
-        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema    = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
         // get brp person from the logged in user
@@ -142,7 +143,9 @@ class CreateMarriageService
         }
 
         return $person;
-    }
+
+    }//end getPerson()
+
 
     /**
      * This function validates and creates the huwelijk object
@@ -176,6 +179,7 @@ class CreateMarriageService
         $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
         return $this->cacheService->getObject($huwelijkId);
+
     }//end createMarriage()
 
 

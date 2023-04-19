@@ -222,7 +222,7 @@ class HandleAssentService
      *
      * @return ObjectEntity|null
      */
-    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId, ?ObjectEntity $assent = null): ?ObjectEntity
+    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId, ?ObjectEntity $assent=null): ?ObjectEntity
     {
         // @TODO generate secret
         $assentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'common-gateway/huwelijksplanner-bundle');
