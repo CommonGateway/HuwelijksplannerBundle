@@ -272,7 +272,7 @@ class InviteWitnessService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $response = json_decode($this->data['response']->getContent(), true);
+        $response       = json_decode($this->data['response']->getContent(), true);
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
 
         if (isset($this->data['body']) === false) {
