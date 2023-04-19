@@ -243,14 +243,14 @@ class InvitePartnerService
 
         if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
-            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200, ['content-type' => 'application/json']);
 
             return $this->data;
         }//end if
 
         if ($this->data['method'] !== 'PATCH') {
             $this->pluginLogger->error('Not a PATCH request');
-            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200, ['content-type' => 'application/json']);
 
             return $this->data;
         }//end if
