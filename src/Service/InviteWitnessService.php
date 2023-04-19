@@ -7,6 +7,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -271,32 +272,27 @@ class InviteWitnessService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
-            return $this->data;
-        }//end if
+        $response = json_decode($this->data['response']->getContent(), true);
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
 
-        if (isset($this->data['parameters']['body']) === false) {
+        if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
-            return [
-                'response' => ['message' => 'No data passed'],
-                'httpCode' => 400,
-            ];
+            return $this->data;
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PATCH') {
+        if ($this->data['method'] !== 'PATCH') {
             $this->pluginLogger->error('Not a PATCH request');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
             return $this->data;
         }//end if
 
-        if (isset($this->data['response']['_self']['id']) === false) {
-            return $this->data;
-        }//end if
+        $response = json_decode($this->data['response']->getContent(), true);
+        $huwelijk = $this->inviteWitness($this->data['body'], $response['_self']['id']);
 
-        $huwelijk = $this->inviteWitness($this->data['parameters']['body'], $this->data['response']['_self']['id']);
-
-        $this->data['response'] = $huwelijk;
+        $this->data['response'] = new Response(json_encode($huwelijk), 200, ['content-type' => 'application/json']);
 
         return $this->data;
 

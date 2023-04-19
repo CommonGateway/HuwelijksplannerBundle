@@ -8,6 +8,8 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Safe\DateTime;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -106,15 +108,14 @@ class InvitePartnerService
      */
     private function createEmailAndSmsData(ObjectEntity $requester, ObjectEntity $person, ObjectEntity $huwelijkObject): ?array
     {
-        $requesterPerson = $requester->getValue('contact');
-
-        $requesterNaam = $requesterPerson->getValue('voornaam').' '.$requesterPerson->getValue('achternaam');
+        $requesterNaam = $requester->getValue('voornaam').' '.$requester->getValue('achternaam');
         $partnerNaam   = $person->getValue('voornaam').' '.$person->getValue('achternaam');
 
         if ($huwelijkObject->getValue('moment') !== false
             && $huwelijkObject->getValue('locatie') !== false
         ) {
-            $description = 'Op '.$huwelijkObject->getValue('moment').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+            $moment = new DateTime($huwelijkObject->getValue('moment'));
+            $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
         }
 
         $dataArray['response']        = [
@@ -140,7 +141,6 @@ class InvitePartnerService
      */
     private function invitePartner(array $huwelijk, string $id): ?array
     {
-        $this->entityManager->clear();
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
         if ($huwelijkObject instanceof ObjectEntity === false) {
             $this->pluginLogger->error('Could not find huwelijk with id '.$id);
@@ -155,17 +155,9 @@ class InvitePartnerService
         if (isset($huwelijk['partners']) === true
             && count($huwelijk['partners']) === 1
         ) {
-            if (count($huwelijkObject->getValue('partners')) > 1) {
+            if (count($huwelijkObject->getValue('partners')) > 2) {
                 // @TODO update partner?
                 return $huwelijkObject->toArray();
-            }//end if
-
-            if (count($huwelijkObject->getValue('partners')) !== 1) {
-                $this->pluginLogger->error('You cannot add a partner before the requester is set.');
-
-                $this->data['response'] = 'You cannot add a partner before the requester is set.';
-
-                return $this->data;
             }//end if
 
             $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -178,22 +170,38 @@ class InvitePartnerService
                     $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
                 }//end if
 
-                $person = $this->assentService->createPerson($huwelijk, $brpPerson);
+                foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
+                    if ($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn'] === $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
+                        $personAssent = $huwelijkPartner;
+                        $person = $this->assentService->createPerson($huwelijk, $brpPerson, $huwelijkPartner->getValue('contact'));
+                    }//end if
+
+                    if ($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn'] !== $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
+                        $partner = $huwelijkPartner->getValue('contact');
+                    }//end if
+                }//end foreach
             }//end if
 
             if (isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === false) {
-                $person = new ObjectEntity($personSchema);
-                $person->hydrate($huwelijk['partners'][0]['contact']);
-                $this->entityManager->persist($person);
+                foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
+                    if ($huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie') === false) {
+                        $personAssent = $huwelijkPartner;
+                        $person = $huwelijkPartner->getValue('contact');
+                    }//end if
+
+                    if (($subjectIdentificatie = $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')) !== false) {
+                        if ($subjectIdentificatie->getValue('inpBsn') !== false){
+                            $partner = $huwelijkPartner->getValue('contact');
+                        }
+                    }//end if
+                }//end foreach
             }//end if
 
             $this->entityManager->flush();
 
-            $partners  = $huwelijkObject->getValue('partners');
-            $dataArray = $this->createEmailAndSmsData($partners[0], $person, $huwelijkObject);
-
-            $requesterAssent['partners'][] = $partners[0]->getId()->toString();
-            $assent                        = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString());
+            $dataArray = $this->createEmailAndSmsData($partner, $person, $huwelijkObject);
+            
+            $assent = $this->handleAssentService->handleAssent($person, 'partner', $dataArray, $huwelijkObject->getId()->toString(), $personAssent);
 
             $assent->setValue('name', $dataArray['response']['assentNaam']);
             $assent->setValue('description', $dataArray['response']['assentDescription']);
@@ -230,32 +238,27 @@ class InvitePartnerService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
-            return $this->data;
-        }//end if
+        $response = json_decode($this->data['response']->getContent(), true);
+        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
 
-        if (isset($this->data['parameters']['body']) === false) {
+        if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
-            return [
-                'response' => ['message' => 'No data passed'],
-                'httpCode' => 400,
-            ];
+            return $this->data;
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'PATCH') {
+        if ($this->data['method'] !== 'PATCH') {
             $this->pluginLogger->error('Not a PATCH request');
+            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200);
 
             return $this->data;
         }//end if
 
-        if (isset($this->data['response']['_self']['id']) === false) {
-            return $this->data;
-        }//end if
+        $response = json_decode($this->data['response']->getContent(), true);
+        $huwelijk = $this->invitePartner($this->data['body'], $response['_self']['id']);
 
-        $huwelijk = $this->invitePartner($this->data['parameters']['body'], $this->data['response']['_self']['id']);
-
-        $this->data['response'] = $huwelijk;
+        $this->data['response'] = new Response(json_encode($huwelijk), 200, ['content-type' => 'application/json']);
 
         return $this->data;
 

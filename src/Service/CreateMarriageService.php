@@ -8,6 +8,7 @@ use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use CommonGateway\HuwelijksplannerBundle\Service\PaymentService;
 
@@ -106,83 +107,42 @@ class CreateMarriageService
 
     }//end __construct()
 
-
     /**
-     * Validate huwelijk type.
-     */
-    private function validateType(array $huwelijk)
-    {
-        if (isset($huwelijk['type'])) {
-            if (!$typeProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['type'])) {
-                $this->pluginLogger->error('huwelijk.type not found in the databse with given id');
-
-                return [
-                    'response' => ['message' => 'huwelijk.type not found in the databse with given id'],
-                    'httpCode' => 400,
-                ];
-            }//end if
-
-            // @TODO check upnLabel or upnUri
-            if (!in_array($typeProductObject->getValue('upnLabel'), ['huwelijk', 'Omzetting', 'Partnerschap'])) {
-                $this->pluginLogger->error('huwelijk.type.upnLabel is not huwelijk, omzetten or partnerschap');
-
-                return [
-                    'response' => ['message' => 'huwelijk.type.upnLabel is not huwelijk, Omzetting or Partnerschap'],
-                    'httpCode' => 400,
-                ];
-            }//end if
-
-            return true;
-        } else {
-            $this->pluginLogger->error('huwelijk.type is not given');
-
-            return [
-                'response' => ['message' => 'huwelijk.type is not given'],
-                'httpCode' => 400,
-            ];
-        }//end if
-
-    }//end validateType()
-
-
-    /**
-     * Validate huwelijk type.
+     * This function gets or creates a klant object.
      *
-     * @return array|bool $huwelijk OR false when invalid huwelijk
+     * @param array $huwelijk The huwelijk array
      */
-    private function validateCeremonie(array $huwelijk)
+    private function getPerson(array $huwelijk): ObjectEntity
     {
-        if (isset($huwelijk['ceremonie'])) {
-            if (!$ceremonieProductObject = $this->entityManager->getRepository('App:ObjectEntity')->find($huwelijk['ceremonie'])) {
-                $this->pluginLogger->error('huwelijk.ceremonie not found in the databse with given id');
+        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
-                return [
-                    'response' => ['message' => 'huwelijk.ceremonie not found in the databse with given id'],
-                    'httpCode' => 400,
-                ];
-            }//end if
-
-            if (!in_array($ceremonieProductObject->getValue('upnLabel'), ['gratis trouwen', 'flits/baliehuwelijk', 'eenvoudig huwelijk', 'uitgebreid huwelijk'])) {
-                $this->pluginLogger->error('huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk');
-
-                return [
-                    'response' => ['message' => 'huwelijk.ceremonie.upnLabel is not gratis trouwen, flits/baliehuwelijk, eenvoudig huwelijk, uitgebreid huwelijk'],
-                    'httpCode' => 400,
-                ];
-            }//end if
-
-            return true;
-        } else {
-            $this->pluginLogger->error('huwelijk.ceremonie is not given');
-
-            return [
-                'response' => ['message' => 'huwelijk.ceremonie is not given'],
-                'httpCode' => 400,
-            ];
+        // get brp person from the logged in user
+        $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
+        $brpPerson  = null;
+        if (count($brpPersons) === 1) {
+            $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
         }//end if
 
-    }//end validateCeremonie()
+        if ($brpPerson->getValue('burgerservicenummer') === false) {
+            $person = $this->assentService->createPerson($huwelijk, $brpPerson);
+        }
 
+        if ($brpPerson->getValue('burgerservicenummer') !== false) {
+            $persons = $this->cacheService->searchObjects(null, ['subjectIdentificatie.inpBsn' => $brpPerson->getValue('burgerservicenummer')], [$personSchema->getId()->toString()])['results'];
+            if (count($persons) === 1) {
+                $person = $this->entityManager->find('App:ObjectEntity', $persons[0]['_self']['id']);
+            }//end if
+
+            if (count($persons) === 0) {
+                // create person from logged in user and if we have a brp person we set those values
+                // if not we set the values from the security object
+                $person = $this->assentService->createPerson($huwelijk, $brpPerson);
+            }
+        }
+
+        return $person;
+    }
 
     /**
      * This function validates and creates the huwelijk object
@@ -190,66 +150,32 @@ class CreateMarriageService
      */
     private function createMarriage(string $huwelijkId, array $huwelijk): ?array
     {
-        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
-
         $huwelijkObject = $this->entityManager->find('App:ObjectEntity', $huwelijkId);
 
-        // @TODO validate moment and location
-        if ($this->validateType($huwelijk) === true
-            && $this->validateCeremonie($huwelijk) === true
-        ) {
-            // ambtenaar en locatie
-            if (key_exists('locatie', $huwelijk) === true) {
-                $huwelijkArray['locatie'] = $huwelijk['locatie'];
-            }//end if
+        $huwelijkArray = $huwelijkObject->toArray();
 
-            $huwelijkArray = [
-                'type'      => $huwelijk['type'],
-                'moment'    => $huwelijk['moment'],
-                'ceremonie' => $huwelijk['ceremonie'],
-                'ambtenaar' => $huwelijk['ambtenaar'],
-                'locatie'   => $huwelijk['locatie'],
-            // @TODO check why the location is not added in the if statement above
-            ];
+        // Get all prices from the products
+        $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
+        // Calculate new price
+        $huwelijkArray['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
 
-            // Get all prices from the products
-            $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
-            // Calculate new price
-            $huwelijkArray['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
+        $huwelijkObject->hydrate($huwelijkArray);
+        $this->entityManager->persist($huwelijkObject);
+        $this->entityManager->flush();
 
-            $huwelijkObject->hydrate($huwelijkArray);
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
+        $person = $this->getPerson($huwelijk);
 
-            // get brp person from the logged in user
-            $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $this->security->getUser()->getPerson()], [$brpSchema->getId()->toString()])['results'];
-            $brpPerson  = null;
-            if (count($brpPersons) === 1) {
-                $brpPerson = $this->entityManager->find('App:ObjectEntity', $brpPersons[0]['_self']['id']);
-            }//end if
+        // creates an assent and add the person to the partners of this merriage
+        $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data, $huwelijkObject->getId()->toString(), null)->getId()->toString();
+        $huwelijkObject->hydrate($requesterAssent);
 
-            // create person from logged in user and if we have a brp person we set those values
-            // if not we set the values from the security object
-            $person = $this->assentService->createPerson($huwelijk, $brpPerson);
+        $this->entityManager->persist($huwelijkObject);
+        $this->entityManager->flush();
+        $this->cacheService->cacheObject($huwelijkObject);
+        // @todo this is hacky, the above schould alredy do this
+        $this->updateChecklistService->checkHuwelijk($huwelijkObject);
 
-            // creates an assent and add the person to the partners of this merriage
-            $requesterAssent['partners'][] = $assent = $this->handleAssentService->handleAssent($person, 'requester', $this->data, $huwelijkObject->getId()->toString())->getId()->toString();
-            $huwelijkObject->hydrate($requesterAssent);
-
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
-            $this->cacheService->cacheObject($huwelijkObject);
-            // @todo this is hacky, the above schould alredy do this
-            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
-
-            return $huwelijkObject->toArray();
-        }//end if
-
-        return [
-            'response' => ['message' => 'Validation failed'],
-            'httpCode' => 400,
-        ];
-
+        return $this->cacheService->getObject($huwelijkId);
     }//end createMarriage()
 
 
@@ -269,25 +195,23 @@ class CreateMarriageService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        if (in_array('huwelijk', $this->data['parameters']['endpoint']->getPath()) === false) {
-            return $this->data;
-        }//end if
-
-        if (isset($this->data['parameters']['body']) === false) {
+        if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
 
             return $this->data;
         }//end if
 
-        if ($this->data['parameters']['method'] !== 'POST') {
+        if ($this->data['method'] !== 'POST') {
             $this->pluginLogger->error('Not a POST request');
 
             return $this->data;
         }//end if
 
-        $huwelijk = $this->createMarriage($this->data['response']['_self']['id'], $this->data['parameters']['body']);
+        $response = json_decode($this->data['response']->getContent(), true);
 
-        $this->data['response'] = $huwelijk;
+        $huwelijk = $this->createMarriage($response['_self']['id'], $this->data['body']);
+
+        $this->data['response'] = new Response(json_encode($huwelijk), 201, ['content-type' => 'application/json']);
 
         return $this->data;
 
