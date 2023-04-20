@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "type": "object",
     "title": "Assent",
     "properties":{
@@ -76,6 +76,10 @@
             "items": {
                 "$ref": "https://huwelijksplanner.nl/schemas/hp.check.schema.json"
             }
+        },
+        "huwelijk": {
+          "$ref": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
+          "inversedBy": "assent"
         }
     },
     "required": [
