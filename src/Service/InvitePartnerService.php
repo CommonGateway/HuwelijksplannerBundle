@@ -238,19 +238,14 @@ class InvitePartnerService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $response       = json_decode($this->data['response']->getContent(), true);
-        $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($response['_self']['id']);
-
         if (isset($this->data['body']) === false) {
             $this->pluginLogger->error('No data passed');
-            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200, ['content-type' => 'application/json']);
 
             return $this->data;
         }//end if
 
         if ($this->data['method'] !== 'PATCH') {
             $this->pluginLogger->error('Not a PATCH request');
-            $this->data['response'] = new Response(json_encode($huwelijkObject->toArray()), 200, ['content-type' => 'application/json']);
 
             return $this->data;
         }//end if
