@@ -405,7 +405,7 @@ class PaymentService
         // ];
         // }//end if
         if ($payment !== null) {
-            $this->data['response'] = new Response(json_encode($payment), 200);
+            $this->data['response'] = new Response(json_encode($payment), 200, ['content-type' => 'application/json']);
             // $this->data['response'] = new Response(\Safe\json_encode(['checkout' => $payment['_links']['checkout']]), 200);
         }
 

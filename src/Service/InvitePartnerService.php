@@ -217,7 +217,7 @@ class InvitePartnerService
             $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
         }//end if
 
-        return $huwelijkObject->toArray();
+        return $this->cacheService->getObject($id);
 
     }//end invitePartner()
 

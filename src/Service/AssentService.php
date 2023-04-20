@@ -6,6 +6,7 @@ use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Security;
@@ -14,28 +15,57 @@ use Symfony\Component\Serializer\Serializer;
 class AssentService
 {
 
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $entityManager;
 
+    /**
+     * @var Security
+     */
     private Security $security;
 
+    /**
+     * @var Serializer
+     */
     private Serializer $serializer;
 
+    /**
+     * @var GatewayResourceService
+     */
     private GatewayResourceService $grService;
 
+    /**
+     * @var CacheService
+     */
     private CacheService $cacheService;
 
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $pluginLogger;
 
+
+    /**
+     * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param Security               $security               The Security
+     * @param GatewayResourceService $grService              The Gateway Resource Service
+     * @param CacheService           $cacheService           The Cache Service
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         Security $security,
         GatewayResourceService $grService,
-        CacheService $cacheService
+        CacheService $cacheService,
+        LoggerInterface        $pluginLogger
     ) {
         $this->entityManager = $entityManager;
         $this->security      = $security;
         $this->serializer    = new Serializer();
         $this->grService     = $grService;
         $this->cacheService  = $cacheService;
+        $this->pluginLogger           = $pluginLogger;
 
     }//end __construct()
 
@@ -54,30 +84,15 @@ class AssentService
     {
         $personSchema = $this->grService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
 
+        if ($person === null) {
+            $person = new ObjectEntity($personSchema);
+        }
+
         if ($brpPerson) {
             $naam                                       = $brpPerson->getValue('naam');
             $verblijfplaats                             = $brpPerson->getValue('verblijfplaats');
             $verblijfplaats && $landVanwaarIngeschreven = $verblijfplaats->getValue('landVanwaarIngeschreven');
         }//end if
-
-        // @TODO check how and if we get the email and phonenumber from the frontend
-        if (key_exists('partners', $huwelijk) === true
-            && key_exists('contact', $huwelijk['partners'][0])
-        ) {
-            $huwelijkPerson = $huwelijk['partners'][0]['contact'];
-
-            if (key_exists('emails', $huwelijkPerson) === true) {
-                $email = $huwelijkPerson['emails'][0]['email'];
-            }//end if
-
-            if (key_exists('telefoonnummers', $huwelijkPerson) === true) {
-                $phonenumber = $huwelijkPerson['telefoonnummers'][0]['telefoonnummer'];
-            }//end if
-        }//end if
-
-        if ($person === null) {
-            $person = new ObjectEntity($personSchema);
-        }
 
         $person->hydrate(
             [
@@ -166,18 +181,19 @@ class AssentService
             $person = $assent->getValue('contact');
 
             if ($person === false) {
-                $person = null;
+                $person = $this->createPerson([], $brpPerson, null);
+                $assent->hydrate(['contact' => $person]);
+
+            } else {
+                $this->createPerson([], $brpPerson, $person);
             }
 
-            $person = $this->createPerson([], $brpPerson, $person);
-
-            $assent->hydrate(['contact' => $person]);
+            $this->entityManager->persist($assent);
+            $this->entityManager->flush();
         }
+        $cacheAssent = $this->cacheService->getObject($assent->getId()->toString());
 
-        $this->entityManager->persist($assent);
-        $this->entityManager->flush();
-
-        $data['response'] = new Response(\Safe\json_encode($assent->toArray()), 200, ['content-type' => 'application/json']);
+        $data['response'] = new Response(\Safe\json_encode($cacheAssent), 200, ['content-type' => 'application/json']);
 
         return $data;
 

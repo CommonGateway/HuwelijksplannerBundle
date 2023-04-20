@@ -3,6 +3,7 @@
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\ObjectEntity;
+use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -28,6 +29,11 @@ class InviteWitnessService
      * @var GatewayResourceService
      */
     private GatewayResourceService $gatewayResourceService;
+
+    /**
+     * @var CacheService
+     */
+    private CacheService $cacheService;
 
     /**
      * @var HandleAssentService
@@ -63,6 +69,7 @@ class InviteWitnessService
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
+     * @param CacheService           $cacheService           The Cache Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
@@ -71,6 +78,7 @@ class InviteWitnessService
     public function __construct(
         EntityManagerInterface $entityManager,
         GatewayResourceService $gatewayResourceService,
+        CacheService $cacheService,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
@@ -78,6 +86,7 @@ class InviteWitnessService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
+        $this->cacheService           = $cacheService;
         $this->data                   = [];
         $this->configuration          = [];
         $this->handleAssentService    = $handleAssentService;
@@ -185,7 +194,7 @@ class InviteWitnessService
         $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
 
-        return $huwelijkObject->toArray();
+        return $this->cacheService->getObject($id);
 
     }//end inviteWitness()
 
