@@ -160,9 +160,9 @@ class CreateMarriageService
         // Get all prices from the products
         $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
         // Calculate new price
-        $huwelijkArray['kosten'] = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
+        $price = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
 
-        $huwelijkObject->hydrate($huwelijkArray);
+        $huwelijkObject->hydrate(['kosten' => $price]);
         $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
 
