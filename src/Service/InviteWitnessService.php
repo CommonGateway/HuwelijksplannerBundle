@@ -186,9 +186,6 @@ class InviteWitnessService
                 $this->updateWitness($witness, $huwelijkObject);
             }
 
-            $huwelijkObject = $this->updateChecklistService->checkHuwelijk($huwelijkObject);
-            $this->entityManager->persist($huwelijkObject);
-            $this->entityManager->flush();
         }//end if
 
         $this->entityManager->persist($huwelijkObject);

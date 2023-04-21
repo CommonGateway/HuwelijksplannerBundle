@@ -146,20 +146,15 @@ class PaymentService
         $productPrices = [];
 
         foreach ($products as $extraProduct) {
-            // @todo move this to validation
-            if (is_array($extraProduct) === false) {
-                $extraProduct = $this->getProductObject($extraProduct);
-            }//end if
-
             if (empty($extraProduct) === true) {
                 continue;
             }//end if
-
-            if (isset($extraProduct['vertalingen'][0]['kosten']) === false) {
+            
+            if (isset($extraProduct['kosten']) === false) {
                 continue;
             }//end if
 
-            $productPrices[] = $extraProduct['vertalingen'][0]['kosten'];
+            $productPrices[] = $extraProduct['kosten'];
         }//end foreach
 
         return $productPrices;

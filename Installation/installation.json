@@ -80,6 +80,11 @@
         "reference": "https://hp.nl/action/hp.UpdateAssentAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateAssentHandler",
         "listens": ["huwelijksplanner.endpoint.assent"]
+      },
+      {
+        "reference": "https://hp.nl/action/hp.UpdateMarriageAction.action.json",
+        "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\UpdateMarriageHandler",
+        "listens": ["huwelijksplanner.patch.huwelijk"]
       }
     ]
   },
@@ -106,8 +111,8 @@
         "reference": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
         "path": "huwelijk",
         "methods": [],
-        "version": "0.0.2",
-        "throws": ["huwelijksplanner.post.huwelijk","huwelijksplanner.patch.partner", "huwelijksplanner.patch.witness"]
+        "version": "0.0.3",
+        "throws": ["huwelijksplanner.post.huwelijk","huwelijksplanner.patch.partner", "huwelijksplanner.patch.witness", "huwelijksplanner.patch.huwelijk"]
       },
       {
         "reference": "https://huwelijksplanner.nl/schemas/hp.medewerker.schema.json",

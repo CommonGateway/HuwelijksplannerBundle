@@ -47,25 +47,25 @@ class AssentService
 
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
-     * @param Security               $security      The Security
-     * @param GatewayResourceService $grService     The Gateway Resource Service
-     * @param CacheService           $cacheService  The Cache Service
-     * @param LoggerInterface        $pluginLogger  The Logger Interface
+     * @param EntityManagerInterface $entityManager          The Entity Manager
+     * @param Security               $security               The Security
+     * @param GatewayResourceService $grService              The Gateway Resource Service
+     * @param CacheService           $cacheService           The Cache Service
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         Security $security,
         GatewayResourceService $grService,
         CacheService $cacheService,
-        LoggerInterface $pluginLogger
+        LoggerInterface        $pluginLogger
     ) {
         $this->entityManager = $entityManager;
         $this->security      = $security;
         $this->serializer    = new Serializer();
         $this->grService     = $grService;
         $this->cacheService  = $cacheService;
-        $this->pluginLogger  = $pluginLogger;
+        $this->pluginLogger           = $pluginLogger;
 
     }//end __construct()
 
@@ -183,6 +183,7 @@ class AssentService
             if ($person === false) {
                 $person = $this->createPerson([], $brpPerson, null);
                 $assent->hydrate(['contact' => $person]);
+
             } else {
                 $this->createPerson([], $brpPerson, $person);
             }
@@ -190,7 +191,6 @@ class AssentService
             $this->entityManager->persist($assent);
             $this->entityManager->flush();
         }
-
         $cacheAssent = $this->cacheService->getObject($assent->getId()->toString());
 
         $data['response'] = new Response(\Safe\json_encode($cacheAssent), 200, ['content-type' => 'application/json']);
