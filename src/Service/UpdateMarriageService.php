@@ -70,20 +70,21 @@ class UpdateMarriageService
         Security $security,
         GatewayResourceService $grService,
         CacheService $cacheService,
-        LoggerInterface        $pluginLogger,
+        LoggerInterface $pluginLogger,
         PaymentService $paymentService,
         UpdateChecklistService $updateChecklistService
     ) {
-        $this->entityManager = $entityManager;
-        $this->security      = $security;
-        $this->serializer    = new Serializer();
-        $this->grService     = $grService;
-        $this->cacheService  = $cacheService;
+        $this->entityManager          = $entityManager;
+        $this->security               = $security;
+        $this->serializer             = new Serializer();
+        $this->grService              = $grService;
+        $this->cacheService           = $cacheService;
         $this->pluginLogger           = $pluginLogger;
-        $this->paymentService = $paymentService;
+        $this->paymentService         = $paymentService;
         $this->updateChecklistService = $updateChecklistService;
 
     }//end __construct()
+
 
     /**
      * This function calculates the costs and updates the checklist service.
@@ -117,7 +118,6 @@ class UpdateMarriageService
         // Get all prices from the products
         $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
         // Calculate new price
-
         $huwelijk->setValue('kosten', 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR'));
         $this->entityManager->persist($huwelijk);
         $this->entityManager->flush();
@@ -130,7 +130,7 @@ class UpdateMarriageService
 
         return $data;
 
-    }//end updateAssentHandler()
+    }//end updateMarriageHandler()
 
 
 }//end class

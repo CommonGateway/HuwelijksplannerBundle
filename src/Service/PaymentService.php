@@ -149,7 +149,7 @@ class PaymentService
             if (empty($extraProduct) === true) {
                 continue;
             }//end if
-            
+
             if (isset($extraProduct['kosten']) === false) {
                 continue;
             }//end if

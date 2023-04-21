@@ -185,7 +185,6 @@ class InviteWitnessService
             foreach ($huwelijkObject->getValue('getuigen') as $witness) {
                 $this->updateWitness($witness, $huwelijkObject);
             }
-
         }//end if
 
         $this->entityManager->persist($huwelijkObject);
