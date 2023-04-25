@@ -118,24 +118,34 @@ class HandleAssentService
 
         $config = $action->getConfiguration();
 
-        switch ($type) {
-        case 'requester':
-            $config['subject'] = 'Melding Voorgenomen Huwelijk';
+        $config['subject'] = 'Melding Voorgenomen Huwelijk';
+        $config['variables'] = [
+            'requesterNaam' => 'requesterNaam',
+            'partnerNaam' => 'partnerNaam',
+            'url' => 'url'
+        ];
 
-            $config['template'] = $config['templateRequester'];
-            break;
-        case 'partner':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
-            $config['template'] = $config['templatePartner'];
-            break;
-        case 'witness':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
-            $config['template'] = $config['templateWitness'];
-            break;
-        default:
-            // @TODO throw error
-            break;
-        }//end switch
+        if (key_exists('cc', $config)) {
+            unset($config['cc']);
+        }
+        if (key_exists('bcc', $config)) {
+            unset($config['bcc']);
+        }
+        if (key_exists('replyTo', $config)) {
+            unset($config['replyTo']);
+        }
+
+        if ($type === 'requester') {
+            $config['template'] = $config['template2'];
+        }
+
+        if ($type === 'partner') {
+            $config['template'] = $config['template3'];
+        }
+
+        if ($type === 'witness') {
+            $config['template'] = $config['template4'];
+        }
 
         $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
 
@@ -149,7 +159,7 @@ class HandleAssentService
             $this->entityManager->flush();
 
             // throw action event
-            $event = new ActionEvent('commongateway.handler.pre', $data, 'hp.send.email');
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.email');
             $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
         }//end foreach
 
@@ -168,21 +178,33 @@ class HandleAssentService
     {
         switch ($type) {
         case 'requester':
-            $message = 'Melding Voorgenomen Huwelijk';
+            $data['response']['recipients'] = 'Melding Voorgenomen Huwelijk';
             break;
         case 'partner':
-            $message = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
+            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
             break;
         case 'witness':
-            $message = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
+            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
             break;
         default:
-            $message = 'Assent request';
+            $data['response']['recipients'] = 'Assent request';
             break;
         }//end switch
 
+        $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.MessageBirdAction.action.json', 'common-gateway/huwelijksplanner-bundle');
+
+        if ($action->getAsync() === false) {
+            $action->setAsync(true);
+            $this->entityManager->persist($action);
+            $this->entityManager->flush();
+        }
+
         foreach ($phoneNumbers as $phoneNumber) {
-            $this->messageBirdService->sendMessage($phoneNumber->getValue('telefoonnummer'), $message);
+
+            $data['response']['recipients'] = $phoneNumber->getValue('telefoonnummer');
+            // throw action event
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
+            $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
         }//end foreach
 
     }//end sendSms()

@@ -93,7 +93,7 @@ class MessageBirdService
      *
      * @return bool
      */
-    public function sendMessage(string $recipients, string $body): bool
+    public function sendMessage(string $recipients, string $body): ?array
     {
         $this->pluginLogger->debug('Send a message');
 
@@ -107,7 +107,7 @@ class MessageBirdService
         } catch (RequestException $exception) {
             $this->pluginLogger->error('Could not send the message with source: '.$source->getName());
 
-            return false;
+            return null;
         }
 
         $message = json_decode($response->getBody()->getContents(), true);
@@ -115,7 +115,7 @@ class MessageBirdService
         if (empty($message) === true) {
             $this->pluginLogger->error('Could not send the message with source: '.$source->getName());
 
-            return false;
+            return null;
         }//end if
 
         $this->pluginLogger->debug('The message was sent successfully');
@@ -126,9 +126,36 @@ class MessageBirdService
         $this->entityManager->persist($messageObject);
         $this->entityManager->flush();
 
-        return true;
+        return $messageObject->toArray();
 
     }//end sendMessage()
+
+    /**
+     * Sends message via messageBird
+     *
+     * @param ?array $data          Data this service might need from a Action.
+     * @param ?array $configuration Configuraiton this service might need from a Action.
+     *
+     * @return array Response array that will be returned to RequestService.
+     */
+    public function messageBirdHandler(?array $data=[], ?array $configuration=[]): array
+    {
+        $this->pluginLogger->debug('messageBirdHandler triggered');
+        $this->data          = $data;
+        $this->configuration = $configuration;
+        
+        $recipients = $this->data['response']['recipients'];
+        $body = $this->data['response']['body'];
+        
+        $message = $this->sendMessage($recipients, $body);
+        
+        if ($message !== null) {
+            $this->data['response'] = new Response(json_encode($message), 200, ['content-type' => 'application/json']);
+        }
+
+        return $this->data;
+
+    }//end createPaymentHandler()
 
 
 }//end class
