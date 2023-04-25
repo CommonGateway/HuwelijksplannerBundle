@@ -221,13 +221,13 @@ class PaymentService
         foreach ($prices as $price) {
             $price = str_replace('EUR ', '', $price);
             if ($price > 0) {
-                $float = floatval($price);
-                $float = $float * 100;
+                $float      = floatval($price);
+                $float      = ($float * 100);
                 $totalPrice = $totalPrice->add(new Money((int) $float, $totalPrice->getCurrency()));
             }
         }
 
-        $amount = $totalPrice->getAmount() / 100;
+        $amount    = ($totalPrice->getAmount() / 100);
         $formatted = sprintf("%0.2f", $amount);
 
         return $formatted;
