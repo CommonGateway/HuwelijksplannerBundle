@@ -107,7 +107,7 @@ class CreateAvailabilityService
             ];
         }//end foreach
 
-        $this->data['response'] = new Response(json_encode($resultArray), 200);
+        $this->data['response'] = new Response(json_encode($resultArray), 200, ['content-type' => 'application/json']);
 
         return $this->data;
 
