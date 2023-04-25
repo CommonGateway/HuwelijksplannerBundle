@@ -130,6 +130,7 @@ class MessageBirdService
 
     }//end sendMessage()
 
+
     /**
      * Sends message via messageBird
      *
@@ -143,19 +144,19 @@ class MessageBirdService
         $this->pluginLogger->debug('messageBirdHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         $recipients = $this->data['response']['recipients'];
-        $body = $this->data['response']['body'];
-        
+        $body       = $this->data['response']['body'];
+
         $message = $this->sendMessage($recipients, $body);
-        
+
         if ($message !== null) {
             $this->data['response'] = new Response(json_encode($message), 200, ['content-type' => 'application/json']);
         }
 
         return $this->data;
 
-    }//end createPaymentHandler()
+    }//end messageBirdHandler()
 
 
 }//end class

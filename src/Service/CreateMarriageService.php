@@ -167,7 +167,6 @@ class CreateMarriageService
         $this->entityManager->flush();
         $this->cacheService->cacheObject($huwelijkObject);
         // @todo this is hacky, the above schould alredy do this
-
         return $this->cacheService->getObject($huwelijkId);
 
     }//end createMarriage()

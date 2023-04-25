@@ -213,7 +213,6 @@ class InvitePartnerService
             $huwelijkObject->hydrate($requesterAssent);
             $this->entityManager->persist($huwelijkObject);
             $this->entityManager->flush();
-
         }//end if
 
         return $this->cacheService->getObject($id);
