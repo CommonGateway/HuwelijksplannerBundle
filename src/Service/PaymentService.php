@@ -216,17 +216,21 @@ class PaymentService
      */
     public function calculatePrice(array $prices, ?string $currency='EUR'): string
     {
-        $currency   = new Currency($currency);
-        $totalPrice = new Money(0, $currency);
+        $totalPrice = new Money(0, new Currency($currency));
 
         foreach ($prices as $price) {
             $price = str_replace('EUR ', '', $price);
             if ($price > 0) {
-                $totalPrice = $totalPrice->add(new Money($price, $currency));
+                $float = floatval($price);
+                $float = $float * 100;
+                $totalPrice = $totalPrice->add(new Money((int) $float, $totalPrice->getCurrency()));
             }
         }
 
-        return $totalPrice->getAmount();
+        $amount = $totalPrice->getAmount() / 100;
+        $formatted = sprintf("%0.2f", $amount);
+
+        return $formatted;
 
     }//end calculatePrice()
 
