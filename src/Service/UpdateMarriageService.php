@@ -53,7 +53,7 @@ class UpdateMarriageService
     /**
      * @var UpdateChecklistService
      */
-    private UpdateChecklistService $updateChecklistService;
+    private UpdateChecklistService $checklistService;
 
 
     /**
@@ -63,7 +63,7 @@ class UpdateMarriageService
      * @param CacheService           $cacheService           The Cache Service
      * @param LoggerInterface        $pluginLogger           The Logger Interface
      * @param PaymentService         $paymentService         The Payment Service
-     * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
+     * @param UpdateChecklistService $checklistService The Update Checklist Service
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -72,7 +72,7 @@ class UpdateMarriageService
         CacheService $cacheService,
         LoggerInterface $pluginLogger,
         PaymentService $paymentService,
-        UpdateChecklistService $updateChecklistService
+        UpdateChecklistService $checklistService
     ) {
         $this->entityManager          = $entityManager;
         $this->security               = $security;
@@ -81,7 +81,7 @@ class UpdateMarriageService
         $this->cacheService           = $cacheService;
         $this->pluginLogger           = $pluginLogger;
         $this->paymentService         = $paymentService;
-        $this->updateChecklistService = $updateChecklistService;
+        $this->checklistService = $checklistService;
 
     }//end __construct()
 
@@ -122,7 +122,7 @@ class UpdateMarriageService
         $this->entityManager->persist($huwelijk);
         $this->entityManager->flush();
 
-        $this->updateChecklistService->checkHuwelijk($huwelijk);
+        $this->checklistService->checkHuwelijk($huwelijk);
 
         $cacheHuwelijk = $this->cacheService->getObject($huwelijk->getId()->toString());
 
