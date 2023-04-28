@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "title": "Huwelijk",
     "type": "object",
     "properties": {
@@ -92,7 +92,7 @@
             "type": "boolean",
             "description": "Melding voorgenomen huwelijk."
         },
-        "assent": {
+        "assents": {
           "type": "array",
           "items": {
             "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"

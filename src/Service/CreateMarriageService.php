@@ -157,15 +157,6 @@ class CreateMarriageService
 
         $huwelijkArray = $huwelijkObject->toArray();
 
-        // Get all prices from the products
-        $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
-        // Calculate new price
-        $price = 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR');
-
-        $huwelijkObject->hydrate(['kosten' => $price]);
-        $this->entityManager->persist($huwelijkObject);
-        $this->entityManager->flush();
-
         $person = $this->getPerson($huwelijk);
 
         // creates an assent and add the person to the partners of this merriage
@@ -176,8 +167,6 @@ class CreateMarriageService
         $this->entityManager->flush();
         $this->cacheService->cacheObject($huwelijkObject);
         // @todo this is hacky, the above schould alredy do this
-        $this->updateChecklistService->checkHuwelijk($huwelijkObject);
-
         return $this->cacheService->getObject($huwelijkId);
 
     }//end createMarriage()

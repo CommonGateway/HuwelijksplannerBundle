@@ -146,20 +146,15 @@ class PaymentService
         $productPrices = [];
 
         foreach ($products as $extraProduct) {
-            // @todo move this to validation
-            if (is_array($extraProduct) === false) {
-                $extraProduct = $this->getProductObject($extraProduct);
-            }//end if
-
             if (empty($extraProduct) === true) {
                 continue;
             }//end if
 
-            if (isset($extraProduct['vertalingen'][0]['kosten']) === false) {
+            if (isset($extraProduct['kosten']) === false) {
                 continue;
             }//end if
 
-            $productPrices[] = $extraProduct['vertalingen'][0]['kosten'];
+            $productPrices[] = $extraProduct['kosten'];
         }//end foreach
 
         return $productPrices;
@@ -221,17 +216,21 @@ class PaymentService
      */
     public function calculatePrice(array $prices, ?string $currency='EUR'): string
     {
-        $currency   = new Currency($currency);
-        $totalPrice = new Money(0, $currency);
+        $totalPrice = new Money(0, new Currency($currency));
 
         foreach ($prices as $price) {
             $price = str_replace('EUR ', '', $price);
             if ($price > 0) {
-                $totalPrice = $totalPrice->add(new Money($price, $currency));
+                $float      = floatval($price);
+                $float      = ($float * 100);
+                $totalPrice = $totalPrice->add(new Money((int) $float, $totalPrice->getCurrency()));
             }
         }
 
-        return $totalPrice->getAmount();
+        $amount    = ($totalPrice->getAmount() / 100);
+        $formatted = sprintf("%0.2f", $amount);
+
+        return $formatted;
 
     }//end calculatePrice()
 

@@ -253,7 +253,7 @@ class UpdateChecklistService
     public function checkHuwelijkOrder(ObjectEntity $huwelijk, array $checklist): array
     {
         // Kijken naar order.
-        if ($huwelijk->getValue('order') === false) {
+        if ($huwelijk->getValue('order') === null) {
             $checklist['order'] = [
                 'result'  => false,
                 'display' => 'Nog geen order opgegeven',

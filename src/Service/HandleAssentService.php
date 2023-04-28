@@ -118,24 +118,36 @@ class HandleAssentService
 
         $config = $action->getConfiguration();
 
+        $config['subject']   = 'Melding Voorgenomen Huwelijk';
+        $config['variables'] = [
+            'requesterNaam' => 'requesterNaam',
+            'partnerNaam'   => 'partnerNaam',
+            'url'           => 'url',
+        ];
+
+        if (key_exists('cc', $config) === true) {
+            unset($config['cc']);
+        }
+
+        if (key_exists('bcc', $config) === true) {
+            unset($config['bcc']);
+        }
+
+        if (key_exists('replyTo', $config) === true) {
+            unset($config['replyTo']);
+        }
+
         switch ($type) {
         case 'requester':
-            $config['subject'] = 'Melding Voorgenomen Huwelijk';
-
-            $config['template'] = $config['templateRequester'];
+            $config['template'] = $config['template2'];
             break;
         case 'partner':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
-            $config['template'] = $config['templatePartner'];
+            $config['template'] = $config['template3'];
             break;
         case 'witness':
-            $config['subject']  = 'Melding Voorgenomen Huwelijk';
-            $config['template'] = $config['templateWitness'];
+            $config['template'] = $config['template4'];
             break;
-        default:
-            // @TODO throw error
-            break;
-        }//end switch
+        }
 
         $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
 
@@ -149,7 +161,7 @@ class HandleAssentService
             $this->entityManager->flush();
 
             // throw action event
-            $event = new ActionEvent('commongateway.handler.pre', $data, 'hp.send.email');
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.email');
             $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
         }//end foreach
 
@@ -168,21 +180,32 @@ class HandleAssentService
     {
         switch ($type) {
         case 'requester':
-            $message = 'Melding Voorgenomen Huwelijk';
+            $data['response']['recipients'] = 'Melding Voorgenomen Huwelijk';
             break;
         case 'partner':
-            $message = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
+            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
             break;
         case 'witness':
-            $message = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
+            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
             break;
         default:
-            $message = 'Assent request';
+            $data['response']['recipients'] = 'Assent request';
             break;
         }//end switch
 
+        $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.MessageBirdAction.action.json', 'common-gateway/huwelijksplanner-bundle');
+
+        if ($action->getAsync() === false) {
+            $action->setAsync(true);
+            $this->entityManager->persist($action);
+            $this->entityManager->flush();
+        }
+
         foreach ($phoneNumbers as $phoneNumber) {
-            $this->messageBirdService->sendMessage($phoneNumber->getValue('telefoonnummer'), $message);
+            $data['response']['recipients'] = $phoneNumber->getValue('telefoonnummer');
+            // throw action event
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
+            $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
         }//end foreach
 
     }//end sendSms()
