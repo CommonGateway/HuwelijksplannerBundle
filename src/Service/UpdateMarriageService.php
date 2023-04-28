@@ -115,9 +115,9 @@ class UpdateMarriageService
 
         $huwelijkArray = $huwelijk->toArray();
 
-        // Get all prices from the products
+        // Get all prices from the products.
         $productPrices = $this->paymentService->getSDGProductPrices($huwelijkArray);
-        // Calculate new price
+        // Calculate new price.
         $huwelijk->setValue('kosten', 'EUR '.(string) $this->paymentService->calculatePrice($productPrices, 'EUR'));
         $this->entityManager->persist($huwelijk);
         $this->entityManager->flush();
