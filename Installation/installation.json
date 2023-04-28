@@ -40,19 +40,43 @@
         "reference": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
         "listens": ["huwelijksplanner.post.huwelijk"],
-        "version": "0.0.2"
+        "conditions": {
+          "==": [
+            {
+              "var": "method"
+            },
+            "POST"
+          ]
+        },
+        "version": "0.0.3"
       },
       {
         "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
         "listens": ["huwelijksplanner.patch.partner"],
-        "version": "0.0.2"
+        "version": "0.0.3",
+        "conditions": {
+          "==": [
+            {
+              "var": "method"
+            },
+            "PATCH"
+          ]
+        }
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
         "listens": ["huwelijksplanner.patch.witness"],
-        "version": "0.0.2"
+        "version": "0.0.3",
+        "conditions": {
+          "==": [
+            {
+              "var": "method"
+            },
+            "PATCH"
+          ]
+        }
       },
       {
         "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",
