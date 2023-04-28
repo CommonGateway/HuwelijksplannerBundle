@@ -118,22 +118,20 @@ class HandleAssentService
 
         $config = $action->getConfiguration();
 
-        $config['subject']   = 'Melding Voorgenomen Huwelijk';
+        $config['subject'] = 'Melding Voorgenomen Huwelijk';
         $config['variables'] = [
             'requesterNaam' => 'requesterNaam',
-            'partnerNaam'   => 'partnerNaam',
-            'url'           => 'url',
+            'partnerNaam' => 'partnerNaam',
+            'url' => 'url'
         ];
 
-        if (key_exists('cc', $config)) {
+        if (key_exists('cc', $config) === true) {
             unset($config['cc']);
         }
-
-        if (key_exists('bcc', $config)) {
+        if (key_exists('bcc', $config) === true) {
             unset($config['bcc']);
         }
-
-        if (key_exists('replyTo', $config)) {
+        if (key_exists('replyTo', $config) === true) {
             unset($config['replyTo']);
         }
 
@@ -202,6 +200,7 @@ class HandleAssentService
         }
 
         foreach ($phoneNumbers as $phoneNumber) {
+
             $data['response']['recipients'] = $phoneNumber->getValue('telefoonnummer');
             // throw action event
             $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');

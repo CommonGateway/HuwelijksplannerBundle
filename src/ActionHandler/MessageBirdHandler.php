@@ -29,6 +29,8 @@ class MessageBirdHandler implements ActionHandlerInterface
      *  This function returns the requered configuration as a [json-schema](https://json-schema.org/) array.
      *
      * @throws array a [json-schema](https://json-schema.org/) that this  action schould comply to
+     *
+     * @return array configuration
      */
     public function getConfiguration(): array
     {
