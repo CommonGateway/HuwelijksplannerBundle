@@ -57,12 +57,12 @@ class UpdateMarriageService
 
 
     /**
-     * @param EntityManagerInterface $entityManager          The Entity Manager
-     * @param Security               $security               The Security
-     * @param GatewayResourceService $grService              The Gateway Resource Service
-     * @param CacheService           $cacheService           The Cache Service
-     * @param LoggerInterface        $pluginLogger           The Logger Interface
-     * @param PaymentService         $paymentService         The Payment Service
+     * @param EntityManagerInterface $entityManager    The Entity Manager
+     * @param Security               $security         The Security
+     * @param GatewayResourceService $grService        The Gateway Resource Service
+     * @param CacheService           $cacheService     The Cache Service
+     * @param LoggerInterface        $pluginLogger     The Logger Interface
+     * @param PaymentService         $paymentService   The Payment Service
      * @param UpdateChecklistService $checklistService The Update Checklist Service
      */
     public function __construct(
@@ -74,13 +74,13 @@ class UpdateMarriageService
         PaymentService $paymentService,
         UpdateChecklistService $checklistService
     ) {
-        $this->entityManager          = $entityManager;
-        $this->security               = $security;
-        $this->serializer             = new Serializer();
-        $this->grService              = $grService;
-        $this->cacheService           = $cacheService;
-        $this->pluginLogger           = $pluginLogger;
-        $this->paymentService         = $paymentService;
+        $this->entityManager    = $entityManager;
+        $this->security         = $security;
+        $this->serializer       = new Serializer();
+        $this->grService        = $grService;
+        $this->cacheService     = $cacheService;
+        $this->pluginLogger     = $pluginLogger;
+        $this->paymentService   = $paymentService;
         $this->checklistService = $checklistService;
 
     }//end __construct()
