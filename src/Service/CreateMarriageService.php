@@ -187,7 +187,7 @@ class CreateMarriageService
         $this->pluginLogger->debug('createMarriageHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
-        
+
         $response = json_decode($this->data['response']->getContent(), true);
 
         $huwelijk = $this->createMarriage($response['_self']['id'], $this->data['body']);

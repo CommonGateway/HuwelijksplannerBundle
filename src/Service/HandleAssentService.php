@@ -118,36 +118,39 @@ class HandleAssentService
 
         $config = $action->getConfiguration();
 
-        $config['subject'] = 'Melding Voorgenomen Huwelijk';
+        $config['subject']   = 'Melding Voorgenomen Huwelijk';
         $config['variables'] = [
             'requesterNaam' => 'requesterNaam',
-            'partnerNaam' => 'partnerNaam',
-            'url' => 'url'
+            'partnerNaam'   => 'partnerNaam',
+            'url'           => 'url',
         ];
 
         if (key_exists('cc', $config) === true) {
             unset($config['cc']);
         }
+
         if (key_exists('bcc', $config) === true) {
             unset($config['bcc']);
         }
+
         if (key_exists('replyTo', $config) === true) {
             unset($config['replyTo']);
         }
+
         if (key_exists('priority', $config) === true) {
             unset($config['priority']);
         }
 
         switch ($type) {
-            case 'requester':
-                $config['template'] = $config['template2'];
-                break;
-            case 'partner':
-                $config['template'] = $config['template3'];
-                break;
-            case 'witness':
-                $config['template'] = $config['template4'];
-                break;
+        case 'requester':
+            $config['template'] = $config['template2'];
+            break;
+        case 'partner':
+            $config['template'] = $config['template3'];
+            break;
+        case 'witness':
+            $config['template'] = $config['template4'];
+            break;
         }
 
         $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
@@ -203,7 +206,6 @@ class HandleAssentService
         }
 
         foreach ($phoneNumbers as $phoneNumber) {
-
             $data['response']['recipients'] = $phoneNumber->getValue('telefoonnummer');
             // throw action event
             $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
