@@ -41,42 +41,95 @@
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
         "listens": ["huwelijksplanner.post.huwelijk"],
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "POST"
+              ]
             },
-            "POST"
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            }
           ]
         },
-        "version": "0.0.3"
+        "version": "0.0.4"
       },
       {
         "reference": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
         "listens": ["huwelijksplanner.patch.partner"],
-        "version": "0.0.3",
+        "version": "0.0.4",
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "PATCH"
+              ]
             },
-            "PATCH"
-          ]
-        }
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            },
+            {
+              "!!" : [
+                {
+                  "var" : "body.partners"
+                },
+                []
+              ]
+            }
+          ] },
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InviteWitnessHandler",
         "listens": ["huwelijksplanner.patch.witness"],
-        "version": "0.0.3",
+        "version": "0.0.4",
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "PATCH"
+              ]
             },
-            "PATCH"
-          ]
-        }
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            },
+            {
+              "!!" : [
+                {
+                  "var" : "body.getuigen"
+                },
+                []
+              ]
+            }
+          ] }
       },
       {
         "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",

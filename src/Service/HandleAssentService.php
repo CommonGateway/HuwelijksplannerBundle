@@ -137,6 +137,10 @@ class HandleAssentService
             unset($config['replyTo']);
         }
 
+        if (key_exists('priority', $config) === true) {
+            unset($config['priority']);
+        }
+
         switch ($type) {
         case 'requester':
             $config['template'] = $config['template2'];

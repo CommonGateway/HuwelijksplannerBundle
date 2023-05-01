@@ -67,9 +67,20 @@ class InstallationService implements InstallerInterface
                 $this->entityManager->persist($entity);
             }
 
-            if ($entity->getMaxDepth() !== 5) {
-                // Set maxDepth for an entity to 5.
+            if ($entity->getReference() === 'https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json'
+                && $entity->getMaxDepth() !== 5
+            ) {
+                // Set maxDepth to 5.
                 $entity->setMaxDepth(5);
+                $this->entityManager->persist($entity);
+            }
+
+            if ($entity->getMaxDepth() !== 4
+                && $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json'
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json'
+            ) {
+                // Set maxDepth to 4.
+                $entity->setMaxDepth(4);
                 $this->entityManager->persist($entity);
             }
         }

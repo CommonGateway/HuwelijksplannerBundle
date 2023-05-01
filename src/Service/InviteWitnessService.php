@@ -178,8 +178,7 @@ class InviteWitnessService
             return $this->data;
         }//end if
 
-        if (isset($huwelijk['getuigen']) === true
-            && count($huwelijk['getuigen']) <= 4
+        if (count($huwelijk['getuigen']) <= 4
         ) {
             // Update the witnesses.
             foreach ($huwelijkObject->getValue('getuigen') as $witness) {
@@ -210,18 +209,6 @@ class InviteWitnessService
         $this->pluginLogger->debug('inviteWitnessHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
-
-        if (isset($this->data['body']) === false) {
-            $this->pluginLogger->error('No data passed');
-
-            return $this->data;
-        }//end if
-
-        if ($this->data['method'] !== 'PATCH') {
-            $this->pluginLogger->error('Not a PATCH request');
-
-            return $this->data;
-        }//end if
 
         $response = json_decode($this->data['response']->getContent(), true);
         $huwelijk = $this->inviteWitness($this->data['body'], $response['_self']['id']);
