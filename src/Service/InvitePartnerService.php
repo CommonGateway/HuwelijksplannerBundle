@@ -152,8 +152,7 @@ class InvitePartnerService
 
         // @TODO check if the requester has already a partner
         // if so throw error else continue
-        if (isset($huwelijk['partners']) === true
-            && count($huwelijk['partners']) === 1
+        if (count($huwelijk['partners']) === 1
         ) {
             if (count($huwelijkObject->getValue('partners')) > 2) {
                 // @TODO update partner?
@@ -235,18 +234,6 @@ class InvitePartnerService
         $this->pluginLogger->debug('invitePartnerHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
-
-        if (isset($this->data['body']) === false) {
-            $this->pluginLogger->error('No data passed');
-
-            return $this->data;
-        }//end if
-
-        if ($this->data['method'] !== 'PATCH') {
-            $this->pluginLogger->error('Not a PATCH request');
-
-            return $this->data;
-        }//end if
 
         $response = json_decode($this->data['response']->getContent(), true);
         $huwelijk = $this->invitePartner($this->data['body'], $response['_self']['id']);

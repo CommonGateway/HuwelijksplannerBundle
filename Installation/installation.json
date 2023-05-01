@@ -41,13 +41,25 @@
         "actionHandler": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
         "listens": ["huwelijksplanner.post.huwelijk"],
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "POST"
+              ]
             },
-            "POST"
-          ]
-        },
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            }
+          ] },
         "version": "0.0.3"
       },
       {
@@ -56,13 +68,34 @@
         "listens": ["huwelijksplanner.patch.partner"],
         "version": "0.0.3",
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "PATCH"
+              ]
             },
-            "PATCH"
-          ]
-        }
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            },
+            {
+              "!!" : [
+                {
+                  "var" : "body.partners"
+                },
+                []
+              ]
+            }
+          ] },
+        "version": "0.0.3"
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
@@ -70,13 +103,33 @@
         "listens": ["huwelijksplanner.patch.witness"],
         "version": "0.0.3",
         "conditions": {
-          "==": [
+          "and" : [
             {
-              "var": "method"
+
+              "==": [
+                {
+                  "var": "method"
+                },
+                "PATCH"
+              ]
             },
-            "PATCH"
-          ]
-        }
+            {
+              "!!" : [
+                {
+                  "var" : "body"
+                },
+                []
+              ]
+            },
+            {
+              "!!" : [
+                {
+                  "var" : "body.getuigen"
+                },
+                []
+              ]
+            }
+          ] }
       },
       {
         "reference": "https://hp.nl/action/hp.UpdateChecklistAction.action.json",

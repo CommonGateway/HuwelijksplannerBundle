@@ -187,19 +187,7 @@ class CreateMarriageService
         $this->pluginLogger->debug('createMarriageHandler triggered');
         $this->data          = $data;
         $this->configuration = $configuration;
-
-        if (isset($this->data['body']) === false) {
-            $this->pluginLogger->error('No data passed');
-
-            return $this->data;
-        }//end if
-
-        if ($this->data['method'] !== 'POST') {
-            $this->pluginLogger->error('Not a POST request');
-
-            return $this->data;
-        }//end if
-
+        
         $response = json_decode($this->data['response']->getContent(), true);
 
         $huwelijk = $this->createMarriage($response['_self']['id'], $this->data['body']);
