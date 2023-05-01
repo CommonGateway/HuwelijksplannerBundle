@@ -95,7 +95,8 @@
                 []
               ]
             }
-          ] },
+          ]
+        }
       },
       {
         "reference": "https://hp.nl/action/hp.InviteWitnessAction.action.json",
