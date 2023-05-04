@@ -270,7 +270,7 @@ class HandleAssentService
                 'status'      => $this->getStatus($type, $person),
                 'requester'   => $type === 'requester' ? $person->getValue('subjectIdentificatie')->getValue('inpBsn') : null,
                 'revocable'   => true,
-                'huwelijk'    => $propertyId,
+                'huwelijk'    => $type === 'witness' ? $propertyId : null,
             ]
         );
         $this->entityManager->persist($assent);
