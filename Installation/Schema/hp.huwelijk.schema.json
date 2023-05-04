@@ -1,7 +1,7 @@
 {
     "$id": "https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json",
     "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "title": "Huwelijk",
     "type": "object",
     "properties": {
@@ -21,7 +21,8 @@
             "items": {
                 "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
             },
-            "maxLength": 4
+            "maxLength": 4,
+            "inversedBy": "huwelijk"
         },
         "type": {
             "description": "Het juridische type van dit huwelijk zo als opgehaald uit de SDG catalogus, zijnde huwelijk, parnterschap of omzetting",
@@ -91,13 +92,6 @@
         "melding": {
             "type": "boolean",
             "description": "Melding voorgenomen huwelijk."
-        },
-        "assents": {
-          "type": "array",
-          "items": {
-            "$ref": "https://huwelijksplanner.nl/schemas/hp.assent.schema.json"
-          },
-          "inversedBy": "huwelijk"
         }
     }
 }
