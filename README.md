@@ -4,15 +4,15 @@ An symfony bundle for functionality about Dutch marriage request handling in mun
 
 # Installatie
 
-De huwelijksplanner backend codebase maakt gebruik van de common gateway als open source installatie framework. Dat betekent dat de huwelijksplanner library in haar meest essentiële vorm een plugin op dit Framework is. Meer informatie over de common gateway vind je hier.
+De huwelijksplanner backend codebase maakt gebruik van de Common Gateway als open source installatie framework. Dat betekent dat de huwelijksplanner library in haar meest essentiële vorm een plugin op dit Framework is. Meer informatie over de Common Gateway vind je [hier](https://commongateway.readthedocs.io/en/latest/).
 
-De huwelijksplanner frontend codebase is een losse kubernetes container
+De huwelijksplanner frontend codebase is een losse Kubernetes container.
 
 # Veranderingen versus de huwelijksplanner 2020
 
-in het vorige huwelijksplanner project is er voor gekozen om de huwelijksplanner volledig op te splitsen in register en per register een common ground component te ontwikkelen. De deze componenten moesten vervolgens los worden geïnstalleerd.
+In het vorige Huwelijksplanner-project is er voor gekozen om de Huwelijksplanner volledig op te splitsen in register en per register een Common Ground-component te ontwikkelen. De deze componenten moesten vervolgens los worden geïnstalleerd.
 
-In de praktijk leide dit tot problemen, er was een groot aantal installaties nodig om de huwelijksplanner aan de praat te krijgen en het grote aantal code basis leidde tot onderhouds uitdagingen.
+In de praktijk leidde dit tot problemen, er was een groot aantal installaties nodig om de huwelijksplanner aan de praat te krijgen en het grote aantal code basis leidde tot onderhoudsuitdagingen.
 
 Bij de nieuwe iteratie van de huwelijksplanner is er daarom voor gekozen om om de losse componenten als plugins op te zetten. Dat heeft twee primaire voordelen
 
@@ -26,18 +26,18 @@ HuwelijksplannerBundle
 https://github.com/CommonGateway/CalendarBundle (voorheen calender component)
 https://github.com/CommonGateway/AssentBundle (voorheens assent component)
 https://github.com/CommonGateway/ShopBundle (voorheen product, order, invoice en payment componenten)
-https://github.com/CommonGateway/CommunicationBundle (voorheen email en sms componenten)
+https://github.com/CommonGateway/CommunicationBundle (voorheen e-mail en sms componenten)
 https://github.com/CommonGateway/TemplateBundle (voorheen template component)
 
-Al deze bundles kunnen nog steeds als standalone component worden geinstaleerd (zie daarvoor de individuele installatie handleidingen) maar worden vanuit de huwelijksplanner standaard als extra plugins op dezelfde gateway geinstalleerd.
+Al deze bundles kunnen nog steeds als standalone component worden geïnstalleerd (zie daarvoor de individuele installatie handleidingen), maar worden vanuit de huwelijksplanner standaard als extra plugins op dezelfde gateway geïnstalleerd.
 
 \#Installeren van de huwelijksplanner
 
 ## Backend
 
-Voor de backend installatie geld dat de standaard commongateway installatie handleiding gevolgd kan worden (als de gemeente nog geen commongateway installatie heeft) de handleiding treft u hier. Voor de opzet van de backend maakt het niet uit hoe u de gateway installeerd (bijvoorbeeld haven, kubernetes, linux of azure) of welke database optie u kiest (MySQL, Postgress, Oracle, MSsql). Het gateway framework handeld deze abstractie af.
+Voor de backend installatie geld dat de Common Gateway installatiehandleiding gevolgd kan worden (als de gemeente nog geen Common Gateway geïnstalleerd heeft) de handleiding treft u [hier](https://github.com/ConductionNL/commonground-gateway#readme). Voor de opzet van de backend maakt het niet uit hoe u de gateway installeert (bijvoorbeeld Haven, Kubernetes, Linux of Azure) of welke database optie u kiest (MySQL, PostgreSQl, Oracle, MsSQL). Het gateway framework handelt deze abstractie af.
 
-Na het installeren van de Gateway logt u in en vind u onder “plugins” in het linker menu een overzicht van de reeds geinstalleerde plugins. Als de huwelijksplanner hier nog niet tussen staat kunt u rechtboven in op “Search” klikken en op “Huwelijksplanner” zoeken. Klik op de Card van huwelijksplanner en vervolgens op de knop installeren.
+Na het installeren van de Gateway logt u in en vindt u onder “plugins” in het linker menu een overzicht van de reeds geïnstalleerde plugins. Als de huwelijksplanner hier nog niet tussen staat kunt u rechtboven in op “Search” klikken en op “Huwelijksplanner” zoeken. Klik op de Card van huwelijksplanner en vervolgens op de knop installeren.
 
 ## Frontend
 
