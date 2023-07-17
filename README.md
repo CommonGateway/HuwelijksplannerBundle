@@ -8,6 +8,7 @@ De huwelijksplanner backend codebase maakt gebruik van de Common Gateway als ope
 
 De huwelijksplanner frontend codebase is een losse Kubernetes container.
 
+
 # Veranderingen versus de huwelijksplanner 2020
 
 In het vorige Huwelijksplanner-project is er voor gekozen om de Huwelijksplanner volledig op te splitsen in register en per register een Common Ground-component te ontwikkelen. De deze componenten moesten vervolgens los worden geïnstalleerd.
