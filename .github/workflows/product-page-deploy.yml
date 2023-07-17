@@ -57,9 +57,6 @@ jobs:
           envkey_GATSBY_JUMBOTRON_SVG: ${{ env.JUMBOTRON_SVG }}
           envkey_GATSBY_FOOTER_LOGO_URL: ${{ env.FOOTER_LOGO_URL }}
           envkey_GATSBY_FOOTER_LOGO_HREF: ${{ env.FOOTER_LOGO_HREF }}
-          directory: src/static
-          file_name: .env.production
-          fail_on_empty: true
           sort_keys: false
 
       - name: Set up Node.js
