@@ -1,0 +1,20 @@
+{
+  "$id": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+  "version": "0.0.1",
+  "title": "CreatePaymentAction",
+  "description": "Create payment handler trigger.",
+  "listens": [
+    "huwelijksplanner.get.payment"
+  ],
+  "throws": [],
+  "conditions": [],
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
+  "priority": 0,
+  "async": false,
+  "configuration": {
+    "redirectUrl": "http://localhost/api/frontend_link",
+    "webhookUrl": "http://localhost/api/mollie/webhook",
+    "method": ["ideal"]
+  }
+}

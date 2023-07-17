@@ -1,0 +1,37 @@
+{
+  "$id": "https://hp.nl/action/hp.CreateMarriageAction.action.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+  "version": "0.0.4",
+  "title": "CreateMarriageAction",
+  "description": "Create Marriage handler trigger.",
+  "listens": [
+    "huwelijksplanner.post.huwelijk"
+  ],
+  "throws": [],
+  "conditions": [],
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
+  "priority": 0,
+  "async": false,
+  "configuration": [],
+  "conditions": {
+    "and" : [
+      {
+
+        "==": [
+          {
+            "var": "method"
+          },
+          "POST"
+        ]
+      },
+      {
+        "!!" : [
+          {
+            "var" : "body"
+          },
+          []
+        ]
+      }
+    ]
+  }
+}

@@ -1,14 +1,14 @@
 {
   "$id": "https://huwelijksplanner.nl/SecurityGroup/marrying.partner1.securityGroup.json",
   "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "Marrying Partner2 SecurityGroup",
   "scopes": [
-    "get.Huwelijk", "patch.Huwelijk", "post.Huwelijk",
-    "get.Klant", "patch.Klant",
-    "get.IngeschrevenPersoon",
-    "get.Mollie",
-    "get.Availability",
-    "get.SDGProduct"
+    "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.GET", "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.PATCH", "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.POST",
+    "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.GET", "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.PATCH",
+    "schemas.https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json.GET",
+    "schemas.https://huwelijksplanner.nl/schemas/hp.mollie.schema.json.GET",
+    "schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET",
+    "schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET"
   ]
 }

@@ -1,10 +1,10 @@
 {
   "$id": "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json",
   "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
-  "version": "0.0.",
+  "version": "0.0.2",
   "title": "Assent SecurityGroup",
   "scopes": [
-    "get.Klant", "patch.Klant",
-    "get.IngeschrevenPersoon"
+    "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.GET", "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.PATCH",
+    "schemas.https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json.GET"
   ]
 }
