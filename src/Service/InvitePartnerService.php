@@ -66,34 +66,33 @@ class InvitePartnerService
 
 
     /**
-     * @param EntityManagerInterface $entityManager The Entity Manager
+     * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
-     * @param HandleAssentService $handleAssentService The Handle Assent Service
+     * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
-     * @param Security $security The Security
-     * @param LoggerInterface $pluginLogger The Logger Interface
+     * @param Security               $security               The Security
+     * @param LoggerInterface        $pluginLogger           The Logger Interface
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         GatewayResourceService $gatewayResourceService,
-        HandleAssentService    $handleAssentService,
+        HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
-        Security               $security,
-        LoggerInterface        $pluginLogger,
-        AssentService          $assentService,
-        CacheService           $cacheService
-    )
-    {
-        $this->entityManager = $entityManager;
+        Security $security,
+        LoggerInterface $pluginLogger,
+        AssentService $assentService,
+        CacheService $cacheService
+    ) {
+        $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
-        $this->data = [];
-        $this->configuration = [];
-        $this->handleAssentService = $handleAssentService;
+        $this->data                   = [];
+        $this->configuration          = [];
+        $this->handleAssentService    = $handleAssentService;
         $this->updateChecklistService = $updateChecklistService;
-        $this->security = $security;
-        $this->pluginLogger = $pluginLogger;
-        $this->assentService = $assentService;
-        $this->cacheService = $cacheService;
+        $this->security               = $security;
+        $this->pluginLogger           = $pluginLogger;
+        $this->assentService          = $assentService;
+        $this->cacheService           = $cacheService;
 
     }//end __construct()
 
@@ -101,29 +100,29 @@ class InvitePartnerService
     /**
      * This function creates the email and sms data.
      *
-     * @param ObjectEntity $requester The requester object.
-     * @param ObjectEntity $person The person object.
+     * @param ObjectEntity $requester      The requester object.
+     * @param ObjectEntity $person         The person object.
      * @param ObjectEntity $huwelijkObject The huwelijk object.
      *
      * @return ?array The updated huwelijk object as array.
      */
     private function createEmailAndSmsData(ObjectEntity $requester, ObjectEntity $person, ObjectEntity $huwelijkObject): ?array
     {
-        $requesterNaam = $requester->getValue('voornaam') . ' ' . $requester->getValue('achternaam');
-        $partnerNaam = $person->getValue('voornaam') . ' ' . $person->getValue('achternaam');
+        $requesterNaam = $requester->getValue('voornaam').' '.$requester->getValue('achternaam');
+        $partnerNaam   = $person->getValue('voornaam').' '.$person->getValue('achternaam');
 
         if ($huwelijkObject->getValue('moment') !== false
             && $huwelijkObject->getValue('locatie') !== false
         ) {
-            $moment = new DateTime($huwelijkObject->getValue('moment'));
-            $description = 'Op ' . $moment->format('D, d M Y H:i:s') . ' in ' . $huwelijkObject->getValue('locatie')->getValue('upnLabel') . '. ';
+            $moment      = new DateTime($huwelijkObject->getValue('moment'));
+            $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
         }
 
-        $dataArray['response'] = [
-            'requesterNaam' => $requesterNaam,
-            'partnerNaam' => $partnerNaam,
-            'assentNaam' => 'U bent gevraagd door ' . $requesterNaam . ' om te trouwen.',
-            'assentDescription' => $description ?? null . $requesterNaam . ' heeft gevraagd of u dit huwelijk wilt bevestigen.',
+        $dataArray['response']        = [
+            'requesterNaam'     => $requesterNaam,
+            'partnerNaam'       => $partnerNaam,
+            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.' om te trouwen.',
+            'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
         ];
         $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId=';
 
@@ -131,18 +130,19 @@ class InvitePartnerService
 
     }//end createEmailAndSmsData()
 
+
     /**
      * This function gets the partner details from the given bsn.
      *
      * @param ObjectEntity $huwelijkObject The huwelijk from the request.
-     * @param array $huwelijk The body from the request.
-     * @param string $bsn The bsn of the given partner via email.
+     * @param array        $huwelijk       The body from the request.
+     * @param string       $bsn            The bsn of the given partner via email.
      *
      * @return array The partner datails as array.
      */
     private function invitePartnerLogin(ObjectEntity $huwelijkObject, array $huwelijk, string $bsn): array
     {
-        $brpSchema = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
+        $brpSchema      = $this->gatewayResourceService->getSchema('https://vng.brp.nl/schemas/brp.ingeschrevenPersoon.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $partnerDetails = [];
 
         $brpPersons = $this->cacheService->searchObjects(null, ['burgerservicenummer' => $bsn], [$brpSchema->getId()->toString()])['results'];
@@ -153,7 +153,7 @@ class InvitePartnerService
         foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
             if ($bsn === $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
                 $partnerDetails['personAssent'] = $huwelijkPartner;
-                $partnerDetails['person'] = $this->assentService->createPerson($huwelijk, $partnerDetails['brpPerson'], $huwelijkPartner->getValue('contact'));
+                $partnerDetails['person']       = $this->assentService->createPerson($huwelijk, $partnerDetails['brpPerson'], $huwelijkPartner->getValue('contact'));
             }//end if
 
             if ($bsn !== $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')->getValue('inpBsn')) {
@@ -162,13 +162,15 @@ class InvitePartnerService
         }//end foreach
 
         return $partnerDetails;
-    }
+
+    }//end invitePartnerLogin()
+
 
     /**
      * This function gets the partner details from the given bsn.
      *
      * @param ObjectEntity $huwelijkObject The huwelijk from the request.
-     * @param string $bsn The bsn of the given partner via email.
+     * @param string       $bsn            The bsn of the given partner via email.
      *
      * @return array The partner datails as array.
      */
@@ -179,7 +181,7 @@ class InvitePartnerService
         foreach ($huwelijkObject->getValue('partners') as $huwelijkPartner) {
             if ($huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie') === false) {
                 $partnerDetails['personAssent'] = $huwelijkPartner;
-                $partnerDetails['person'] = $huwelijkPartner->getValue('contact');
+                $partnerDetails['person']       = $huwelijkPartner->getValue('contact');
             }//end if
 
             if (($subjectIdentificatie = $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')) !== false) {
@@ -190,14 +192,15 @@ class InvitePartnerService
         }//end foreach
 
         return $partnerDetails;
-    }
+
+    }//end invitePartnerInvite()
 
 
     /**
      * This function validates and creates the huwelijk object and creates an assent for the current user.
      *
-     * @param array $huwelijk The huwelijk array from the request.
-     * @param string $id The id of the huwelijk object.
+     * @param array  $huwelijk The huwelijk array from the request.
+     * @param string $id       The id of the huwelijk object.
      *
      * @return ?array The updated huwelijk object as array.
      */
@@ -205,9 +208,9 @@ class InvitePartnerService
     {
         $huwelijkObject = $this->entityManager->getRepository('App:ObjectEntity')->find($id);
         if ($huwelijkObject instanceof ObjectEntity === false) {
-            $this->pluginLogger->error('Could not find huwelijk with id ' . $id);
+            $this->pluginLogger->error('Could not find huwelijk with id '.$id);
 
-            $this->data['response'] = 'Could not find huwelijk with id ' . $id;
+            $this->data['response'] = 'Could not find huwelijk with id '.$id;
 
             return $this->data;
         }//end if
@@ -256,17 +259,16 @@ class InvitePartnerService
     /**
      * Creates the marriage request object.
      *
-     * @param ?array $data The data array.
+     * @param ?array $data          The data array.
      * @param ?array $configuration The configuration array.
      *
      * @return array The data array
      * @throws Exception
-     *
      */
-    public function invitePartnerHandler(?array $data = [], ?array $configuration = []): array
+    public function invitePartnerHandler(?array $data=[], ?array $configuration=[]): array
     {
         $this->pluginLogger->debug('invitePartnerHandler triggered');
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         $response = json_decode($this->data['response']->getContent(), true);
