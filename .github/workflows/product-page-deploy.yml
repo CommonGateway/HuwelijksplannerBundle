@@ -59,19 +59,8 @@ jobs:
           envkey_GATSBY_FOOTER_LOGO_HREF: ${{ env.FOOTER_LOGO_HREF }}
           sort_keys: false
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
       - name: Install dependencies
-        run: cd pwa && npm install
-
-      - name: Remove old Gatsby cache
-        run: rm -rf pwa/.cache
-
-      - name: Build application
-        run: cd pwa && npm run build
+        run: cd docker-compose up
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
