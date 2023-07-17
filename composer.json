@@ -29,9 +29,5 @@
 		"psr-4" : {
 			"CommonGateway\\HuwelijksplannerBundle\\" : "src/"
 		}
-	},
-	"scripts": {
-		"post-package-install": "bin/console commongateway:install common-gateway/huwelijksplanner-bundle",
-		"post-package-initalize": "bin/console commongateway:initialize"
 	}
 }
