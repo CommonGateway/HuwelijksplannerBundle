@@ -31,8 +31,7 @@
 		}
 	},
 	"scripts": {
-		"post-package-install": "composer require common-gateway/huwelijksplanner-bundle",
-		"post-package-update": "composer update common-gateway/huwelijksplanner-bundle",
-		"post-package-uninstall": "composer remove common-gateway/huwelijksplanner-bundle"
+		"post-package-install": "bin/console commongateway:install common-gateway/huwelijksplanner-bundle",
+		"post-package-initalize": "bin/console commongateway:initialize"
 	}
 }
