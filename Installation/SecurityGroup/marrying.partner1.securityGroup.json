@@ -2,7 +2,7 @@
   "$id": "https://huwelijksplanner.nl/SecurityGroup/marrying.partner1.securityGroup.json",
   "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
   "version": "0.0.2",
-  "title": "Marrying Partner2 SecurityGroup",
+  "title": "Marrying Partner1 SecurityGroup",
   "scopes": [
     "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.GET", "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.PATCH", "schemas.https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json.POST",
     "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.GET", "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.PATCH",
