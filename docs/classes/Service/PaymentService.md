@@ -1,16 +1,12 @@
-# CommonGateway\HuwelijksplannerBundle\Service\PaymentService  
+# CommonGateway\HuwelijksplannerBundle\Service\PaymentService
 
 This service holds al the logic for mollie payments.
-
-
-
-
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[__construct](#paymentservice__construct)||
+|[\_\_construct](#paymentservice__construct)||
 |[calculatePrice](#paymentservicecalculateprice)|Calculates total price with given prices and currency.|
 |[checkSourceAuth](#paymentservicechecksourceauth)|Check the auth of the given source.|
 |[createMolliePayment](#paymentservicecreatemolliepayment)|Creates a payment object.|
@@ -19,20 +15,13 @@ This service holds al the logic for mollie payments.
 |[getProductArrayPrices](#paymentservicegetproductarrayprices)|Get product prices from this marriage.|
 |[getSDGProductPrices](#paymentservicegetsdgproductprices)|Get product prices from this marriage.|
 
-
-
-
-### PaymentService::__construct  
+### PaymentService::\_\_construct
 
 **Description**
 
 ```php
  __construct (void)
 ```
-
- 
-
- 
 
 **Parameters**
 
@@ -42,11 +31,9 @@ This service holds al the logic for mollie payments.
 
 `void`
 
-
 <hr />
 
-
-### PaymentService::calculatePrice  
+### PaymentService::calculatePrice
 
 **Description**
 
@@ -54,16 +41,14 @@ This service holds al the logic for mollie payments.
 public calculatePrice (array $prices, string|null $currency)
 ```
 
-Calculates total price with given prices and currency. 
-
- 
+Calculates total price with given prices and currency.
 
 **Parameters**
 
-* `(array) $prices`
-: Array of prices to accumulate.  
-* `(string|null) $currency`
-: ISO 4271 currency.  
+*   `(array) $prices`
+    : Array of prices to accumulate.
+*   `(string|null) $currency`
+    : ISO 4271 currency.
 
 **Return Values**
 
@@ -71,11 +56,9 @@ Calculates total price with given prices and currency.
 
 > Total price after acummulation.
 
-
 <hr />
 
-
-### PaymentService::checkSourceAuth  
+### PaymentService::checkSourceAuth
 
 **Description**
 
@@ -83,14 +66,12 @@ Calculates total price with given prices and currency.
 public checkSourceAuth (\Source $source)
 ```
 
-Check the auth of the given source. 
-
- 
+Check the auth of the given source.
 
 **Parameters**
 
-* `(\Source) $source`
-: The given source to check the api key.  
+*   `(\Source) $source`
+    : The given source to check the api key.
 
 **Return Values**
 
@@ -98,11 +79,9 @@ Check the auth of the given source.
 
 > If the api key is set or not.
 
-
 <hr />
 
-
-### PaymentService::createMolliePayment  
+### PaymentService::createMolliePayment
 
 **Description**
 
@@ -110,18 +89,18 @@ Check the auth of the given source.
 public createMolliePayment (array $paymentArray)
 ```
 
-Creates a payment object. 
+Creates a payment object.
 
-The required fields in the paymentArray are:  
-The amount object with currency and value.  
-The string descrtiption.  
-The string redirectUrl were mollie has to redirect to after the payment.  
-The method array with the payment methods. 
+The required fields in the paymentArray are:\
+The amount object with currency and value.\
+The string descrtiption.\
+The string redirectUrl were mollie has to redirect to after the payment.\
+The method array with the payment methods.
 
 **Parameters**
 
-* `(array) $paymentArray`
-: The body for the payment request.  
+*   `(array) $paymentArray`
+    : The body for the payment request.
 
 **Return Values**
 
@@ -129,11 +108,9 @@ The method array with the payment methods.
 
 > Syncrhonization object or a error repsonse or null.
 
-
 <hr />
 
-
-### PaymentService::createPayment  
+### PaymentService::createPayment
 
 **Description**
 
@@ -141,9 +118,7 @@ The method array with the payment methods.
 public createPayment (void)
 ```
 
-Creates a payment object. 
-
- 
+Creates a payment object.
 
 **Parameters**
 
@@ -155,11 +130,9 @@ Creates a payment object.
 
 > Payment object as array or null.
 
-
 <hr />
 
-
-### PaymentService::createPaymentHandler  
+### PaymentService::createPaymentHandler
 
 **Description**
 
@@ -167,16 +140,14 @@ Creates a payment object.
 public createPaymentHandler (?array $data, ?array $configuration)
 ```
 
-Creates payment for given marriage. 
-
- 
+Creates payment for given marriage.
 
 **Parameters**
 
-* `(?array) $data`
-: Data this service might need from a Action.  
-* `(?array) $configuration`
-: Configuraiton this service might need from a Action.  
+*   `(?array) $data`
+    : Data this service might need from a Action.
+*   `(?array) $configuration`
+    : Configuraiton this service might need from a Action.
 
 **Return Values**
 
@@ -184,11 +155,9 @@ Creates payment for given marriage.
 
 > Response array that will be returned to RequestService.
 
-
 <hr />
 
-
-### PaymentService::getProductArrayPrices  
+### PaymentService::getProductArrayPrices
 
 **Description**
 
@@ -196,14 +165,12 @@ Creates payment for given marriage.
 public getProductArrayPrices (array $products)
 ```
 
-Get product prices from this marriage. 
-
- 
+Get product prices from this marriage.
 
 **Parameters**
 
-* `(array) $products`
-: The products array from the marriage.  
+*   `(array) $products`
+    : The products array from the marriage.
 
 **Return Values**
 
@@ -211,11 +178,9 @@ Get product prices from this marriage.
 
 > $productPrices Array of all product prices.
 
-
 <hr />
 
-
-### PaymentService::getSDGProductPrices  
+### PaymentService::getSDGProductPrices
 
 **Description**
 
@@ -223,14 +188,12 @@ Get product prices from this marriage.
 public getSDGProductPrices (array $huwelijk)
 ```
 
-Get product prices from this marriage. 
-
- 
+Get product prices from this marriage.
 
 **Parameters**
 
-* `(array) $huwelijk`
-: Huwelijk object as array.  
+*   `(array) $huwelijk`
+    : Huwelijk object as array.
 
 **Return Values**
 
@@ -238,6 +201,4 @@ Get product prices from this marriage.
 
 > $productPrices Array of all product prices.
 
-
 <hr />
-
