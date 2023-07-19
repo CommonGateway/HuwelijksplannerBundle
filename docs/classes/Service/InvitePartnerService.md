@@ -1,32 +1,21 @@
-# CommonGateway\HuwelijksplannerBundle\Service\InvitePartnerService  
+# CommonGateway\HuwelijksplannerBundle\Service\InvitePartnerService
 
 This service holds al the logic for creating the marriage request object.
-
-
-
-
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[__construct](#invitepartnerservice__construct)||
+|[\_\_construct](#invitepartnerservice__construct)||
 |[invitePartnerHandler](#invitepartnerserviceinvitepartnerhandler)|Creates the marriage request object.|
 
-
-
-
-### InvitePartnerService::__construct  
+### InvitePartnerService::\_\_construct
 
 **Description**
 
 ```php
  __construct (void)
 ```
-
- 
-
- 
 
 **Parameters**
 
@@ -36,11 +25,9 @@ This service holds al the logic for creating the marriage request object.
 
 `void`
 
-
 <hr />
 
-
-### InvitePartnerService::invitePartnerHandler  
+### InvitePartnerService::invitePartnerHandler
 
 **Description**
 
@@ -48,16 +35,14 @@ This service holds al the logic for creating the marriage request object.
 public invitePartnerHandler (?array $data, ?array $configuration)
 ```
 
-Creates the marriage request object. 
-
- 
+Creates the marriage request object.
 
 **Parameters**
 
-* `(?array) $data`
-: The data array.  
-* `(?array) $configuration`
-: The configuration array.  
+*   `(?array) $data`
+    : The data array.
+*   `(?array) $configuration`
+    : The configuration array.
 
 **Return Values**
 
@@ -65,12 +50,8 @@ Creates the marriage request object.
 
 > The data array
 
-
 **Throws Exceptions**
-
 
 `\Exception`
 
-
 <hr />
-

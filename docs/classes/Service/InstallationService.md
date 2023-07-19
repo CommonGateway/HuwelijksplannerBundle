@@ -1,17 +1,14 @@
-# CommonGateway\HuwelijksplannerBundle\Service\InstallationService  
-
-
+# CommonGateway\HuwelijksplannerBundle\Service\InstallationService
 
 ## Implements:
+
 CommonGateway\CoreBundle\Installer\InstallerInterface
-
-
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[__construct](#installationservice__construct)||
+|[\_\_construct](#installationservice__construct)||
 |[checkDataConsistency](#installationservicecheckdataconsistency)|This function installs the huwelijksplanner bundle assets.|
 |[install](#installationserviceinstall)||
 |[setEntityMaxDepth](#installationservicesetentitymaxdepth)|This function sets the max depth of all entities to 5.|
@@ -19,10 +16,7 @@ CommonGateway\CoreBundle\Installer\InstallerInterface
 |[uninstall](#installationserviceuninstall)||
 |[update](#installationserviceupdate)||
 
-
-
-
-### InstallationService::__construct  
+### InstallationService::\_\_construct
 
 **Description**
 
@@ -30,10 +24,6 @@ CommonGateway\CoreBundle\Installer\InstallerInterface
  __construct (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -42,11 +32,9 @@ CommonGateway\CoreBundle\Installer\InstallerInterface
 
 `void`
 
-
 <hr />
 
-
-### InstallationService::checkDataConsistency  
+### InstallationService::checkDataConsistency
 
 **Description**
 
@@ -54,9 +42,7 @@ CommonGateway\CoreBundle\Installer\InstallerInterface
 public checkDataConsistency (void)
 ```
 
-This function installs the huwelijksplanner bundle assets. 
-
- 
+This function installs the huwelijksplanner bundle assets.
 
 **Parameters**
 
@@ -66,13 +52,9 @@ This function installs the huwelijksplanner bundle assets.
 
 `void`
 
-
-
-
 <hr />
 
-
-### InstallationService::install  
+### InstallationService::install
 
 **Description**
 
@@ -80,10 +62,6 @@ This function installs the huwelijksplanner bundle assets.
  install (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -92,11 +70,9 @@ This function installs the huwelijksplanner bundle assets.
 
 `void`
 
-
 <hr />
 
-
-### InstallationService::setEntityMaxDepth  
+### InstallationService::setEntityMaxDepth
 
 **Description**
 
@@ -104,9 +80,7 @@ This function installs the huwelijksplanner bundle assets.
 public setEntityMaxDepth (void)
 ```
 
-This function sets the max depth of all entities to 5. 
-
- 
+This function sets the max depth of all entities to 5.
 
 **Parameters**
 
@@ -116,13 +90,9 @@ This function sets the max depth of all entities to 5.
 
 `void`
 
-
-
-
 <hr />
 
-
-### InstallationService::setStyle  
+### InstallationService::setStyle
 
 **Description**
 
@@ -130,25 +100,19 @@ This function sets the max depth of all entities to 5.
 public setStyle (\SymfonyStyle $io)
 ```
 
-Set symfony style in order to output to the console. 
-
- 
+Set symfony style in order to output to the console.
 
 **Parameters**
 
-* `(\SymfonyStyle) $io`
+*   `(\SymfonyStyle) $io`
 
 **Return Values**
 
 `self`
 
-
-
-
 <hr />
 
-
-### InstallationService::uninstall  
+### InstallationService::uninstall
 
 **Description**
 
@@ -156,10 +120,6 @@ Set symfony style in order to output to the console.
  uninstall (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -168,11 +128,9 @@ Set symfony style in order to output to the console.
 
 `void`
 
-
 <hr />
 
-
-### InstallationService::update  
+### InstallationService::update
 
 **Description**
 
@@ -180,10 +138,6 @@ Set symfony style in order to output to the console.
  update (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -192,6 +146,4 @@ Set symfony style in order to output to the console.
 
 `void`
 
-
 <hr />
-
