@@ -1,7 +1,7 @@
 {
   "$id": "https://huwelijksplanner.nl/SecurityGroup/assent.securityGroup.json",
   "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "title": "Assent SecurityGroup",
   "scopes": [
     "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.GET", "schemas.https://klantenBundle.commonground.nu/klant.klant.schema.json.PATCH",
