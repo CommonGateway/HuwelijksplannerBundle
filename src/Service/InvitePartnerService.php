@@ -170,7 +170,6 @@ class InvitePartnerService
      * This function gets the partner details from the given bsn.
      *
      * @param ObjectEntity $huwelijkObject The huwelijk from the request.
-     * @param string       $bsn            The bsn of the given partner via email.
      *
      * @return array The partner datails as array.
      */
@@ -182,13 +181,13 @@ class InvitePartnerService
             if ($huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie') === false) {
                 $partnerDetails['personAssent'] = $huwelijkPartner;
                 $partnerDetails['person']       = $huwelijkPartner->getValue('contact');
-            }//end if
+            }
 
             if (($subjectIdentificatie = $huwelijkPartner->getValue('contact')->getValue('subjectIdentificatie')) !== false) {
                 if ($subjectIdentificatie->getValue('inpBsn') !== false) {
                     $partnerDetails['partner'] = $huwelijkPartner->getValue('contact');
                 }
-            }//end if
+            }
         }//end foreach
 
         return $partnerDetails;
@@ -227,9 +226,6 @@ class InvitePartnerService
             return $huwelijkObject->toArray();
         }//end if
 
-        $personSchema = $this->gatewayResourceService->getSchema('https://klantenBundle.commonground.nu/klant.klant.schema.json', 'common-gateway/huwelijksplanner-bundle');
-
-        $brpPerson = null;
         if (isset($huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']) === true) {
             $partnerDetails = $this->invitePartnerLogin($huwelijkObject, $huwelijk, $huwelijk['partners'][0]['contact']['subjectIdentificatie']['inpBsn']);
         }//end if
