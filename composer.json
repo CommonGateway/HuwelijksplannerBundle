@@ -25,6 +25,11 @@
 	"require-dev" : {
 		"symfony/dependency-injection" : "~3.4|~4.1|~5.0"
 	},
+	"config": {
+		"allow-plugins": {
+			"symfony/flex": true
+		}
+	},
 	"autoload" : {
 		"psr-4" : {
 			"CommonGateway\\HuwelijksplannerBundle\\" : "src/"
