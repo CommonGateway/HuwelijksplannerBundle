@@ -1,0 +1,45 @@
+{
+  "$id": "https://hp.nl/action/hp.InvitePartnerAction.action.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+  "version": "0.0.4",
+  "title": "InvitePartnerAction",
+  "description": "Invite partner handler trigger.",
+  "listens": [
+    "huwelijksplanner.patch.partner"
+  ],
+  "throws": [],
+  "conditions": [],
+  "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\InvitePartnerHandler",
+  "priority": 0,
+  "async": false,
+  "configuration": [],
+  "conditions": {
+    "and" : [
+      {
+
+        "==": [
+          {
+            "var": "method"
+          },
+          "PATCH"
+        ]
+      },
+      {
+        "!!" : [
+          {
+            "var" : "body"
+          },
+          []
+        ]
+      },
+      {
+        "!!" : [
+          {
+            "var" : "body.partners"
+          },
+          []
+        ]
+      }
+    ]
+  }
+}
