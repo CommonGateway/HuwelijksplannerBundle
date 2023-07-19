@@ -1,21 +1,32 @@
-# CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService
+# CommonGateway\HuwelijksplannerBundle\Service\CreateMarriageService  
 
 This service holds al the logic for creating the marriage request object.
+
+
+
+
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[\_\_construct](#createmarriageservice__construct)||
+|[__construct](#createmarriageservice__construct)||
 |[createMarriageHandler](#createmarriageservicecreatemarriagehandler)|Creates the marriage request object.|
 
-### CreateMarriageService::\_\_construct
+
+
+
+### CreateMarriageService::__construct  
 
 **Description**
 
 ```php
  __construct (void)
 ```
+
+ 
+
+ 
 
 **Parameters**
 
@@ -25,9 +36,11 @@ This service holds al the logic for creating the marriage request object.
 
 `void`
 
+
 <hr />
 
-### CreateMarriageService::createMarriageHandler
+
+### CreateMarriageService::createMarriageHandler  
 
 **Description**
 
@@ -35,19 +48,27 @@ This service holds al the logic for creating the marriage request object.
 public createMarriageHandler (?array $data, ?array $configuration)
 ```
 
-Creates the marriage request object.
+Creates the marriage request object. 
+
+ 
 
 **Parameters**
 
-*   `(?array) $data`
-*   `(?array) $configuration`
+* `(?array) $data`
+* `(?array) $configuration`
 
 **Return Values**
 
 `?array`
 
+
+
+
 **Throws Exceptions**
+
 
 `\Exception`
 
+
 <hr />
+
