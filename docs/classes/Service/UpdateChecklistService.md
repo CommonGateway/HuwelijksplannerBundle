@@ -1,16 +1,12 @@
-# CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService  
+# CommonGateway\HuwelijksplannerBundle\Service\UpdateChecklistService
 
 This service holds al the logic for checksing data from the marriage request and updating the associated checklist.
-
-
-
-
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[__construct](#updatechecklistservice__construct)||
+|[\_\_construct](#updatechecklistservice__construct)||
 |[checkHuwelijk](#updatechecklistservicecheckhuwelijk)|Checks data from the marriage object and updates the associated checklist.|
 |[checkHuwelijkCase](#updatechecklistservicecheckhuwelijkcase)|Checks the case of the huwelijk.|
 |[checkHuwelijkMoment](#updatechecklistservicecheckhuwelijkmoment)|Checks the moment of the huwelijk.|
@@ -20,20 +16,13 @@ This service holds al the logic for checksing data from the marriage request and
 |[checkHuwelijkProducts](#updatechecklistservicecheckhuwelijkproducts)|Checks the products of the huwelijk.|
 |[checkHuwelijkWitnesses](#updatechecklistservicecheckhuwelijkwitnesses)|Checks the witnesses of the huwelijk.|
 
-
-
-
-### UpdateChecklistService::__construct  
+### UpdateChecklistService::\_\_construct
 
 **Description**
 
 ```php
  __construct (void)
 ```
-
- 
-
- 
 
 **Parameters**
 
@@ -43,11 +32,9 @@ This service holds al the logic for checksing data from the marriage request and
 
 `void`
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijk  
+### UpdateChecklistService::checkHuwelijk
 
 **Description**
 
@@ -55,14 +42,12 @@ This service holds al the logic for checksing data from the marriage request and
 public checkHuwelijk (\ObjectEntity $huwelijk)
 ```
 
-Checks data from the marriage object and updates the associated checklist. 
-
- 
+Checks data from the marriage object and updates the associated checklist.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
 
 **Return Values**
 
@@ -70,11 +55,9 @@ Checks data from the marriage object and updates the associated checklist.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkCase  
+### UpdateChecklistService::checkHuwelijkCase
 
 **Description**
 
@@ -82,16 +65,14 @@ Checks data from the marriage object and updates the associated checklist.
 public checkHuwelijkCase (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the case of the huwelijk. 
-
- 
+Checks the case of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -99,11 +80,9 @@ Checks the case of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkMoment  
+### UpdateChecklistService::checkHuwelijkMoment
 
 **Description**
 
@@ -111,16 +90,14 @@ Checks the case of the huwelijk.
 public checkHuwelijkMoment (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the moment of the huwelijk. 
-
- 
+Checks the moment of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -128,11 +105,9 @@ Checks the moment of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkOfficer  
+### UpdateChecklistService::checkHuwelijkOfficer
 
 **Description**
 
@@ -140,16 +115,14 @@ Checks the moment of the huwelijk.
 public checkHuwelijkOfficer (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the offeser of the huwelijk. 
-
- 
+Checks the offeser of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -157,11 +130,9 @@ Checks the offeser of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkOrder  
+### UpdateChecklistService::checkHuwelijkOrder
 
 **Description**
 
@@ -169,16 +140,14 @@ Checks the offeser of the huwelijk.
 public checkHuwelijkOrder (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the order of the huwelijk. 
-
- 
+Checks the order of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -186,11 +155,9 @@ Checks the order of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkPartners  
+### UpdateChecklistService::checkHuwelijkPartners
 
 **Description**
 
@@ -198,16 +165,14 @@ Checks the order of the huwelijk.
 public checkHuwelijkPartners (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the partners of the huwelijk. 
-
- 
+Checks the partners of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -215,11 +180,9 @@ Checks the partners of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkProducts  
+### UpdateChecklistService::checkHuwelijkProducts
 
 **Description**
 
@@ -227,16 +190,14 @@ Checks the partners of the huwelijk.
 public checkHuwelijkProducts (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the products of the huwelijk. 
-
- 
+Checks the products of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -244,11 +205,9 @@ Checks the products of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
 
-
-### UpdateChecklistService::checkHuwelijkWitnesses  
+### UpdateChecklistService::checkHuwelijkWitnesses
 
 **Description**
 
@@ -256,16 +215,14 @@ Checks the products of the huwelijk.
 public checkHuwelijkWitnesses (\ObjectEntity $huwelijk, array $checklist)
 ```
 
-Checks the witnesses of the huwelijk. 
-
- 
+Checks the witnesses of the huwelijk.
 
 **Parameters**
 
-* `(\ObjectEntity) $huwelijk`
-: The huwelijk object  
-* `(array) $checklist`
-: The checklist array  
+*   `(\ObjectEntity) $huwelijk`
+    : The huwelijk object
+*   `(array) $checklist`
+    : The checklist array
 
 **Return Values**
 
@@ -273,6 +230,4 @@ Checks the witnesses of the huwelijk.
 
 > The huwelijk object with updated/created checklist
 
-
 <hr />
-
