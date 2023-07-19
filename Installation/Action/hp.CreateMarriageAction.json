@@ -8,7 +8,6 @@
     "huwelijksplanner.post.huwelijk"
   ],
   "throws": [],
-  "conditions": [],
   "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreateMarriageHandler",
   "priority": 0,
   "async": false,
