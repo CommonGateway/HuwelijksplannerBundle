@@ -1,0 +1,15 @@
+# CommonGateway\HuwelijksplannerBundle
+
+* [Service\InstallationService](Service/InstallationService.md) 
+* [Service\CreateAvailabilityService](Service/CreateAvailabilityService.md) 
+* [Service\CreateMarriageService](Service/CreateMarriageService.md) 
+* [Service\HandleAssentService](Service/HandleAssentService.md) 
+* [Service\InvitePartnerService](Service/InvitePartnerService.md) 
+* [Service\InviteWitnessService](Service/InviteWitnessService.md) 
+* [Service\MessageBirdService](Service/MessageBirdService.md) 
+* [Service\PaymentService](Service/PaymentService.md) 
+* [Service\UpdateChecklistService](Service/UpdateChecklistService.md) 
+* [Command\CreateAvailabilityCommand](Command/CreateAvailabilityCommand.md) 
+* [Command\CreateMarriageCommand](Command/CreateMarriageCommand.md) 
+* [Command\HandleAssentCommand](Command/HandleAssentCommand.md) 
+* [Command\UpdateChecklistCommand](Command/UpdateChecklistCommand.md) 
