@@ -1,6 +1,8 @@
-# CommonGateway\HuwelijksplannerBundle\Command\CreateAvailabilityCommand
+# CommonGateway\HuwelijksplannerBundle\Command\CreateAvailabilityCommand  
 
 Command to execute the CreateAvailabilityService.
+
+
 
 ## Extend:
 
@@ -15,7 +17,7 @@ Symfony\Component\Console\Command\Command
 
 | Name | Description |
 |------|-------------|
-| [\_\_construct](https://secure.php.net/manual/en/symfony\component\console\command\command.__construct.php) | - |
+| [__construct](https://secure.php.net/manual/en/symfony\component\console\command\command.__construct.php) | - |
 |addArgument|Adds an argument.|
 |addOption|Adds an option.|
 |addUsage|Add a command usage example, it'll be prefixed with the command name.|
@@ -31,7 +33,7 @@ Symfony\Component\Console\Command\Command
 |getName|Returns the command name.|
 |getNativeDefinition|Gets the InputDefinition to be used to create representations of this Command.|
 |getProcessedHelp|Returns the processed help for the command replacing the %command.name% and
-%command.full\_name% patterns with the real values dynamically.|
+%command.full_name% patterns with the real values dynamically.|
 |getSynopsis|Returns the synopsis for the command.|
 |getUsages|Returns alternative usages of the command.|
 |ignoreValidationErrors|Ignores validation errors.|
@@ -49,3 +51,5 @@ Symfony\Component\Console\Command\Command
 | [setHidden](https://secure.php.net/manual/en/symfony\component\console\command\command.sethidden.php) | - |
 |setName|Sets the name of the command.|
 |setProcessTitle|Sets the process title of the command.|
+
+
