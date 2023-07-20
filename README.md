@@ -35,13 +35,13 @@ If you have any questions, suggestions, or new ideas, please don't hesitate to s
 
 The Utrecht Huwelijksplanner backend codebase utilizes the Common Gateway as an open-source installation framework. This means that the Huwelijksplanner library, in its core form, functions as a plugin on this Framework. To learn more about the Common Gateway, you can refer to the documentation [here](https://commongateway.readthedocs.io/en/latest/).
 
-Please note that the Huwelijksplanner frontend codebase is a separate Kubernetes container.
+Please note that the Huwelijksplanner frontend codebase is a separate docker container.
 
 To install the backend, follow the steps below:
 
 ### Gateway Installation
 
-1.  If the municipality does not have the Common Gateway installed, you can follow the installation guide provided [here](https://github.com/ConductionNL/commonground-gateway#readme). The Common Gateway installation is required for the backend setup. You can choose any installation method for the gateway, such as Haven, Kubernetes, Linux, or Azure, and any database option like MySQL, PostgreSQL, Oracle, or MsSQL. The gateway framework handles this abstraction.
+1.  If you do not have the Common Gateway installed, you can follow the installation guide provided [here](https://github.com/ConductionNL/commonground-gateway#readme). The Common Gateway installation is required for the backend setup. You can choose any installation method for the gateway, such as Haven, Kubernetes, Linux, or Azure, and any database option like MySQL, PostgreSQL, Oracle, or MsSQL. The gateway framework handles this abstraction.
 
 ### HuwelijksplannerBundle Installation - Admin-UI
 
