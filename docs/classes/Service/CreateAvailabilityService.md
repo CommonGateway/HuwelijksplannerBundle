@@ -1,21 +1,32 @@
-# CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService
+# CommonGateway\HuwelijksplannerBundle\Service\CreateAvailabilityService  
 
 This service holds al the logic for creating availability.
+
+
+
+
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[\_\_construct](#createavailabilityservice__construct)||
+|[__construct](#createavailabilityservice__construct)||
 |[createAvailabilityHandler](#createavailabilityservicecreateavailabilityhandler)|Creates availability for someone with given date info.|
 
-### CreateAvailabilityService::\_\_construct
+
+
+
+### CreateAvailabilityService::__construct  
 
 **Description**
 
 ```php
  __construct (void)
 ```
+
+ 
+
+ 
 
 **Parameters**
 
@@ -25,9 +36,11 @@ This service holds al the logic for creating availability.
 
 `void`
 
+
 <hr />
 
-### CreateAvailabilityService::createAvailabilityHandler
+
+### CreateAvailabilityService::createAvailabilityHandler  
 
 **Description**
 
@@ -35,19 +48,27 @@ This service holds al the logic for creating availability.
 public createAvailabilityHandler (?array $data, ?array $configuration)
 ```
 
-Creates availability for someone with given date info.
+Creates availability for someone with given date info. 
+
+ 
 
 **Parameters**
 
-*   `(?array) $data`
-*   `(?array) $configuration`
+* `(?array) $data`
+* `(?array) $configuration`
 
 **Return Values**
 
 `array`
 
+
+
+
 **Throws Exceptions**
+
 
 `\Exception`
 
+
 <hr />
+
