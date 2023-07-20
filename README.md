@@ -21,13 +21,9 @@ Optionally, municipalities still have the flexibility to choose between running 
 The Huwelijksplanner currently utilizes the following bundles:
 
 1. **HuwelijksplannerBundle**: [GitHub Repository](https://github.com/CommonGateway/HuwelijksplannerBundle)
-
 2. **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
-
 3. **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
-
 4. **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
-
 5. **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
 
 While all these bundles can still be installed as standalone components (please refer to their respective installation guides), the Huwelijksplanner now defaults to installing these bundles as additional plugins on the same gateway.
@@ -51,11 +47,8 @@ To install the backend, follow the steps below:
 ### HuwelijksplannerBundle Installation - Admin-UI
 
 1. After successfully installing the Gateway, access the admin-ui and log in.
-
 2. In the left menu, navigate to "Plugins" to view a list of installed plugins. If you don't find the "Huwelijksplanner" plugin listed here, you can search for it by clicking on "Search" in the upper-right corner and typing "Huwelijksplanner" in the search bar.
-
 3. Click on the "Huwelijksplanner" card and then click on the "Install" button to install the plugin.
-
 4. The admin-ui allows you to install, upgrade, or remove bundles. However, to load all the required data (schemas, endpoints, sources), you need to execute the initialization command in a terminal.
 
 ### HuwelijksplannerBundle Installation - Terminal
@@ -82,7 +75,7 @@ To install the backend, follow the steps below:
    docker-compose exec php bin/console commongateway:initialize -data
    ```
 
-With these steps completed, the backend setup for the Utrecht Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process seek assistance from the development team. Happy coding
+With these steps completed, the backend setup for the Utrecht Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
 
 ## Frontend Installation Instructions
 
@@ -144,7 +137,7 @@ In the Gateway UI, you need to configure scopes for the anonymous user. Follow t
 
 Once you have completed these steps, you should have the Utrecht Huwelijksplanner project running on your local development environment with the necessary scopes configured for the anonymous user.
 
-To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at https://commongateway.github.io/HuwelijksplannerBundle/. This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
+To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at [https://commongateway.github.io/HuwelijksplannerBundle/](https://commongateway.github.io/HuwelijksplannerBundle/). This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
 
 Whether you are a developer working on a municipal wedding planning project or an enthusiast seeking to learn more about the HuwelijksplannerBundle, this documentation is an invaluable resource to help you navigate and utilize the bundle effectively.
 
