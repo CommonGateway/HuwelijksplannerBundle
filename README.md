@@ -10,9 +10,9 @@ However, this approach led to several issues. Numerous installations were necess
 
 In the current iteration of the Huwelijksplanner, we have addressed these concerns by reorganizing the individual components as plugins. This change offers two primary advantages:
 
-1. Smaller Codebases: By restructuring the components into plugins, the underlying codebases are now more manageable and easier to maintain.
+1.  Smaller Codebases: By restructuring the components into plugins, the underlying codebases are now more manageable and easier to maintain.
 
-2. Unified Gateway Installation: These different plugins can now be run on a single installation of the Common Gateway. This streamlines the deployment process and simplifies the setup for developers.
+2.  Unified Gateway Installation: These different plugins can now be run on a single installation of the Common Gateway. This streamlines the deployment process and simplifies the setup for developers.
 
 Optionally, municipalities still have the flexibility to choose between running the components in separate installations or combining them in a unified setup.
 
@@ -20,10 +20,10 @@ Optionally, municipalities still have the flexibility to choose between running 
 
 The [**HuwelijksplannerBundle**](https://github.com/CommonGateway/HuwelijksplannerBundle) currently utilizes the following bundles:
 
-1. **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
-2. **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
-3. **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
-4. **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
+1.  **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
+2.  **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
+3.  **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
+4.  **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
 
 While all these bundles can still be installed as standalone components (please refer to their respective installation guides), the HuwelijksplannerBundle now defaults to installing these bundles as additional plugins on the same gateway.
 
@@ -41,102 +41,88 @@ To install the backend, follow the steps below:
 
 ### Gateway Installation
 
-1. If the municipality does not have the Common Gateway installed, you can follow the installation guide provided [here](https://github.com/ConductionNL/commonground-gateway#readme). The Common Gateway installation is required for the backend setup. You can choose any installation method for the gateway, such as Haven, Kubernetes, Linux, or Azure, and any database option like MySQL, PostgreSQL, Oracle, or MsSQL. The gateway framework handles this abstraction.
+1.  If the municipality does not have the Common Gateway installed, you can follow the installation guide provided [here](https://github.com/ConductionNL/commonground-gateway#readme). The Common Gateway installation is required for the backend setup. You can choose any installation method for the gateway, such as Haven, Kubernetes, Linux, or Azure, and any database option like MySQL, PostgreSQL, Oracle, or MsSQL. The gateway framework handles this abstraction.
 
 ### HuwelijksplannerBundle Installation - Admin-UI
 
-1. After successfully installing the Gateway, access the admin-ui and log in.
-2. In the left menu, navigate to "Plugins" to view a list of installed plugins. If you don't find the "Huwelijksplanner" plugin listed here, you can search for it by clicking on "Search" in the upper-right corner and typing "Huwelijksplanner" in the search bar.
-3. Click on the "Huwelijksplanner" card and then click on the "Install" button to install the plugin.
-4. The admin-ui allows you to install, upgrade, or remove bundles. However, to load all the required data (schemas, endpoints, sources), you need to execute the initialization command in a terminal.
+1.  After successfully installing the Gateway, access the admin-ui and log in.
+2.  In the left menu, navigate to "Plugins" to view a list of installed plugins. If you don't find the "Huwelijksplanner" plugin listed here, you can search for it by clicking on "Search" in the upper-right corner and typing "Huwelijksplanner" in the search bar.
+3.  Click on the "Huwelijksplanner" card and then click on the "Install" button to install the plugin.
+4.  The admin-ui allows you to install, upgrade, or remove bundles. However, to load all the required data (schemas, endpoints, sources), you need to execute the initialization command in a terminal.
 
 ### HuwelijksplannerBundle Installation - Terminal
 
-1. Open a terminal and run the following command to install the Huwelijksplanner bundle:
+1.  Open a terminal and run the following command to install the Huwelijksplanner bundle:
 
-   ```
-   docker-compose exec php composer require common-gateway/huwelijksplanner-bundle
-   ```
+        docker-compose exec php composer require common-gateway/huwelijksplanner-bundle
 
 ### Initialization Command (Terminal)
 
-1. To load all the data without any specific content, execute the following command:
+1.  To load all the data without any specific content, execute the following command:
 
-   ```
-   docker-compose exec php bin/console commongateway:initialize
-   ```
+        docker-compose exec php bin/console commongateway:initialize
 
-   OR
+    OR
 
-   To load all the data along with specific content, run:
+    To load all the data along with specific content, run:
 
-   ```
-   docker-compose exec php bin/console commongateway:initialize -data
-   ```
+        docker-compose exec php bin/console commongateway:initialize -data
 
 With these steps completed, the backend setup for the Utrecht Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
 
 ## Frontend Installation Instructions
 
-[//]: # (# Utrecht Huwelijksplanner - Developer Instructions)
-[//]: # ()
+[//]: # "# Utrecht Huwelijksplanner - Developer Instructions"
+
+[//]: #
+
 These instructions will guide you through the setup process for the Utrecht Huwelijksplanner project. Please follow the steps below to get started:
 
 ### Prerequisites
 
 Before you begin, ensure you have the following software installed on your system:
 
-1. Git
-2. Node.js (npm)
-3. Docker
-4. Docker Compose
+1.  Git
+2.  Node.js (npm)
+3.  Docker
+4.  Docker Compose
 
 ### Installation
 
-1. Clone the Utrecht Huwelijksplanner repository by running the following command in your terminal:
+1.  Clone the Utrecht Huwelijksplanner repository by running the following command in your terminal:
 
-   ```
-   git clone https://github.com/frameless/utrecht-huwelijksplanner.git
-   ```
+        git clone https://github.com/frameless/utrecht-huwelijksplanner.git
 
-2. In the project directory, find the `.env` file and modify the `NEXT_PUBLIC_API_URL` to use the local API. Change it to:
+2.  In the project directory, find the `.env` file and modify the `NEXT_PUBLIC_API_URL` to use the local API. Change it to:
 
-   ```
-   NEXT_PUBLIC_API_URL=http://localhost/api
-   ```
+        NEXT_PUBLIC_API_URL=http://localhost/api
 
-3. Run the following command in the terminal to install the project dependencies and generate necessary code:
+3.  Run the following command in the terminal to install the project dependencies and generate necessary code:
 
-   ```
-   npm install && npm run codegen
-   ```
+        npm install && npm run codegen
 
-4. Build and start the development environment using Docker Compose:
+4.  Build and start the development environment using Docker Compose:
 
-   ```
-   docker-compose -f docker-compose.dev.yml build
-   docker-compose -f docker-compose.dev.yml up --remove-orphans
-   ```
+        docker-compose -f docker-compose.dev.yml build
+        docker-compose -f docker-compose.dev.yml up --remove-orphans
 
-   If you encounter an error during this step, try running the production Docker Compose file located in the repository under `Docker-compose.yml`. After a successful build, you can retry step 4.
+    If you encounter an error during this step, try running the production Docker Compose file located in the repository under `Docker-compose.yml`. After a successful build, you can retry step 4.
 
 ### Setting up Scopes for Anonymous User in Gateway UI
 
 In the Gateway UI, you need to configure scopes for the anonymous user. Follow these steps to set it up:
 
-1. Go to the settings in the Gateway UI.
-2. Navigate to the 'Security Groups' tab.
-3. Locate and select 'Default Anonymous' to view its details.
-4. Add the following scopes under the 'Scopes' section:
+1.  Go to the settings in the Gateway UI.
+2.  Navigate to the 'Security Groups' tab.
+3.  Locate and select 'Default Anonymous' to view its details.
+4.  Add the following scopes under the 'Scopes' section:
 
-   ```
-   - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
-   - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
-   ```
+        - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
+        - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
 
 Once you have completed these steps, you should have the Utrecht Huwelijksplanner project running on your local development environment with the necessary scopes configured for the anonymous user.
 
-To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at [https://commongateway.github.io/HuwelijksplannerBundle/](https://commongateway.github.io/HuwelijksplannerBundle/). This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
+To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at <https://commongateway.github.io/HuwelijksplannerBundle/>. This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
 
 Whether you are a developer working on a municipal wedding planning project or an enthusiast seeking to learn more about the HuwelijksplannerBundle, this documentation is an invaluable resource to help you navigate and utilize the bundle effectively.
 
