@@ -16,19 +16,18 @@ In the current iteration of the Huwelijksplanner, we have addressed these concer
 
 Optionally, municipalities still have the flexibility to choose between running the components in separate installations or combining them in a unified setup.
 
-### Bundles Used in the Huwelijksplanner
+### Bundles Used in the HuwelijksplannerBundle
 
-The Huwelijksplanner currently utilizes the following bundles:
+The [**HuwelijksplannerBundle**](https://github.com/CommonGateway/HuwelijksplannerBundle) currently utilizes the following bundles:
 
-1. **HuwelijksplannerBundle**: [GitHub Repository](https://github.com/CommonGateway/HuwelijksplannerBundle)
-2. **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
-3. **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
-4. **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
-5. **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
+1. **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
+2. **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
+3. **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
+4. **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
 
-While all these bundles can still be installed as standalone components (please refer to their respective installation guides), the Huwelijksplanner now defaults to installing these bundles as additional plugins on the same gateway.
+While all these bundles can still be installed as standalone components (please refer to their respective installation guides), the HuwelijksplannerBundle now defaults to installing these bundles as additional plugins on the same gateway.
 
-This new approach offers greater modularity, making it easier for developers to work with the Huwelijksplanner and allowing for more flexible configurations based on the needs of individual municipalities.
+This new approach offers greater modularity, making it easier for developers to work with the HuwelijksplannerBundle and allowing for more flexible configurations based on the needs of individual municipalities.
 
 If you have any questions, suggestions, or new ideas, please don't hesitate to share them in the project repository. Let's work together to create an exceptional wedding planning experience that brings joy and happiness to couples preparing for their special day.
 
