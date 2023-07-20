@@ -17,7 +17,7 @@ env: # Change these to your preferences any image url can also be a base encoded
   NAVBAR_LOGO_URL: "https://huisstijl.utrecht.nl/fileadmin/uploads/documenten/zz-huisstijl/logo/logo-gemeente-utrecht-nederlands-klein-300.png"
 
   # Footer
-  FOOTER_LOGO_URL: ""
+  FOOTER_LOGO_URL: "https://huisstijl.utrecht.nl/fileadmin/uploads/documenten/zz-huisstijl/logo/logo-gemeente-utrecht-nederlands-klein-300.png"
   FOOTER_LOGO_HREF: "https://www.utrecht.nl"
 
   # Jumbotron
