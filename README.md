@@ -1,48 +1,129 @@
 # HuwelijksplannerBundle [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a86fa955b62542e4a2e9b88d9ee618d4)](https://app.codacy.com/gh/CommonGateway/HuwelijksplannerBundle/dashboard?utm_source=gh\&utm_medium=referral\&utm_content=\&utm_campaign=Badge_grade)
 
-An symfony bundle for functionality about Dutch marriage request handling in municipalities
+The HuwelijksplannerBundle is a powerful Symfony bundle that provides essential functionality for handling Dutch marriage requests within municipalities. This bundle is specifically designed to streamline and simplify the process of managing marriage-related operations, making it an indispensable tool for municipal authorities.
 
-# Installatie
+## Changes from Huwelijksplanner 2020
 
-De huwelijksplanner backend codebase maakt gebruik van de Common Gateway als open source installatie framework. Dat betekent dat de huwelijksplanner library in haar meest essentiële vorm een plugin op dit Framework is. Meer informatie over de Common Gateway vind je [hier](https://commongateway.readthedocs.io/en/latest/).
+In the previous iteration of the Huwelijksplanner project, the decision was made to fully separate the Huwelijksplanner into individual registers, each developed as a separate Common Ground component. These components were then required to be installed independently.
 
-De huwelijksplanner frontend codebase is een losse Kubernetes container.
+However, this approach led to several issues. Numerous installations were necessary to get the Huwelijksplanner up and running, and the large number of codebases posed maintenance challenges.
 
-# Veranderingen versus de huwelijksplanner 2020
+In the current iteration of the Huwelijksplanner, we have addressed these concerns by reorganizing the individual components as plugins. This change offers two primary advantages:
 
-In het vorige Huwelijksplanner-project is er voor gekozen om de Huwelijksplanner volledig op te splitsen in register en per register een Common Ground-component te ontwikkelen. De deze componenten moesten vervolgens los worden geïnstalleerd.
+1.  Smaller Codebases: By restructuring the components into plugins, the underlying codebases are now more manageable and easier to maintain.
 
-In de praktijk leidde dit tot problemen, er was een groot aantal installaties nodig om de huwelijksplanner aan de praat te krijgen en het grote aantal code basis leidde tot onderhoudsuitdagingen.
+2.  Unified Gateway Installation: These different plugins can now be run on a single installation of the Common Gateway. This streamlines the deployment process and simplifies the setup for developers.
 
-Bij de nieuwe iteratie van de huwelijksplanner is er daarom voor gekozen om om de losse componenten als plugins op te zetten. Dat heeft twee primaire voordelen
+Optionally, municipalities still have the flexibility to choose between running the components in separate installations or combining them in a unified setup.
 
-1.  De onderliggende codebases zijn een stuk kleiner (en daarmee te onderhouden)
-2.  Deze verschillende plugins kunnen op één installatie van de Gateway worden gedraaid.
+### Bundles Used in the HuwelijksplannerBundle
 
-Optioneel kan de gemeente er dan nog steeds voor kiezen om de componenten in losse installaties te draaien, of te combineren tussen losse en een vaste combinatie.
+The [**HuwelijksplannerBundle**](https://github.com/CommonGateway/HuwelijksplannerBundle) currently utilizes the following bundles:
 
-De bundels waar de huwelijksplanner op dit moment gebruik van maakt zijn
-HuwelijksplannerBundle
-https://github.com/CommonGateway/CalendarBundle (voorheen calender component)
-https://github.com/CommonGateway/AssentBundle (voorheens assent component)
-https://github.com/CommonGateway/ShopBundle (voorheen product, order, invoice en payment componenten)
-https://github.com/CommonGateway/CommunicationBundle (voorheen e-mail en sms componenten)
-https://github.com/CommonGateway/TemplateBundle (voorheen template component)
+1.  **CoreBundle**: [GitHub Repository](https://github.com/CommonGateway/CoreBundle)
+2.  **BRPBundle**: [GitHub Repository](https://github.com/CommonGateway/BRPBundle)
+3.  **KlantenBundle**: [GitHub Repository](https://github.com/CommonGateway/KlantenBundle)
+4.  **ZGWBundle**: [GitHub Repository](https://github.com/CommonGateway/ZGWBundle)
 
-Al deze bundles kunnen nog steeds als standalone component worden geïnstalleerd (zie daarvoor de individuele installatie handleidingen), maar worden vanuit de huwelijksplanner standaard als extra plugins op dezelfde gateway geïnstalleerd.
+While all these bundles can still be installed as standalone components (please refer to their respective installation guides), the HuwelijksplannerBundle now defaults to installing these bundles as additional plugins on the same gateway.
 
-\#Installeren van de huwelijksplanner
+This new approach offers greater modularity, making it easier for developers to work with the HuwelijksplannerBundle and allowing for more flexible configurations based on the needs of individual municipalities.
 
-## Backend
+If you have any questions, suggestions, or new ideas, please don't hesitate to share them in the project repository. Let's work together to create an exceptional wedding planning experience that brings joy and happiness to couples preparing for their special day.
 
-Voor de backend installatie geld dat de Common Gateway installatiehandleiding gevolgd kan worden (als de gemeente nog geen Common Gateway geïnstalleerd heeft) de handleiding treft u [hier](https://github.com/ConductionNL/commonground-gateway#readme). Voor de opzet van de backend maakt het niet uit hoe u de gateway installeert (bijvoorbeeld Haven, Kubernetes, Linux of Azure) of welke database optie u kiest (MySQL, PostgreSQl, Oracle, MsSQL). Het gateway framework handelt deze abstractie af.
+## Backend Installation Instructions
 
-Na het installeren van de Gateway logt u in en vindt u onder “plugins” in het linker menu een overzicht van de reeds geïnstalleerde plugins. Als de huwelijksplanner hier nog niet tussen staat kunt u rechtboven in op “Search” klikken en op “Huwelijksplanner” zoeken. Klik op de Card van huwelijksplanner en vervolgens op de knop installeren.
+The Utrecht Huwelijksplanner backend codebase utilizes the Common Gateway as an open-source installation framework. This means that the Huwelijksplanner library, in its core form, functions as a plugin on this Framework. To learn more about the Common Gateway, you can refer to the documentation [here](https://commongateway.readthedocs.io/en/latest/).
 
-## Frontend
+Please note that the Huwelijksplanner frontend codebase is a separate docker container.
 
-ToDo
+To install the backend, follow the steps below:
 
-## Testdata
+### Gateway Installation
 
-\#Bijwerken
+1.  If you do not have the Common Gateway installed, you can follow the installation guide provided [here](https://github.com/ConductionNL/commonground-gateway#readme). The Common Gateway installation is required for the backend setup. You can choose any installation method for the gateway, such as Haven, Kubernetes, Linux, or Azure, and any database option like MySQL, PostgreSQL, Oracle, or MsSQL. The gateway framework handles this abstraction.
+
+### HuwelijksplannerBundle Installation - Admin-UI
+
+1.  After successfully installing the Gateway, access the admin-ui and log in.
+2.  In the left menu, navigate to "Plugins" to view a list of installed plugins. If you don't find the "Huwelijksplanner" plugin listed here, you can search for it by clicking on "Search" in the upper-right corner and typing "Huwelijksplanner" in the search bar.
+3.  Click on the "Huwelijksplanner" card and then click on the "Install" button to install the plugin.
+4.  The admin-ui allows you to install, upgrade, or remove bundles. However, to load all the required data (schemas, endpoints, sources), you need to execute the initialization command in a terminal.
+
+### HuwelijksplannerBundle Installation - Terminal
+
+1.  Open a terminal and run the following command to install the Huwelijksplanner bundle:
+
+        docker-compose exec php composer require common-gateway/huwelijksplanner-bundle
+
+### Initialization Command (Terminal)
+
+1.  To load all the data without any specific content, execute the following command:
+
+        docker-compose exec php bin/console commongateway:initialize
+
+    OR
+
+    To load all the data along with specific content, run:
+
+        docker-compose exec php bin/console commongateway:initialize -data
+
+With these steps completed, the backend setup for the Utrecht Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
+
+## Frontend Installation Instructions
+
+[//]: # "# Utrecht Huwelijksplanner - Developer Instructions"
+
+[//]: #
+
+These instructions will guide you through the setup process for the Utrecht Huwelijksplanner project. Please follow the steps below to get started:
+
+### Prerequisites
+
+Before you begin, ensure you have the following software installed on your system:
+
+1.  Git
+2.  Node.js (npm)
+3.  Docker
+4.  Docker Compose
+
+### Installation
+
+1.  Clone the Utrecht Huwelijksplanner repository by running the following command in your terminal:
+
+        git clone https://github.com/frameless/utrecht-huwelijksplanner.git
+
+2.  In the project directory, find the `.env` file and modify the `NEXT_PUBLIC_API_URL` to use the local API. Change it to:
+
+        NEXT_PUBLIC_API_URL=http://localhost/api
+
+3.  Run the following command in the terminal to install the project dependencies and generate necessary code:
+
+        npm install && npm run codegen
+
+4.  Build and start the development environment using Docker Compose:
+
+        docker-compose -f docker-compose.dev.yml build
+        docker-compose -f docker-compose.dev.yml up --remove-orphans
+
+    If you encounter an error during this step, try running the production Docker Compose file located in the repository under `Docker-compose.yml`. After a successful build, you can retry step 4.
+
+### Setting up Scopes for Anonymous User in Gateway UI
+
+In the Gateway UI, you need to configure scopes for the anonymous user. Follow these steps to set it up:
+
+1.  Go to the settings in the Gateway UI.
+2.  Navigate to the 'Security Groups' tab.
+3.  Locate and select 'Default Anonymous' to view its details.
+4.  Add the following scopes under the 'Scopes' section:
+
+        - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
+        - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
+
+Once you have completed these steps, you should have the Utrecht Huwelijksplanner project running on your local development environment with the necessary scopes configured for the anonymous user.
+
+To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at <https://commongateway.github.io/HuwelijksplannerBundle/>. This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
+
+Whether you are a developer working on a municipal wedding planning project or an enthusiast seeking to learn more about the HuwelijksplannerBundle, this documentation is an invaluable resource to help you navigate and utilize the bundle effectively.
+
+Join us in harnessing the power of the HuwelijksplannerBundle to create seamless and efficient marriage request handling solutions for Dutch municipalities. Happy coding!
