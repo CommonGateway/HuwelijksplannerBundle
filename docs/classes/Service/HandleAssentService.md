@@ -11,9 +11,11 @@ This service holds al the logic for approving or requesting a assent.
 | Name | Description |
 |------|-------------|
 |[__construct](#handleassentservice__construct)||
+|[checkConfig](#handleassentservicecheckconfig)|Checks the config.|
 |[checkSourceAuth](#handleassentservicechecksourceauth)|Check the auth of the given source.|
 |[getStatus](#handleassentservicegetstatus)|Determines the status of the assent based on if the assent contains the bsn of the assentee.|
 |[handleAssent](#handleassentservicehandleassent)|Handles the assent for the given person and sends an email or sms.|
+|[handleAssentEmailAndSms](#handleassentservicehandleassentemailandsms)|Handles the assent for the given person and sends an email or sms.|
 |[sendEmail](#handleassentservicesendemail)|Sends an emails.|
 |[sendSms](#handleassentservicesendsms)|Sends a sms.|
 
@@ -39,6 +41,33 @@ This service holds al the logic for approving or requesting a assent.
 **Return Values**
 
 `void`
+
+
+<hr />
+
+
+### HandleAssentService::checkConfig  
+
+**Description**
+
+```php
+public checkConfig (string $config)
+```
+
+Checks the config. 
+
+ 
+
+**Parameters**
+
+* `(string) $config`
+: The config array from the action.  
+
+**Return Values**
+
+`array`
+
+
 
 
 <hr />
@@ -105,7 +134,40 @@ Determines the status of the assent based on if the assent contains the bsn of t
 **Description**
 
 ```php
-public handleAssent (\ObjectEntity $person, string $type, array $data, array $data, \ObjectEntity|null $assent)
+public handleAssent (\ObjectEntity $person, string $type, array $propertyId, \ObjectEntity|null $assent)
+```
+
+Handles the assent for the given person and sends an email or sms. 
+
+ 
+
+**Parameters**
+
+* `(\ObjectEntity) $person`
+: The person to make/update an assent for.  
+* `(string) $type`
+: The type of assent.  
+* `(array) $propertyId`
+: The id of the property this assent is about.  
+* `(\ObjectEntity|null) $assent`
+: The assent of the person  
+
+**Return Values**
+
+`\ObjectEntity|null`
+
+
+
+
+<hr />
+
+
+### HandleAssentService::handleAssentEmailAndSms  
+
+**Description**
+
+```php
+public handleAssentEmailAndSms (\ObjectEntity $person, string $type, array $data, \ObjectEntity|null $assent)
 ```
 
 Handles the assent for the given person and sends an email or sms. 
@@ -120,8 +182,6 @@ Handles the assent for the given person and sends an email or sms.
 : The type of assent.  
 * `(array) $data`
 : The data of the request.  
-* `(array) $data`
-: The id of the property this assent is about.  
 * `(\ObjectEntity|null) $assent`
 : The assent of the person  
 

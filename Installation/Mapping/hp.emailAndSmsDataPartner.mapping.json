@@ -1,0 +1,13 @@
+{
+  "title": "EmailAndSmsDataPartner",
+  "$id": "https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.1",
+  "passTrough": false,
+  "mapping": {
+    "body": "Beste {{ partnerName }}, u bent gevraagd door {{ requesterName }} om te trouwen. Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}",
+    "assentName": "U bent gevraagd door {{ requesterName }} om te trouwen.",
+    "assentDescription": "Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen.",
+    "url": "https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}"
+  }
+}

@@ -5,6 +5,7 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
+use CommonGateway\CoreBundle\Service\MappingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,11 @@ class InviteWitnessService
      * @var GatewayResourceService
      */
     private GatewayResourceService $gatewayResourceService;
+
+    /**
+     * @var MappingService
+     */
+    private MappingService $mappingService;
 
     /**
      * @var CacheService
@@ -69,6 +75,7 @@ class InviteWitnessService
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
+     * @param MappingService         $mappingService         The Mapping Servive
      * @param CacheService           $cacheService           The Cache Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
@@ -78,6 +85,7 @@ class InviteWitnessService
     public function __construct(
         EntityManagerInterface $entityManager,
         GatewayResourceService $gatewayResourceService,
+        MappingService $mappingService,
         CacheService $cacheService,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
@@ -86,6 +94,7 @@ class InviteWitnessService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
+        $this->mappingService         = $mappingService;
         $this->cacheService           = $cacheService;
         $this->data                   = [];
         $this->configuration          = [];
@@ -110,14 +119,20 @@ class InviteWitnessService
     {
         $person = $witness->getValue('contact');
 
-        $dataArray = $this->createEmailAndSmsData($huwelijkObject);
         // creates an assent and add the person to the partners of this merriage
-        $assent = $this->handleAssentService->handleAssent($person, 'witness', $dataArray, $huwelijkObject->getId()->toString(), $witness);
+        $assent = $this->handleAssentService->handleAssent($person, 'witness', $huwelijkObject->getId()->toString(), $witness);
 
-        $assent->setValue('name', $dataArray['response']['assentNaam']);
+        // Create email and sms data.
+        $dataArray = $this->createEmailAndSmsData($huwelijkObject, $person, $assent->getId()->toString());
+
+        // Update assent with assentName and assentDescription of the data array.
+        $assent->setValue('name', $dataArray['response']['assentName']);
         $assent->setValue('description', $dataArray['response']['assentDescription']);
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
+
+        // Hanle send email and sms for assent.
+        $this->handleAssentService->handleAssentEmailAndSms($person, 'witness',  $dataArray, $assent);
 
     }//end updateWitness()
 
@@ -126,35 +141,43 @@ class InviteWitnessService
      * This function creates the email and sms data.
      *
      * @param ObjectEntity $huwelijkObject The huwelijk object.
+     * @param ObjectEntity $person         The person object.
+     * @param string       $assentId       The assent id of the witness.
      *
      * @return ?array The updated huwelijk object as array.
      */
-    private function createEmailAndSmsData(ObjectEntity $huwelijkObject): ?array
+    private function createEmailAndSmsData(ObjectEntity $huwelijkObject, ObjectEntity $person, string $assentId): ?array
     {
         $partnersAssents = $huwelijkObject->getValue('partners');
-
-        if (count($partnersAssents) === 2) {
-            $requesterNaam = $partnersAssents[0]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[0]->getValue('contact')->getValue('achternaam');
-            $partnerNaam   = $partnersAssents[1]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[1]->getValue('contact')->getValue('achternaam');
-
-            if ($huwelijkObject->getValue('moment') !== false
-                && $huwelijkObject->getValue('locatie') !== false
-            ) {
-                $moment      = new DateTime($huwelijkObject->getValue('moment'));
-                $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
-            }
-
-            $dataArray['response'] = [
-                'requesterNaam'     => $requesterNaam,
-                'partnerNaam'       => $partnerNaam,
-                'assentNaam'        => 'U bent gevraagd om getuigen te zijn bij het huwelijk van '.$requesterNaam.' en '.$partnerNaam,
-                'assentDescription' => $description.$requesterNaam.' & '.$partnerNaam.' hebben u gevraagd om een reactie te geven op dit verzoek.',
-            ];
+        if (count($partnersAssents) !== 2) {
+            return [];
         }
 
-        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId=';
+        $moment = null;
+        if ($huwelijkObject->getValue('moment') !== false) {
+            $moment = $huwelijkObject->getValue('moment');
+        }
 
-        return $dataArray;
+        $location = null;
+        if ($huwelijkObject->getValue('locatie') !== false) {
+            $location = $huwelijkObject->getValue('locatie')->getValue('upnLabel');
+        }
+
+        $dataArray = [
+            'requesterName' => $partnersAssents[0]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[0]->getValue('contact')->getValue('achternaam'),
+            'partnerName'   => $partnersAssents[1]->getValue('contact')->getValue('voornaam').' '.$partnersAssents[1]->getValue('contact')->getValue('achternaam'),
+            'witnessName'   => $person->getValue('voornaam'),
+            'moment'        => $moment,
+            'location'      => $location,
+            'huwelijk'      => $huwelijkObject,
+            'assentId'      => $assentId,
+        ];
+
+        $mapping = $this->gatewayResourceService->getMapping('https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataWitness.mapping.json', 'common-gateway/huwelijksplanner-bundle');
+
+        $data['response'] = $this->mappingService->mapping($mapping, $dataArray);
+
+        return $data;
 
     }//end createEmailAndSmsData()
 
