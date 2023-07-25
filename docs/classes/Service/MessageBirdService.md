@@ -1,24 +1,17 @@
-# CommonGateway\HuwelijksplannerBundle\Service\MessageBirdService  
+# CommonGateway\HuwelijksplannerBundle\Service\MessageBirdService
 
 This service holds all the logic for sending a message with messagebird.
-
-
-
-
 
 ## Methods
 
 | Name | Description |
 |------|-------------|
-|[__construct](#messagebirdservice__construct)||
+|[\_\_construct](#messagebirdservice__construct)||
 |[importMessage](#messagebirdserviceimportmessage)||
 |[messageBirdHandler](#messagebirdservicemessagebirdhandler)|Sends message via messageBird|
 |[sendMessage](#messagebirdservicesendmessage)|Handles sending a message with messagebird.|
 
-
-
-
-### MessageBirdService::__construct  
+### MessageBirdService::\_\_construct
 
 **Description**
 
@@ -26,10 +19,6 @@ This service holds all the logic for sending a message with messagebird.
  __construct (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -38,11 +27,9 @@ This service holds all the logic for sending a message with messagebird.
 
 `void`
 
-
 <hr />
 
-
-### MessageBirdService::importMessage  
+### MessageBirdService::importMessage
 
 **Description**
 
@@ -50,10 +37,6 @@ This service holds all the logic for sending a message with messagebird.
  importMessage (void)
 ```
 
- 
-
- 
-
 **Parameters**
 
 `This function has no parameters.`
@@ -62,11 +45,9 @@ This service holds all the logic for sending a message with messagebird.
 
 `void`
 
-
 <hr />
 
-
-### MessageBirdService::messageBirdHandler  
+### MessageBirdService::messageBirdHandler
 
 **Description**
 
@@ -74,16 +55,14 @@ This service holds all the logic for sending a message with messagebird.
 public messageBirdHandler (?array $data, ?array $configuration)
 ```
 
-Sends message via messageBird 
-
- 
+Sends message via messageBird
 
 **Parameters**
 
-* `(?array) $data`
-: Data this service might need from a Action.  
-* `(?array) $configuration`
-: Configuraiton this service might need from a Action.  
+*   `(?array) $data`
+    : Data this service might need from a Action.
+*   `(?array) $configuration`
+    : Configuraiton this service might need from a Action.
 
 **Return Values**
 
@@ -91,11 +70,9 @@ Sends message via messageBird
 
 > Response array that will be returned to RequestService.
 
-
 <hr />
 
-
-### MessageBirdService::sendMessage  
+### MessageBirdService::sendMessage
 
 **Description**
 
@@ -103,21 +80,15 @@ Sends message via messageBird
 public sendMessage (string $recipients, string $body)
 ```
 
-Handles sending a message with messagebird. 
-
- 
+Handles sending a message with messagebird.
 
 **Parameters**
 
-* `(string) $recipients`
-* `(string) $body`
+*   `(string) $recipients`
+*   `(string) $body`
 
 **Return Values**
 
 `bool`
 
-
-
-
 <hr />
-
