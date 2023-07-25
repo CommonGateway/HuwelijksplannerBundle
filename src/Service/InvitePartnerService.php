@@ -5,6 +5,7 @@ namespace CommonGateway\HuwelijksplannerBundle\Service;
 use App\Entity\ObjectEntity;
 use CommonGateway\CoreBundle\Service\CacheService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService;
+use CommonGateway\CoreBundle\Service\MappingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,11 @@ class InvitePartnerService
      * @var GatewayResourceService
      */
     private GatewayResourceService $gatewayResourceService;
+
+    /**
+     * @var MappingService
+     */
+    private MappingService $mappingService;
 
     /**
      * @var HandleAssentService
@@ -68,6 +74,7 @@ class InvitePartnerService
     /**
      * @param EntityManagerInterface $entityManager          The Entity Manager
      * @param GatewayResourceService $gatewayResourceService The Gateway Resource Service
+     * @param MappingService         $mappingService         The Mapping Service
      * @param HandleAssentService    $handleAssentService    The Handle Assent Service
      * @param UpdateChecklistService $updateChecklistService The Update Checklist Service
      * @param Security               $security               The Security
@@ -76,6 +83,7 @@ class InvitePartnerService
     public function __construct(
         EntityManagerInterface $entityManager,
         GatewayResourceService $gatewayResourceService,
+        MappingService $mappingService,
         HandleAssentService $handleAssentService,
         UpdateChecklistService $updateChecklistService,
         Security $security,
@@ -85,6 +93,7 @@ class InvitePartnerService
     ) {
         $this->entityManager          = $entityManager;
         $this->gatewayResourceService = $gatewayResourceService;
+        $this->mappingService         = $mappingService;
         $this->data                   = [];
         $this->configuration          = [];
         $this->handleAssentService    = $handleAssentService;
@@ -103,30 +112,36 @@ class InvitePartnerService
      * @param ObjectEntity $requester      The requester object.
      * @param ObjectEntity $person         The person object.
      * @param ObjectEntity $huwelijkObject The huwelijk object.
+     * @param string $assentId The id of the assent.
      *
      * @return ?array The updated huwelijk object as array.
      */
-    private function createEmailAndSmsData(ObjectEntity $requester, ObjectEntity $person, ObjectEntity $huwelijkObject): ?array
+    private function createEmailAndSmsData(ObjectEntity $requester, ObjectEntity $person, ObjectEntity $huwelijkObject, string $assentId): array
     {
-        $requesterNaam = $requester->getValue('voornaam').' '.$requester->getValue('achternaam');
-        $partnerNaam   = $person->getValue('voornaam').' '.$person->getValue('achternaam');
-
-        if ($huwelijkObject->getValue('moment') !== false
-            && $huwelijkObject->getValue('locatie') !== false
-        ) {
-            $moment      = new DateTime($huwelijkObject->getValue('moment'));
-            $description = 'Op '.$moment->format('D, d M Y H:i:s').' in '.$huwelijkObject->getValue('locatie')->getValue('upnLabel').'. ';
+        $moment = null;
+        if ($huwelijkObject->getValue('moment') !== false) {
+            $moment = $huwelijkObject->getValue('moment');
         }
 
-        $dataArray['response']        = [
-            'requesterNaam'     => $requesterNaam,
-            'partnerNaam'       => $partnerNaam,
-            'assentNaam'        => 'U bent gevraagd door '.$requesterNaam.' om te trouwen.',
-            'assentDescription' => $description ?? null.$requesterNaam.' heeft gevraagd of u dit huwelijk wilt bevestigen.',
-        ];
-        $dataArray['response']['url'] = 'https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId=';
+        $location = null;
+        if ($huwelijkObject->getValue('locatie') !== false) {
+            $location = $huwelijkObject->getValue('locatie')->getValue('upnLabel');
+        }
 
-        return $dataArray;
+        $dataArray = [
+            'requesterName' => $requester->getValue('voornaam').' '.$requester->getValue('achternaam'),
+            'partnerName'   => $person->getValue('voornaam').' '.$person->getValue('achternaam'),
+            'moment'        => $moment,
+            'location'      => $location,
+            'huwelijk'      => $huwelijkObject,
+            'assentId'      => $assentId
+        ];
+
+        $mapping = $this->gatewayResourceService->getMapping('https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json', 'common-gateway/huwelijksplanner-bundle');
+
+        $data['response'] = $this->mappingService->mapping($mapping, $dataArray);
+
+        return $data;
 
     }//end createEmailAndSmsData()
 
@@ -236,16 +251,20 @@ class InvitePartnerService
 
         $this->entityManager->flush();
 
-        $dataArray = $this->createEmailAndSmsData($partnerDetails['partner'], $partnerDetails['person'], $huwelijkObject);
+        // Handle the assent of the partner.
+        $assent = $this->handleAssentService->handleAssent($partnerDetails['person'], 'partner', $huwelijkObject->getId()->toString(), $partnerDetails['personAssent']);
 
-        $assent = $this->handleAssentService->handleAssent($partnerDetails['person'], 'partner', $dataArray, $huwelijkObject->getId()->toString(), $partnerDetails['personAssent']);
+        // Create email and sms data.
+        $dataArray = $this->createEmailAndSmsData($partnerDetails['partner'], $partnerDetails['person'], $huwelijkObject, $assent->getId()->toString());
 
-        $assent->setValue('name', $dataArray['response']['assentNaam']);
+        // Update assent with assentName and assentDescription of the data array.
+        $assent->setValue('name', $dataArray['response']['assentName']);
         $assent->setValue('description', $dataArray['response']['assentDescription']);
         $this->entityManager->persist($assent);
-
-        $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
+
+        // Hanle send email and sms for assent.
+        $this->handleAssentService->handleAssentEmailAndSms($partnerDetails['person'], 'partner',  $dataArray, $assent);
 
         return $this->cacheService->getObject($id);
 

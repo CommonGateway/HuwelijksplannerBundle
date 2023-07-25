@@ -97,6 +97,34 @@ class HandleAssentService
 
     }//end checkSourceAuth()
 
+    /**
+     * Checks the config.
+     *
+     * @param string $config The config array from the action.
+     *
+     * @return array
+     */
+    public function checkConfig(array $config): array
+    {
+        if (key_exists('cc', $config) === true) {
+            unset($config['cc']);
+        }
+
+        if (key_exists('bcc', $config) === true) {
+            unset($config['bcc']);
+        }
+
+        if (key_exists('replyTo', $config) === true) {
+            unset($config['replyTo']);
+        }
+
+        if (key_exists('priority', $config) === true) {
+            unset($config['priority']);
+        }
+
+        return $config;
+    }
+
 
     /**
      * Sends an emails.
@@ -116,30 +144,8 @@ class HandleAssentService
             // logger
         }//end if
 
-        $config = $action->getConfiguration();
-
-        $config['subject']   = 'Melding Voorgenomen Huwelijk';
-        $config['variables'] = [
-            'requesterNaam' => 'requesterNaam',
-            'partnerNaam'   => 'partnerNaam',
-            'url'           => 'url',
-        ];
-
-        if (key_exists('cc', $config) === true) {
-            unset($config['cc']);
-        }
-
-        if (key_exists('bcc', $config) === true) {
-            unset($config['bcc']);
-        }
-
-        if (key_exists('replyTo', $config) === true) {
-            unset($config['replyTo']);
-        }
-
-        if (key_exists('priority', $config) === true) {
-            unset($config['priority']);
-        }
+        $configuration = $action->getConfiguration();
+        $config = $this->checkConfig($configuration);
 
         switch ($type) {
         case 'requester':
@@ -182,35 +188,17 @@ class HandleAssentService
      */
     public function sendSms(object $phoneNumbers, string $type, array $data): void
     {
-        switch ($type) {
-        case 'requester':
-            $data['response']['recipients'] = 'Melding Voorgenomen Huwelijk';
-            break;
-        case 'partner':
-            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
-            break;
-        case 'witness':
-            $data['response']['recipients'] = 'Beste '.$data['response']['partnerNaam'].', '.$data['response']['assentNaam'].' '.$data['response']['assentDescription'].' '.$data['response']['url'];
-            break;
-        default:
-            $data['response']['recipients'] = 'Assent request';
-            break;
-        }//end switch
-
         $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.MessageBirdAction.action.json', 'common-gateway/huwelijksplanner-bundle');
 
-        if ($action->getAsync() === false) {
-            $action->setAsync(true);
-            $this->entityManager->persist($action);
-            $this->entityManager->flush();
-        }
-
+        // Set the phoneNumbers to the recipients array.
+        $data['response']['recipients'] = [];
         foreach ($phoneNumbers as $phoneNumber) {
-            $data['response']['recipients'] = $phoneNumber->getValue('telefoonnummer');
-            // throw action event
-            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
-            $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
+            $data['response']['recipients'][] = $phoneNumber->getValue('telefoonnummer');
         }//end foreach
+
+        // throw action event
+        $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
+        $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
 
     }//end sendSms()
 
@@ -244,12 +232,47 @@ class HandleAssentService
      * @param ObjectEntity      $person The person to make/update an assent for.
      * @param string            $type   The type of assent.
      * @param array             $data   The data of the request.
-     * @param array             $data   The id of the property this assent is about.
      * @param ObjectEntity|null $assent The assent of the person
      *
      * @return ObjectEntity|null
      */
-    public function handleAssent(ObjectEntity $person, string $type, array $data, string $propertyId, ?ObjectEntity $assent=null): ?ObjectEntity
+    public function handleAssentEmailAndSms(ObjectEntity $person, string $type, array $data, ObjectEntity $assent): ObjectEntity
+    {
+
+        if (($phoneNumbers = $person->getValue('telefoonnummers')) === false) {
+            $phoneNumbers = null;
+        }//end if
+
+        if (($emailAddresses = $person->getValue('emails')) === false) {
+            $emailAddresses = null;
+        }//end if
+
+        if ($emailAddresses === null && $phoneNumbers === null) {
+            return $assent;
+        }//end if
+
+        $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
+
+        if ($assent->getValue('status') !== 'granted') {
+            $this->sendEmail($emailAddresses, $type, $data);
+            $this->sendSms($phoneNumbers, $type, $data);
+        }
+
+        return $assent;
+    }
+
+
+    /**
+     * Handles the assent for the given person and sends an email or sms.
+     *
+     * @param ObjectEntity      $person The person to make/update an assent for.
+     * @param string            $type   The type of assent.
+     * @param array             $propertyId   The id of the property this assent is about.
+     * @param ObjectEntity|null $assent The assent of the person
+     *
+     * @return ObjectEntity|null
+     */
+    public function handleAssent(ObjectEntity $person, string $type, string $propertyId, ?ObjectEntity $assent=null): ?ObjectEntity
     {
         // @TODO generate secret
         $assentSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.assent.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -275,27 +298,6 @@ class HandleAssentService
         );
         $this->entityManager->persist($assent);
         $this->entityManager->flush();
-
-        if (($phoneNumbers = $person->getValue('telefoonnummers')) === false) {
-            $phoneNumbers = null;
-        }//end if
-
-        if (($emailAddresses = $person->getValue('emails')) === false) {
-            $emailAddresses = null;
-        }//end if
-
-        if ($emailAddresses === null && $phoneNumbers === null) {
-            return $assent;
-        }//end if
-
-        $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
-
-        if ($assent->getValue('status') !== 'granted') {
-            $data['response']['url'] = $data['response']['url'].$assent->getId()->toString();
-
-            $this->sendEmail($emailAddresses, $type, $data);
-            $this->sendSms($phoneNumbers, $type, $data);
-        }
 
         return $assent;
 

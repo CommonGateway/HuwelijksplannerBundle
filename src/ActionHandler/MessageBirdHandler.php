@@ -39,7 +39,14 @@ class MessageBirdHandler implements ActionHandlerInterface
             '$schema'    => 'https://docs.commongateway.nl/schemas/ActionHandler.schema.json',
             'title'      => 'MessageBird',
             'required'   => [],
-            'properties' => [],
+            'properties' => [
+                'originator' => [
+                    'type'        => 'string',
+                    'description' => 'The phonenumber of the orginator of the message',
+                    'example'     => '+31853036840',
+                    'required'    => true,
+                ]
+            ],
         ];
 
     }//end getConfiguration()

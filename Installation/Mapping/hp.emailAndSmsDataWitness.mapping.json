@@ -1,0 +1,13 @@
+{
+  "title": "EmailAndSmsDataWitness",
+  "$id": "https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataWitness.mapping.json",
+  "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+  "version": "0.0.4",
+  "passTrough": false,
+  "mapping": {
+    "body": "Beste {{ witnessName }}, u bent gevraagd om getuigen te zijn bij het huwelijk van {{ requesterName }} en {{ partnerName }}. Op {{ moment }} in {{ location }}. {{ requesterName }} en {{ partnerName }} hebben u gevraagd om een reactie te geven op dit verzoek. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId={{ assentId }}",
+    "assentName": "U bent gevraagd om getuigen te zijn bij het huwelijk van {{ requesterName }} en {{ partnerName }}.",
+    "assentDescription": "Op {{ moment }} in {{ location }}. {{ requesterName }} {{ partnerName }} hebben u gevraagd om een reactie te geven op dit verzoek.",
+    "url": "https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId={{ assentId }}"
+  }
+}
