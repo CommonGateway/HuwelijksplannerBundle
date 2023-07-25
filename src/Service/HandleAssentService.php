@@ -97,6 +97,7 @@ class HandleAssentService
 
     }//end checkSourceAuth()
 
+
     /**
      * Checks the config.
      *
@@ -123,7 +124,8 @@ class HandleAssentService
         }
 
         return $config;
-    }
+
+    }//end checkConfig()
 
 
     /**
@@ -145,7 +147,7 @@ class HandleAssentService
         }//end if
 
         $configuration = $action->getConfiguration();
-        $config = $this->checkConfig($configuration);
+        $config        = $this->checkConfig($configuration);
 
         switch ($type) {
         case 'requester':
@@ -259,16 +261,17 @@ class HandleAssentService
         }
 
         return $assent;
-    }
+
+    }//end handleAssentEmailAndSms()
 
 
     /**
      * Handles the assent for the given person and sends an email or sms.
      *
-     * @param ObjectEntity      $person The person to make/update an assent for.
-     * @param string            $type   The type of assent.
-     * @param array             $propertyId   The id of the property this assent is about.
-     * @param ObjectEntity|null $assent The assent of the person
+     * @param ObjectEntity      $person     The person to make/update an assent for.
+     * @param string            $type       The type of assent.
+     * @param array             $propertyId The id of the property this assent is about.
+     * @param ObjectEntity|null $assent     The assent of the person
      *
      * @return ObjectEntity|null
      */

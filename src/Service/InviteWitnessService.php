@@ -142,7 +142,7 @@ class InviteWitnessService
      *
      * @param ObjectEntity $huwelijkObject The huwelijk object.
      * @param ObjectEntity $person         The person object.
-     * @param string $assentId The assent id of the witness.
+     * @param string       $assentId       The assent id of the witness.
      *
      * @return ?array The updated huwelijk object as array.
      */
@@ -170,7 +170,7 @@ class InviteWitnessService
             'moment'        => $moment,
             'location'      => $location,
             'huwelijk'      => $huwelijkObject,
-            'assentId'      => $assentId
+            'assentId'      => $assentId,
         ];
 
         $mapping = $this->gatewayResourceService->getMapping('https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataWitness.mapping.json', 'common-gateway/huwelijksplanner-bundle');
@@ -178,6 +178,7 @@ class InviteWitnessService
         $data['response'] = $this->mappingService->mapping($mapping, $dataArray);
 
         return $data;
+
     }//end createEmailAndSmsData()
 
 

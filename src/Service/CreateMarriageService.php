@@ -160,7 +160,7 @@ class CreateMarriageService
         $person = $this->getPerson($huwelijk);
 
         // creates an assent and add the person to the partners of this merriage
-        $assent = $this->handleAssentService->handleAssent($person, 'requester', $huwelijkObject->getId()->toString(), null);
+        $assent                        = $this->handleAssentService->handleAssent($person, 'requester', $huwelijkObject->getId()->toString(), null);
         $requesterAssent['partners'][] = $assent->getId()->toString();
         $huwelijkObject->hydrate($requesterAssent);
 
@@ -169,7 +169,7 @@ class CreateMarriageService
         $this->entityManager->persist($huwelijkObject);
         $this->entityManager->flush();
         $this->cacheService->cacheObject($huwelijkObject);
-        
+
         // @todo this is hacky, the above schould alredy do this
         return $this->cacheService->getObject($huwelijkId);
 

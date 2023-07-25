@@ -47,8 +47,7 @@ class InvitePartnerHandler implements ActionHandlerInterface
             'properties' => [
                 'mapping' => [
                     'type'        => 'string',
-                    'description' => 
-                        'The mapping for the assent email and sms data that is made for the partner.
+                    'description' => 'The mapping for the assent email and sms data that is made for the partner.
                          The following variables has to be filled in.
                          * `body` is the body of the sms,
                          * `assentName` is the name of the assent that is made for this partner,
@@ -64,7 +63,7 @@ class InvitePartnerHandler implements ActionHandlerInterface
                     'example'     => 'https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json',
                     'reference'   => 'https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json',
                     'required'    => true,
-                ]
+                ],
             ],
         ];
 

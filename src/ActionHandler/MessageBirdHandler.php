@@ -45,7 +45,7 @@ class MessageBirdHandler implements ActionHandlerInterface
                     'description' => 'The phonenumber of the orginator of the message',
                     'example'     => '+31853036840',
                     'required'    => true,
-                ]
+                ],
             ],
         ];
 

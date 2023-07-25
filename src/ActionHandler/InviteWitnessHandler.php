@@ -47,8 +47,7 @@ class InviteWitnessHandler implements ActionHandlerInterface
             'properties' => [
                 'mapping' => [
                     'type'        => 'string',
-                    'description' =>
-                        'The mapping for the assent email and sms data that is made for the partner.
+                    'description' => 'The mapping for the assent email and sms data that is made for the partner.
                          The following variables has to be filled in.
                          * `body` is the body of the sms,
                          * `assentName` is the name of the assent that is made for this partner,
@@ -65,7 +64,7 @@ class InviteWitnessHandler implements ActionHandlerInterface
                     'example'     => 'https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataWitness.mapping.json',
                     'reference'   => 'https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataWitness.mapping.json',
                     'required'    => true,
-                ]
+                ],
             ],
         ];
 

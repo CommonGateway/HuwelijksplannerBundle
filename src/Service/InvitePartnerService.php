@@ -112,7 +112,7 @@ class InvitePartnerService
      * @param ObjectEntity $requester      The requester object.
      * @param ObjectEntity $person         The person object.
      * @param ObjectEntity $huwelijkObject The huwelijk object.
-     * @param string $assentId The id of the assent.
+     * @param string       $assentId       The id of the assent.
      *
      * @return ?array The updated huwelijk object as array.
      */
@@ -134,7 +134,7 @@ class InvitePartnerService
             'moment'        => $moment,
             'location'      => $location,
             'huwelijk'      => $huwelijkObject,
-            'assentId'      => $assentId
+            'assentId'      => $assentId,
         ];
 
         $mapping = $this->gatewayResourceService->getMapping('https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json', 'common-gateway/huwelijksplanner-bundle');
