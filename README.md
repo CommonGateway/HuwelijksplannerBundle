@@ -33,7 +33,7 @@ If you have any questions, suggestions, or new ideas, please don't hesitate to s
 
 ## Backend Installation Instructions
 
-The Utrecht Huwelijksplanner backend codebase utilizes the Common Gateway as an open-source installation framework. This means that the Huwelijksplanner library, in its core form, functions as a plugin on this Framework. To learn more about the Common Gateway, you can refer to the documentation [here](https://commongateway.readthedocs.io/en/latest/).
+The Huwelijksplanner backend codebase utilizes the Common Gateway as an open-source installation framework. This means that the Huwelijksplanner library, in its core form, functions as a plugin on this Framework. To learn more about the Common Gateway, you can refer to the documentation [here](https://commongateway.readthedocs.io/en/latest/).
 
 Please note that the Huwelijksplanner frontend codebase is a separate docker container.
 
@@ -68,15 +68,11 @@ To install the backend, follow the steps below:
 
         docker-compose exec php bin/console commongateway:initialize -data
 
-With these steps completed, the backend setup for the Utrecht Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
+With these steps completed, the backend setup for the Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
 
 ## Frontend Installation Instructions
 
-[//]: # "# Utrecht Huwelijksplanner - Developer Instructions"
-
-[//]: #
-
-These instructions will guide you through the setup process for the Utrecht Huwelijksplanner project. Please follow the steps below to get started:
+These instructions will guide you through the setup process for the Huwelijksplanner project. Please follow the steps below to get started:
 
 ### Prerequisites
 
@@ -108,19 +104,94 @@ Before you begin, ensure you have the following software installed on your syste
 
     If you encounter an error during this step, try running the production Docker Compose file located in the repository under `Docker-compose.yml`. After a successful build, you can retry step 4.
 
-### Setting up Scopes for Anonymous User in Gateway UI
+With these steps completed, the frontend setup for the Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
 
-In the Gateway UI, you need to configure scopes for the anonymous user. Follow these steps to set it up:
+## Admin UI - Setup Instructions
 
-1.  Go to the settings in the Gateway UI.
-2.  Navigate to the 'Security Groups' tab.
-3.  Locate and select 'Default Anonymous' to view its details.
-4.  Add the following scopes under the 'Scopes' section:
+Once the backend (and frontend) is up and running, the HuwelijksplannerBundle can be configured. To ensure proper functionality, the sources and Security Group (Default Anonymous user) need to be modified. Other adjustments are optional.
 
-        - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
-        - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
+### Configuration Steps:
 
-Once you have completed these steps, you should have the Utrecht Huwelijksplanner project running on your local development environment with the necessary scopes configured for the anonymous user.
+1.  **Users**
+    *   Change the passwords of the users if necessary. It is recommended that you change the email of the admin user.
+        *   Go to `Settings` in the Admin UI.
+        *   Navigate to the `Users` tab.
+        *   Select the user and edit the password.
+
+2.  **Security Group**
+    *   Add the scopes for the Default Anonymous in the Security Group.
+        *   Go to `Settings` in the Admin UI.
+        *   Navigate to the `Security Groups` tab
+        *   Locate and select `Default Anonymous` to view its details
+        *   Add the following scopes under the `Scopes` section:
+            \- schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
+            \- schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
+
+3.  **Sources**
+    *   Provide the required API keys for the following sources:
+        *   SendInBlue API
+        *   Mollie API
+        *   MessageBird API
+
+4.  **Actions**
+    *   Change the sender of the SMS in the `MessageBird` action:
+        *   Go to `Actions` in the Admin UI.
+        *   Locate and select `MessageBird` to view its details
+        *   Set the `Originator` to the sender of the SMS.
+
+5.  **Mappings**
+    *   Configure SMS and Email data for the partner and/or the witnesses:
+        *   Go to `Mappings` in the Admin UI.
+        *   Locate and select `EmailAndSmsDataPartner` or `EmailAndSmsDataWitness` to view its details
+        *   Change the values of body, assentName, assentDescription and url.
+            *   `body` is the body of the sms
+            *   `assentName` is the name of the assent that is made for this partner
+            *   `assentDescription` is the description of the assent that is made for this partner
+            *   `url` is the url that the partner is directed to, to confirm the marriage
+
+Once you have completed these steps, the Huwelijksplanner Admin UI should be fully configured and is the Huwelijksplanner project ready to use.
+
+## Huwelijksplanner Test Data - Developer Guide
+
+Here is information on the test data used in the Huwelijksplanner. We load two files containing test data: BRP (Basisregistratie Personen) `BRPTestData.json` and SDG products `HuwelijksPlannerTestData,json`.
+
+### Test Data Details:
+
+#### BRP Test Data:
+
+The BRP test data includes entries for registered persons in the BRP system, linked to the users being loaded. Each user has a `person` property that contains a BSN (Burger Service Nummer) corresponding to the BSN in the BRP registered persons object.
+
+#### SDG Products Test Data:
+
+The SDG products test data consists of the following objects:
+
+1.  Types of Marriages:
+    *   Omzetting (Conversion)
+    *   Partnerschap (Partnership)
+    *   Huwelijk (Marriage)
+    *   Eenvoudig Huwelijk (Simple Marriage)
+    *   Flits/Baliehuwelijk (Express/Counter Marriage)
+    *   Gratis Trouwen (Free Marriage)
+
+2.  Marriage Officials:
+    *   Toegewezen (Assigned)
+    *   Eigen Trouwambtenaar (Own Marriage Official)
+    *   Keuze Trouwambtenaar (Choice of Marriage Official)
+
+3.  Marriage Locations:
+    *   Eigen Locatie (Own Location)
+    *   Loge (Lodge)
+    *   Trouwzaal (Wedding Hall)
+    *   Balie (Counter)
+
+4.  Extra Products:
+    *   Trouwboekje (Marriage Booklet)
+
+All SDG products have translations with additional information about the product.
+
+These test data files are used to populate the Huwelijksplanner with sample information for testing and development purposes.
+
+Feel free to explore and utilize this test data as needed during your development workflow.
 
 To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at <https://commongateway.github.io/HuwelijksplannerBundle/>. This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
 
