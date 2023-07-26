@@ -112,11 +112,11 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
 
 ### Configuration Steps:
 
-1.  **Users**
-    *   Change the passwords of the users if necessary.
-        *   Go to `Settings` in the Admin UI.
-        *   Navigate to the `Users` tab.
-        *   Select the user and edit the password.
+1. **Users**
+    - Change the passwords of the users if necessary. It is recommended that you change the email of the admin user.
+      - Go to `Settings` in the Admin UI. 
+      - Navigate to the `Users` tab.
+      - Select the user and edit the password.
 
 2.  **Security Group**
     *   Add the scopes for the Default Anonymous in the Security Group.
@@ -150,6 +150,48 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
             *   `url` is the url that the partner is directed to, to confirm the marriage
 
 Once you have completed these steps, the Huwelijksplanner Admin UI should be fully configured and is the Huwelijksplanner project ready to use.
+
+## Huwelijksplanner Test Data - Developer Guide
+
+Here is information on the test data used in the Huwelijksplanner. We load two files containing test data: BRP (Basisregistratie Personen) `BRPTestData.json` and SDG products `HuwelijksPlannerTestData,json`.
+
+### Test Data Details:
+
+#### BRP Test Data:
+
+The BRP test data includes entries for registered persons in the BRP system, linked to the users being loaded. Each user has a `person` property that contains a BSN (Burger Service Nummer) corresponding to the BSN in the BRP registered persons object.
+
+#### SDG Products Test Data:
+
+The SDG products test data consists of the following objects:
+
+1. Types of Marriages:
+    - Omzetting (Conversion)
+    - Partnerschap (Partnership)
+    - Huwelijk (Marriage)
+    - Eenvoudig Huwelijk (Simple Marriage)
+    - Flits/Baliehuwelijk (Express/Counter Marriage)
+    - Gratis Trouwen (Free Marriage)
+
+2. Marriage Officials:
+    - Toegewezen (Assigned)
+    - Eigen Trouwambtenaar (Own Marriage Official)
+    - Keuze Trouwambtenaar (Choice of Marriage Official)
+
+3. Marriage Locations:
+    - Eigen Locatie (Own Location)
+    - Loge (Lodge)
+    - Trouwzaal (Wedding Hall)
+    - Balie (Counter)
+
+4. Extra Products:
+    - Trouwboekje (Marriage Booklet)
+
+All SDG products have translations with additional information about the product.
+
+These test data files are used to populate the Huwelijksplanner with sample information for testing and development purposes.
+
+Feel free to explore and utilize this test data as needed during your development workflow.
 
 To gain a deeper understanding of the services and commands offered by the HuwelijksplannerBundle, we encourage you to explore the detailed documentation available at <https://commongateway.github.io/HuwelijksplannerBundle/>. This documentation provides comprehensive insights into the bundle's capabilities, service usage, and available commands.
 
