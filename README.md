@@ -104,7 +104,6 @@ Before you begin, ensure you have the following software installed on your syste
 
     If you encounter an error during this step, try running the production Docker Compose file located in the repository under `Docker-compose.yml`. After a successful build, you can retry step 4.
 
-
 With these steps completed, the frontend setup for the Huwelijksplanner project should be ready to use. If you encounter any issues during the installation process, seek assistance from the development team. Happy coding!
 
 ## Admin UI - Setup Instructions
@@ -113,44 +112,42 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
 
 ### Configuration Steps:
 
-1. **Users**
-    - Change the passwords of the users if necessary.
-      - Go to `Settings` in the Admin UI. 
-      - Navigate to the `Users` tab.
-      - Select the user and edit the password.
+1.  **Users**
+    *   Change the passwords of the users if necessary.
+        *   Go to `Settings` in the Admin UI.
+        *   Navigate to the `Users` tab.
+        *   Select the user and edit the password.
 
-2. **Security Group**
-    - Add the scopes for the Default Anonymous in the Security Group.
-      - Go to `Settings` in the Admin UI.
-      - Navigate to the `Security Groups` tab
-      - Locate and select `Default Anonymous` to view its details
-      - Add the following scopes under the `Scopes` section:
-          ```
-          - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
-          - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
-          ```
+2.  **Security Group**
+    *   Add the scopes for the Default Anonymous in the Security Group.
+        *   Go to `Settings` in the Admin UI.
+        *   Navigate to the `Security Groups` tab
+        *   Locate and select `Default Anonymous` to view its details
+        *   Add the following scopes under the `Scopes` section:
+                - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
+                - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
 
-3. **Sources**
-    - Provide the required API keys for the following sources:
-        - SendInBlue API
-        - Mollie API
-        - MessageBird API
+3.  **Sources**
+    *   Provide the required API keys for the following sources:
+        *   SendInBlue API
+        *   Mollie API
+        *   MessageBird API
 
-4. **Actions**
-    - Change the sender of the SMS in the `MessageBird` action:
-      - Go to `Actions` in the Admin UI. 
-      - Locate and select `MessageBird` to view its details
-      - Set the `Originator` to the sender of the SMS.
+4.  **Actions**
+    *   Change the sender of the SMS in the `MessageBird` action:
+        *   Go to `Actions` in the Admin UI.
+        *   Locate and select `MessageBird` to view its details
+        *   Set the `Originator` to the sender of the SMS.
 
-5. **Mappings**
-    - Configure SMS and Email data for the partner and/or the witnesses:
-      - Go to `Mappings` in the Admin UI.
-      - Locate and select `EmailAndSmsDataPartner` or `EmailAndSmsDataWitness` to view its details
-      - Change the values of body, assentName, assentDescription and url.
-        - `body` is the body of the sms
-        - `assentName` is the name of the assent that is made for this partner
-        - `assentDescription` is the description of the assent that is made for this partner
-        - `url` is the url that the partner is directed to, to confirm the marriage
+5.  **Mappings**
+    *   Configure SMS and Email data for the partner and/or the witnesses:
+        *   Go to `Mappings` in the Admin UI.
+        *   Locate and select `EmailAndSmsDataPartner` or `EmailAndSmsDataWitness` to view its details
+        *   Change the values of body, assentName, assentDescription and url.
+            *   `body` is the body of the sms
+            *   `assentName` is the name of the assent that is made for this partner
+            *   `assentDescription` is the description of the assent that is made for this partner
+            *   `url` is the url that the partner is directed to, to confirm the marriage
 
 Once you have completed these steps, the Huwelijksplanner Admin UI should be fully configured and is the Huwelijksplanner project ready to use.
 
