@@ -88,8 +88,8 @@ class MessageBirdService
     /**
      * Handles sending a message with messagebird.
      *
-     * @param array $recipients The phonenumbers of the recipients
-     * @param string $body The body of the tekst
+     * @param array  $recipients The phonenumbers of the recipients
+     * @param string $body       The body of the tekst
      *
      * @return bool
      */

@@ -72,8 +72,8 @@ class UpdateChecklistService
     /**
      * Checks the partners of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -112,8 +112,8 @@ class UpdateChecklistService
     /**
      * Checks the witnesses of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -153,8 +153,8 @@ class UpdateChecklistService
     /**
      * Checks the offeser of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -183,8 +183,8 @@ class UpdateChecklistService
     /**
      * Checks the moment of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -214,8 +214,8 @@ class UpdateChecklistService
     /**
      * Checks the products of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -245,8 +245,8 @@ class UpdateChecklistService
     /**
      * Checks the order of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -275,8 +275,8 @@ class UpdateChecklistService
     /**
      * Checks the case of the huwelijk.
      *
-     * @param ObjectEntity $huwelijk The huwelijk object
-     * @param array $checklist The checklist array
+     * @param ObjectEntity $huwelijk  The huwelijk object
+     * @param array        $checklist The checklist array
      *
      * @return array The huwelijk object with updated/created checklist
      */
@@ -301,6 +301,7 @@ class UpdateChecklistService
 
     }//end checkHuwelijkCase()
 
+
     /**
      * Checks data from the marriage object and updates the associated checklist.
      *
@@ -311,7 +312,7 @@ class UpdateChecklistService
      */
     public function updateChecklistHandler(array $data, array $configuration): array
     {
-        $this->data = $data;
+        $this->data          = $data;
         $this->configuration = $configuration;
 
         $huwelijkSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'common-gateway/huwelijksplanner-bundle');
@@ -321,7 +322,9 @@ class UpdateChecklistService
         }
 
         return $this->data;
-    }
+
+    }//end updateChecklistHandler()
+
 
     /**
      * Checks data from the marriage object and updates the associated checklist.

@@ -193,7 +193,6 @@ class CreateMarriageService
         $this->configuration = $configuration;
 
         // Check the response for an error, if so throw the error.
-
         $response = json_decode($this->data['response']->getContent(), true);
 
         $huwelijk = $this->createMarriage($response['_self']['id'], $this->data['body']);
