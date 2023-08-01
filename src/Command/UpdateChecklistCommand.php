@@ -56,9 +56,6 @@ class UpdateChecklistCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $style = new SymfonyStyle($input, $output);
-        $this->service->setStyle($style);
-
         if (!$this->service->updateChecklistHandler([], [])) {
             return Command::FAILURE;
         }
