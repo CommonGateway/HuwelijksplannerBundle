@@ -88,12 +88,12 @@ class MessageBirdService
     /**
      * Handles sending a message with messagebird.
      *
-     * @param string $recipients
-     * @param string $body
+     * @param array $recipients The phonenumbers of the recipients
+     * @param string $body The body of the tekst
      *
      * @return bool
      */
-    public function sendMessage(string $recipients, string $body): ?array
+    public function sendMessage(array $recipients, string $body): ?array
     {
         $this->pluginLogger->debug('Send a message');
 
