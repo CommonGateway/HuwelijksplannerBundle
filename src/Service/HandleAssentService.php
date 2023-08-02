@@ -197,9 +197,11 @@ class HandleAssentService
             $data['response']['recipients'][] = $phoneNumber->getValue('telefoonnummer');
         }//end foreach
 
-        // throw action event
-        $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
-        $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
+        if (empty($data['response']['recipients']) === false) {
+            // throw action event
+            $event = new ActionEvent('commongateway.handler.pre', $data, 'huwelijksplanner.send.message');
+            $this->eventDispatcher->dispatch($event, 'commongateway.handler.pre');
+        }
 
     }//end sendSms()
 

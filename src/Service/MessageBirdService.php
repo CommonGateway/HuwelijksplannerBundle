@@ -88,19 +88,16 @@ class MessageBirdService
     /**
      * Handles sending a message with messagebird.
      *
-     * @param array  $recipients The phonenumbers of the recipients
-     * @param string $body       The body of the tekst
-     *
-     * @return bool
+     * @return array|null
      */
-    public function sendMessage(array $recipients, string $body): ?array
+    public function sendMessage(): ?array
     {
         $this->pluginLogger->debug('Send a message');
 
         $messagebirdEntity = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.messagebird.schema.json', 'common-gateway/huwelijksplanner-bundle');
         $source            = $this->gatewayResourceService->getSource('https://huwelijksplanner.nl/source/hp.messagebird.source.json', 'common-gateway/huwelijksplanner-bundle');
 
-        $config = ['body' => json_encode(['recipients' => $recipients, 'originator' => $this->configuration['originator'], 'body' => $body])];
+        $config = ['body' => json_encode(['recipients' => $this->data['response']['recipients'], 'originator' => $this->configuration['originator'], 'body' => $this->data['response']['bodyMessage']])];
 
         try {
             $response = $this->callService->call($source, '/messages', 'POST', $config);
@@ -145,10 +142,7 @@ class MessageBirdService
         $this->data          = $data;
         $this->configuration = $configuration;
 
-        $recipients = $this->data['response']['recipients'];
-        $body       = $this->data['response']['bodyMessage'];
-
-        $message = $this->sendMessage($recipients, $body);
+        $message = $this->sendMessage();
 
         if ($message !== null) {
             $this->data['response'] = new Response(json_encode($message), 200, ['content-type' => 'application/json']);
