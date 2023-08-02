@@ -149,17 +149,17 @@ class HandleAssentService
         $configuration = $action->getConfiguration();
         $config        = $this->checkConfig($configuration);
 
-        switch ($type) {
-        case 'requester':
-            $config['template'] = $config['template2'];
-            break;
-        case 'partner':
-            $config['template'] = $config['template3'];
-            break;
-        case 'witness':
-            $config['template'] = $config['template4'];
-            break;
-        }
+//        switch ($type) {
+//        case 'requester':
+//            $config['template'] = $config['template2'];
+//            break;
+//        case 'partner':
+//            $config['template'] = $config['template3'];
+//            break;
+//        case 'witness':
+//            $config['template'] = $config['template4'];
+//            break;
+//        }
 
         $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
 

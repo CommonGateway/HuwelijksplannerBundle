@@ -1,14 +1,12 @@
 {
   "$id": "https://hp.nl/action/hp.CreatePaymentAction.action.json",
   "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "CreatePaymentAction",
   "description": "Create payment handler trigger.",
   "listens": [
     "huwelijksplanner.get.payment"
   ],
-  "throws": [],
-  "conditions": [],
   "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
   "priority": 0,
   "async": false,

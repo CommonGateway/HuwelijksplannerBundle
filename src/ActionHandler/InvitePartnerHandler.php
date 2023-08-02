@@ -49,7 +49,10 @@ class InvitePartnerHandler implements ActionHandlerInterface
                     'type'        => 'string',
                     'description' => 'The mapping for the assent email and sms data that is made for the partner.
                          The following variables has to be filled in.
-                         * `body` is the body of the sms,
+                         * `header` is the header of the email,
+                         * `salutation` is the salutation of the email,
+                         * `bodyEmail` is the body of the email,
+                         * `bodyMessage` is the body of the sms,
                          * `assentName` is the name of the assent that is made for this partner,
                          * `assentDescription` is the description of the assent that is made for this partner,
                          * `url` is the url that the partner is directed to, to confirm the marriage

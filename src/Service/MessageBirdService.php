@@ -146,7 +146,7 @@ class MessageBirdService
         $this->configuration = $configuration;
 
         $recipients = $this->data['response']['recipients'];
-        $body       = $this->data['response']['body'];
+        $body       = $this->data['response']['bodyMessage'];
 
         $message = $this->sendMessage($recipients, $body);
 
