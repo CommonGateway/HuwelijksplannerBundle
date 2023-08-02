@@ -112,11 +112,11 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
 
 ### Configuration Steps:
 
-1. **Users**
-    - Change the passwords of the users if necessary. It is recommended that you change the email of the admin user.
-      - Go to `Settings` in the Admin UI. 
-      - Navigate to the `Users` tab.
-      - Select the user and edit the password.
+1.  **Users**
+    *   Change the passwords of the users if necessary. It is recommended that you change the email of the admin user.
+        *   Go to `Settings` in the Admin UI.
+        *   Navigate to the `Users` tab.
+        *   Select the user and edit the password.
 
 2.  **Security Group**
     *   Add the scopes for the Default Anonymous in the Security Group.
@@ -124,8 +124,8 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
         *   Navigate to the `Security Groups` tab
         *   Locate and select `Default Anonymous` to view its details
         *   Add the following scopes under the `Scopes` section:
-                - schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
-                - schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
+            \- schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
+            \- schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
 
 3.  **Sources**
     *   Provide the required API keys for the following sources:
@@ -165,27 +165,27 @@ The BRP test data includes entries for registered persons in the BRP system, lin
 
 The SDG products test data consists of the following objects:
 
-1. Types of Marriages:
-    - Omzetting (Conversion)
-    - Partnerschap (Partnership)
-    - Huwelijk (Marriage)
-    - Eenvoudig Huwelijk (Simple Marriage)
-    - Flits/Baliehuwelijk (Express/Counter Marriage)
-    - Gratis Trouwen (Free Marriage)
+1.  Types of Marriages:
+    *   Omzetting (Conversion)
+    *   Partnerschap (Partnership)
+    *   Huwelijk (Marriage)
+    *   Eenvoudig Huwelijk (Simple Marriage)
+    *   Flits/Baliehuwelijk (Express/Counter Marriage)
+    *   Gratis Trouwen (Free Marriage)
 
-2. Marriage Officials:
-    - Toegewezen (Assigned)
-    - Eigen Trouwambtenaar (Own Marriage Official)
-    - Keuze Trouwambtenaar (Choice of Marriage Official)
+2.  Marriage Officials:
+    *   Toegewezen (Assigned)
+    *   Eigen Trouwambtenaar (Own Marriage Official)
+    *   Keuze Trouwambtenaar (Choice of Marriage Official)
 
-3. Marriage Locations:
-    - Eigen Locatie (Own Location)
-    - Loge (Lodge)
-    - Trouwzaal (Wedding Hall)
-    - Balie (Counter)
+3.  Marriage Locations:
+    *   Eigen Locatie (Own Location)
+    *   Loge (Lodge)
+    *   Trouwzaal (Wedding Hall)
+    *   Balie (Counter)
 
-4. Extra Products:
-    - Trouwboekje (Marriage Booklet)
+4.  Extra Products:
+    *   Trouwboekje (Marriage Booklet)
 
 All SDG products have translations with additional information about the product.
 

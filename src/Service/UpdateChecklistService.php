@@ -75,7 +75,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkPartners(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -115,7 +115,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkWitnesses(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -156,7 +156,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkOfficer(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -186,7 +186,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkMoment(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -217,7 +217,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkProducts(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -248,7 +248,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkOrder(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -278,7 +278,7 @@ class UpdateChecklistService
      * @param ObjectEntity $huwelijk  The huwelijk object
      * @param array        $checklist The checklist array
      *
-     * @return ObjectEntity The huwelijk object with updated/created checklist
+     * @return array The huwelijk object with updated/created checklist
      */
     public function checkHuwelijkCase(ObjectEntity $huwelijk, array $checklist): array
     {
@@ -300,6 +300,30 @@ class UpdateChecklistService
         return $checklist;
 
     }//end checkHuwelijkCase()
+
+
+    /**
+     * Checks data from the marriage object and updates the associated checklist.
+     *
+     * @param array $data
+     * @param array $configuration
+     *
+     * @return array data response with the huwelijk object with updated/created checklist
+     */
+    public function updateChecklistHandler(array $data, array $configuration): array
+    {
+        $this->data          = $data;
+        $this->configuration = $configuration;
+
+        $huwelijkSchema = $this->gatewayResourceService->getSchema('https://huwelijksplanner.nl/schemas/hp.huwelijk.schema.json', 'common-gateway/huwelijksplanner-bundle');
+
+        foreach ($huwelijkSchema->getObjectEntities() as $huwelijk) {
+            $this->data['response'][] = $this->checkHuwelijk($huwelijk);
+        }
+
+        return $this->data;
+
+    }//end updateChecklistHandler()
 
 
     /**
