@@ -7,7 +7,7 @@
   "passTrough": false,
   "mapping": {
     "header": "Melding Voorgenomen Huwelijk",
-    "salutation": "Beste {{ partnerName }},",
+    "salutation": "Beste {{ partnerName }}",
     "bodyEmail": "Uw partner heeft u uitgenodigd om te loggen met DigiD. Zo bevestigt u met uw partner dat jullie het huwelijk willen regelen.",
     "bodyMessage": "Beste {{ partnerName }}, u bent gevraagd door {{ requesterName }} om te trouwen. Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}",
     "assentName": "U bent gevraagd door {{ requesterName }} om te trouwen.",

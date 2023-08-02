@@ -101,7 +101,7 @@ class HandleAssentService
     /**
      * Checks the config.
      *
-     * @param string $config The config array from the action.
+     * @param array $config The config array from the action.
      *
      * @return array
      */
@@ -132,12 +132,11 @@ class HandleAssentService
      * Sends an emails.
      *
      * @param object $emailAddresses The emailaddresses.
-     * @param string $type           The type of the assent.
-     * @param string $data           The data array of the request.
+     * @param array $data The data array of the request.
      *
      * @return void
      */
-    public function sendEmail(object $emailAddresses, string $type, array $data): void
+    public function sendEmail(object $emailAddresses, array $data): void
     {
         // Get action.
         $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.HandleSendEmailAction.action.json', 'common-gateway/huwelijksplanner-bundle');
@@ -149,20 +148,8 @@ class HandleAssentService
         $configuration = $action->getConfiguration();
         $config        = $this->checkConfig($configuration);
 
-        // switch ($type) {
-        // case 'requester':
-        // $config['template'] = $config['template2'];
-        // break;
-        // case 'partner':
-        // $config['template'] = $config['template3'];
-        // break;
-        // case 'witness':
-        // $config['template'] = $config['template4'];
-        // break;
-        // }
         $config['serviceDNS'] = $source->getLocation().$source->getApiKey();
 
-        // ? variables and data
         foreach ($emailAddresses as $emailAddress) {
             // set receiver to config
             $config['receiver'] = $emailAddress->getValue('email');
@@ -183,14 +170,11 @@ class HandleAssentService
      * Sends a sms.
      *
      * @param object $phoneNumbers The phonenumbers.
-     * @param string $type         The type of the assent.
-     *
+     * @param array $data
      * @return void
      */
-    public function sendSms(object $phoneNumbers, string $type, array $data): void
+    public function sendSms(object $phoneNumbers, array $data): void
     {
-        $action = $this->gatewayResourceService->getAction('https://hp.nl/action/hp.MessageBirdAction.action.json', 'common-gateway/huwelijksplanner-bundle');
-
         // Set the phoneNumbers to the recipients array.
         $data['response']['recipients'] = [];
         foreach ($phoneNumbers as $phoneNumber) {
@@ -255,8 +239,8 @@ class HandleAssentService
         $this->pluginLogger->debug('hier mail of sms versturen en een secret genereren');
 
         if ($assent->getValue('status') !== 'granted') {
-            $this->sendEmail($emailAddresses, $type, $data);
-            $this->sendSms($phoneNumbers, $type, $data);
+            $this->sendEmail($emailAddresses, $data);
+            $this->sendSms($phoneNumbers, $data);
         }
 
         return $assent;
@@ -267,10 +251,10 @@ class HandleAssentService
     /**
      * Handles the assent for the given person and sends an email or sms.
      *
-     * @param ObjectEntity      $person     The person to make/update an assent for.
-     * @param string            $type       The type of assent.
-     * @param array             $propertyId The id of the property this assent is about.
-     * @param ObjectEntity|null $assent     The assent of the person
+     * @param ObjectEntity $person The person to make/update an assent for.
+     * @param string $type The type of assent.
+     * @param string $propertyId The id of the property this assent is about.
+     * @param ObjectEntity|null $assent The assent of the person
      *
      * @return ObjectEntity|null
      */

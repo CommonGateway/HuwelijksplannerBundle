@@ -7,7 +7,7 @@
   "passTrough": false,
   "mapping": {
     "header": "Melding Voorgenomen Huwelijk",
-    "salutation": "Beste {{ witnessName }},",
+    "salutation": "Beste {{ witnessName }}",
     "bodyEmail": "{{ requesterName }} en {{ partnerName }} heeft u uitgenodigd om getuigen te zijn voor hun huwelijk. Via de link kunt u de uitnodiging accepteren of weigeren.",
     "bodyMessage": "Beste {{ witnessName }}, u bent gevraagd om getuigen te zijn bij het huwelijk van {{ requesterName }} en {{ partnerName }}. Op {{ moment }} in {{ location }}. {{ requesterName }} en {{ partnerName }} hebben u gevraagd om een reactie te geven op dit verzoek. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/getuigen/instemmen?assentId={{ assentId }}",
     "assentName": "U bent gevraagd om getuigen te zijn bij het huwelijk van {{ requesterName }} en {{ partnerName }}.",
