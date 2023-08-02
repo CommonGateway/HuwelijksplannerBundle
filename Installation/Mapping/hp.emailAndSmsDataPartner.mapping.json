@@ -2,11 +2,14 @@
   "title": "EmailAndSmsDataPartner",
   "$id": "https://huwelijksplanner.nl/mapping/hp.emailAndSmsDataPartner.mapping.json",
   "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The mapping for the assent email and sms data that is made for the partner.\n The following variables has to be filled in.\n * `body` is the body of the sms,\n * `assentName` is the name of the assent that is made for this partner,\n * `assentDescription` is the description of the assent that is made for this partner,\n * `url` is the url that the partner is directed to, to confirm the marriage\n Here you can use the \\'requesterName\\', \\'partnerName\\', \\'moment\\', \\'location\\', \\'huwelijk\\', \\'assentId\\' variables to your sentence. \n ** The requesterName is the name of the partner that requested the marriage. \n ** The partnerName is the name of the partner that is asked to get married.\n ** The `moment` is the moment of the marriage.\n ** The `location` is the location of the marriage.\n ** The `huwelijk` is the huwelijks object that is being updated.\n ** The `assentId` is the assent id that is made for the partner.",
   "passTrough": false,
   "mapping": {
-    "body": "Beste {{ partnerName }}, u bent gevraagd door {{ requesterName }} om te trouwen. Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}",
+    "header": "Melding Voorgenomen Huwelijk",
+    "salutation": "Beste {{ partnerName }}",
+    "bodyEmail": "Uw partner heeft u uitgenodigd om te loggen met DigiD. Zo bevestigt u met uw partner dat jullie het huwelijk willen regelen.",
+    "bodyMessage": "Beste {{ partnerName }}, u bent gevraagd door {{ requesterName }} om te trouwen. Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen. https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}",
     "assentName": "U bent gevraagd door {{ requesterName }} om te trouwen.",
     "assentDescription": "Op {{ moment }} in {{ location }}. {{ requesterName }} heeft gevraagd of u dit huwelijk wilt bevestigen.",
     "url": "https://utrecht-huwelijksplanner.frameless.io/en/voorgenomen-huwelijk/partner/login?assentId={{ assentId }}"
