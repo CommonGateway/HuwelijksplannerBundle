@@ -7,6 +7,12 @@
   "listens": [
     "huwelijksplanner.send.email"
   ],
+  "conditions": {
+    "==": [
+      1,
+      1
+    ]
+  },
   "class": "App\\ActionHandler\\EmailHandler",
   "priority": 0,
   "async": true,

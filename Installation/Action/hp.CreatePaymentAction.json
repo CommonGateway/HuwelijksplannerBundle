@@ -7,6 +7,12 @@
   "listens": [
     "huwelijksplanner.get.payment"
   ],
+  "conditions": {
+    "==": [
+      1,
+      1
+    ]
+  },
   "class": "CommonGateway\\HuwelijksplannerBundle\\ActionHandler\\CreatePaymentHandler",
   "priority": 0,
   "async": false,
