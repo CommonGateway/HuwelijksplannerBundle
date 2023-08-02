@@ -132,7 +132,7 @@ class HandleAssentService
      * Sends an emails.
      *
      * @param object $emailAddresses The emailaddresses.
-     * @param array $data The data array of the request.
+     * @param array  $data           The data array of the request.
      *
      * @return void
      */
@@ -169,8 +169,8 @@ class HandleAssentService
     /**
      * Sends a sms.
      *
-     * @param object $phoneNumbers The phonenumbers.
-     * @param array $data
+     * @param  object $phoneNumbers The phonenumbers.
+     * @param  array  $data
      * @return void
      */
     public function sendSms(object $phoneNumbers, array $data): void
@@ -251,10 +251,10 @@ class HandleAssentService
     /**
      * Handles the assent for the given person and sends an email or sms.
      *
-     * @param ObjectEntity $person The person to make/update an assent for.
-     * @param string $type The type of assent.
-     * @param string $propertyId The id of the property this assent is about.
-     * @param ObjectEntity|null $assent The assent of the person
+     * @param ObjectEntity      $person     The person to make/update an assent for.
+     * @param string            $type       The type of assent.
+     * @param string            $propertyId The id of the property this assent is about.
+     * @param ObjectEntity|null $assent     The assent of the person
      *
      * @return ObjectEntity|null
      */
