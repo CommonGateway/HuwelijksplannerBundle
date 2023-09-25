@@ -112,34 +112,25 @@ Once the backend (and frontend) is up and running, the HuwelijksplannerBundle ca
 
 ### Configuration Steps:
 
-1.  **Users**
+1. **Users**
     *   Change the passwords of the users if necessary. It is recommended that you change the email of the admin user.
         *   Go to `Settings` in the Admin UI.
         *   Navigate to the `Users` tab.
         *   Select the user and edit the password.
 
-2.  **Security Group**
-    *   Add the scopes for the Default Anonymous in the Security Group.
-        *   Go to `Settings` in the Admin UI.
-        *   Navigate to the `Security Groups` tab
-        *   Locate and select `Default Anonymous` to view its details
-        *   Add the following scopes under the `Scopes` section:
-            \- schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET
-            \- schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET
-
-3.  **Sources**
+2. **Sources**
     *   Provide the required API keys for the following sources:
         *   SendInBlue API
         *   Mollie API
         *   MessageBird API
 
-4.  **Actions**
+3. **Actions**
     *   Change the sender of the SMS in the `MessageBird` action:
         *   Go to `Actions` in the Admin UI.
         *   Locate and select `MessageBird` to view its details
         *   Set the `Originator` to the sender of the SMS.
 
-5.  **Mappings**
+4. **Mappings**
     *   Configure SMS and Email data for the partner and/or the witnesses:
         *   Go to `Mappings` in the Admin UI.
         *   Locate and select `EmailAndSmsDataPartner` or `EmailAndSmsDataWitness` to view its details
