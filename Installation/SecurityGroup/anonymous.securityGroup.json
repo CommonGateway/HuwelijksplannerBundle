@@ -1,0 +1,10 @@
+{
+  "$id": "https://huwelijksplanner.nl/SecurityGroup/anonymous.securityGroup.json",
+  "$schema": "https://docs.commongateway.nl/schemas/SecurityGroup.schema.json",
+  "version": "0.0.1",
+  "title": "Anonymous SecurityGroup",
+  "scopes": [
+    "schemas.https://huwelijksplanner.nl/schemas/hp.availability.schema.json.GET",
+    "schemas.https://huwelijksplanner.nl/schemas/hp.sdgProduct.schema.json.GET"
+  ]
+}
