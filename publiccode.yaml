@@ -18,23 +18,25 @@ softwareType: softwareAddon
 description:
   en:
     localisedName: null
-    genericName: Symfony Bundle for handling Dutch marriage requests within municipalities.
-    shortDescription: HuwelijksplannerBundle
-    longDescription: The HuwelijksplannerBundle is a powerful Symfony bundle that provides essential functionality for handling Dutch marriage requests within municipalities. This bundle is specifically designed to streamline and simplify the process of managing marriage-related operations, making it an indispensable tool for municipal authorities.
+    genericName: null
+    shortDescription: "Symfony Bundle for handling Dutch marriage requests within municipalities."
+    longDescription: "The HuwelijksplannerBundle is a powerful Symfony bundle that provides essential functionality for handling Dutch marriage requests within municipalities. This bundle is specifically designed to streamline and simplify the process of managing marriage-related operations, making it an indispensable tool for municipal authorities."
     documentation: null
     apiDocumentation: null
-    features: []
+    features:
+      - Common Ground Gateway Plugin
     screenshots: []
     videos: []
     awards: []
   nl:
     localisedName: null
-    genericName: Symfony Bundel voor het afhandelen van Nederlandse huwelijksaanvragen binnen gemeenten.
-    shortDescription: HuwelijksplannerBundle
-    longDescription: De HuwelijksplannerBundle is een krachtige Symfony-bundel die essentiële functionaliteit biedt voor de afhandeling van Nederlandse huwelijksverzoeken binnen gemeenten. Deze bundel is speciaal ontworpen om het beheer van huwelijksgerelateerde handelingen te stroomlijnen en te vereenvoudigen, waardoor het een onmisbaar hulpmiddel is voor gemeentelijke autoriteiten.
+    genericName: null
+    shortDescription: "Symfony Bundel voor het afhandelen van Nederlandse huwelijksaanvragen binnen gemeenten."
+    longDescription: "De HuwelijksplannerBundle is een krachtige Symfony-bundel die essentiële functionaliteit biedt voor de afhandeling van Nederlandse huwelijksverzoeken binnen gemeenten. Deze bundel is speciaal ontworpen om het beheer van huwelijksgerelateerde handelingen te stroomlijnen en te vereenvoudigen, waardoor het een onmisbaar hulpmiddel is voor gemeentelijke autoriteiten."
     documentation: null
     apiDocumentation: null
-    features: []
+    features:
+      - Common Ground Gateway Plugin
     screenshots: []
     videos: []
     awards: []
@@ -78,6 +80,18 @@ dependsOn:
       versionMin: 1.2
       versionMax: 1.3
       version: 1.2.47
+      optional: false
+    - name: BRPBundle
+      versionMin: 0.1
+      version: 0.1.4
+      optional: false
+    - name: KlantenBundle
+      versionMin: 0.1
+      version: 0.1.3
+      optional: false
+    - name: ZGWBundle
+      versionMin: 0.1
+      version: 0.1.34
       optional: false
 roadmap: null
 inputTypes:
