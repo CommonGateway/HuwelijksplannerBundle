@@ -1,7 +1,6 @@
 <?php
 
 // src/Service/InstallationService.php
-
 namespace CommonGateway\HuwelijksplannerBundle\Service;
 
 use App\Entity\Entity;
@@ -12,15 +11,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InstallationService implements InstallerInterface
 {
+
     private EntityManagerInterface $entityManager;
+
     private ContainerInterface $container;
+
     private SymfonyStyle $io;
+
 
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
     {
         $this->entityManager = $entityManager;
-        $this->container = $container;
-    }
+        $this->container     = $container;
+
+    }//end __construct()
+
 
     /**
      * Set symfony style in order to output to the console.
@@ -34,22 +39,29 @@ class InstallationService implements InstallerInterface
         $this->io = $io;
 
         return $this;
-    }
+
+    }//end setStyle()
+
 
     public function install()
     {
         $this->checkDataConsistency();
-    }
+
+    }//end install()
+
 
     public function update()
     {
         $this->checkDataConsistency();
-    }
+
+    }//end update()
+
 
     public function uninstall()
     {
         // Do some cleanup
-    }
+    }//end uninstall()
+
 
     /**
      * This function sets the max depth of all entities to 5.
@@ -62,7 +74,8 @@ class InstallationService implements InstallerInterface
         foreach ($entities as $entity) {
             // Unsets the persist of the availability entity and molly entity.
             if ($entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.mollie.schema.json'
-                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json') {
+                || $entity->getReference() === 'https://huwelijksplanner.nl/schemas/hp.availability.schema.json'
+            ) {
                 $entity->setPersist(false);
                 $this->entityManager->persist($entity);
             }
@@ -83,8 +96,10 @@ class InstallationService implements InstallerInterface
                 $entity->setMaxDepth(4);
                 $this->entityManager->persist($entity);
             }
-        }
-    }
+        }//end foreach
+
+    }//end setEntityMaxDepth()
+
 
     /**
      * This function installs the huwelijksplanner bundle assets.
@@ -98,5 +113,8 @@ class InstallationService implements InstallerInterface
         $this->setEntityMaxDepth();
 
         $this->entityManager->flush();
-    }
-}
+
+    }//end checkDataConsistency()
+
+
+}//end class
